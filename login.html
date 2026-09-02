@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Master Duty Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            teal: {
+              450: '#2dd4bf',
+              550: '#14b8a6',
+              650: '#0d9488',
+              750: '#0f766e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #0c4a4e 50%, #0f172a 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    .glass {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(45, 212, 191, 0.15);
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center p-4">
+
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-400 to-teal-700 mb-5">
+        <i class="fas fa-shield-halved text-3xl text-white"></i>
+      </div>
+      <h1 class="text-3xl font-bold text-white">Master Duty Pro</h1>
+      <p class="text-teal-300 mt-2 text-sm">Polis Bantuan FGV • Wilayah Terengganu</p>
+    </div>
+
+    <div class="glass rounded-3xl p-8">
+      <div class="text-center mb-8">
+        <h2 class="text-xl font-semibold text-white">Selamat Kembali</h2>
+        <p class="text-slate-400 text-sm mt-1">Log masuk menggunakan No.SKB</p>
+      </div>
+
+      <form id="loginForm" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-2">No.SKB</label>
+          <input type="text" id="noSkb" placeholder="Contoh: 1001" 
+            class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-teal-500" required>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-2">Kata Laluan</label>
+          <input type="password" id="password" placeholder="••••••••" 
+            class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-teal-500" required>
+        </div>
+
+        <button type="submit" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3.5 rounded-xl">
+          Log Masuk
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const demoUsers = {
+      "1001": { name: "Ahmad Bin Ali", jawatan: "POW", password: "123456" },
+      "1002": { name: "Siti Aminah", jawatan: "PPOW", password: "123456" },
+      "1003": { name: "Mohd Faiz", jawatan: "PTW", password: "123456" },
+      "2001": { name: "Ketua Pos A", jawatan: "Ketua Pos", password: "123456" },
+      "3001": { name: "Ketua Unit B", jawatan: "Ketua Unit", password: "123456" }
+    };
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const noSkb = document.getElementById('noSkb').value.trim();
+      const password = document.getElementById('password').value;
+      const user = demoUsers[noSkb];
+
+      if (user && user.password === password) {
+        localStorage.setItem('mdp_user', JSON.stringify({
+          noSkb: noSkb,
+          name: user.name,
+          jawatan: user.jawatan,
+          isAdmin: ["PTW", "PPOW", "POW"].includes(user.jawatan)
+        }));
+        window.location.href = 'dashboard.html';
+      } else {
+        alert('No.SKB atau Kata Laluan salah.');
+      }
+    });
+  </script>
+</body>
+</html>
