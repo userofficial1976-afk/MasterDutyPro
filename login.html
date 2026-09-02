@@ -16,15 +16,10 @@
               550: '#14b8a6',
               650: '#0d9488',
               750: '#0f766e',
-              850: '#115e59',
             }
           },
           fontFamily: {
             sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif'],
-          },
-          boxShadow: {
-            'glow': '0 0 40px rgba(20, 184, 166, 0.15)',
-            'glow-lg': '0 0 60px rgba(20, 184, 166, 0.25)',
           }
         }
       }
@@ -32,179 +27,57 @@
   </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-    
     body {
       background: linear-gradient(135deg, #0f172a 0%, #0c4a4e 50%, #0f172a 100%);
       min-height: 100vh;
     }
-    
     .glass {
       background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(20px);
       border: 1px solid rgba(45, 212, 191, 0.15);
     }
-    
     .input-glow:focus {
       box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.25);
     }
-    
     .btn-glow {
       background: linear-gradient(135deg, #14b8a6, #0d9488);
       transition: all 0.3s ease;
     }
-    
     .btn-glow:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 30px rgba(20, 184, 166, 0.4);
-    }
-    
-    .floating {
-      animation: floating 6s ease-in-out infinite;
-    }
-    
-    @keyframes floating {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
     }
   </style>
 </head>
 <body class="flex items-center justify-center p-4 font-sans">
 
-  <!-- Background Effects -->
   <div class="fixed inset-0 overflow-hidden pointer-events-none">
     <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-550/20 rounded-full blur-3xl"></div>
     <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-teal-650/15 rounded-full blur-3xl"></div>
   </div>
 
   <div class="w-full max-w-md relative z-10">
-    
-    <!-- Logo & Branding -->
-    <div class="text-center mb-8 floating">
-      <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-450 to-teal-750 shadow-glow mb-5">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-450 to-teal-750 shadow-lg mb-5">
         <i class="fas fa-shield-halved text-3xl text-white"></i>
       </div>
       <h1 class="text-3xl font-bold text-white tracking-tight">Master Duty Pro</h1>
       <p class="text-teal-450/80 mt-2 text-sm font-medium">Polis Bantuan FGV • Wilayah Terengganu</p>
     </div>
 
-    <!-- Login Card -->
-    <div class="glass rounded-3xl p-8 shadow-glow">
+    <div class="glass rounded-3xl p-8 shadow-lg">
       <div class="text-center mb-8">
         <h2 class="text-xl font-semibold text-white">Selamat Kembali</h2>
-        <p class="text-slate-400 text-sm mt-1">Sila log masuk untuk meneruskan</p>
+        <p class="text-slate-400 text-sm mt-1">Log masuk menggunakan No.SKB</p>
       </div>
 
       <form id="loginForm" class="space-y-5">
-        <!-- Email / ID -->
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-2">ID Pengguna / Emel</label>
+          <label class="block text-sm font-medium text-slate-300 mb-2">No.SKB</label>
           <div class="relative">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-teal-450">
-              <i class="fas fa-user"></i>
+              <i class="fas fa-id-card"></i>
             </span>
-            <input 
-              type="text" 
-              id="username"
-              placeholder="contoh: ketua.pos01"
-              class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3.5 pl-12 pr-4 focus:outline-none focus:border-teal-550 input-glow transition"
-              required
-            >
+            <input type="text" id="noSkb" placeholder="Contoh: 12345" 
+              class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3.5 pl-12 pr-4 focus:outline-none focus:border-teal-550 input-glow transition" required>
           </div>
-        </div>
-
-        <!-- Password -->
-        <div>
-          <label class="block text-sm font-medium text-slate-300 mb-2">Kata Laluan</label>
-          <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-teal-450">
-              <i class="fas fa-lock"></i>
-            </span>
-            <input 
-              type="password" 
-              id="password"
-              placeholder="••••••••"
-              class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3.5 pl-12 pr-12 focus:outline-none focus:border-teal-550 input-glow transition"
-              required
-            >
-            <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-450">
-              <i class="fas fa-eye" id="eyeIcon"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Role (optional display) -->
-        <div>
-          <label class="block text-sm font-medium text-slate-300 mb-2">Peranan</label>
-          <select id="role" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-teal-550 input-glow transition">
-            <option value="">-- Pilih Peranan --</option>
-            <option value="admin">Super Admin</option>
-            <option value="ketua_pos">Ketua Pos</option>
-            <option value="ketua_unit">Ketua Unit</option>
-            <option value="ptw">PTW</option>
-            <option value="ppow">PPOW</option>
-            <option value="pow">POW</option>
-          </select>
-        </div>
-
-        <!-- Remember & Forgot -->
-        <div class="flex items-center justify-between text-sm">
-          <label class="flex items-center gap-2 text-slate-400 cursor-pointer">
-            <input type="checkbox" class="rounded border-slate-600 text-teal-550 focus:ring-teal-550">
-            Ingat saya
-          </label>
-          <a href="#" class="text-teal-450 hover:text-teal-300 transition">Lupa kata laluan?</a>
-        </div>
-
-        <!-- Submit -->
-        <button type="submit" class="w-full btn-glow text-white font-semibold py-3.5 rounded-xl flex items-center justify-center gap-2">
-          <i class="fas fa-right-to-bracket"></i>
-          Log Masuk
-        </button>
-      </form>
-
-      <div class="mt-8 pt-6 border-t border-slate-700/50 text-center">
-        <p class="text-slate-500 text-xs">
-          © 2026 Master Duty Pro • Sistem Pengurusan Tugasan
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function togglePassword() {
-      const input = document.getElementById('password');
-      const icon = document.getElementById('eyeIcon');
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
-      } else {
-        input.type = 'password';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
-      }
-    }
-
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const role = document.getElementById('role').value;
-
-      // Demo login (akan diganti dengan Supabase nanti)
-      if (username && password && role) {
-        // Simpan session sementara
-        localStorage.setItem('mdp_user', JSON.stringify({
-          username,
-          role,
-          name: username
-        }));
-        
-        // Redirect ke dashboard
-        window.location.href = 'dashboard.html';
-      } else {
-        alert('Sila lengkapkan semua maklumat.');
-      }
-    });
-  </script>
-</body>
-</html>
