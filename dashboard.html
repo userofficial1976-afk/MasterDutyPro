@@ -16,7 +16,6 @@
               550: '#14b8a6',
               650: '#0d9488',
               750: '#0f766e',
-              850: '#115e59',
             }
           },
           fontFamily: {
@@ -28,31 +27,23 @@
   </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-    
-    body {
-      background: #0b1220;
-    }
-    
+    body { background: #0b1220; }
     .glass {
       background: rgba(15, 23, 42, 0.7);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(45, 212, 191, 0.12);
     }
-    
     .sidebar-link.active {
       background: linear-gradient(90deg, rgba(20, 184, 166, 0.2), transparent);
       border-left: 3px solid #14b8a6;
       color: #2dd4bf;
     }
-    
-    .stat-card {
-      transition: all 0.3s ease;
-    }
-    
+    .stat-card { transition: all 0.3s ease; }
     .stat-card:hover {
       transform: translateY(-4px);
       border-color: rgba(45, 212, 191, 0.3);
     }
+    .menu-hidden { display: none !important; }
   </style>
 </head>
 <body class="font-sans text-slate-200">
@@ -61,7 +52,7 @@
     
     <!-- Sidebar -->
     <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block">
-      <div class="p-6">
+      <div class="p-6 h-full flex flex-col">
         <!-- Brand -->
         <div class="flex items-center gap-3 mb-10">
           <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center shadow-lg">
@@ -74,44 +65,63 @@
         </div>
 
         <!-- Navigation -->
-        <nav class="space-y-1">
+        <nav class="space-y-1 flex-1">
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Utama</p>
           
-          <a href="dashboard.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition">
+          <!-- Dashboard - Admin only -->
+          <a href="dashboard.html" id="menu-dashboard" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition">
             <i class="fas fa-chart-pie w-5"></i>
             Dashboard
           </a>
           
-          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <!-- Pengurusan Anggota - Admin only -->
+          <a href="#" id="menu-anggota" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-users w-5"></i>
-            Senarai Anggota
+            Pengurusan Anggota
           </a>
           
-          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <!-- Pengisian Kod Duty - Semua -->
+          <a href="#" id="menu-kod-duty" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-code w-5"></i>
+            Pengisian Kod Duty
+          </a>
+          
+          <!-- Pengisian Kod Tempat Kerja - Semua -->
+          <a href="#" id="menu-kod-tempat" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-map-marker-alt w-5"></i>
+            Pengisian Kod Tempat Kerja
+          </a>
+          
+          <!-- Pengisian Jadual Tugas - Semua -->
+          <a href="#" id="menu-jadual" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-calendar-check w-5"></i>
-            Pengisian Duty
-          </a>
-          
-          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-            <i class="fas fa-exchange-alt w-5"></i>
-            Tukar Shift / Cuti
+            Pengisian Jadual Tugas
           </a>
 
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Laporan</p>
           
-          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <!-- Laporan Wilayah - Admin only -->
+          <a href="#" id="menu-laporan-wilayah" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-file-alt w-5"></i>
             Laporan Wilayah
           </a>
           
-          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <!-- Anggaran RK02 - Semua -->
+          <a href="#" id="menu-rk02" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-chart-bar w-5"></i>
             Anggaran RK02
+          </a>
+          
+          <!-- Anggaran RK01 - Semua -->
+          <a href="#" id="menu-rk01" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-chart-line w-5"></i>
+            Anggaran RK01
           </a>
 
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Sistem</p>
           
-          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <!-- Tetapan - Admin only -->
+          <a href="#" id="menu-tetapan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-cog w-5"></i>
             Tetapan
           </a>
@@ -143,10 +153,10 @@
             
             <div class="flex items-center gap-3">
               <div class="text-right hidden sm:block">
-                <p class="text-sm font-medium text-white" id="userName">Admin</p>
-                <p class="text-xs text-slate-400" id="userRole">Super Admin</p>
+                <p class="text-sm font-medium text-white" id="userName">-</p>
+                <p class="text-xs text-slate-400" id="userJawatan">-</p>
               </div>
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center font-bold text-white">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center font-bold text-white" id="userAvatar">
                 A
               </div>
             </div>
@@ -160,7 +170,7 @@
         <!-- Hero -->
         <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-teal-750 via-teal-650 to-teal-550 p-8">
           <div class="relative z-10">
-            <h1 class="text-3xl font-bold text-white mb-2">Selamat Datang ke Master Duty Pro</h1>
+            <h1 class="text-3xl font-bold text-white mb-2">Selamat Datang, <span id="welcomeName">Pengguna</span></h1>
             <p class="text-teal-100/90 max-w-2xl">Sistem pengurusan jadual tugasan anggota keselamatan secara berpusat, sistematik dan profesional untuk Wilayah Terengganu.</p>
           </div>
           <div class="absolute right-0 bottom-0 opacity-20">
@@ -224,44 +234,42 @@
         <!-- Status + Quick Actions -->
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
           
-          <!-- Status Tidak Bertugas -->
           <div class="xl:col-span-2 glass rounded-2xl p-6">
             <div class="flex items-center justify-between mb-6">
               <div>
                 <h3 class="text-lg font-semibold text-white">Status Tidak Bertugas Hari Ini</h3>
-                <p class="text-sm text-slate-400">Klik kad untuk lihat senarai</p>
+                <p class="text-sm text-slate-400">Ringkasan status cuti & tidak bertugas</p>
               </div>
             </div>
             
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div class="bg-orange-500/15 border border-orange-500/30 rounded-xl p-4 text-center cursor-pointer hover:bg-orange-500/25 transition">
+              <div class="bg-orange-500/15 border border-orange-500/30 rounded-xl p-4 text-center">
                 <p class="text-xs text-orange-300 font-medium">OFF / GOFF</p>
                 <p class="text-2xl font-bold text-orange-400 mt-1">12</p>
               </div>
-              <div class="bg-emerald-500/15 border border-emerald-500/30 rounded-xl p-4 text-center cursor-pointer hover:bg-emerald-500/25 transition">
+              <div class="bg-emerald-500/15 border border-emerald-500/30 rounded-xl p-4 text-center">
                 <p class="text-xs text-emerald-300 font-medium">Cuti Tahunan</p>
                 <p class="text-2xl font-bold text-emerald-400 mt-1">8</p>
               </div>
-              <div class="bg-red-500/15 border border-red-500/30 rounded-xl p-4 text-center cursor-pointer hover:bg-red-500/25 transition">
+              <div class="bg-red-500/15 border border-red-500/30 rounded-xl p-4 text-center">
                 <p class="text-xs text-red-300 font-medium">Cuti Sakit</p>
                 <p class="text-2xl font-bold text-red-400 mt-1">5</p>
               </div>
-              <div class="bg-blue-500/15 border border-blue-500/30 rounded-xl p-4 text-center cursor-pointer hover:bg-blue-500/25 transition">
+              <div class="bg-blue-500/15 border border-blue-500/30 rounded-xl p-4 text-center">
                 <p class="text-xs text-blue-300 font-medium">Kursus</p>
                 <p class="text-2xl font-bold text-blue-400 mt-1">3</p>
               </div>
-              <div class="bg-yellow-500/15 border border-yellow-500/30 rounded-xl p-4 text-center cursor-pointer hover:bg-yellow-500/25 transition">
+              <div class="bg-yellow-500/15 border border-yellow-500/30 rounded-xl p-4 text-center">
                 <p class="text-xs text-yellow-300 font-medium">Cuti Am</p>
                 <p class="text-2xl font-bold text-yellow-400 mt-1">2</p>
               </div>
-              <div class="bg-slate-500/15 border border-slate-500/30 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-500/25 transition">
+              <div class="bg-slate-500/15 border border-slate-500/30 rounded-xl p-4 text-center">
                 <p class="text-xs text-slate-300 font-medium">Jumlah</p>
                 <p class="text-2xl font-bold text-white mt-1">41</p>
               </div>
             </div>
           </div>
 
-          <!-- Quick Actions -->
           <div class="glass rounded-2xl p-6">
             <h3 class="text-lg font-semibold text-white mb-5">Quick Actions</h3>
             
@@ -271,18 +279,18 @@
                   <i class="fas fa-calendar-plus"></i>
                 </div>
                 <div>
-                  <p class="font-medium text-white">Masukkan Duty</p>
-                  <p class="text-xs text-slate-400">Tambah jadual tugasan</p>
+                  <p class="font-medium text-white">Pengisian Jadual Tugas</p>
+                  <p class="text-xs text-slate-400">Isi duty anggota</p>
                 </div>
               </a>
               
               <a href="#" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
                 <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450 group-hover:scale-110 transition">
-                  <i class="fas fa-users"></i>
+                  <i class="fas fa-code"></i>
                 </div>
                 <div>
-                  <p class="font-medium text-white">Senarai Anggota</p>
-                  <p class="text-xs text-slate-400">Urus data anggota</p>
+                  <p class="font-medium text-white">Kod Duty</p>
+                  <p class="text-xs text-slate-400">Urus kod shift</p>
                 </div>
               </a>
               
@@ -295,21 +303,10 @@
                   <p class="text-xs text-slate-400">PDF / Excel</p>
                 </div>
               </a>
-              
-              <a href="#" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
-                <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450 group-hover:scale-110 transition">
-                  <i class="fas fa-bell"></i>
-                </div>
-                <div>
-                  <p class="font-medium text-white">Notifikasi</p>
-                  <p class="text-xs text-slate-400">WhatsApp & Emel</p>
-                </div>
-              </a>
             </div>
           </div>
         </div>
 
-        <!-- Footer -->
         <div class="text-center text-slate-500 text-sm py-6">
           Master Duty Pro — Wilayah Terengganu<br>
           © 2026 • Operational Duty Management System
@@ -319,16 +316,33 @@
   </div>
 
   <script>
-    // Set current date
+    // Semak login
+    const user = JSON.parse(localStorage.getItem('mdp_user') || 'null');
+    
+    if (!user) {
+      window.location.href = 'login.html';
+    } else {
+      // Papar maklumat pengguna
+      document.getElementById('userName').textContent = user.name;
+      document.getElementById('userJawatan').textContent = user.jawatan;
+      document.getElementById('welcomeName').textContent = user.name.split(' ')[0];
+      document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+
+      // Tapisan menu berdasarkan jawatan
+      const isAdmin = user.isAdmin === true; // PTW, PPOW, POW
+
+      if (!isAdmin) {
+        // Sembunyikan menu Admin sahaja
+        document.getElementById('menu-dashboard').classList.add('menu-hidden');
+        document.getElementById('menu-anggota').classList.add('menu-hidden');
+        document.getElementById('menu-laporan-wilayah').classList.add('menu-hidden');
+        document.getElementById('menu-tetapan').classList.add('menu-hidden');
+      }
+    }
+
+    // Tarikh hari ini
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ms-MY', options);
-
-    // Load user from localStorage (demo)
-    const user = JSON.parse(localStorage.getItem('mdp_user') || '{}');
-    if (user.username) {
-      document.getElementById('userName').textContent = user.username;
-      document.getElementById('userRole').textContent = user.role?.replace('_', ' ').toUpperCase() || 'User';
-    }
   </script>
 </body>
 </html>
