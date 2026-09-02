@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kod Duty — Master Duty Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            teal: {
+              450: '#2dd4bf',
+              550: '#14b8a6',
+              650: '#0d9488',
+              750: '#0f766e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0b1220; font-family: 'Segoe UI', system-ui, sans-serif; }
+    .glass {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(45, 212, 191, 0.12);
+    }
+    .sidebar-link.active {
+      background: linear-gradient(90deg, rgba(20, 184, 166, 0.2), transparent);
+      border-left: 3px solid #14b8a6;
+      color: #2dd4bf;
+    }
+  </style>
+</head>
+<body class="text-slate-200">
+
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block">
+      <div class="p-6">
+        <div class="flex items-center gap-3 mb-10">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center">
+            <i class="fas fa-shield-halved text-white text-xl"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-white text-lg">Master Duty Pro</h1>
+            <p class="text-xs text-teal-450">Wilayah Terengganu</p>
+          </div>
+        </div>
+
+        <nav class="space-y-1">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Utama</p>
+          
+          <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-chart-pie w-5"></i> Dashboard
+          </a>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-users w-5"></i> Pengurusan Anggota
+          </a>
+          <a href="kod-duty.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium">
+            <i class="fas fa-code w-5"></i> Pengisian Kod Duty
+          </a>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-map-marker-alt w-5"></i> Kod Tempat Kerja
+          </a>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-calendar-check w-5"></i> Pengisian Jadual Tugas
+          </a>
+
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Laporan</p>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-file-alt w-5"></i> Laporan Wilayah
+          </a>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-chart-bar w-5"></i> Anggaran RK02
+          </a>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-chart-line w-5"></i> Anggaran RK01
+          </a>
+
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Sistem</p>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-cog w-5"></i> Tetapan
+          </a>
+          <a href="login.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
+            <i class="fas fa-sign-out-alt w-5"></i> Log Keluar
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 lg:ml-72">
+      <header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-white">Pengisian Kod Duty</h2>
+            <p class="text-sm text-slate-400">Urus kod waktu kerja mengikut unit</p>
+          </div>
+          <div class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
+            <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
+            System Online
+          </div>
+        </div>
+      </header>
+
+      <div class="p-6 space-y-6">
+
+        <!-- Form Card -->
+        <div class="glass rounded-2xl p-6">
+          <h3 class="text-lg font-semibold text-white mb-5" id="tajukBorang">Tambah Kod Duty</h3>
+          
+          <div id="mesej" class="mb-4"></div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            <div>
+              <label class="block text-sm text-slate-400 mb-2">Unit</label>
+              <select id="unit" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
+                <option value="">-- Pilih Unit --</option>
+                <option value="Jerangau">Jerangau</option>
+                <option value="Chador">Chador</option>
+                <option value="Terengganu">Terengganu</option>
+                <option value="Setiu">Setiu</option>
+                <option value="Rantau Abang">Rantau Abang</option>
+                <option value="Kerteh">Kerteh</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm text-slate-400 mb-2">Kod Duty</label>
+              <input type="text" id="kod" placeholder="Contoh: A" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550 uppercase">
+            </div>
+
+            <div>
+              <label class="block text-sm text-slate-400 mb-2">Waktu Tugasan</label>
+              <input type="text" id="waktuTugasan" placeholder="Contoh: 0700-1500" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
+            </div>
+
+            <div>
+              <label class="block text-sm text-slate-400 mb-2">Jam Kerja</label>
+              <input type="number" id="jamKerja" min="0" step="0.5" placeholder="8" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
+            </div>
+
+            <div>
+              <label class="block text-sm text-slate-400 mb-2">Jam KLM</label>
+              <input type="number" id="jamKlm" min="0" step="0.5" value="0" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
+            </div>
+
+            <div>
+              <label class="block text-sm text-slate-400 mb-2">Status</label>
+              <select id="status" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
+                <option value="Aktif">Aktif</option>
+                <option value="Tidak Aktif">Tidak Aktif</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex gap-3 mt-6">
+            <button onclick="simpanKodDuty()" class="bg-teal-600 hover:bg-teal-500 text-white font-semibold px-6 py-3 rounded-xl transition">
+              <i class="fas fa-save mr-2"></i> Simpan Kod Duty
+            </button>
+            <button id="btnBatal" onclick="batalEdit()" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-semibold px-6 py-3 rounded-xl transition">
+              Batal Edit
+            </button>
+          </div>
+        </div>
+
+        <!-- Senarai -->
+        <div class="glass rounded-2xl p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+            <h3 class="text-lg font-semibold text-white">Senarai Kod Duty</h3>
+            
+            <div class="flex flex-col sm:flex-row gap-3">
+              <select id="filterUnit" onchange="paparKodDuty()" class="bg-slate-900/60 border border-slate-700 text-white rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-teal-550">
+                <option value="">Semua Unit</option>
+                <option value="Jerangau">Jerangau</option>
+                <option value="Chador">Chador</option>
+                <option value="Terengganu">Terengganu</option>
+                <option value="Setiu">Setiu</option>
+                <option value="Rantau Abang">Rantau Abang</option>
+                <option value="Kerteh">Kerteh</option>
+              </select>
+              <input type="text" id="cariKod" placeholder="Cari kod..." onkeyup="paparKodDuty()" class="bg-slate-900/60 border border-slate-700 text-white rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-teal-550">
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-700">
+                  <th class="text-left py-3 px-3">Bil</th>
+                  <th class="text-left py-3 px-3">Unit</th>
+                  <th class="text-left py-3 px-3">Kod</th>
+                  <th class="text-left py-3 px-3">Waktu Tugasan</th>
+                  <th class="text-left py-3 px-3">Jam Kerja</th>
+                  <th class="text-left py-3 px-3">Jam KLM</th>
+                  <th class="text-left py-3 px-3">Status</th>
+                  <th class="text-left py-3 px-3">Tindakan</th>
+                </tr>
+              </thead>
+              <tbody id="senaraiKodDuty">
+                <tr>
+                  <td colspan="8" class="py-8 text-center text-slate-500">Memuatkan data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="text-center text-slate-500 text-sm py-4">
+          Master Duty Pro — Wilayah Terengganu © 2026
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Supabase
+    const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const SENARAI_UNIT = ["Jerangau", "Chador", "Terengganu", "Setiu", "Rantau Abang", "Kerteh"];
+    let unitLama = "";
+    let kodLama = "";
+    let sedangEdit = false;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      paparKodDuty();
+    });
+
+    function paparMesej(mesej, jenis = "success") {
+      const el = document.getElementById("mesej");
+      const warna = jenis === "success" 
+        ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" 
+        : "bg-red-500/15 text-red-400 border-red-500/30";
+      el.innerHTML = `<div class="border rounded-xl px-4 py-3 text-sm ${warna}">${mesej}</div>`;
+      setTimeout(() => el.innerHTML = "", 4000);
+    }
+
+    async function simpanKodDuty() {
+      const unit = document.getElementById("unit").value.trim();
+      const kod = document.getElementById("kod").value.trim().toUpperCase();
+      const waktuTugasan = document.getElementById("waktuTugasan").value.trim();
+      const jamKerja = document.getElementById("jamKerja").value;
+      const jamKlm = document.getElementById("jamKlm").value;
+      const status = document.getElementById("status").value;
+
+      if (!unit) return paparMesej("❌ Sila pilih Unit", "error");
+      if (!kod) return paparMesej("❌ Sila masukkan Kod Duty", "error");
+      if (!waktuTugasan) return paparMesej("❌ Sila masukkan Waktu Tugasan", "error");
+      if (jamKerja === "") return paparMesej("❌ Sila masukkan Jam Kerja", "error");
+
+      const data = {
+        unit,
+        kod,
+        waktu_tugasan: waktuTugasan,
+        jam_kerja: Number(jamKerja),
+        jam_klm: Number(jamKlm || 0),
+        status
+      };
+
+      let result;
+      if (sedangEdit) {
+        result = await supabaseClient.from("kod_duty").update(data).eq("unit", unitLama).eq("kod", kodLama);
+      } else {
+        result = await supabaseClient.from("kod_duty").insert([data]);
+      }
+
+      if (result.error) {
+        if (result.error.code === "23505" || result.error.message.includes("duplicate")) {
+          paparMesej(`⚠️ Kod Duty ${kod} untuk Unit ${unit} telah digunakan`, "error");
+        } else {
+          paparMesej("❌ Gagal simpan: " + result.error.message, "error");
+        }
+        return;
+      }
+
+      paparMesej(sedangEdit ? "✅ Kod Duty berjaya dikemaskini" : "✅ Kod Duty berjaya disimpan");
+      kosongkanBorang();
+      paparKodDuty();
+    }
+
+    async function paparKodDuty() {
+      const tbody = document.getElementById("senaraiKodDuty");
+      tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-slate-500">Memuatkan data...</td></tr>`;
+
+      const { data, error } = await supabaseClient
+        .from("kod_duty")
+        .select("*")
+        .order("unit", { ascending: true })
+        .order("kod", { ascending: true });
+
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-red-400">Gagal ambil data: ${error.message}</td></tr>`;
+        return;
+      }
+
+      const filterUnit = document.getElementById("filterUnit").value;
+      const cariKod = document.getElementById("cariKod").value.trim().toUpperCase();
+
+      let senarai = data || [];
+      if (filterUnit) senarai = senarai.filter(i => i.unit === filterUnit);
+      if (cariKod) senarai = senarai.filter(i => String(i.kod).toUpperCase().includes(cariKod));
+
+      if (senarai.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-slate-500">Tiada Kod Duty dijumpai</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = "";
+      senarai.forEach((item, index) => {
+        const statusClass = item.status === "Aktif" 
+          ? "bg-emerald-500/15 text-emerald-400" 
+          : "bg-red-500/15 text-red-400";
+
+        const tr = document.createElement("tr");
+        tr.className = "border-b border-slate-800 hover:bg-white/5";
+        tr.innerHTML = `
+          <td class="py-3 px-3">${index + 1}</td>
+          <td class="py-3 px-3 font-medium text-white">${item.unit || ""}</td>
+          <td class="py-3 px-3 font-bold text-teal-450">${item.kod || ""}</td>
+          <td class="py-3 px-3">${item.waktu_tugasan || ""}</td>
+          <td class="py-3 px-3">${item.jam_kerja ?? 0}</td>
+          <td class="py-3 px-3">${item.jam_klm ?? 0}</td>
+          <td class="py-3 px-3"><span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${statusClass}">${item.status || ""}</span></td>
+          <td class="py-3 px-3">
+            <button onclick='editKodDuty(${JSON.stringify(item)})' class="text-amber-400 hover:text-amber-300 mr-3 text-sm">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button onclick='padamKodDuty(${JSON.stringify(item)})' class="text-red-400 hover:text-red-300 text-sm">
+              <i class="fas fa-trash"></i> Padam
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function editKodDuty(item) {
+      sedangEdit = true;
+      unitLama = item.unit;
+      kodLama = item.kod;
+      document.getElementById("unit").value = item.unit || "";
+      document.getElementById("kod").value = item.kod || "";
+      document.getElementById("waktuTugasan").value = item.waktu_tugasan || "";
+      document.getElementById("jamKerja").value = item.jam_kerja ?? "";
+      document.getElementById("jamKlm").value = item.jam_klm ?? 0;
+      document.getElementById("status").value = item.status || "Aktif";
+      document.getElementById("tajukBorang").textContent = "Edit Kod Duty";
+      document.getElementById("btnBatal").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function batalEdit() {
+      kosongkanBorang();
+    }
+
+    function kosongkanBorang() {
+      sedangEdit = false;
+      unitLama = "";
+      kodLama = "";
+      document.getElementById("unit").value = "";
+      document.getElementById("kod").value = "";
+      document.getElementById("waktuTugasan").value = "";
+      document.getElementById("jamKerja").value = "";
+      document.getElementById("jamKlm").value = "0";
+      document.getElementById("status").value = "Aktif";
+      document.getElementById("tajukBorang").textContent = "Tambah Kod Duty";
+      document.getElementById("btnBatal").classList.add("hidden");
+    }
+
+    async function padamKodDuty(item) {
+      if (!confirm(`Padam Kod Duty ${item.kod} untuk Unit ${item.unit}?`)) return;
+
+      const { error } = await supabaseClient
+        .from("kod_duty")
+        .delete()
+        .eq("unit", item.unit)
+        .eq("kod", item.kod);
+
+      if (error) {
+        paparMesej("❌ Gagal padam: " + error.message, "error");
+        return;
+      }
+      paparMesej("✅ Kod Duty berjaya dipadam");
+      paparKodDuty();
+    }
+  </script>
+</body>
+</html>
