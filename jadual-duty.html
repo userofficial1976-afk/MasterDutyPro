@@ -752,89 +752,139 @@
   // =====================================================
   // SIMPAN DUTY (RINGKAS - Langkah 1)
   // =====================================================
-  async function simpanDuty() {
-    try {
-      const tarikh = getValue("tarikh");
-      const noSkb = getValue("noSkb");
-      const kodDuty = getValue("kodDuty");
-      const kodTempatKerja = getValue("kodTempatKerja");
-      const unit = getValue("unitPilihan");
+async function simpanDuty() {
+  try {
+    const tarikh = getValue("tarikh");
+    const noSkb = getValue("noSkb");
+    const kodDuty = getValue("kodDuty");
+    const kodTempatKerja = getValue("kodTempatKerja");
+    const unit = getValue("unitPilihan");
 
-      if (!tarikh) return paparPopup("Sila pilih tarikh duty.", "error");
-      if (!noSkb) return paparPopup("Sila pilih nama anggota.", "error");
-      if (!kodDuty) return paparPopup("Sila pilih Kod Duty.", "error");
-      if (!kodTempatKerja) return paparPopup("Sila pilih Kod Tempat Kerja.", "error");
+    if (!tarikh) return paparPopup("Sila pilih tarikh duty.", "error");
+    if (!noSkb) return paparPopup("Sila pilih nama anggota.", "error");
+    if (!kodDuty) return paparPopup("Sila pilih Kod Duty.", "error");
+    if (!kodTempatKerja) return paparPopup("Sila pilih Kod Tempat Kerja.", "error");
 
-      const anggota = semuaAnggota.find(a => String(a.no_skb) === String(noSkb));
-      const duty = semuaKodDuty.find(i => normalisasi(i.unit) === normalisasi(unit) && normalisasi(i.kod) === normalisasi(kodDuty));
-      const tempatKerja = semuaKodTempatKerja.find(i => normalisasi(i.kod_tempat_kerja) === normalisasi(kodTempatKerja));
+    const anggota = semuaAnggota.find(a => String(a.no_skb) === String(noSkb));
+    const duty = semuaKodDuty.find(i => normalisasi(i.unit) === normalisasi(unit) && normalisasi(i.kod) === normalisasi(kodDuty));
+    const tempatKerja = semuaKodTempatKerja.find(i => normalisasi(i.kod_tempat_kerja) === normalisasi(kodTempatKerja));
 
-      if (!anggota || !duty || !tempatKerja) {
-        return paparPopup("Data tidak lengkap. Sila semak semula.", "error");
-      }
-
-      const hariOffday = document.getElementById("hariOffday");
-      const hariCutiam = document.getElementById("hariCutiam");
-      const jamOffday = Number(getValue("jamOffday") || 0);
-      const jamCutiam = Number(getValue("jamCutiam") || 0);
-
-      const dataDuty = {
-        tarikh: tarikh,
-        bulan: getValue("bulan"),
-        tahun: Number(getValue("tahun")),
-        hari: getValue("hari"),
-        no_skb: anggota.no_skb,
-        no_anggota: anggota.no_anggota,
-        nama_anggota: anggota.nama,
-        kawasan: anggota.kawasan,
-        unit: anggota.unit,
-        ketua_unit: anggota.ketua_unit,
-        ketua_pos: anggota.ketua_pos,
-        pos: anggota.pos,
-        pos_tampungan: getValue("posTampungan"),
-        jam_tampungan: Number(getValue("jamTampung") || 0),
-        waktu_tugasan: duty.waktu_tugasan,
-        jam_kerja: duty.jam_kerja,
-        jam_klm: Number(duty.jam_klm || 0),
-        kod_duty: duty.kod,
-        kod_waktu_kerja: duty.kod,
-        kod_tempat_kerja: tempatKerja.kod_tempat_kerja,
-        tempat_kerja: tempatKerja.nama_tempat_kerja,
-        hari_offday_bertugas: (hariOffday && hariOffday.checked) ? 1 : 0,
-        jam_offday_bertugas: jamOffday,
-        hari_cutiam_bertugas: (hariCutiam && hariCutiam.checked) ? 1 : 0,
-        jam_cutiam_bertugas: jamCutiam,
-        rm_klm_hari_biasa: Number(getValue("rmKlmHariBiasa") || 0),
-        rm_klm_tampungan: Number(getValue("rmTampung") || 0),
-        jam_klm_off: Number(getValue("klmOffday") || 0),
-        jam_klm_wajib: Number(getValue("klmWajib") || 0),
-        jam_klm_mc: Number(getValue("klmMc") || 0),
-        jam_klm_cuti_tahun: Number(getValue("klmCutiTahun") || 0),
-        jam_klm_cuti_ehsan: Number(getValue("klmCutiEhsan") || 0),
-        jam_klm_kursus: Number(getValue("klmKursus") || 0),
-        jam_klm_cuti_ganti: Number(getValue("klmCutiGanti") || 0),
-        jam_klm_tambahan: Number(getValue("klmKawalanTambahan") || 0),
-        dikemaskini_oleh: "Sistem",
-        dikemaskini_pada: new Date().toISOString()
-      };
-
-      let result;
-      if (dutySedangEdit) {
-        result = await supabaseClient.from("jadual_duty").update(dataDuty).eq("id", dutySedangEdit);
-      } else {
-        result = await supabaseClient.from("jadual_duty").insert([dataDuty]);
-      }
-
-      if (result.error) throw result.error;
-
-      dutySedangEdit = null;
-      paparPopup("Rekod Duty berjaya disimpan!", "success");
-      await paparDuty();
-    } catch (e) {
-      console.error(e);
-      paparPopup("Gagal simpan: " + e.message, "error");
+    if (!anggota || !duty || !tempatKerja) {
+      return paparPopup("Data tidak lengkap. Sila semak semula.", "error");
     }
+
+    // =====================================================
+    // SEMAK REKOD SUDAN WUJUD (No.SKB + Tarikh)
+    // =====================================================
+    const { data: rekodSediaAda, error: errorSemak } = await supabaseClient
+      .from("jadual_duty")
+      .select("id, nama_anggota, tarikh")
+      .eq("no_skb", noSkb)
+      .eq("tarikh", tarikh)
+      .limit(1);
+
+    if (errorSemak) throw errorSemak;
+
+    let idUntukUpdate = null;
+
+    if (rekodSediaAda && rekodSediaAda.length > 0) {
+      // Rekod sudah wujud
+      const yakin = confirm(
+        `Rekod untuk ${anggota.nama} pada tarikh ${formatTarikh(tarikh)} sudah wujud.\n\nAdakah anda mahu KEMASKINI rekod tersebut?`
+      );
+
+      if (!yakin) {
+        paparPopup("Simpanan dibatalkan.", "error");
+        return;
+      }
+
+      // Pengguna pilih Ya → Update
+      idUntukUpdate = rekodSediaAda[0].id;
+    }
+
+    // =====================================================
+    // SEDIAKAN DATA
+    // =====================================================
+    const hariOffday = document.getElementById("hariOffday");
+    const hariCutiam = document.getElementById("hariCutiam");
+    const jamOffday = Number(getValue("jamOffday") || 0);
+    const jamCutiam = Number(getValue("jamCutiam") || 0);
+
+    const dataDuty = {
+      tarikh: tarikh,
+      bulan: getValue("bulan"),
+      tahun: Number(getValue("tahun")),
+      hari: getValue("hari"),
+      no_skb: anggota.no_skb,
+      no_anggota: anggota.no_anggota,
+      nama_anggota: anggota.nama,
+      kawasan: anggota.kawasan,
+      unit: anggota.unit,
+      ketua_unit: anggota.ketua_unit,
+      ketua_pos: anggota.ketua_pos,
+      pos: anggota.pos,
+      pos_tampungan: getValue("posTampungan"),
+      jam_tampungan: Number(getValue("jamTampung") || 0),
+      waktu_tugasan: duty.waktu_tugasan,
+      jam_kerja: duty.jam_kerja,
+      jam_klm: Number(duty.jam_klm || 0),
+      kod_duty: duty.kod,
+      kod_waktu_kerja: duty.kod,
+      kod_tempat_kerja: tempatKerja.kod_tempat_kerja,
+      tempat_kerja: tempatKerja.nama_tempat_kerja,
+      hari_offday_bertugas: (hariOffday && hariOffday.checked) ? 1 : 0,
+      jam_offday_bertugas: jamOffday,
+      hari_cutiam_bertugas: (hariCutiam && hariCutiam.checked) ? 1 : 0,
+      jam_cutiam_bertugas: jamCutiam,
+      rm_klm_hari_biasa: Number(getValue("rmKlmHariBiasa") || 0),
+      rm_klm_tampungan: Number(getValue("rmTampung") || 0),
+      jam_klm_off: Number(getValue("klmOffday") || 0),
+      jam_klm_wajib: Number(getValue("klmWajib") || 0),
+      jam_klm_mc: Number(getValue("klmMc") || 0),
+      jam_klm_cuti_tahun: Number(getValue("klmCutiTahun") || 0),
+      jam_klm_cuti_ehsan: Number(getValue("klmCutiEhsan") || 0),
+      jam_klm_kursus: Number(getValue("klmKursus") || 0),
+      jam_klm_cuti_ganti: Number(getValue("klmCutiGanti") || 0),
+      jam_klm_tambahan: Number(getValue("klmKawalanTambahan") || 0),
+      dikemaskini_oleh: "Sistem",
+      dikemaskini_pada: new Date().toISOString()
+    };
+
+    // =====================================================
+    // SIMPAN ATAU UPDATE
+    // =====================================================
+    let result;
+
+    if (idUntukUpdate || dutySedangEdit) {
+      // Update
+      const idUpdate = idUntukUpdate || dutySedangEdit;
+      result = await supabaseClient
+        .from("jadual_duty")
+        .update(dataDuty)
+        .eq("id", idUpdate);
+    } else {
+      // Insert baharu
+      result = await supabaseClient
+        .from("jadual_duty")
+        .insert([dataDuty]);
+    }
+
+    if (result.error) throw result.error;
+
+    dutySedangEdit = null;
+    paparPopup(
+      idUntukUpdate || dutySedangEdit
+        ? "Rekod Duty berjaya dikemaskini!"
+        : "Rekod Duty berjaya disimpan!",
+      "success"
+    );
+    await paparDuty();
+
+  } catch (e) {
+    console.error(e);
+    paparPopup("Gagal simpan: " + e.message, "error");
   }
+}
 
   // =====================================================
   // PAPAR SENARAI
