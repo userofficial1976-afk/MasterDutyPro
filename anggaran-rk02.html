@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anggaran RK02 — Master Duty Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            teal: { 450: '#2dd4bf', 550: '#14b8a6', 650: '#0d9488', 750: '#0f766e' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0b1220; font-family: 'Segoe UI', system-ui, sans-serif; }
+    .glass {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(45, 212, 191, 0.12);
+    }
+    .sidebar-link.active {
+      background: linear-gradient(90deg, rgba(20, 184, 166, 0.2), transparent);
+      border-left: 3px solid #14b8a6;
+      color: #2dd4bf;
+    }
+    select:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    /* Print / PDF - borang formal putih */
+    @media print {
+      aside, .no-print, header .no-print-btn { display: none !important; }
+      main { margin: 0 !important; padding: 0 !important; }
+      body { background: white !important; color: black !important; font-size: 10px; }
+      .glass { background: white !important; border: none !important; backdrop-filter: none; }
+      .print-area { color: black !important; }
+      table { border-collapse: collapse; width: 100%; font-size: 9px; }
+      th, td { border: 1px solid #333; padding: 3px 4px; }
+      th { background: #e5e7eb !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .sign-box { border: 1px solid #333; min-height: 120px; }
+    }
+
+    .rk02-table th, .rk02-table td {
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      padding: 6px 4px;
+      text-align: center;
+      font-size: 11px;
+    }
+    .rk02-table th { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; font-weight: 600; }
+    .rk02-table td.nama { text-align: left; padding-left: 8px; }
+    .rk02-table tfoot td { font-weight: 700; background: rgba(15, 23, 42, 0.5); }
+  </style>
+</head>
+<body class="text-slate-200">
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto no-print">
+    <div class="p-6">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center">
+          <i class="fas fa-shield-halved text-white text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-white text-lg">Master Duty Pro</h1>
+          <p class="text-xs text-teal-450">Wilayah Terengganu</p>
+        </div>
+      </div>
+
+      <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
+        <p id="userName" class="text-sm font-semibold text-white truncate">-</p>
+        <p id="userJawatan" class="text-xs text-teal-400 mt-1">-</p>
+      </div>
+
+      <nav class="space-y-1">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Utama</p>
+        <a href="dashboard.html" id="menuDashboard" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <i class="fas fa-chart-pie w-5"></i> Dashboard
+        </a>
+        <a href="#" id="menuAnggota" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <i class="fas fa-users w-5"></i> Pengurusan Anggota
+        </a>
+        <a href="kod-duty.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <i class="fas fa-code w-5"></i> Kod Waktu Kerja
+        </a>
+        <a href="kod-tempat-kerja.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <i class="fas fa-map-marker-alt w-5"></i> Kod Tempat Kerja
+        </a>
+        <a href="jadual-duty.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <i class="fas fa-calendar-check w-5"></i> Pengisian Jadual Tugas
+        </a>
+
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Laporan</p>
+        <a href="#" id="menuLaporan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <i class="fas fa-file-alt w-5"></i> Laporan Wilayah
+        </a>
+        <a href="anggaran-rk02.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium">
+          <i class="fas fa-chart-bar w-5"></i> Anggaran RK02
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <i class="fas fa-chart-line w-5"></i> Anggaran RK01
+        </a>
+
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Sistem</p>
+        <a href="#" id="menuTetapan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <i class="fas fa-cog w-5"></i> Tetapan
+        </a>
+        <a href="#" onclick="logKeluar()" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
+          <i class="fas fa-sign-out-alt w-5"></i> Log Keluar
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 lg:ml-72">
+    <header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4 no-print">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-white">Anggaran RK02</h2>
+          <p class="text-sm text-slate-400">Rumusan Kerja Lebih Masa Bulanan</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="window.print()" class="no-print-btn bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">
+            <i class="fas fa-print mr-2"></i> Cetak / PDF
+          </button>
+          <div class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
+            <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
+            System Online
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="p-6 space-y-6">
+      <!-- Filter -->
+      <div class="glass rounded-2xl p-5 no-print">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 items-end">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-semibold">Unit</label>
+            <select id="filterUnit" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-2.5 px-3 text-sm focus:outline-none focus:border-teal-550">
+              <option value="">-- Pilih Unit --</option>
+              <option value="Jerangau">Jerangau</option>
+              <option value="Chador">Chador</option>
+              <option value="Terengganu">Terengganu</option>
+              <option value="Setiu">Setiu</option>
+              <option value="Rantau Abang">Rantau Abang</option>
+              <option value="Kerteh">Kerteh</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-semibold">Pos</label>
+            <select id="filterPos" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-2.5 px-3 text-sm focus:outline-none focus:border-teal-550">
+              <option value="">-- Semua Pos --</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-semibold">Bulan</label>
+            <select id="filterBulan" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-2.5 px-3 text-sm focus:outline-none focus:border-teal-550"></select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-semibold">Tahun</label>
+            <select id="filterTahun" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-2.5 px-3 text-sm focus:outline-none focus:border-teal-550">
+              <option value="2025">2025</option>
+              <option value="2026" selected>2026</option>
+              <option value="2027">2027</option>
+            </select>
+          </div>
+          <div>
+            <button onclick="janaLaporan()" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-xl transition">
+              <i class="fas fa-sync-alt mr-2"></i> Jana Laporan
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Print Area -->
+      <div class="glass rounded-2xl p-6 print-area" id="printArea">
+        <!-- Header Borang -->
+        <div class="text-center mb-5">
+          <h2 class="text-lg font-bold text-white tracking-wide">FGV SECURITY SERVICES SDN BHD</h2>
+          <h3 class="text-sm font-semibold text-teal-400 mt-1">RUMUSAN KERJA LEBIH MASA BULANAN ANGGOTA</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5 text-sm border border-slate-700 rounded-xl p-4">
+          <div>
+            <span class="text-slate-400">NAMA POS :</span>
+            <span id="namaPos" class="font-semibold text-white ml-1">-</span>
+          </div>
+          <div>
+            <span class="text-slate-400">KAWASAN / UNIT :</span>
+            <span id="namaKawasan" class="font-semibold text-white ml-1">-</span>
+          </div>
+          <div class="flex justify-between">
+            <div>
+              <span class="text-slate-400">BULAN :</span>
+              <span id="bulanLaporan" class="font-semibold text-white ml-1">-</span>
+            </div>
+            <span class="font-bold text-teal-450">RK-02</span>
+          </div>
+        </div>
+
+        <!-- Main Table -->
+        <div class="overflow-x-auto">
+          <table class="rk02-table w-full">
+            <thead>
+              <tr>
+                <th rowspan="3">BIL</th>
+                <th rowspan="3">SKB / NO ANGGOTA</th>
+                <th rowspan="3">NAMA ANGGOTA</th>
+                <th rowspan="3">GAJI POKOK<br>(RM)</th>
+                <th colspan="2">HARI BIASA</th>
+                <th colspan="6">HARI OFF</th>
+                <th colspan="4">HARI CUTI AM</th>
+                <th rowspan="3">JUMLAH<br>TUNTUTAN KLM</th>
+              </tr>
+              <tr>
+                <th rowspan="2">Jam</th>
+                <th rowspan="2">RM</th>
+                <th colspan="2">&lt; 4 Jam</th>
+                <th colspan="2">4 – 8 Jam</th>
+                <th colspan="2">&gt; 8 Jam</th>
+                <th colspan="2">&lt; 8 Jam</th>
+                <th colspan="2">&gt; 8 Jam</th>
+              </tr>
+              <tr>
+                <th>Hari</th><th>RM</th>
+                <th>Hari</th><th>RM</th>
+                <th>Jam</th><th>RM</th>
+                <th>Hari</th><th>RM</th>
+                <th>Jam</th><th>RM</th>
+              </tr>
+            </thead>
+            <tbody id="rk02Body">
+              <tr>
+                <td colspan="17" class="py-10 text-slate-500">Sila pilih Unit, Bulan & Tahun kemudian klik Jana Laporan</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" class="text-right pr-3">JUMLAH</td>
+                <td id="jJamBiasa">0</td>
+                <td id="jRmBiasa">0.00</td>
+                <td id="jOff4">0</td>
+                <td id="jRmOff4">0.00</td>
+                <td id="jOff48">0</td>
+                <td id="jRmOff48">0.00</td>
+                <td id="jOff8">0</td>
+                <td id="jRmOff8">0.00</td>
+                <td id="jCuti8">0</td>
+                <td id="jRmCuti8">0.00</td>
+                <td id="jCuti8p">0</td>
+                <td id="jRmCuti8p">0.00</td>
+                <td id="jJumlahRM">0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Rumusan KLM -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+          <div class="border border-slate-700 rounded-xl p-4">
+            <h4 class="text-sm font-semibold text-teal-400 mb-3">RUMUSAN KLM BULAN SEMASA</h4>
+            <table class="w-full text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-700">
+                  <th class="text-left py-2">Bil</th>
+                  <th class="text-left py-2">Keterangan</th>
+                  <th class="text-right py-2">Jam</th>
+                  <th class="text-right py-2">RM</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-slate-800"><td class="py-1.5">01</td><td>KLM Tugas Kawalan</td><td class="text-right" id="rJamKawalan">0</td><td class="text-right" id="rRmKawalan">0.00</td></tr>
+                <tr class="border-b border-slate-800"><td class="py-1.5">02</td><td>KLM Tampungan Pos</td><td class="text-right" id="rJamTampung">0</td><td class="text-right" id="rRmTampung">0.00</td></tr>
+                <tr class="border-b border-slate-800"><td class="py-1.5">03</td><td>KLM Tugas Eskot</td><td class="text-right" id="rJamEskot">0</td><td class="text-right" id="rRmEskot">0.00</td></tr>
+                <tr class="border-b border-slate-800"><td class="py-1.5">04</td><td>KLM Kawalan Tambahan</td><td class="text-right" id="rJamTambahan">0</td><td class="text-right" id="rRmTambahan">0.00</td></tr>
+                <tr class="border-b border-slate-800"><td class="py-1.5">05</td><td>KLM Offday / Kategori Khas</td><td class="text-right" id="rJamOffKhas">0</td><td class="text-right" id="rRmOffKhas">0.00</td></tr>
+                <tr class="font-bold"><td class="py-2" colspan="2">JUMLAH KLM</td><td class="text-right" id="rJamTotal">0</td><td class="text-right text-teal-400" id="rRmTotal">0.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pengesahan -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="sign-box border border-slate-700 rounded-xl p-3 text-center text-xs">
+              <p class="font-semibold text-slate-300 mb-8">DISEDIAKAN OLEH<br>KETUA POS</p>
+              <p class="border-t border-slate-600 pt-2 mt-10 text-slate-400" id="signKetuaPos">-</p>
+              <p class="text-slate-500 mt-1">Tandatangan & Nama</p>
+            </div>
+            <div class="sign-box border border-slate-700 rounded-xl p-3 text-center text-xs">
+              <p class="font-semibold text-slate-300 mb-2">DISAHKAN OLEH<br>KETUA UNIT</p>
+              <p class="text-slate-500 text-[10px] mb-6">Saya sahkan KLM anggota di bawah kawalan saya adalah betul.</p>
+              <p class="border-t border-slate-600 pt-2 mt-4 text-slate-400" id="signKetuaUnit">-</p>
+              <p class="text-slate-500 mt-1">Tandatangan & Cop</p>
+            </div>
+            <div class="sign-box border border-slate-700 rounded-xl p-3 text-center text-xs">
+              <p class="font-semibold text-slate-300 mb-2">DISAHKAN OLEH<br>PEGAWAI OPERASI</p>
+              <p class="text-slate-500 text-[10px] mb-6">Tuntutan KLM disemak dan tidak bercanggah peraturan.</p>
+              <p class="border-t border-slate-600 pt-2 mt-4 text-slate-400">&nbsp;</p>
+              <p class="text-slate-500 mt-1">Tandatangan & Cop</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center text-slate-500 text-sm py-4 no-print">
+        Master Duty Pro — Wilayah Terengganu © 2026
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const SENARAI_BULAN = ["", "Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+  const SENARAI_BULAN_UPPER = ["", "JANUARI", "FEBRUARI", "MAC", "APRIL", "MEI", "JUN", "JULAI", "OGOS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DISEMBER"];
+
+  let currentUser = null;
+  let semuaAnggota = [];
+  let dataDuty = [];
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    currentUser = bacaPengguna();
+    if (!currentUser) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    paparMaklumatPengguna();
+    kawalMenuMengikutPeranan();
+    isiDropdownBulan();
+    applyRoleAccess();
+    await muatAnggota();
+  });
+
+  function bacaPengguna() {
+    try {
+      const data = localStorage.getItem("mdp_user");
+      return data ? JSON.parse(data) : null;
+    } catch { return null; }
+  }
+
+  function paparMaklumatPengguna() {
+    if (!currentUser) return;
+    document.getElementById("userName").textContent = currentUser.name || currentUser.noSkb || "-";
+    document.getElementById("userJawatan").textContent = currentUser.jawatan || "-";
+  }
+
+  function kawalMenuMengikutPeranan() {
+    if (!currentUser || currentUser.isAdmin) return;
+    ["menuDashboard", "menuAnggota", "menuLaporan", "menuTetapan"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+  }
+
+  function logKeluar() {
+    localStorage.removeItem("mdp_user");
+    window.location.href = "login.html";
+  }
+
+  function isiDropdownBulan() {
+    const sel = document.getElementById("filterBulan");
+    sel.innerHTML = "";
+    for (let i = 1; i <= 12; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = SENARAI_BULAN[i];
+      sel.appendChild(opt);
+    }
+    sel.value = new Date().getMonth() + 1;
+  }
+
+  function applyRoleAccess() {
+    if (!currentUser || currentUser.isAdmin) return;
+
+    const unitSel = document.getElementById("filterUnit");
+    const userUnit = currentUser.unit || "";
+    if (userUnit) {
+      unitSel.innerHTML = `<option value="${userUnit}">${userUnit}</option>`;
+      unitSel.value = userUnit;
+      unitSel.disabled = true;
+    }
+
+    const jawatan = (currentUser.jawatan || "").toLowerCase();
+    if (jawatan.includes("ketua pos") && currentUser.pos) {
+      const posSel = document.getElementById("filterPos");
+      posSel.innerHTML = `<option value="${currentUser.pos}">${currentUser.pos}</option>`;
+      posSel.value = currentUser.pos;
+      posSel.disabled = true;
+    }
+  }
+
+  async function muatAnggota() {
+    const { data, error } = await supabaseClient
+      .from("Data_Anggota")
+      .select("no_skb, nama, no_anggota, unit, pos, kawasan, ketua_unit, ketua_pos, gaji_pokok, rm_pehariklmbiasa, rm_perharioffday, rm_perjamoffday, rm_perharicutiam, rm_perjamcutiam, status")
+      .order("nama");
+    if (error) {
+      console.error(error);
+      return;
+    }
+    semuaAnggota = data || [];
+
+    // Isi pos bila unit berubah
+    document.getElementById("filterUnit").addEventListener("change", isiPosIkutUnit);
+    isiPosIkutUnit();
+  }
+
+  function isiPosIkutUnit() {
+    const unit = document.getElementById("filterUnit").value;
+    const posSel = document.getElementById("filterPos");
+    if (posSel.disabled) return;
+
+    posSel.innerHTML = `<option value="">-- Semua Pos --</option>`;
+    if (!unit) return;
+
+    const posList = [...new Set(
+      semuaAnggota
+        .filter(a => String(a.unit || "").toLowerCase() === unit.toLowerCase())
+        .map(a => a.pos)
+        .filter(Boolean)
+    )].sort();
+
+    posList.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p;
+      opt.textContent = p;
+      posSel.appendChild(opt);
+    });
+  }
+
+  function formatRM(v) {
+    return Number(v || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function num(v) {
+    return Number(v || 0);
+  }
+
+  // =====================================================
+  // JANA LAPORAN DARI jadual_duty
+  // =====================================================
+  async function janaLaporan() {
+    const unit = document.getElementById("filterUnit").value;
+    const pos = document.getElementById("filterPos").value;
+    const bulanNo = Number(document.getElementById("filterBulan").value);
+    const tahun = document.getElementById("filterTahun").value;
+    const namaBulan = SENARAI_BULAN[bulanNo];
+
+    if (!unit) return alert("Sila pilih Unit");
+    if (!bulanNo || !tahun) return alert("Sila pilih Bulan & Tahun");
+
+    document.getElementById("namaPos").textContent = pos || "Semua Pos";
+    document.getElementById("namaKawasan").textContent = unit;
+    document.getElementById("bulanLaporan").textContent = `${SENARAI_BULAN_UPPER[bulanNo]} ${tahun}`;
+
+    // Query duty
+    let query = supabaseClient
+      .from("jadual_duty")
+      .select("*")
+      .eq("tahun", String(tahun))
+      .eq("bulan", namaBulan)
+      .eq("unit", unit);
+
+    if (pos) query = query.eq("pos", pos);
+
+    // Role filter extra
+    if (currentUser && !currentUser.isAdmin) {
+      const jawatan = (currentUser.jawatan || "").toLowerCase();
+      if (jawatan.includes("ketua pos") && currentUser.pos) {
+        query = query.eq("pos", currentUser.pos);
+      }
+    }
+
+    const { data, error } = await query;
+    if (error) {
+      alert("Gagal muat data: " + error.message);
+      return;
+    }
+
+    dataDuty = data || [];
+    prosesDanPapar();
+  }
+
+  function prosesDanPapar() {
+    // Group by no_skb
+    const map = {};
+
+    dataDuty.forEach(row => {
+      const key = String(row.no_skb);
+      if (!map[key]) {
+        const anggota = semuaAnggota.find(a => String(a.no_skb) === key) || {};
+        map[key] = {
+          no_skb: row.no_skb,
+          no_anggota: row.no_anggota || anggota.no_anggota || "",
+          nama: row.nama_anggota || anggota.nama || "",
+          gaji: num(String(anggota.gaji_pokok || "0").replace(/,/g, "")),
+          kadarKlm: num(anggota.rm_pehariklmbiasa),
+          kadarOffHari: num(anggota.rm_perharioffday),
+          kadarOffJam: num(anggota.rm_perjamoffday),
+          kadarCutiHari: num(anggota.rm_perharicutiam),
+          kadarCutiJam: num(anggota.rm_perjamcutiam),
+          ketua_pos: row.ketua_pos || anggota.ketua_pos || "",
+          ketua_unit: row.ketua_unit || anggota.ketua_unit || "",
+          // accumulators
+          jamBiasa: 0,
+          rmBiasa: 0,
+          off4: 0, rmOff4: 0,
+          off48: 0, rmOff48: 0,
+          off8: 0, rmOff8: 0,
+          cuti8: 0, rmCuti8: 0,
+          cuti8p: 0, rmCuti8p: 0,
+          jamTampung: 0, rmTampung: 0,
+          jamEskot: 0, rmEskot: 0,
+          jamTambahan: 0, rmTambahan: 0,
+          jamOffKhas: 0, rmOffKhas: 0
+        };
+      }
+
+      const d = map[key];
+
+      // Hari Biasa KLM
+      d.jamBiasa += num(row.jam_klm);
+      d.rmBiasa += num(row.rm_klm_hari_biasa);
+
+      // Offday — pecah bracket
+      const isOff = num(row.hari_offday_bertugas) === 1 || String(row.hari_offday_bertugas) === "1";
+      const jamOff = num(row.jam_offday_bertugas);
+      if (isOff || jamOff > 0) {
+        if (jamOff > 0 && jamOff < 4) {
+          d.off4 += 1;
+          d.rmOff4 += num(row.rm_hari_offday) || d.kadarOffHari;
+        } else if (jamOff >= 4 && jamOff <= 8) {
+          d.off48 += 1;
+          d.rmOff48 += num(row.rm_hari_offday) || d.kadarOffHari;
+        } else if (jamOff > 8) {
+          d.off8 += jamOff;
+          d.rmOff8 += num(row.rm_jam_offday) || (jamOff * d.kadarOffJam);
+          // juga boleh ada komponen hari
+          if (num(row.rm_hari_offday)) d.rmOff8 += num(row.rm_hari_offday);
+        } else if (isOff && jamOff === 0) {
+          // offday bertugas tanpa jam khusus — kira sebagai hari
+          d.off48 += 1;
+          d.rmOff48 += num(row.rm_hari_offday) || d.kadarOffHari;
+        }
+      }
+
+      // Cuti Am — pecah bracket
+      const isCuti = num(row.hari_cutiam_bertugas) === 1 || String(row.hari_cutiam_bertugas) === "1";
+      const jamCuti = num(row.jam_cutiam_bertugas);
+      if (isCuti || jamCuti > 0) {
+        if (jamCuti > 0 && jamCuti < 8) {
+          d.cuti8 += 1;
+          d.rmCuti8 += num(row.rm_hari_cutiam) || d.kadarCutiHari;
+        } else if (jamCuti >= 8) {
+          d.cuti8p += jamCuti;
+          d.rmCuti8p += num(row.rm_jam_cutiam) || (jamCuti * d.kadarCutiJam);
+          if (num(row.rm_hari_cutiam)) d.rmCuti8p += num(row.rm_hari_cutiam);
+        } else if (isCuti && jamCuti === 0) {
+          d.cuti8 += 1;
+          d.rmCuti8 += num(row.rm_hari_cutiam) || d.kadarCutiHari;
+        }
+      }
+
+      // Tampungan / Eskot / Tambahan / Off khas
+      d.jamTampung += num(row.jam_tampungan);
+      d.rmTampung += num(row.rm_klm_tampungan);
+      d.jamEskot += num(row.jam_klm_eskot);
+      d.rmEskot += num(row.rm_klm_eskot);
+      d.jamTambahan += num(row.jam_klm_tambahan);
+      d.rmTambahan += num(row.rm_klm_tambahan);
+      d.jamOffKhas += num(row.jam_klm_off) + num(row.jam_klm_wajib) + num(row.jam_klm_mc) +
+                      num(row.jam_klm_cuti_tahun) + num(row.jam_klm_cuti_ehsan) +
+                      num(row.jam_klm_kursus) + num(row.jam_klm_cuti_ganti);
+      d.rmOffKhas += num(row.rm_klm_off) + num(row.rm_klm_wajib) + num(row.rm_klm_mc) +
+                     num(row.rm_klm_cuti_tahun) + num(row.rm_klm_cuti_ehsan) +
+                     num(row.rm_klm_kursus) + num(row.rm_klm_cuti_ganti);
+    });
+
+    // Convert to array & sort
+    let senarai = Object.values(map).map(d => {
+      d.jumlahRM = d.rmBiasa + d.rmOff4 + d.rmOff48 + d.rmOff8 + d.rmCuti8 + d.rmCuti8p;
+      return d;
+    });
+
+    senarai.sort((a, b) => String(a.no_skb).localeCompare(String(b.no_skb), undefined, { numeric: true }));
+
+    // Papar table
+    const tbody = document.getElementById("rk02Body");
+    if (!senarai.length) {
+      tbody.innerHTML = `<tr><td colspan="17" class="py-8 text-slate-500">Tiada rekod duty untuk tempoh ini</td></tr>`;
+      resetJumlah();
+      return;
+    }
+
+    let html = "";
+    let bil = 1;
+    const total = {
+      jamBiasa: 0, rmBiasa: 0,
+      off4: 0, rmOff4: 0, off48: 0, rmOff48: 0, off8: 0, rmOff8: 0,
+      cuti8: 0, rmCuti8: 0, cuti8p: 0, rmCuti8p: 0, jumlahRM: 0,
+      jamTampung: 0, rmTampung: 0, jamEskot: 0, rmEskot: 0,
+      jamTambahan: 0, rmTambahan: 0, jamOffKhas: 0, rmOffKhas: 0
+    };
+
+    senarai.forEach(d => {
+      html += `
+        <tr>
+          <td>${bil}</td>
+          <td>${d.no_skb} / ${d.no_anggota}</td>
+          <td class="nama">${d.nama}</td>
+          <td>${formatRM(d.gaji)}</td>
+          <td>${d.jamBiasa}</td>
+          <td>${formatRM(d.rmBiasa)}</td>
+          <td>${d.off4}</td>
+          <td>${formatRM(d.rmOff4)}</td>
+          <td>${d.off48}</td>
+          <td>${formatRM(d.rmOff48)}</td>
+          <td>${d.off8}</td>
+          <td>${formatRM(d.rmOff8)}</td>
+          <td>${d.cuti8}</td>
+          <td>${formatRM(d.rmCuti8)}</td>
+          <td>${d.cuti8p}</td>
+          <td>${formatRM(d.rmCuti8p)}</td>
+          <td>${formatRM(d.jumlahRM)}</td>
+        </tr>`;
+      bil++;
+
+      total.jamBiasa += d.jamBiasa; total.rmBiasa += d.rmBiasa;
+      total.off4 += d.off4; total.rmOff4 += d.rmOff4;
+      total.off48 += d.off48; total.rmOff48 += d.rmOff48;
+      total.off8 += d.off8; total.rmOff8 += d.rmOff8;
+      total.cuti8 += d.cuti8; total.rmCuti8 += d.rmCuti8;
+      total.cuti8p += d.cuti8p; total.rmCuti8p += d.rmCuti8p;
+      total.jumlahRM += d.jumlahRM;
+      total.jamTampung += d.jamTampung; total.rmTampung += d.rmTampung;
+      total.jamEskot += d.jamEskot; total.rmEskot += d.rmEskot;
+      total.jamTambahan += d.jamTambahan; total.rmTambahan += d.rmTambahan;
+      total.jamOffKhas += d.jamOffKhas; total.rmOffKhas += d.rmOffKhas;
+    });
+
+    // Minimum 10 rows for print form feel
+    while (bil <= 10) {
+      html += `<tr><td>${bil}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+      bil++;
+    }
+
+    tbody.innerHTML = html;
+
+    // Footer
+    document.getElementById("jJamBiasa").textContent = total.jamBiasa;
+    document.getElementById("jRmBiasa").textContent = formatRM(total.rmBiasa);
+    document.getElementById("jOff4").textContent = total.off4;
+    document.getElementById("jRmOff4").textContent = formatRM(total.rmOff4);
+    document.getElementById("jOff48").textContent = total.off48;
+    document.getElementById("jRmOff48").textContent = formatRM(total.rmOff48);
+    document.getElementById("jOff8").textContent = total.off8;
+    document.getElementById("jRmOff8").textContent = formatRM(total.rmOff8);
+    document.getElementById("jCuti8").textContent = total.cuti8;
+    document.getElementById("jRmCuti8").textContent = formatRM(total.rmCuti8);
+    document.getElementById("jCuti8p").textContent = total.cuti8p;
+    document.getElementById("jRmCuti8p").textContent = formatRM(total.rmCuti8p);
+    document.getElementById("jJumlahRM").textContent = formatRM(total.jumlahRM);
+
+    // Rumusan
+    const jamKawalan = Math.max(0, total.jamBiasa - total.jamTampung - total.jamEskot - total.jamTambahan);
+    const rmKawalan = Math.max(0, total.rmBiasa - total.rmTampung - total.rmEskot - total.rmTambahan);
+
+    document.getElementById("rJamKawalan").textContent = jamKawalan;
+    document.getElementById("rRmKawalan").textContent = formatRM(rmKawalan);
+    document.getElementById("rJamTampung").textContent = total.jamTampung;
+    document.getElementById("rRmTampung").textContent = formatRM(total.rmTampung);
+    document.getElementById("rJamEskot").textContent = total.jamEskot;
+    document.getElementById("rRmEskot").textContent = formatRM(total.rmEskot);
+    document.getElementById("rJamTambahan").textContent = total.jamTambahan;
+    document.getElementById("rRmTambahan").textContent = formatRM(total.rmTambahan);
+    document.getElementById("rJamOffKhas").textContent = total.jamOffKhas;
+    document.getElementById("rRmOffKhas").textContent = formatRM(total.rmOffKhas);
+
+    const jamTotal = jamKawalan + total.jamTampung + total.jamEskot + total.jamTambahan + total.jamOffKhas;
+    const rmTotal = rmKawalan + total.rmTampung + total.rmEskot + total.rmTambahan + total.rmOffKhas;
+    document.getElementById("rJamTotal").textContent = jamTotal;
+    document.getElementById("rRmTotal").textContent = formatRM(rmTotal);
+
+    // Signature names from first record
+    if (senarai.length) {
+      document.getElementById("signKetuaPos").textContent = senarai[0].ketua_pos || "-";
+      document.getElementById("signKetuaUnit").textContent = senarai[0].ketua_unit || "-";
+    }
+  }
+
+  function resetJumlah() {
+    ["jJamBiasa","jOff4","jOff48","jOff8","jCuti8","jCuti8p","rJamKawalan","rJamTampung","rJamEskot","rJamTambahan","rJamOffKhas","rJamTotal"].forEach(id => {
+      document.getElementById(id).textContent = "0";
+    });
+    ["jRmBiasa","jRmOff4","jRmOff48","jRmOff8","jRmCuti8","jRmCuti8p","jJumlahRM","rRmKawalan","rRmTampung","rRmEskot","rRmTambahan","rRmOffKhas","rRmTotal"].forEach(id => {
+      document.getElementById(id).textContent = "0.00";
+    });
+  }
+</script>
+</body>
+</html>
