@@ -35,15 +35,18 @@
       border-left: 3px solid #14b8a6;
       color: #2dd4bf;
     }
+    select:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body class="text-slate-200">
-
   <div class="flex min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block">
+    <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto">
       <div class="p-6">
-        <div class="flex items-center gap-3 mb-10">
+        <div class="flex items-center gap-3 mb-8">
           <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center">
             <i class="fas fa-shield-halved text-white text-xl"></i>
           </div>
@@ -53,20 +56,22 @@
           </div>
         </div>
 
+        <!-- User Info -->
+        <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
+          <p id="userName" class="text-sm font-semibold text-white truncate">-</p>
+          <p id="userJawatan" class="text-xs text-teal-400 mt-1">-</p>
+        </div>
+
         <nav class="space-y-1">
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Utama</p>
           
-
-
           <a href="dashboard.html" id="menuDashboard" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-          <i class="fas fa-chart-pie w-5"></i> Dashboard
-        </a>
-
+            <i class="fas fa-chart-pie w-5"></i> Dashboard
+          </a>
           
-        <a href="#" id="menuAnggota" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-          <i class="fas fa-users w-5"></i> Pengurusan Anggota
-        </a>
-
+          <a href="#" id="menuAnggota" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-users w-5"></i> Pengurusan Anggota
+          </a>
           
           <a href="kod-duty.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium">
             <i class="fas fa-code w-5"></i> Kod Waktu Kerja
@@ -79,7 +84,7 @@
           </a>
 
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Laporan</p>
-          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <a href="#" id="menuLaporan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-file-alt w-5"></i> Laporan Wilayah
           </a>
           <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
@@ -90,10 +95,10 @@
           </a>
 
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Sistem</p>
-          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+          <a href="#" id="menuTetapan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-cog w-5"></i> Tetapan
           </a>
-          <a href="login.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
+          <a href="#" onclick="logKeluar()" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
             <i class="fas fa-sign-out-alt w-5"></i> Log Keluar
           </a>
         </nav>
@@ -116,7 +121,6 @@
       </header>
 
       <div class="p-6 space-y-6">
-
         <!-- Form Card -->
         <div class="glass rounded-2xl p-6">
           <h3 class="text-lg font-semibold text-white mb-5" id="tajukBorang">Tambah Kod Duty</h3>
@@ -136,27 +140,22 @@
                 <option value="Kerteh">Kerteh</option>
               </select>
             </div>
-
             <div>
               <label class="block text-sm text-slate-400 mb-2">Kod Duty</label>
               <input type="text" id="kod" placeholder="Contoh: A" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550 uppercase">
             </div>
-
             <div>
               <label class="block text-sm text-slate-400 mb-2">Waktu Tugasan</label>
               <input type="text" id="waktuTugasan" placeholder="Contoh: 0700-1500" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
             </div>
-
             <div>
               <label class="block text-sm text-slate-400 mb-2">Jam Kerja</label>
               <input type="number" id="jamKerja" min="0" step="0.5" placeholder="8" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
             </div>
-
             <div>
               <label class="block text-sm text-slate-400 mb-2">Jam KLM</label>
               <input type="number" id="jamKlm" min="0" step="0.5" value="0" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
             </div>
-
             <div>
               <label class="block text-sm text-slate-400 mb-2">Status</label>
               <select id="status" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
@@ -232,14 +231,88 @@
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const SENARAI_UNIT = ["Jerangau", "Chador", "Terengganu", "Setiu", "Rantau Abang", "Kerteh"];
+
     let unitLama = "";
     let kodLama = "";
     let sedangEdit = false;
+    let currentUser = null;
 
-    document.addEventListener("DOMContentLoaded", function() {
+    // =====================================================
+    // INIT
+    // =====================================================
+    document.addEventListener("DOMContentLoaded", function () {
+      currentUser = bacaPengguna();
+      if (!currentUser) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      paparMaklumatPengguna();
+      kawalMenuMengikutPeranan();
+      applyRoleAccess();
       paparKodDuty();
     });
 
+    function bacaPengguna() {
+      try {
+        const data = localStorage.getItem("mdp_user");
+        return data ? JSON.parse(data) : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function paparMaklumatPengguna() {
+      if (!currentUser) return;
+      document.getElementById("userName").textContent = currentUser.name || currentUser.noSkb || "-";
+      document.getElementById("userJawatan").textContent = currentUser.jawatan || "-";
+    }
+
+    function kawalMenuMengikutPeranan() {
+      if (!currentUser || currentUser.isAdmin) return;
+
+      // Sembunyi menu admin
+      ["menuDashboard", "menuAnggota", "menuLaporan", "menuTetapan"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+      });
+    }
+
+    function logKeluar() {
+      localStorage.removeItem("mdp_user");
+      window.location.href = "login.html";
+    }
+
+    // =====================================================
+    // ROLE ACCESS - LOCK UNIT
+    // =====================================================
+    function applyRoleAccess() {
+      if (!currentUser) return;
+
+      const unitSelect = document.getElementById("unit");
+      const filterUnit = document.getElementById("filterUnit");
+
+      // Admin boleh pilih semua
+      if (currentUser.isAdmin) return;
+
+      const userUnit = currentUser.unit || "";
+
+      if (userUnit) {
+        // Lock form Unit
+        unitSelect.innerHTML = `<option value="${userUnit}">${userUnit}</option>`;
+        unitSelect.value = userUnit;
+        unitSelect.disabled = true;
+
+        // Lock filter dropdown
+        filterUnit.innerHTML = `<option value="${userUnit}">${userUnit}</option>`;
+        filterUnit.value = userUnit;
+        filterUnit.disabled = true;
+      }
+    }
+
+    // =====================================================
+    // HELPER
+    // =====================================================
     function paparMesej(mesej, jenis = "success") {
       const el = document.getElementById("mesej");
       const warna = jenis === "success" 
@@ -249,6 +322,9 @@
       setTimeout(() => el.innerHTML = "", 4000);
     }
 
+    // =====================================================
+    // SIMPAN
+    // =====================================================
     async function simpanKodDuty() {
       const unit = document.getElementById("unit").value.trim();
       const kod = document.getElementById("kod").value.trim().toUpperCase();
@@ -262,6 +338,11 @@
       if (!waktuTugasan) return paparMesej("❌ Sila masukkan Waktu Tugasan", "error");
       if (jamKerja === "") return paparMesej("❌ Sila masukkan Jam Kerja", "error");
 
+      // Extra safety: non-admin hanya boleh simpan unit sendiri
+      if (currentUser && !currentUser.isAdmin && currentUser.unit && unit !== currentUser.unit) {
+        return paparMesej("❌ Anda hanya dibenarkan urus unit sendiri", "error");
+      }
+
       const data = {
         unit,
         kod,
@@ -273,7 +354,11 @@
 
       let result;
       if (sedangEdit) {
-        result = await supabaseClient.from("kod_duty").update(data).eq("unit", unitLama).eq("kod", kodLama);
+        result = await supabaseClient
+          .from("kod_duty")
+          .update(data)
+          .eq("unit", unitLama)
+          .eq("kod", kodLama);
       } else {
         result = await supabaseClient.from("kod_duty").insert([data]);
       }
@@ -292,15 +377,25 @@
       paparKodDuty();
     }
 
+    // =====================================================
+    // PAPAR SENARAI
+    // =====================================================
     async function paparKodDuty() {
       const tbody = document.getElementById("senaraiKodDuty");
       tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-slate-500">Memuatkan data...</td></tr>`;
 
-      const { data, error } = await supabaseClient
+      let query = supabaseClient
         .from("kod_duty")
         .select("*")
         .order("unit", { ascending: true })
         .order("kod", { ascending: true });
+
+      // Non-admin hanya nampak unit sendiri
+      if (currentUser && !currentUser.isAdmin && currentUser.unit) {
+        query = query.eq("unit", currentUser.unit);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-red-400">Gagal ambil data: ${error.message}</td></tr>`;
@@ -311,6 +406,8 @@
       const cariKod = document.getElementById("cariKod").value.trim().toUpperCase();
 
       let senarai = data || [];
+
+      // Filter tambahan (jika admin)
       if (filterUnit) senarai = senarai.filter(i => i.unit === filterUnit);
       if (cariKod) senarai = senarai.filter(i => String(i.kod).toUpperCase().includes(cariKod));
 
@@ -348,18 +445,30 @@
       });
     }
 
+    // =====================================================
+    // EDIT / BATAL / KOSONGKAN
+    // =====================================================
     function editKodDuty(item) {
+      // Non-admin hanya boleh edit unit sendiri
+      if (currentUser && !currentUser.isAdmin && currentUser.unit && item.unit !== currentUser.unit) {
+        paparMesej("❌ Anda hanya dibenarkan urus unit sendiri", "error");
+        return;
+      }
+
       sedangEdit = true;
       unitLama = item.unit;
       kodLama = item.kod;
+
       document.getElementById("unit").value = item.unit || "";
       document.getElementById("kod").value = item.kod || "";
       document.getElementById("waktuTugasan").value = item.waktu_tugasan || "";
       document.getElementById("jamKerja").value = item.jam_kerja ?? "";
       document.getElementById("jamKlm").value = item.jam_klm ?? 0;
       document.getElementById("status").value = item.status || "Aktif";
+
       document.getElementById("tajukBorang").textContent = "Edit Kod Duty";
       document.getElementById("btnBatal").classList.remove("hidden");
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -371,7 +480,13 @@
       sedangEdit = false;
       unitLama = "";
       kodLama = "";
-      document.getElementById("unit").value = "";
+
+      // Jika unit dikunci, jangan clear value unit
+      const unitSelect = document.getElementById("unit");
+      if (!unitSelect.disabled) {
+        unitSelect.value = "";
+      }
+
       document.getElementById("kod").value = "";
       document.getElementById("waktuTugasan").value = "";
       document.getElementById("jamKerja").value = "";
@@ -381,7 +496,16 @@
       document.getElementById("btnBatal").classList.add("hidden");
     }
 
+    // =====================================================
+    // PADAM
+    // =====================================================
     async function padamKodDuty(item) {
+      // Non-admin hanya boleh padam unit sendiri
+      if (currentUser && !currentUser.isAdmin && currentUser.unit && item.unit !== currentUser.unit) {
+        paparMesej("❌ Anda hanya dibenarkan urus unit sendiri", "error");
+        return;
+      }
+
       if (!confirm(`Padam Kod Duty ${item.kod} untuk Unit ${item.unit}?`)) return;
 
       const { error } = await supabaseClient
@@ -394,6 +518,7 @@
         paparMesej("❌ Gagal padam: " + error.message, "error");
         return;
       }
+
       paparMesej("✅ Kod Duty berjaya dipadam");
       paparKodDuty();
     }
