@@ -123,8 +123,12 @@
 
         localStorage.setItem("mdp_user", JSON.stringify(userData));
 
-        // Redirect ke dashboard
-        window.location.href = "dashboard.html";
+// Redirect mengikut peranan
+if (isAdmin) {
+  window.location.href = "dashboard.html";
+} else {
+  window.location.href = "jadual-duty.html";
+}
 
       } catch (err) {
         errorMsg.textContent = "❌ " + err.message;
