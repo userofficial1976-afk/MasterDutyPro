@@ -1,142 +1,1115 @@
 <!DOCTYPE html>
+
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Login — Master Duty Pro</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  >
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
+
     body {
-      background: linear-gradient(135deg, #0f172a 0%, #0c4a4e 50%, #0f172a 100%);
+
+      background:
+        linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #0c4a4e 50%,
+          #0f172a 100%
+        );
+
       min-height: 100vh;
-      font-family: 'Segoe UI', system-ui, sans-serif;
+
+      font-family:
+        'Segoe UI',
+        system-ui,
+        sans-serif;
+
     }
+
+
     .glass {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(45, 212, 191, 0.15);
+
+      background:
+        rgba(15, 23, 42, 0.75);
+
+      backdrop-filter:
+        blur(20px);
+
+      border:
+        1px solid rgba(45, 212, 191, 0.15);
+
     }
+
   </style>
+
 </head>
+
 <body class="flex items-center justify-center p-4">
 
   <div class="w-full max-w-md">
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-400 to-teal-700 mb-5">
-        <i class="fas fa-shield-halved text-3xl text-white"></i>
-      </div>
-      <h1 class="text-3xl font-bold text-white">Master Duty Pro</h1>
-      <p class="text-teal-300 mt-2 text-sm">Polis Bantuan FGV • Wilayah Terengganu</p>
-    </div>
 
-    <div class="glass rounded-3xl p-8">
-      <div class="text-center mb-8">
-        <h2 class="text-xl font-semibold text-white">Selamat Kembali</h2>
-        <p class="text-slate-400 text-sm mt-1">Log masuk menggunakan No.SKB</p>
-      </div>
+```
+<!-- =====================================================
+     LOGO
+====================================================== -->
 
-      <form id="loginForm" class="space-y-5">
-        <div>
-          <label class="block text-sm font-medium text-slate-300 mb-2">No.SKB</label>
-          <input type="text" id="noSkb" placeholder="Contoh: 12345" 
-            class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-teal-500" required>
-        </div>
+<div class="text-center mb-8">
 
-        <div>
-          <label class="block text-sm font-medium text-slate-300 mb-2">Kata Laluan</label>
-          <input type="password" id="password" placeholder="••••••••" 
-            class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-teal-500" required>
-        </div>
+  <div
+    class="
+      inline-flex
+      items-center
+      justify-center
+      w-20
+      h-20
+      rounded-2xl
+      bg-gradient-to-br
+      from-teal-400
+      to-teal-700
+      mb-5
+    "
+  >
 
-        <div id="errorMsg" class="hidden text-red-400 text-sm text-center"></div>
+    <i
+      class="
+        fas
+        fa-shield-halved
+        text-3xl
+        text-white
+      "
+    ></i>
 
-        <button type="submit" id="btnLogin" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3.5 rounded-xl transition">
-          Log Masuk
-        </button>
-      </form>
-
-      <p class="text-center text-slate-500 text-xs mt-6">
-        Kata laluan sementara: <span class="text-teal-400">123456</span>
-      </p>
-    </div>
   </div>
 
-  <script>
-    const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Kata laluan sementara untuk semua pengguna
+  <h1
+    class="
+      text-3xl
+      font-bold
+      text-white
+    "
+  >
+    Master Duty Pro
+  </h1>
+
+
+  <p
+    class="
+      text-teal-300
+      mt-2
+      text-sm
+    "
+  >
+    Polis Bantuan FGV • Wilayah Terengganu
+  </p>
+
+</div>
+
+
+
+<!-- =====================================================
+     LOGIN CARD
+====================================================== -->
+
+<div
+  class="
+    glass
+    rounded-3xl
+    p-8
+  "
+>
+
+
+  <!-- TAJUK -->
+
+  <div class="text-center mb-8">
+
+    <h2
+      class="
+        text-xl
+        font-semibold
+        text-white
+      "
+    >
+      Selamat Kembali
+    </h2>
+
+
+    <p
+      class="
+        text-slate-400
+        text-sm
+        mt-1
+      "
+    >
+      Log masuk menggunakan No.SKB
+    </p>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       FORM LOGIN
+  ====================================================== -->
+
+  <form
+    id="loginForm"
+    class="space-y-5"
+  >
+
+
+    <!-- NO SKB -->
+
+    <div>
+
+      <label
+        class="
+          block
+          text-sm
+          font-medium
+          text-slate-300
+          mb-2
+        "
+      >
+        No.SKB
+      </label>
+
+
+      <input
+        type="text"
+        id="noSkb"
+        placeholder="Contoh: 12345"
+        autocomplete="username"
+        class="
+          w-full
+          bg-slate-900
+          border
+          border-slate-700
+          text-white
+          rounded-xl
+          py-3.5
+          px-4
+          focus:outline-none
+          focus:border-teal-500
+        "
+        required
+      >
+
+    </div>
+
+
+
+    <!-- KATA LALUAN -->
+
+    <div>
+
+      <label
+        class="
+          block
+          text-sm
+          font-medium
+          text-slate-300
+          mb-2
+        "
+      >
+        Kata Laluan
+      </label>
+
+
+      <input
+        type="password"
+        id="password"
+        placeholder="••••••••"
+        autocomplete="current-password"
+        class="
+          w-full
+          bg-slate-900
+          border
+          border-slate-700
+          text-white
+          rounded-xl
+          py-3.5
+          px-4
+          focus:outline-none
+          focus:border-teal-500
+        "
+        required
+      >
+
+    </div>
+
+
+
+    <!-- ERROR -->
+
+    <div
+      id="errorMsg"
+      class="
+        hidden
+        text-red-400
+        text-sm
+        text-center
+      "
+    ></div>
+
+
+
+    <!-- BUTTON -->
+
+    <button
+      type="submit"
+      id="btnLogin"
+      class="
+        w-full
+        bg-teal-600
+        hover:bg-teal-500
+        text-white
+        font-semibold
+        py-3.5
+        rounded-xl
+        transition
+      "
+    >
+      Log Masuk
+    </button>
+
+
+  </form>
+
+
+
+  <!-- PASSWORD SEMENTARA -->
+
+  <p
+    class="
+      text-center
+      text-slate-500
+      text-xs
+      mt-6
+    "
+  >
+
+    Kata laluan sementara:
+
+    <span class="text-teal-400">
+      123456
+    </span>
+
+  </p>
+
+
+</div>
+```
+
+  </div>
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+
+  <script>
+
+
+    // =====================================================
+    // SUPABASE
+    // =====================================================
+
+    const SUPABASE_URL =
+      "https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+
+    const SUPABASE_KEY =
+      "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+
+    // =====================================================
+    // PASSWORD SEMENTARA
+    // =====================================================
+
     const TEMP_PASSWORD = "123456";
 
-    // Jawatan yang dianggap Admin
-    const ADMIN_JAWATAN = ["PTW", "PPOW", "POW", "ptw", "ppow", "pow"];
 
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
 
-      const noSkb = document.getElementById('noSkb').value.trim();
-      const password = document.getElementById('password').value;
-      const errorMsg = document.getElementById('errorMsg');
-      const btnLogin = document.getElementById('btnLogin');
+    // =====================================================
+    // JAWATAN ADMIN
+    // =====================================================
 
-      errorMsg.classList.add('hidden');
-      btnLogin.disabled = true;
-      btnLogin.textContent = "Sedang log masuk...";
+    const ADMIN_JAWATAN = [
 
-      try {
-        // Semak kata laluan sementara
-        if (password !== TEMP_PASSWORD) {
-          throw new Error("No.SKB atau Kata Laluan salah.");
-        }
+      "PTW",
+      "PPOW",
+      "POW"
 
-        // Cari anggota dalam database
-        const { data, error } = await supabaseClient
-          .from("Data_Anggota")
-          .select("no_skb, nama, unit, pos, jawatan, ketua_unit, ketua_pos, status")
-          .eq("no_skb", noSkb)
-          .maybeSingle();
+    ];
 
-        if (error) throw error;
 
-        if (!data) {
-          throw new Error("No.SKB tidak dijumpai dalam sistem.");
-        }
 
-        // Tentukan sama ada Admin
-        const jawatan = (data.jawatan || "").trim();
-        const isAdmin = ADMIN_JAWATAN.includes(jawatan);
+    // =====================================================
+    // FUNGSI SEMAK NILAI
+    //
+    // Digunakan untuk:
+    // Ya
+    // YA
+    // yes
+    // true
+    // 1
+    // aktif
+    // ketua
+    // =====================================================
 
-        // Simpan maklumat pengguna
-        const userData = {
-          noSkb: String(data.no_skb),
-          name: data.nama || "",
-          jawatan: jawatan,
-          unit: data.unit || "",
-          pos: data.pos || "",
-          ketua_unit: data.ketua_unit || "",
-          ketua_pos: data.ketua_pos || "",
-          isAdmin: isAdmin
-        };
+    function isYes(value) {
 
-        localStorage.setItem("mdp_user", JSON.stringify(userData));
 
-// Redirect mengikut peranan
-if (isAdmin) {
-  window.location.href = "dashboard.html";
-} else {
-  window.location.href = "jadual-duty.html";
-}
+      if (value === true) {
 
-      } catch (err) {
-        errorMsg.textContent = "❌ " + err.message;
-        errorMsg.classList.remove("hidden");
-        btnLogin.disabled = false;
-        btnLogin.textContent = "Log Masuk";
+        return true;
+
       }
-    });
+
+
+      if (
+        value === false ||
+        value === null ||
+        value === undefined
+      ) {
+
+        return false;
+
+      }
+
+
+      const text =
+        String(value)
+          .trim()
+          .toLowerCase();
+
+
+      return [
+
+        "ya",
+        "yes",
+        "true",
+        "1",
+        "ketua",
+        "aktif"
+
+      ].includes(text);
+
+    }
+
+
+
+    // =====================================================
+    // SEMAK KETUA POS
+    // =====================================================
+
+    function checkKetuaPos(
+      data,
+      noSkb
+    ) {
+
+
+      const jawatan =
+        String(data.jawatan || "")
+          .trim()
+          .toLowerCase();
+
+
+      const ketuaPos =
+        String(data.ketua_pos || "")
+          .trim()
+          .toLowerCase();
+
+
+      const nama =
+        String(data.nama || "")
+          .trim()
+          .toLowerCase();
+
+
+      const skb =
+        String(noSkb || "")
+          .trim()
+          .toLowerCase();
+
+
+
+      // ---------------------------------------------------
+      // 1. JAWATAN = KETUA POS
+      // ---------------------------------------------------
+
+      if (
+
+        jawatan === "ketua pos" ||
+
+        jawatan.includes("ketua pos")
+
+      ) {
+
+        return true;
+
+      }
+
+
+
+      // ---------------------------------------------------
+      // 2. ketua_pos = YA / TRUE / 1
+      // ---------------------------------------------------
+
+      if (
+        isYes(data.ketua_pos)
+      ) {
+
+        return true;
+
+      }
+
+
+
+      // ---------------------------------------------------
+      // 3. ketua_pos SIMPAN NO.SKB
+      // ---------------------------------------------------
+
+      if (
+
+        ketuaPos &&
+
+        ketuaPos === skb
+
+      ) {
+
+        return true;
+
+      }
+
+
+
+      // ---------------------------------------------------
+      // 4. ketua_pos SIMPAN NAMA
+      // ---------------------------------------------------
+
+      if (
+
+        ketuaPos &&
+
+        nama &&
+
+        ketuaPos === nama
+
+      ) {
+
+        return true;
+
+      }
+
+
+
+      return false;
+
+    }
+
+
+
+    // =====================================================
+    // SEMAK KETUA UNIT
+    // =====================================================
+
+    function checkKetuaUnit(
+      data,
+      noSkb
+    ) {
+
+
+      const jawatan =
+        String(data.jawatan || "")
+          .trim()
+          .toLowerCase();
+
+
+      const ketuaUnit =
+        String(data.ketua_unit || "")
+          .trim()
+          .toLowerCase();
+
+
+      const nama =
+        String(data.nama || "")
+          .trim()
+          .toLowerCase();
+
+
+      const skb =
+        String(noSkb || "")
+          .trim()
+          .toLowerCase();
+
+
+
+      // ---------------------------------------------------
+      // 1. JAWATAN = KETUA UNIT
+      // ---------------------------------------------------
+
+      if (
+
+        jawatan === "ketua unit" ||
+
+        jawatan.includes("ketua unit")
+
+      ) {
+
+        return true;
+
+      }
+
+
+
+      // ---------------------------------------------------
+      // 2. ketua_unit = YA / TRUE / 1
+      // ---------------------------------------------------
+
+      if (
+        isYes(data.ketua_unit)
+      ) {
+
+        return true;
+
+      }
+
+
+
+      // ---------------------------------------------------
+      // 3. ketua_unit SIMPAN NO.SKB
+      // ---------------------------------------------------
+
+      if (
+
+        ketuaUnit &&
+
+        ketuaUnit === skb
+
+      ) {
+
+        return true;
+
+      }
+
+
+
+      // ---------------------------------------------------
+      // 4. ketua_unit SIMPAN NAMA
+      // ---------------------------------------------------
+
+      if (
+
+        ketuaUnit &&
+
+        nama &&
+
+        ketuaUnit === nama
+
+      ) {
+
+        return true;
+
+      }
+
+
+
+      return false;
+
+    }
+
+
+
+    // =====================================================
+    // FORM LOGIN
+    // =====================================================
+
+    document
+      .getElementById("loginForm")
+      .addEventListener(
+        "submit",
+        async function(e) {
+
+          e.preventDefault();
+
+
+
+          // =================================================
+          // AMBIL INPUT
+          // =================================================
+
+          const noSkb =
+
+            document
+              .getElementById("noSkb")
+              .value
+              .trim();
+
+
+          const password =
+
+            document
+              .getElementById("password")
+              .value;
+
+
+          const errorMsg =
+
+            document
+              .getElementById("errorMsg");
+
+
+          const btnLogin =
+
+            document
+              .getElementById("btnLogin");
+
+
+
+          // =================================================
+          // RESET ERROR
+          // =================================================
+
+          errorMsg.classList.add(
+            "hidden"
+          );
+
+
+          btnLogin.disabled = true;
+
+
+          btnLogin.textContent =
+            "Sedang log masuk...";
+
+
+
+          try {
+
+
+            // =================================================
+            // 1. SEMAK PASSWORD
+            // =================================================
+
+            if (
+              password !== TEMP_PASSWORD
+            ) {
+
+              throw new Error(
+                "No.SKB atau Kata Laluan salah."
+              );
+
+            }
+
+
+
+            // =================================================
+            // 2. CARI DATA ANGGOTA
+            // =================================================
+
+            const {
+              data,
+              error
+            } = await supabaseClient
+
+              .from("Data_Anggota")
+
+              .select(`
+                no_skb,
+                nama,
+                unit,
+                pos,
+                jawatan,
+                ketua_unit,
+                ketua_pos,
+                status
+              `)
+
+              .eq(
+                "no_skb",
+                noSkb
+              )
+
+              .maybeSingle();
+
+
+
+            // =================================================
+            // 3. ERROR SUPABASE
+            // =================================================
+
+            if (error) {
+
+              console.error(
+                "SUPABASE ERROR:",
+                error
+              );
+
+              throw new Error(
+                "Ralat sambungan ke database."
+              );
+
+            }
+
+
+
+            // =================================================
+            // 4. NO SKB TIDAK DIJUMPAI
+            // =================================================
+
+            if (!data) {
+
+              throw new Error(
+                "No.SKB tidak dijumpai dalam sistem."
+              );
+
+            }
+
+
+
+            // =================================================
+            // 5. SEMAK STATUS
+            // =================================================
+
+            const status =
+
+              String(
+                data.status || ""
+              )
+              .trim()
+              .toLowerCase();
+
+
+
+            if (
+
+              status &&
+
+              [
+
+                "tidak aktif",
+                "inactive",
+                "disabled",
+                "terminated",
+                "keluar"
+
+              ].includes(status)
+
+            ) {
+
+              throw new Error(
+                "Akaun anda tidak aktif. Sila hubungi Admin."
+              );
+
+            }
+
+
+
+            // =================================================
+            // 6. SEMAK ADMIN
+            // =================================================
+
+            const jawatan =
+
+              String(
+                data.jawatan || ""
+              )
+              .trim()
+              .toUpperCase();
+
+
+
+            const isAdmin =
+
+              ADMIN_JAWATAN.includes(
+                jawatan
+              );
+
+
+
+            // =================================================
+            // 7. SEMAK KETUA POS
+            // =================================================
+
+            const isKetuaPos =
+
+              checkKetuaPos(
+                data,
+                noSkb
+              );
+
+
+
+            // =================================================
+            // 8. SEMAK KETUA UNIT
+            // =================================================
+
+            const isKetuaUnit =
+
+              checkKetuaUnit(
+                data,
+                noSkb
+              );
+
+
+
+            // =================================================
+            // 9. HANYA ADMIN / KETUA POS / KETUA UNIT
+            // =================================================
+
+            if (
+
+              !isAdmin &&
+
+              !isKetuaPos &&
+
+              !isKetuaUnit
+
+            ) {
+
+              throw new Error(
+                "Akses ditolak. Hanya Admin, Ketua Pos dan Ketua Unit dibenarkan untuk log masuk."
+              );
+
+            }
+
+
+
+            // =================================================
+            // 10. TENTUKAN ROLE
+            // =================================================
+
+            let role =
+              "anggota";
+
+
+
+            if (isAdmin) {
+
+              role =
+                "admin";
+
+            }
+
+            else if (isKetuaUnit) {
+
+              role =
+                "ketua_unit";
+
+            }
+
+            else if (isKetuaPos) {
+
+              role =
+                "ketua_pos";
+
+            }
+
+
+
+            // =================================================
+            // 11. BINA DATA USER
+            // =================================================
+
+            const userData = {
+
+              noSkb:
+                String(data.no_skb),
+
+              name:
+                data.nama || "",
+
+              jawatan:
+                data.jawatan || "",
+
+              unit:
+                data.unit || "",
+
+              pos:
+                data.pos || "",
+
+              ketua_unit:
+                data.ketua_unit || "",
+
+              ketua_pos:
+                data.ketua_pos || "",
+
+              status:
+                data.status || "",
+
+              isAdmin:
+                isAdmin,
+
+              isKetuaPos:
+                isKetuaPos,
+
+              isKetuaUnit:
+                isKetuaUnit,
+
+              role:
+                role
+
+            };
+
+
+
+            // =================================================
+            // 12. SIMPAN LOGIN
+            // =================================================
+
+            localStorage.setItem(
+              "mdp_user",
+              JSON.stringify(userData)
+            );
+
+
+
+            // =================================================
+            // 13. DEBUG CONSOLE
+            // =================================================
+
+            console.log(
+              "================================="
+            );
+
+            console.log(
+              "LOGIN BERJAYA"
+            );
+
+            console.log(
+              "NO SKB:",
+              userData.noSkb
+            );
+
+            console.log(
+              "NAMA:",
+              userData.name
+            );
+
+            console.log(
+              "JAWATAN:",
+              userData.jawatan
+            );
+
+            console.log(
+              "ROLE:",
+              userData.role
+            );
+
+            console.log(
+              "ADMIN:",
+              userData.isAdmin
+            );
+
+            console.log(
+              "KETUA UNIT:",
+              userData.isKetuaUnit
+            );
+
+            console.log(
+              "KETUA POS:",
+              userData.isKetuaPos
+            );
+
+            console.log(
+              "=================================");
+
+
+
+            // =================================================
+            // 14. REDIRECT
+            // =================================================
+
+            // ADMIN
+            if (isAdmin) {
+
+              window.location.href =
+                "dashboard.html";
+
+            }
+
+
+            // KETUA UNIT
+            else if (isKetuaUnit) {
+
+              window.location.href =
+                "jadual-duty.html";
+
+            }
+
+
+            // KETUA POS
+            else if (isKetuaPos) {
+
+              window.location.href =
+                "jadual-duty.html";
+
+            }
+
+
+          }
+
+
+          // ===================================================
+          // ERROR
+          // ===================================================
+
+          catch (err) {
+
+
+            console.error(
+              "LOGIN ERROR:",
+              err
+            );
+
+
+            errorMsg.textContent =
+              "❌ " +
+              (
+                err.message ||
+                "Ralat semasa log masuk."
+              );
+
+
+            errorMsg.classList.remove(
+              "hidden"
+            );
+
+
+            btnLogin.disabled =
+              false;
+
+
+            btnLogin.textContent =
+              "Log Masuk";
+
+          }
+
+        }
+      );
+
+
   </script>
+
 </body>
 </html>
