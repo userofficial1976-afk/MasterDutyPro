@@ -43,6 +43,10 @@
       border-color: #14b8a6;
       box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
     }
+    input:disabled, select:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
     label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.4rem; font-weight: 600; }
   </style>
 </head>
@@ -52,7 +56,7 @@
   <!-- Sidebar -->
   <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto">
     <div class="p-6">
-      <div class="flex items-center gap-3 mb-10">
+      <div class="flex items-center gap-3 mb-8">
         <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center">
           <i class="fas fa-shield-halved text-white text-xl"></i>
         </div>
@@ -62,16 +66,23 @@
         </div>
       </div>
 
+      <!-- User Info -->
+      <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
+        <p id="userName" class="text-sm font-semibold text-white truncate">-</p>
+        <p id="userJawatan" class="text-xs text-teal-400 mt-1">-</p>
+      </div>
+
       <nav class="space-y-1">
         <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Utama</p>
-        <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        
+        <a href="dashboard.html" id="menuDashboard" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
           <i class="fas fa-chart-pie w-5"></i> Dashboard
         </a>
-        <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <a href="#" id="menuAnggota" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
           <i class="fas fa-users w-5"></i> Pengurusan Anggota
         </a>
         <a href="kod-duty.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-          <i class="fas fa-code w-5"></i> Kod Waktu Kerja
+          <i class="fas fa-code w-5"></i> Pengisian Kod Duty
         </a>
         <a href="kod-tempat-kerja.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
           <i class="fas fa-map-marker-alt w-5"></i> Kod Tempat Kerja
@@ -81,7 +92,7 @@
         </a>
 
         <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Laporan</p>
-        <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <a href="#" id="menuLaporan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
           <i class="fas fa-file-alt w-5"></i> Laporan Wilayah
         </a>
         <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
@@ -92,10 +103,10 @@
         </a>
 
         <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Sistem</p>
-        <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <a href="#" id="menuTetapan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
           <i class="fas fa-cog w-5"></i> Tetapan
         </a>
-        <a href="login.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
+        <a href="#" onclick="logKeluar()" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
           <i class="fas fa-sign-out-alt w-5"></i> Log Keluar
         </a>
       </nav>
@@ -243,7 +254,6 @@
         </div>
       </div>
 
-      <!-- Simpan -->
       <button onclick="simpanDuty()" class="w-full bg-gradient-to-r from-teal-650 to-teal-550 hover:from-teal-550 hover:to-teal-450 text-white font-bold py-4 rounded-2xl text-lg transition shadow-lg">
         <i class="fas fa-save mr-2"></i> SIMPAN DUTY
       </button>
@@ -308,8 +318,22 @@
   let semuaKodDuty = [];
   let semuaKodTempatKerja = [];
   let dutySedangEdit = null;
+  let currentUser = null;
 
+  // =====================================================
+  // INIT
+  // =====================================================
   document.addEventListener("DOMContentLoaded", async function () {
+    // Semak login
+    currentUser = bacaPengguna();
+    if (!currentUser) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    paparMaklumatPengguna();
+    kawalMenuMengikutPeranan();
+
     isiSenaraiUnit();
     pasangEventTarikh();
     pasangEventUnit();
@@ -317,13 +341,100 @@
     pasangEventAnggota();
     pasangEventKodDuty();
     pasangEventPengiraanRM();
+
     await muatAnggota();
     isiSenaraiPosTampungan();
     await muatKodDuty();
     await muatKodTempatKerja();
     isiSenaraiFilterKetuaUnit();
+
+    // Auto set mengikut peranan
+    await applyRoleAccess();
   });
 
+  function bacaPengguna() {
+    try {
+      const data = localStorage.getItem("mdp_user");
+      return data ? JSON.parse(data) : null;
+    } catch { return null; }
+  }
+
+  function paparMaklumatPengguna() {
+    if (!currentUser) return;
+    document.getElementById("userName").textContent = currentUser.name || currentUser.noSkb || "-";
+    document.getElementById("userJawatan").textContent = currentUser.jawatan || "-";
+  }
+
+  function kawalMenuMengikutPeranan() {
+    if (!currentUser || currentUser.isAdmin) return;
+    // Sembunyi menu admin
+    ["menuDashboard", "menuAnggota", "menuLaporan", "menuTetapan"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+  }
+
+  function logKeluar() {
+    localStorage.removeItem("mdp_user");
+    window.location.href = "login.html";
+  }
+
+  // =====================================================
+  // ROLE ACCESS
+  // =====================================================
+  async function applyRoleAccess() {
+    if (!currentUser) return;
+
+    const unitSelect = document.getElementById("unitPilihan");
+    const posSelect = document.getElementById("posAsal");
+
+    if (currentUser.isAdmin) {
+      // Admin - boleh pilih semua
+      return;
+    }
+
+    const jawatan = (currentUser.jawatan || "").toLowerCase();
+    const userUnit = currentUser.unit || "";
+    const userPos = currentUser.pos || "";
+
+    // Kunci Unit
+    if (userUnit) {
+      unitSelect.innerHTML = `<option value="${userUnit}">${userUnit}</option>`;
+      unitSelect.value = userUnit;
+      unitSelect.disabled = true;
+    }
+
+    if (jawatan.includes("ketua pos")) {
+      // Ketua Pos - kunci Pos juga
+      if (userPos) {
+        posSelect.innerHTML = `<option value="${userPos}">${userPos}</option>`;
+        posSelect.value = userPos;
+        posSelect.disabled = true;
+      }
+      // Trigger load anggota
+      unitSelect.dispatchEvent(new Event("change"));
+      setTimeout(() => {
+        posSelect.dispatchEvent(new Event("change"));
+      }, 300);
+    } else if (jawatan.includes("ketua unit")) {
+      // Ketua Unit - boleh pilih Pos di bawah Unit dia
+      unitSelect.dispatchEvent(new Event("change"));
+      // posSelect kekal enabled, tapi hanya pos di bawah unit
+    } else {
+      // Lain-lain - kunci unit & pos jika ada
+      if (userPos) {
+        posSelect.innerHTML = `<option value="${userPos}">${userPos}</option>`;
+        posSelect.value = userPos;
+        posSelect.disabled = true;
+      }
+      unitSelect.dispatchEvent(new Event("change"));
+      setTimeout(() => posSelect.dispatchEvent(new Event("change")), 300);
+    }
+  }
+
+  // =====================================================
+  // HELPER
+  // =====================================================
   function getValue(id) { const el = document.getElementById(id); return el ? el.value : ""; }
   function setValue(id, value) { const el = document.getElementById(id); if (el) el.value = value == null ? "" : value; }
   function normalisasi(v) { return String(v || "").trim().toLowerCase(); }
@@ -336,7 +447,11 @@
     const select = document.getElementById("unitPilihan");
     if (!select) return;
     select.innerHTML = `<option value="">-- Pilih Unit --</option>`;
-    SENARAI_UNIT.forEach(u => { const opt = document.createElement("option"); opt.value = u; opt.textContent = u; select.appendChild(opt); });
+    SENARAI_UNIT.forEach(u => {
+      const opt = document.createElement("option");
+      opt.value = u; opt.textContent = u;
+      select.appendChild(opt);
+    });
   }
 
   function pasangEventTarikh() {
@@ -383,15 +498,32 @@
     if (!unitSelect) return;
     unitSelect.addEventListener("change", function () {
       const unit = this.value;
-      document.getElementById("posAsal").innerHTML = `<option value="">-- Pilih Pos Asal --</option>`;
+      const posSelect = document.getElementById("posAsal");
+      // Jangan reset jika disabled (Ketua Pos)
+      if (!posSelect.disabled) {
+        posSelect.innerHTML = `<option value="">-- Pilih Pos Asal --</option>`;
+      }
       document.getElementById("anggota").innerHTML = `<option value="">-- Pilih Nama Anggota --</option>`;
       kosongkanMaklumatAnggota();
       isiKodDutyIkutUnit(unit);
       isiKodTempatKerjaIkutUnit(unit);
       if (!unit) return;
-      const posList = [...new Set(semuaAnggota.filter(a => normalisasi(a.unit) === normalisasi(unit)).map(a => a.pos).filter(Boolean))].sort();
-      const posSelect = document.getElementById("posAsal");
-      posList.forEach(pos => { const opt = document.createElement("option"); opt.value = pos; opt.textContent = pos; posSelect.appendChild(opt); });
+
+      let posList = [...new Set(
+        semuaAnggota
+          .filter(a => normalisasi(a.unit) === normalisasi(unit))
+          .map(a => a.pos)
+          .filter(Boolean)
+      )].sort();
+
+      // Jika Ketua Unit, hanya tunjuk pos di bawah unit dia (sudah difilter)
+      if (!posSelect.disabled) {
+        posList.forEach(pos => {
+          const opt = document.createElement("option");
+          opt.value = pos; opt.textContent = pos;
+          posSelect.appendChild(opt);
+        });
+      }
     });
   }
 
@@ -404,7 +536,11 @@
       document.getElementById("anggota").innerHTML = `<option value="">-- Pilih Nama Anggota --</option>`;
       kosongkanMaklumatAnggota();
       if (!unit || !pos) return;
-      const list = semuaAnggota.filter(a => normalisasi(a.unit) === normalisasi(unit) && normalisasi(a.pos) === normalisasi(pos)).sort((a,b) => (a.nama||"").localeCompare(b.nama||""));
+
+      const list = semuaAnggota
+        .filter(a => normalisasi(a.unit) === normalisasi(unit) && normalisasi(a.pos) === normalisasi(pos))
+        .sort((a,b) => (a.nama||"").localeCompare(b.nama||""));
+
       const anggotaSelect = document.getElementById("anggota");
       list.forEach(a => {
         const opt = document.createElement("option");
@@ -483,7 +619,11 @@
     if (!select) return;
     select.innerHTML = `<option value="">-- Pilih Pos Tampungan --</option>`;
     const posList = [...new Set(semuaAnggota.map(a => a.pos).filter(Boolean))].sort();
-    posList.forEach(p => { const opt = document.createElement("option"); opt.value = p; opt.textContent = p; select.appendChild(opt); });
+    posList.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p; opt.textContent = p;
+      select.appendChild(opt);
+    });
   }
 
   function pasangEventPengiraanRM() {
@@ -527,7 +667,7 @@
   }
 
   // =====================================================
-  // SIMPAN DUTY (DENGAN SEMAK DUPLICATE + UPDATE)
+  // SIMPAN DUTY
   // =====================================================
   async function simpanDuty() {
     try {
@@ -550,10 +690,10 @@
         return paparPopup("Data tidak lengkap. Sila semak semula.", "error");
       }
 
-      // Semak rekod sedia ada
+      // Semak duplicate
       const { data: rekodSediaAda, error: errorSemak } = await supabaseClient
         .from("jadual_duty")
-        .select("id, no_skb, tarikh, nama_anggota")
+        .select("id, nama_anggota")
         .eq("no_skb", String(noSkb))
         .eq("tarikh", tarikh);
 
@@ -563,14 +703,13 @@
       let idUntukUpdate = null;
 
       if (rekodSediaAda && rekodSediaAda.length > 0) {
-        const rekod = rekodSediaAda[0];
-        const yakin = confirm(`Rekod untuk ${rekod.nama_anggota || anggota.nama} pada tarikh ${formatTarikh(tarikh)} sudah wujud.\n\nAdakah anda mahu KEMASKINI rekod tersebut?`);
+        const yakin = confirm(`Rekod untuk ${rekodSediaAda[0].nama_anggota || anggota.nama} pada tarikh ${formatTarikh(tarikh)} sudah wujud.\n\nAdakah anda mahu KEMASKINI?`);
         if (!yakin) {
           paparPopup("Simpanan dibatalkan.", "error");
           return;
         }
         modeUpdate = true;
-        idUntukUpdate = rekod.id;
+        idUntukUpdate = rekodSediaAda[0].id;
       }
 
       if (dutySedangEdit) {
@@ -580,8 +719,6 @@
 
       const hariOffday = document.getElementById("hariOffday");
       const hariCutiam = document.getElementById("hariCutiam");
-      const jamOffday = Number(getValue("jamOffday") || 0);
-      const jamCutiam = Number(getValue("jamCutiam") || 0);
 
       const dataDuty = {
         tarikh, bulan: getValue("bulan"), tahun: Number(getValue("tahun")), hari: getValue("hari"),
@@ -591,59 +728,38 @@
         waktu_tugasan: duty.waktu_tugasan, jam_kerja: duty.jam_kerja, jam_klm: Number(duty.jam_klm || 0),
         kod_duty: duty.kod, kod_waktu_kerja: duty.kod,
         kod_tempat_kerja: tempatKerja.kod_tempat_kerja, tempat_kerja: tempatKerja.nama_tempat_kerja,
-        hari_offday_bertugas: (hariOffday && hariOffday.checked) ? 1 : 0, jam_offday_bertugas: jamOffday,
-        hari_cutiam_bertugas: (hariCutiam && hariCutiam.checked) ? 1 : 0, jam_cutiam_bertugas: jamCutiam,
-        rm_klm_hari_biasa: Number(getValue("rmKlmHariBiasa") || 0), rm_klm_tampungan: Number(getValue("rmTampung") || 0),
-        jam_klm_off: Number(getValue("klmOffday") || 0), jam_klm_wajib: Number(getValue("klmWajib") || 0),
-        jam_klm_mc: Number(getValue("klmMc") || 0), jam_klm_cuti_tahun: Number(getValue("klmCutiTahun") || 0),
-        jam_klm_cuti_ehsan: Number(getValue("klmCutiEhsan") || 0), jam_klm_kursus: Number(getValue("klmKursus") || 0),
-        jam_klm_cuti_ganti: Number(getValue("klmCutiGanti") || 0), jam_klm_tambahan: Number(getValue("klmKawalanTambahan") || 0),
-        dikemaskini_oleh: "Sistem", dikemaskini_pada: new Date().toISOString()
+        hari_offday_bertugas: (hariOffday && hariOffday.checked) ? 1 : 0,
+        jam_offday_bertugas: Number(getValue("jamOffday") || 0),
+        hari_cutiam_bertugas: (hariCutiam && hariCutiam.checked) ? 1 : 0,
+        jam_cutiam_bertugas: Number(getValue("jamCutiam") || 0),
+        rm_klm_hari_biasa: Number(getValue("rmKlmHariBiasa") || 0),
+        rm_klm_tampungan: Number(getValue("rmTampung") || 0),
+        jam_klm_off: Number(getValue("klmOffday") || 0),
+        jam_klm_wajib: Number(getValue("klmWajib") || 0),
+        jam_klm_mc: Number(getValue("klmMc") || 0),
+        jam_klm_cuti_tahun: Number(getValue("klmCutiTahun") || 0),
+        jam_klm_cuti_ehsan: Number(getValue("klmCutiEhsan") || 0),
+        jam_klm_kursus: Number(getValue("klmKursus") || 0),
+        jam_klm_cuti_ganti: Number(getValue("klmCutiGanti") || 0),
+        jam_klm_tambahan: Number(getValue("klmKawalanTambahan") || 0),
+        dikemaskini_oleh: currentUser?.name || "Sistem",
+        dikemaskini_pada: new Date().toISOString()
       };
 
-     // ==========================================
-// SIMPAN / UPDATE
-// ==========================================
-let hasil;
+      if (modeUpdate) {
+        const { error } = await supabaseClient
+          .from("jadual_duty")
+          .update(dataDuty)
+          .eq("no_skb", String(noSkb))
+          .eq("tarikh", tarikh);
+        if (error) throw error;
+        paparPopup("Rekod Duty berjaya dikemaskini!", "success");
+      } else {
+        const { error } = await supabaseClient.from("jadual_duty").insert([dataDuty]);
+        if (error) throw error;
+        paparPopup("Rekod Duty berjaya disimpan!", "success");
+      }
 
-if (modeUpdate) {
-  // Cuba update dengan no_skb + tarikh
-  hasil = await supabaseClient
-    .from("jadual_duty")
-    .update(dataDuty)
-    .match({
-      no_skb: String(noSkb),
-      tarikh: tarikh
-    })
-    .select();
-
-  console.log("Update dengan match:", hasil);
-
-  if (hasil.error) throw hasil.error;
-
-  if (!hasil.data || hasil.data.length === 0) {
-    // Cuba terus tanpa select
-    const { error: err2 } = await supabaseClient
-      .from("jadual_duty")
-      .update(dataDuty)
-      .eq("no_skb", String(noSkb))
-      .eq("tarikh", tarikh);
-
-    if (err2) throw err2;
-
-    paparPopup("Update dihantar (tanpa confirmation data). Sila semak di Supabase Table Editor.", "success");
-  } else {
-    paparPopup("Rekod Duty berjaya dikemaskini!", "success");
-  }
-} else {
-  hasil = await supabaseClient
-    .from("jadual_duty")
-    .insert([dataDuty])
-    .select();
-
-  if (hasil.error) throw hasil.error;
-  paparPopup("Rekod Duty berjaya disimpan!", "success");
-}
       dutySedangEdit = null;
       await paparDuty();
 
@@ -658,7 +774,11 @@ if (modeUpdate) {
     if (!select) return;
     select.innerHTML = `<option value="">Semua Ketua Unit</option>`;
     const list = [...new Set(semuaAnggota.map(a => a.ketua_unit).filter(Boolean))].sort();
-    list.forEach(n => { const opt = document.createElement("option"); opt.value = n; opt.textContent = n; select.appendChild(opt); });
+    list.forEach(n => {
+      const opt = document.createElement("option");
+      opt.value = n; opt.textContent = n;
+      select.appendChild(opt);
+    });
   }
 
   async function paparDuty() {
@@ -670,19 +790,37 @@ if (modeUpdate) {
       return;
     }
     const [tahun, bulan] = filterBulan.split("-");
-    let query = supabaseClient.from("jadual_duty").select("*").eq("tahun", Number(tahun)).eq("bulan", getNamaBulan(Number(bulan))).order("tarikh");
+    let query = supabaseClient.from("jadual_duty").select("*")
+      .eq("tahun", Number(tahun))
+      .eq("bulan", getNamaBulan(Number(bulan)))
+      .order("tarikh");
+
+    // Filter mengikut peranan
+    if (currentUser && !currentUser.isAdmin) {
+      const jawatan = (currentUser.jawatan || "").toLowerCase();
+      if (jawatan.includes("ketua pos") && currentUser.pos) {
+        query = query.eq("pos", currentUser.pos);
+      } else if (jawatan.includes("ketua unit") && currentUser.unit) {
+        query = query.eq("unit", currentUser.unit);
+      }
+    }
+
     const filterKetuaUnit = getValue("filterKetuaUnit");
     if (filterKetuaUnit) query = query.eq("ketua_unit", filterKetuaUnit);
+
     const { data, error } = await query;
     if (error) { paparPopup(error.message, "error"); return; }
+
     semuaDuty = data || [];
     const cari = getValue("cariNama").toLowerCase();
     let senarai = semuaDuty;
     if (cari) senarai = senarai.filter(i => (i.nama_anggota || "").toLowerCase().includes(cari));
+
     if (!senarai.length) {
       tbody.innerHTML = `<tr><td colspan="8" class="py-10 text-center text-slate-500">Tiada rekod duty</td></tr>`;
       return;
     }
+
     tbody.innerHTML = senarai.map(item => `
       <tr class="border-b border-slate-800 hover:bg-white/5">
         <td class="py-3 px-2">${formatTarikh(item.tarikh)}</td>
@@ -706,11 +844,20 @@ if (modeUpdate) {
     dutySedangEdit = id;
     setValue("tarikh", duty.tarikh);
     document.getElementById("tarikh")?.dispatchEvent(new Event("change"));
-    setValue("unitPilihan", duty.unit);
-    document.getElementById("unitPilihan")?.dispatchEvent(new Event("change"));
+
+    // Hanya set unit/pos jika admin atau tidak dikunci
+    const unitSelect = document.getElementById("unitPilihan");
+    if (!unitSelect.disabled) {
+      setValue("unitPilihan", duty.unit);
+      unitSelect.dispatchEvent(new Event("change"));
+    }
+
     setTimeout(() => {
-      setValue("posAsal", duty.pos);
-      document.getElementById("posAsal")?.dispatchEvent(new Event("change"));
+      const posSelect = document.getElementById("posAsal");
+      if (!posSelect.disabled) {
+        setValue("posAsal", duty.pos);
+        posSelect.dispatchEvent(new Event("change"));
+      }
       setTimeout(() => {
         setValue("anggota", duty.no_skb);
         document.getElementById("anggota")?.dispatchEvent(new Event("change"));
@@ -734,8 +881,8 @@ if (modeUpdate) {
         if (off) off.checked = duty.hari_offday_bertugas == 1;
         if (ca) ca.checked = duty.hari_cutiam_bertugas == 1;
         kiraSemuaRM();
-      }, 350);
-    }, 350);
+      }, 400);
+    }, 400);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
