@@ -6,22 +6,7 @@
   <title>Login — Master Duty Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            teal: {
-              450: '#2dd4bf',
-              550: '#14b8a6',
-              650: '#0d9488',
-              750: '#0f766e',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
       background: linear-gradient(135deg, #0f172a 0%, #0c4a4e 50%, #0f172a 100%);
@@ -55,7 +40,7 @@
       <form id="loginForm" class="space-y-5">
         <div>
           <label class="block text-sm font-medium text-slate-300 mb-2">No.SKB</label>
-          <input type="text" id="noSkb" placeholder="Contoh: 1001" 
+          <input type="text" id="noSkb" placeholder="Contoh: 12345" 
             class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-teal-500" required>
         </div>
 
@@ -65,38 +50,87 @@
             class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-teal-500" required>
         </div>
 
-        <button type="submit" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3.5 rounded-xl">
+        <div id="errorMsg" class="hidden text-red-400 text-sm text-center"></div>
+
+        <button type="submit" id="btnLogin" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3.5 rounded-xl transition">
           Log Masuk
         </button>
       </form>
+
+      <p class="text-center text-slate-500 text-xs mt-6">
+        Kata laluan sementara: <span class="text-teal-400">123456</span>
+      </p>
     </div>
   </div>
 
   <script>
-    const demoUsers = {
-      "1001": { name: "Ahmad Bin Ali", jawatan: "POW", password: "123456" },
-      "1002": { name: "Siti Aminah", jawatan: "PPOW", password: "123456" },
-      "1003": { name: "Mohd Faiz", jawatan: "PTW", password: "123456" },
-      "2001": { name: "Ketua Pos A", jawatan: "Ketua Pos", password: "123456" },
-      "3001": { name: "Ketua Unit B", jawatan: "Ketua Unit", password: "123456" }
-    };
+    const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    // Kata laluan sementara untuk semua pengguna
+    const TEMP_PASSWORD = "123456";
+
+    // Jawatan yang dianggap Admin
+    const ADMIN_JAWATAN = ["PTW", "PPOW", "POW", "ptw", "ppow", "pow"];
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
+
       const noSkb = document.getElementById('noSkb').value.trim();
       const password = document.getElementById('password').value;
-      const user = demoUsers[noSkb];
+      const errorMsg = document.getElementById('errorMsg');
+      const btnLogin = document.getElementById('btnLogin');
 
-      if (user && user.password === password) {
-        localStorage.setItem('mdp_user', JSON.stringify({
-          noSkb: noSkb,
-          name: user.name,
-          jawatan: user.jawatan,
-          isAdmin: ["PTW", "PPOW", "POW"].includes(user.jawatan)
-        }));
-        window.location.href = 'dashboard.html';
-      } else {
-        alert('No.SKB atau Kata Laluan salah.');
+      errorMsg.classList.add('hidden');
+      btnLogin.disabled = true;
+      btnLogin.textContent = "Sedang log masuk...";
+
+      try {
+        // Semak kata laluan sementara
+        if (password !== TEMP_PASSWORD) {
+          throw new Error("No.SKB atau Kata Laluan salah.");
+        }
+
+        // Cari anggota dalam database
+        const { data, error } = await supabaseClient
+          .from("Data_Anggota")
+          .select("no_skb, nama, unit, pos, jawatan, ketua_unit, ketua_pos, status")
+          .eq("no_skb", noSkb)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+          throw new Error("No.SKB tidak dijumpai dalam sistem.");
+        }
+
+        // Tentukan sama ada Admin
+        const jawatan = (data.jawatan || "").trim();
+        const isAdmin = ADMIN_JAWATAN.includes(jawatan);
+
+        // Simpan maklumat pengguna
+        const userData = {
+          noSkb: String(data.no_skb),
+          name: data.nama || "",
+          jawatan: jawatan,
+          unit: data.unit || "",
+          pos: data.pos || "",
+          ketua_unit: data.ketua_unit || "",
+          ketua_pos: data.ketua_pos || "",
+          isAdmin: isAdmin
+        };
+
+        localStorage.setItem("mdp_user", JSON.stringify(userData));
+
+        // Redirect ke dashboard
+        window.location.href = "dashboard.html";
+
+      } catch (err) {
+        errorMsg.textContent = "❌ " + err.message;
+        errorMsg.classList.remove("hidden");
+        btnLogin.disabled = false;
+        btnLogin.textContent = "Log Masuk";
       }
     });
   </script>
