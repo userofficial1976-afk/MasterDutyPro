@@ -115,24 +115,40 @@
 
   <!-- Main -->
   <main class="flex-1 lg:ml-72">
-    <header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-xl font-bold text-white">Pengisian Jadual Tugas</h2>
-          <p class="text-sm text-slate-400">Isi dan urus duty anggota</p>
-        </div>
+<header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
+  <div class="flex items-center justify-between gap-4">
 
+    <!-- TAJUK -->
+    <div class="flex-1 min-w-0">
+      <h2 class="text-xl font-bold text-white">
+        Pengisian Jadual Tugas
+      </h2>
+      <p class="text-sm text-slate-400">
+        Isi dan urus duty anggota
+      </p>
+    </div>
 
-              <button onclick="simpanDuty()" class="bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">
-        <i class="fas fa-save mr-2"></i> SIMPAN DUTY
+    <!-- BUTANG + STATUS -->
+    <div class="flex items-center gap-3 shrink-0">
+
+      <button
+        type="button"
+        onclick="simpanDuty()"
+        class="bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm whitespace-nowrap"
+      >
+        <i class="fas fa-save mr-2"></i>
+        SIMPAN DUTY
       </button>
-        
-        <div class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
-          <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
-          System Online
-        </div>
+
+      <div class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">
+        <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
+        System Online
       </div>
-    </header>
+
+    </div>
+
+  </div>
+</header>
 
     <div class="p-6 space-y-6">
 
