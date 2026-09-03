@@ -32,101 +32,98 @@
     }
     select:disabled { opacity: 0.7; cursor: not-allowed; }
 
-    /* Print / PDF - borang formal putih */
-@media print {
-  @page {
-    size: A4 landscape;
-    margin: 8mm;
-  }
-
-  aside,
-  .no-print,
-  header,
-  .filter-box {
-    display: none !important;
-  }
-
-  main {
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  body {
-    background: white !important;
-    color: #000 !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    font-size: 9pt;
-  }
-
-  .glass {
-    background: white !important;
-    border: none !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    padding: 0 !important;
-  }
-
-  .print-area {
-    color: #000 !important;
-  }
-
-  .rk02-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-  }
-
-  .rk02-table th,
-  .rk02-table td {
-    border: 1px solid #000 !important;
-    padding: 2px 3px !important;
-    font-size: 8pt !important;
-    color: #000 !important;
-    background: white !important;
-  }
-
-  .rk02-table th {
-    background: #f0f0f0 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    font-weight: bold;
-  }
-
-  .rk02-table tfoot td {
-    font-weight: bold;
-    background: #f8f8f8 !important;
-  }
-
-  .sign-box {
-    border: 1px solid #000 !important;
-    min-height: 110px;
-    color: #000 !important;
-  }
-
-  .report-title {
-    color: #000 !important;
-  }
-
-  .text-teal-400,
-  .text-teal-450,
-  .text-white,
-  .text-slate-400,
-  .text-slate-300,
-  .text-slate-500 {
-    color: #000 !important;
-  }
-}
-
-    
+    .rk02-table { width: 100%; border-collapse: collapse; }
     .rk02-table th, .rk02-table td {
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      padding: 6px 4px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 5px 4px;
       text-align: center;
       font-size: 11px;
     }
-    .rk02-table th { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; font-weight: 600; }
+    .rk02-table th {
+      background: rgba(20, 184, 166, 0.15);
+      color: #2dd4bf;
+      font-weight: 600;
+    }
     .rk02-table td.nama { text-align: left; padding-left: 8px; }
-    .rk02-table tfoot td { font-weight: 700; background: rgba(15, 23, 42, 0.5); }
+    .rk02-table tfoot td {
+      font-weight: 700;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    /* ========== PRINT / PDF — ikut borang rasmi ========== */
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 6mm;
+      }
+      aside, .no-print, header { display: none !important; }
+      main { margin: 0 !important; padding: 0 !important; }
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+        font-size: 9pt;
+      }
+      .glass {
+        background: #fff !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+      }
+      .print-area { color: #000 !important; }
+      .report-title, .report-title * { color: #000 !important; }
+      .rk02-table th, .rk02-table td {
+        border: 1px solid #000 !important;
+        padding: 2px 3px !important;
+        font-size: 7.5pt !important;
+        color: #000 !important;
+        background: #fff !important;
+      }
+      .rk02-table th {
+        background: #e8e8e8 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-weight: bold;
+      }
+      .rk02-table tfoot td {
+        font-weight: bold;
+        background: #f3f3f3 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .info-table td {
+        border: 1px solid #000 !important;
+        color: #000 !important;
+        background: #fff !important;
+        padding: 3px 6px !important;
+        font-size: 9pt !important;
+      }
+      .bottom-table td, .bottom-table th {
+        border: 1px solid #000 !important;
+        color: #000 !important;
+        background: #fff !important;
+        padding: 3px 5px !important;
+        font-size: 8pt !important;
+      }
+      .bottom-table th {
+        background: #e8e8e8 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .sign-box {
+        border: 1px solid #000 !important;
+        color: #000 !important;
+        background: #fff !important;
+        min-height: 105px;
+      }
+      .sign-box * { color: #000 !important; }
+      .text-teal-400, .text-teal-450, .text-white,
+      .text-slate-300, .text-slate-400, .text-slate-500 {
+        color: #000 !important;
+      }
+    }
   </style>
 </head>
 <body class="text-slate-200">
@@ -195,10 +192,10 @@
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-xl font-bold text-white">Anggaran RK02</h2>
-          <p class="text-sm text-slate-400">Rumusan Kerja Lebih Masa Bulanan</p>
+          <p class="text-sm text-slate-400">Rumusan Kerja Lebih Masa Bulanan Anggota</p>
         </div>
         <div class="flex items-center gap-3">
-          <button onclick="window.print()" class="no-print-btn bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">
+          <button onclick="window.print()" class="bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">
             <i class="fas fa-print mr-2"></i> Cetak / PDF
           </button>
           <div class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
@@ -211,7 +208,7 @@
 
     <div class="p-6 space-y-6">
       <!-- Filter -->
-      <div class="glass rounded-2xl p-5 no-print">
+      <div class="glass rounded-2xl p-5 no-print filter-box">
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 items-end">
           <div>
             <label class="block text-xs text-slate-400 mb-1.5 font-semibold">Unit</label>
@@ -251,61 +248,65 @@
         </div>
       </div>
 
-      <!-- Print Area -->
+      <!-- PRINT AREA -->
       <div class="glass rounded-2xl p-6 print-area" id="printArea">
-        <!-- Header Borang -->
-        <div class="text-center mb-5">
-          <h2 class="text-lg font-bold text-white tracking-wide">FGV SECURITY SERVICES SDN BHD</h2>
-          <h3 class="text-sm font-semibold text-teal-400 mt-1">RUMUSAN KERJA LEBIH MASA BULANAN ANGGOTA</h3>
+
+        <!-- Tajuk -->
+        <div class="text-center mb-4 report-title">
+          <div class="font-bold text-lg tracking-wide text-white">FGV SECURITY SERVICES SDN BHD</div>
+          <div class="font-semibold text-sm text-teal-400 mt-1">RUMUSAN KERJA LEBIH MASA BULANAN ANGGOTA</div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5 text-sm border border-slate-700 rounded-xl p-4">
-          <div>
-            <span class="text-slate-400">NAMA POS :</span>
-            <span id="namaPos" class="font-semibold text-white ml-1">-</span>
-          </div>
-          <div>
-            <span class="text-slate-400">KAWASAN / UNIT :</span>
-            <span id="namaKawasan" class="font-semibold text-white ml-1">-</span>
-          </div>
-          <div class="flex justify-between">
-            <div>
-              <span class="text-slate-400">BULAN :</span>
-              <span id="bulanLaporan" class="font-semibold text-white ml-1">-</span>
-            </div>
-            <span class="font-bold text-teal-450">RK-02</span>
-          </div>
-        </div>
+        <!-- Info header -->
+        <table class="info-table w-full text-sm mb-4" style="border-collapse:collapse">
+          <tr>
+            <td class="border border-slate-600 p-2" style="width:14%"><b>NAMA POS :</b></td>
+            <td class="border border-slate-600 p-2" id="namaPos" style="width:46%">-</td>
+            <td class="border border-slate-600 p-2 text-right font-bold text-teal-450" style="width:40%">RK-02</td>
+          </tr>
+          <tr>
+            <td class="border border-slate-600 p-2"><b>KAWASAN :</b></td>
+            <td class="border border-slate-600 p-2" id="namaKawasan">-</td>
+            <td class="border border-slate-600 p-2">
+              <b>BULAN :</b> <span id="bulanLaporan">-</span>
+            </td>
+          </tr>
+        </table>
 
-        <!-- Main Table -->
+        <!-- Jadual utama -->
         <div class="overflow-x-auto">
-          <table class="rk02-table w-full">
+          <table class="rk02-table">
             <thead>
               <tr>
-                <th rowspan="3">BIL</th>
-                <th rowspan="3">SKB / NO ANGGOTA</th>
-                <th rowspan="3">NAMA ANGGOTA</th>
-                <th rowspan="3">GAJI POKOK<br>(RM)</th>
+                <th rowspan="3" style="width:28px">BIL</th>
+                <th rowspan="3" style="width:90px">SKB / NO ANGGOTA</th>
+                <th rowspan="3" style="width:140px">NAMA ANGGOTA</th>
+                <th rowspan="3" style="width:70px">GAJI POKOK<br>(RM)</th>
                 <th colspan="2">HARI BIASA</th>
                 <th colspan="6">HARI OFF</th>
                 <th colspan="4">HARI CUTI AM</th>
-                <th rowspan="3">JUMLAH<br>TUNTUTAN KLM</th>
+                <th rowspan="3" style="width:70px">JUMLAH<br>TUNTUTAN<br>KLM</th>
               </tr>
               <tr>
-                <th rowspan="2">Jam</th>
-                <th rowspan="2">RM</th>
-                <th colspan="2">&lt; 4 Jam</th>
-                <th colspan="2">4 – 8 Jam</th>
-                <th colspan="2">&gt; 8 Jam</th>
-                <th colspan="2">&lt; 8 Jam</th>
-                <th colspan="2">&gt; 8 Jam</th>
+                <th rowspan="2" style="width:40px">Jam</th>
+                <th rowspan="2" style="width:55px">RM</th>
+                <th colspan="2">Kurang 4 Jam</th>
+                <th colspan="2">4 Hingga 8 Jam</th>
+                <th colspan="2">Lebih 8 Jam</th>
+                <th colspan="2">Kurang 8 Jam</th>
+                <th colspan="2">Lebih 8 Jam</th>
               </tr>
               <tr>
-                <th>Hari</th><th>RM</th>
-                <th>Hari</th><th>RM</th>
-                <th>Jam</th><th>RM</th>
-                <th>Hari</th><th>RM</th>
-                <th>Jam</th><th>RM</th>
+                <th style="width:32px">Hari</th>
+                <th style="width:50px">RM</th>
+                <th style="width:32px">Hari</th>
+                <th style="width:50px">RM</th>
+                <th style="width:32px">Jam</th>
+                <th style="width:50px">RM</th>
+                <th style="width:32px">Hari</th>
+                <th style="width:50px">RM</th>
+                <th style="width:32px">Jam</th>
+                <th style="width:50px">RM</th>
               </tr>
             </thead>
             <tbody id="rk02Body">
@@ -315,7 +316,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="4" class="text-right pr-3">JUMLAH</td>
+                <td colspan="4" class="text-right pr-2">JUMLAH</td>
                 <td id="jJamBiasa">0</td>
                 <td id="jRmBiasa">0.00</td>
                 <td id="jOff4">0</td>
@@ -334,49 +335,117 @@
           </table>
         </div>
 
-        <!-- Rumusan KLM -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-          <div class="border border-slate-700 rounded-xl p-4">
-            <h4 class="text-sm font-semibold text-teal-400 mb-3">RUMUSAN KLM BULAN SEMASA</h4>
-            <table class="w-full text-xs">
-              <thead>
-                <tr class="text-slate-400 border-b border-slate-700">
-                  <th class="text-left py-2">Bil</th>
-                  <th class="text-left py-2">Keterangan</th>
-                  <th class="text-right py-2">Jam</th>
-                  <th class="text-right py-2">RM</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b border-slate-800"><td class="py-1.5">01</td><td>KLM Tugas Kawalan</td><td class="text-right" id="rJamKawalan">0</td><td class="text-right" id="rRmKawalan">0.00</td></tr>
-                <tr class="border-b border-slate-800"><td class="py-1.5">02</td><td>KLM Tampungan Pos</td><td class="text-right" id="rJamTampung">0</td><td class="text-right" id="rRmTampung">0.00</td></tr>
-                <tr class="border-b border-slate-800"><td class="py-1.5">03</td><td>KLM Tugas Eskot</td><td class="text-right" id="rJamEskot">0</td><td class="text-right" id="rRmEskot">0.00</td></tr>
-                <tr class="border-b border-slate-800"><td class="py-1.5">04</td><td>KLM Kawalan Tambahan</td><td class="text-right" id="rJamTambahan">0</td><td class="text-right" id="rRmTambahan">0.00</td></tr>
-                <tr class="border-b border-slate-800"><td class="py-1.5">05</td><td>KLM Offday / Kategori Khas</td><td class="text-right" id="rJamOffKhas">0</td><td class="text-right" id="rRmOffKhas">0.00</td></tr>
-                <tr class="font-bold"><td class="py-2" colspan="2">JUMLAH KLM</td><td class="text-right" id="rJamTotal">0</td><td class="text-right text-teal-400" id="rRmTotal">0.00</td></tr>
-              </tbody>
-            </table>
-          </div>
+        <!-- Bahagian bawah: Cuti Awam + Rumusan KLM -->
+        <table class="bottom-table w-full mt-5 text-xs" style="border-collapse:collapse">
+          <colgroup>
+            <col style="width:32%">
+            <col style="width:5%">
+            <col style="width:38%">
+            <col style="width:12%">
+            <col style="width:13%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="border border-slate-600 p-2 text-left">TARIKH CUTI AWAM BULAN INI</th>
+              <th colspan="2" class="border border-slate-600 p-2 text-center">RUMUSAN KLM BAGI BULAN SEMASA</th>
+              <th class="border border-slate-600 p-2 text-center">JAM</th>
+              <th class="border border-slate-600 p-2 text-center">RM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-slate-600 p-1.5" id="cutiAwam1">-</td>
+              <td class="border border-slate-600 p-1.5 text-center">01</td>
+              <td class="border border-slate-600 p-1.5">KLM Tugas Kawalan</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamKawalan">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rRmKawalan">0.00</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-600 p-1.5" id="cutiAwam2">-</td>
+              <td class="border border-slate-600 p-1.5 text-center">02</td>
+              <td class="border border-slate-600 p-1.5">KLM Pejabat</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamPejabat">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rRmPejabat">0.00</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-600 p-1.5" id="cutiAwam3">-</td>
+              <td class="border border-slate-600 p-1.5 text-center">03</td>
+              <td class="border border-slate-600 p-1.5">KLM Latihan Dwi Bulanan</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamLatihan">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rRmLatihan">0.00</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-600 p-1.5" id="cutiAwam4">-</td>
+              <td class="border border-slate-600 p-1.5 text-center">04</td>
+              <td class="border border-slate-600 p-1.5">KLM Tugas Tampungan Pos</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamTampung">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rRmTampung">0.00</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-600 p-1.5" id="cutiAwam5">-</td>
+              <td class="border border-slate-600 p-1.5 text-center">05</td>
+              <td class="border border-slate-600 p-1.5">KLM Tugas Eskot</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamEskot">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rRmEskot">0.00</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-600 p-1.5 font-semibold">CATITAN</td>
+              <td class="border border-slate-600 p-1.5 text-center">06</td>
+              <td class="border border-slate-600 p-1.5">KLM Tugas CIT</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamCit">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rRmCit">0.00</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-600 p-1.5" id="catitan">- Catitan -</td>
+              <td class="border border-slate-600 p-1.5 text-center">07</td>
+              <td class="border border-slate-600 p-1.5">KLM Pentadbiran</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamPentadbiran">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rRmPentadbiran">0.00</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-600 p-1.5"></td>
+              <td class="border border-slate-600 p-1.5 text-center">08</td>
+              <td class="border border-slate-600 p-1.5">KLM Tambahan</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamTambahan">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rRmTambahan">0.00</td>
+            </tr>
+            <tr class="font-bold">
+              <td class="border border-slate-600 p-1.5"></td>
+              <td colspan="2" class="border border-slate-600 p-1.5 text-center">JUMLAH KLM</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamTotal">0</td>
+              <td class="border border-slate-600 p-1.5 text-right text-teal-400" id="rRmTotal">0.00</td>
+            </tr>
+          </tbody>
+        </table>
 
-          <!-- Pengesahan -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div class="sign-box border border-slate-700 rounded-xl p-3 text-center text-xs">
-              <p class="font-semibold text-slate-300 mb-8">DISEDIAKAN OLEH<br>KETUA POS</p>
-              <p class="border-t border-slate-600 pt-2 mt-10 text-slate-400" id="signKetuaPos">-</p>
-              <p class="text-slate-500 mt-1">Tandatangan & Nama</p>
-            </div>
-            <div class="sign-box border border-slate-700 rounded-xl p-3 text-center text-xs">
-              <p class="font-semibold text-slate-300 mb-2">DISAHKAN OLEH<br>KETUA UNIT</p>
-              <p class="text-slate-500 text-[10px] mb-6">Saya sahkan KLM anggota di bawah kawalan saya adalah betul.</p>
-              <p class="border-t border-slate-600 pt-2 mt-4 text-slate-400" id="signKetuaUnit">-</p>
-              <p class="text-slate-500 mt-1">Tandatangan & Cop</p>
-            </div>
-            <div class="sign-box border border-slate-700 rounded-xl p-3 text-center text-xs">
-              <p class="font-semibold text-slate-300 mb-2">DISAHKAN OLEH<br>PEGAWAI OPERASI</p>
-              <p class="text-slate-500 text-[10px] mb-6">Tuntutan KLM disemak dan tidak bercanggah peraturan.</p>
-              <p class="border-t border-slate-600 pt-2 mt-4 text-slate-400">&nbsp;</p>
-              <p class="text-slate-500 mt-1">Tandatangan & Cop</p>
-            </div>
+        <!-- Pengesahan -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
+          <div class="sign-box border border-slate-600 rounded-lg p-3 text-center text-xs">
+            <p class="font-semibold mb-1">DISEDIAKAN OLEH KETUA POS</p>
+            <div class="h-12"></div>
+            <p class="border-t border-slate-500 pt-2 mt-2">…………………………………………………………</p>
+            <p class="mt-1 font-medium" id="signKetuaPos">-</p>
+            <p class="text-slate-500 mt-0.5">Tandatangan & Nama</p>
+          </div>
+          <div class="sign-box border border-slate-600 rounded-lg p-3 text-center text-xs">
+            <p class="font-semibold mb-1">DISAHKAN OLEH KETUA UNIT</p>
+            <p class="text-[10px] text-slate-400 leading-snug mb-1">
+              Saya sahkan KLM anggota yang bertugas di POS kawalan di bawah kawalan saya adalah betul.
+            </p>
+            <div class="h-6"></div>
+            <p class="border-t border-slate-500 pt-2">…………………………………………………………</p>
+            <p class="mt-1 font-medium" id="signKetuaUnit">-</p>
+            <p class="text-slate-500 mt-0.5">Tandatangan & Cop</p>
+          </div>
+          <div class="sign-box border border-slate-600 rounded-lg p-3 text-center text-xs">
+            <p class="font-semibold mb-1">DISAHKAN OLEH PEGAWAI OPERASI</p>
+            <p class="text-[10px] text-slate-400 leading-snug mb-1">
+              Saya telah menyemak dan mengesahkan tuntutan KLM anggota disenaraikan adalah betul dan tidak bercanggah dengan peraturan syarikat.
+            </p>
+            <div class="h-6"></div>
+            <p class="border-t border-slate-500 pt-2">…………………………………………………………</p>
+            <p class="mt-1 font-medium">&nbsp;</p>
+            <p class="text-slate-500 mt-0.5">Tandatangan & Cop</p>
           </div>
         </div>
       </div>
@@ -406,7 +475,6 @@
       window.location.href = "login.html";
       return;
     }
-
     paparMaklumatPengguna();
     kawalMenuMengikutPeranan();
     isiDropdownBulan();
@@ -454,7 +522,6 @@
 
   function applyRoleAccess() {
     if (!currentUser || currentUser.isAdmin) return;
-
     const unitSel = document.getElementById("filterUnit");
     const userUnit = currentUser.unit || "";
     if (userUnit) {
@@ -462,7 +529,6 @@
       unitSel.value = userUnit;
       unitSel.disabled = true;
     }
-
     const jawatan = (currentUser.jawatan || "").toLowerCase();
     if (jawatan.includes("ketua pos") && currentUser.pos) {
       const posSel = document.getElementById("filterPos");
@@ -477,13 +543,8 @@
       .from("Data_Anggota")
       .select("no_skb, nama, no_anggota, unit, pos, kawasan, ketua_unit, ketua_pos, gaji_pokok, rm_pehariklmbiasa, rm_perharioffday, rm_perjamoffday, rm_perharicutiam, rm_perjamcutiam, status")
       .order("nama");
-    if (error) {
-      console.error(error);
-      return;
-    }
+    if (error) { console.error(error); return; }
     semuaAnggota = data || [];
-
-    // Isi pos bila unit berubah
     document.getElementById("filterUnit").addEventListener("change", isiPosIkutUnit);
     isiPosIkutUnit();
   }
@@ -492,17 +553,14 @@
     const unit = document.getElementById("filterUnit").value;
     const posSel = document.getElementById("filterPos");
     if (posSel.disabled) return;
-
     posSel.innerHTML = `<option value="">-- Semua Pos --</option>`;
     if (!unit) return;
-
     const posList = [...new Set(
       semuaAnggota
         .filter(a => String(a.unit || "").toLowerCase() === unit.toLowerCase())
         .map(a => a.pos)
         .filter(Boolean)
     )].sort();
-
     posList.forEach(p => {
       const opt = document.createElement("option");
       opt.value = p;
@@ -514,13 +572,10 @@
   function formatRM(v) {
     return Number(v || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
-
-  function num(v) {
-    return Number(v || 0);
-  }
+  function num(v) { return Number(v || 0); }
 
   // =====================================================
-  // JANA LAPORAN DARI jadual_duty
+  // JANA LAPORAN
   // =====================================================
   async function janaLaporan() {
     const unit = document.getElementById("filterUnit").value;
@@ -532,11 +587,10 @@
     if (!unit) return alert("Sila pilih Unit");
     if (!bulanNo || !tahun) return alert("Sila pilih Bulan & Tahun");
 
-    document.getElementById("namaPos").textContent = pos || "Semua Pos";
-    document.getElementById("namaKawasan").textContent = unit;
-    document.getElementById("bulanLaporan").textContent = `${SENARAI_BULAN_UPPER[bulanNo]} ${tahun}`;
+    document.getElementById("namaPos").textContent = pos || "Semua Pos (" + unit + ")";
+    document.getElementById("namaKawasan").textContent = unit + " / Wilayah Terengganu";
+    document.getElementById("bulanLaporan").textContent = SENARAI_BULAN_UPPER[bulanNo] + " " + tahun;
 
-    // Query duty
     let query = supabaseClient
       .from("jadual_duty")
       .select("*")
@@ -546,7 +600,6 @@
 
     if (pos) query = query.eq("pos", pos);
 
-    // Role filter extra
     if (currentUser && !currentUser.isAdmin) {
       const jawatan = (currentUser.jawatan || "").toLowerCase();
       if (jawatan.includes("ketua pos") && currentUser.pos) {
@@ -559,13 +612,58 @@
       alert("Gagal muat data: " + error.message);
       return;
     }
-
     dataDuty = data || [];
+
+    await muatCutiAwam(bulanNo, tahun);
     prosesDanPapar();
   }
 
+  // =====================================================
+  // CUTI AWAM (opsyenal — jika table wujud)
+  // =====================================================
+  async function muatCutiAwam(bulanNo, tahun) {
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById("cutiAwam" + i);
+      if (el) el.textContent = "-";
+    }
+    try {
+      const namaBulan = SENARAI_BULAN_UPPER[bulanNo];
+      const { data, error } = await supabaseClient
+        .from("cuti_awam")
+        .select("tarikh, nama_cuti, bulan, tahun, status")
+        .eq("tahun", Number(tahun))
+        .eq("status", "AKTIF")
+        .order("tarikh", { ascending: true });
+
+      if (error || !data) return;
+
+      const filtered = data.filter(c => {
+        const b = String(c.bulan || "").toUpperCase();
+        return b === namaBulan || b === SENARAI_BULAN[bulanNo].toUpperCase();
+      });
+
+      filtered.slice(0, 5).forEach((cuti, idx) => {
+        const el = document.getElementById("cutiAwam" + (idx + 1));
+        if (!el) return;
+        let tarikhStr = "-";
+        if (cuti.tarikh) {
+          const d = new Date(cuti.tarikh + "T00:00:00");
+          const dd = String(d.getDate()).padStart(2, "0");
+          const mm = String(d.getMonth() + 1).padStart(2, "0");
+          const yy = d.getFullYear();
+          tarikhStr = dd + "/" + mm + "/" + yy;
+        }
+        el.textContent = tarikhStr + (cuti.nama_cuti ? " - " + cuti.nama_cuti : "");
+      });
+    } catch (e) {
+      console.warn("cuti_awam tidak tersedia:", e.message);
+    }
+  }
+
+  // =====================================================
+  // PROSES & PAPAR
+  // =====================================================
   function prosesDanPapar() {
-    // Group by no_skb
     const map = {};
 
     dataDuty.forEach(row => {
@@ -577,16 +675,13 @@
           no_anggota: row.no_anggota || anggota.no_anggota || "",
           nama: row.nama_anggota || anggota.nama || "",
           gaji: num(String(anggota.gaji_pokok || "0").replace(/,/g, "")),
-          kadarKlm: num(anggota.rm_pehariklmbiasa),
           kadarOffHari: num(anggota.rm_perharioffday),
           kadarOffJam: num(anggota.rm_perjamoffday),
           kadarCutiHari: num(anggota.rm_perharicutiam),
           kadarCutiJam: num(anggota.rm_perjamcutiam),
-          ketua_pos: row.ketua_pos || anggota.ketua_pos || "",
+          ketua_pos: row.ketua_pos || row.nama_ketua_pos || anggota.ketua_pos || "",
           ketua_unit: row.ketua_unit || anggota.ketua_unit || "",
-          // accumulators
-          jamBiasa: 0,
-          rmBiasa: 0,
+          jamBiasa: 0, rmBiasa: 0,
           off4: 0, rmOff4: 0,
           off48: 0, rmOff48: 0,
           off8: 0, rmOff8: 0,
@@ -595,17 +690,18 @@
           jamTampung: 0, rmTampung: 0,
           jamEskot: 0, rmEskot: 0,
           jamTambahan: 0, rmTambahan: 0,
-          jamOffKhas: 0, rmOffKhas: 0
+          jamOffKhas: 0, rmOffKhas: 0,
+          jamKursus: 0, rmKursus: 0
         };
       }
 
       const d = map[key];
 
-      // Hari Biasa KLM
+      // Hari Biasa
       d.jamBiasa += num(row.jam_klm);
       d.rmBiasa += num(row.rm_klm_hari_biasa);
 
-      // Offday — pecah bracket
+      // Offday bracket
       const isOff = num(row.hari_offday_bertugas) === 1 || String(row.hari_offday_bertugas) === "1";
       const jamOff = num(row.jam_offday_bertugas);
       if (isOff || jamOff > 0) {
@@ -618,16 +714,14 @@
         } else if (jamOff > 8) {
           d.off8 += jamOff;
           d.rmOff8 += num(row.rm_jam_offday) || (jamOff * d.kadarOffJam);
-          // juga boleh ada komponen hari
           if (num(row.rm_hari_offday)) d.rmOff8 += num(row.rm_hari_offday);
-        } else if (isOff && jamOff === 0) {
-          // offday bertugas tanpa jam khusus — kira sebagai hari
+        } else if (isOff) {
           d.off48 += 1;
           d.rmOff48 += num(row.rm_hari_offday) || d.kadarOffHari;
         }
       }
 
-      // Cuti Am — pecah bracket
+      // Cuti Am bracket
       const isCuti = num(row.hari_cutiam_bertugas) === 1 || String(row.hari_cutiam_bertugas) === "1";
       const jamCuti = num(row.jam_cutiam_bertugas);
       if (isCuti || jamCuti > 0) {
@@ -638,36 +732,33 @@
           d.cuti8p += jamCuti;
           d.rmCuti8p += num(row.rm_jam_cutiam) || (jamCuti * d.kadarCutiJam);
           if (num(row.rm_hari_cutiam)) d.rmCuti8p += num(row.rm_hari_cutiam);
-        } else if (isCuti && jamCuti === 0) {
+        } else if (isCuti) {
           d.cuti8 += 1;
           d.rmCuti8 += num(row.rm_hari_cutiam) || d.kadarCutiHari;
         }
       }
 
-      // Tampungan / Eskot / Tambahan / Off khas
+      // Kategori lain
       d.jamTampung += num(row.jam_tampungan);
       d.rmTampung += num(row.rm_klm_tampungan);
       d.jamEskot += num(row.jam_klm_eskot);
       d.rmEskot += num(row.rm_klm_eskot);
       d.jamTambahan += num(row.jam_klm_tambahan);
       d.rmTambahan += num(row.rm_klm_tambahan);
+      d.jamKursus += num(row.jam_klm_kursus);
+      d.rmKursus += num(row.rm_klm_kursus);
       d.jamOffKhas += num(row.jam_klm_off) + num(row.jam_klm_wajib) + num(row.jam_klm_mc) +
-                      num(row.jam_klm_cuti_tahun) + num(row.jam_klm_cuti_ehsan) +
-                      num(row.jam_klm_kursus) + num(row.jam_klm_cuti_ganti);
+                      num(row.jam_klm_cuti_tahun) + num(row.jam_klm_cuti_ehsan) + num(row.jam_klm_cuti_ganti);
       d.rmOffKhas += num(row.rm_klm_off) + num(row.rm_klm_wajib) + num(row.rm_klm_mc) +
-                     num(row.rm_klm_cuti_tahun) + num(row.rm_klm_cuti_ehsan) +
-                     num(row.rm_klm_kursus) + num(row.rm_klm_cuti_ganti);
+                     num(row.rm_klm_cuti_tahun) + num(row.rm_klm_cuti_ehsan) + num(row.rm_klm_cuti_ganti);
     });
 
-    // Convert to array & sort
     let senarai = Object.values(map).map(d => {
       d.jumlahRM = d.rmBiasa + d.rmOff4 + d.rmOff48 + d.rmOff8 + d.rmCuti8 + d.rmCuti8p;
       return d;
     });
-
     senarai.sort((a, b) => String(a.no_skb).localeCompare(String(b.no_skb), undefined, { numeric: true }));
 
-    // Papar table
     const tbody = document.getElementById("rk02Body");
     if (!senarai.length) {
       tbody.innerHTML = `<tr><td colspan="17" class="py-8 text-slate-500">Tiada rekod duty untuk tempoh ini</td></tr>`;
@@ -677,107 +768,127 @@
 
     let html = "";
     let bil = 1;
-    const total = {
+    const T = {
       jamBiasa: 0, rmBiasa: 0,
       off4: 0, rmOff4: 0, off48: 0, rmOff48: 0, off8: 0, rmOff8: 0,
       cuti8: 0, rmCuti8: 0, cuti8p: 0, rmCuti8p: 0, jumlahRM: 0,
       jamTampung: 0, rmTampung: 0, jamEskot: 0, rmEskot: 0,
-      jamTambahan: 0, rmTambahan: 0, jamOffKhas: 0, rmOffKhas: 0
+      jamTambahan: 0, rmTambahan: 0, jamKursus: 0, rmKursus: 0,
+      jamOffKhas: 0, rmOffKhas: 0
     };
 
     senarai.forEach(d => {
-      html += `
-        <tr>
-          <td>${bil}</td>
-          <td>${d.no_skb} / ${d.no_anggota}</td>
-          <td class="nama">${d.nama}</td>
-          <td>${formatRM(d.gaji)}</td>
-          <td>${d.jamBiasa}</td>
-          <td>${formatRM(d.rmBiasa)}</td>
-          <td>${d.off4}</td>
-          <td>${formatRM(d.rmOff4)}</td>
-          <td>${d.off48}</td>
-          <td>${formatRM(d.rmOff48)}</td>
-          <td>${d.off8}</td>
-          <td>${formatRM(d.rmOff8)}</td>
-          <td>${d.cuti8}</td>
-          <td>${formatRM(d.rmCuti8)}</td>
-          <td>${d.cuti8p}</td>
-          <td>${formatRM(d.rmCuti8p)}</td>
-          <td>${formatRM(d.jumlahRM)}</td>
-        </tr>`;
+      html += `<tr>
+        <td>${bil}</td>
+        <td>${d.no_skb} / ${d.no_anggota}</td>
+        <td class="nama">${esc(d.nama)}</td>
+        <td>${formatRM(d.gaji)}</td>
+        <td>${d.jamBiasa}</td>
+        <td>${formatRM(d.rmBiasa)}</td>
+        <td>${d.off4}</td>
+        <td>${formatRM(d.rmOff4)}</td>
+        <td>${d.off48}</td>
+        <td>${formatRM(d.rmOff48)}</td>
+        <td>${d.off8}</td>
+        <td>${formatRM(d.rmOff8)}</td>
+        <td>${d.cuti8}</td>
+        <td>${formatRM(d.rmCuti8)}</td>
+        <td>${d.cuti8p}</td>
+        <td>${formatRM(d.rmCuti8p)}</td>
+        <td>${formatRM(d.jumlahRM)}</td>
+      </tr>`;
       bil++;
-
-      total.jamBiasa += d.jamBiasa; total.rmBiasa += d.rmBiasa;
-      total.off4 += d.off4; total.rmOff4 += d.rmOff4;
-      total.off48 += d.off48; total.rmOff48 += d.rmOff48;
-      total.off8 += d.off8; total.rmOff8 += d.rmOff8;
-      total.cuti8 += d.cuti8; total.rmCuti8 += d.rmCuti8;
-      total.cuti8p += d.cuti8p; total.rmCuti8p += d.rmCuti8p;
-      total.jumlahRM += d.jumlahRM;
-      total.jamTampung += d.jamTampung; total.rmTampung += d.rmTampung;
-      total.jamEskot += d.jamEskot; total.rmEskot += d.rmEskot;
-      total.jamTambahan += d.jamTambahan; total.rmTambahan += d.rmTambahan;
-      total.jamOffKhas += d.jamOffKhas; total.rmOffKhas += d.rmOffKhas;
+      T.jamBiasa += d.jamBiasa; T.rmBiasa += d.rmBiasa;
+      T.off4 += d.off4; T.rmOff4 += d.rmOff4;
+      T.off48 += d.off48; T.rmOff48 += d.rmOff48;
+      T.off8 += d.off8; T.rmOff8 += d.rmOff8;
+      T.cuti8 += d.cuti8; T.rmCuti8 += d.rmCuti8;
+      T.cuti8p += d.cuti8p; T.rmCuti8p += d.rmCuti8p;
+      T.jumlahRM += d.jumlahRM;
+      T.jamTampung += d.jamTampung; T.rmTampung += d.rmTampung;
+      T.jamEskot += d.jamEskot; T.rmEskot += d.rmEskot;
+      T.jamTambahan += d.jamTambahan; T.rmTambahan += d.rmTambahan;
+      T.jamKursus += d.jamKursus; T.rmKursus += d.rmKursus;
+      T.jamOffKhas += d.jamOffKhas; T.rmOffKhas += d.rmOffKhas;
     });
 
-    // Minimum 10 rows for print form feel
     while (bil <= 10) {
       html += `<tr><td>${bil}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
       bil++;
     }
-
     tbody.innerHTML = html;
 
-    // Footer
-    document.getElementById("jJamBiasa").textContent = total.jamBiasa;
-    document.getElementById("jRmBiasa").textContent = formatRM(total.rmBiasa);
-    document.getElementById("jOff4").textContent = total.off4;
-    document.getElementById("jRmOff4").textContent = formatRM(total.rmOff4);
-    document.getElementById("jOff48").textContent = total.off48;
-    document.getElementById("jRmOff48").textContent = formatRM(total.rmOff48);
-    document.getElementById("jOff8").textContent = total.off8;
-    document.getElementById("jRmOff8").textContent = formatRM(total.rmOff8);
-    document.getElementById("jCuti8").textContent = total.cuti8;
-    document.getElementById("jRmCuti8").textContent = formatRM(total.rmCuti8);
-    document.getElementById("jCuti8p").textContent = total.cuti8p;
-    document.getElementById("jRmCuti8p").textContent = formatRM(total.rmCuti8p);
-    document.getElementById("jJumlahRM").textContent = formatRM(total.jumlahRM);
+    // Footer jadual
+    set("jJamBiasa", T.jamBiasa);
+    set("jRmBiasa", formatRM(T.rmBiasa));
+    set("jOff4", T.off4); set("jRmOff4", formatRM(T.rmOff4));
+    set("jOff48", T.off48); set("jRmOff48", formatRM(T.rmOff48));
+    set("jOff8", T.off8); set("jRmOff8", formatRM(T.rmOff8));
+    set("jCuti8", T.cuti8); set("jRmCuti8", formatRM(T.rmCuti8));
+    set("jCuti8p", T.cuti8p); set("jRmCuti8p", formatRM(T.rmCuti8p));
+    set("jJumlahRM", formatRM(T.jumlahRM));
 
-    // Rumusan
-    const jamKawalan = Math.max(0, total.jamBiasa - total.jamTampung - total.jamEskot - total.jamTambahan);
-    const rmKawalan = Math.max(0, total.rmBiasa - total.rmTampung - total.rmEskot - total.rmTambahan);
+    // Rumusan KLM
+    // Kawalan = jam biasa yang BUKAN tampungan/eskot/tambahan
+    const jamKawalan = Math.max(0, T.jamBiasa - T.jamTampung - T.jamEskot - T.jamTambahan);
+    const rmKawalan = Math.max(0, T.rmBiasa - T.rmTampung - T.rmEskot - T.rmTambahan)
+                      + T.rmOff4 + T.rmOff48 + T.rmOff8 + T.rmCuti8 + T.rmCuti8p + T.rmOffKhas;
 
-    document.getElementById("rJamKawalan").textContent = jamKawalan;
-    document.getElementById("rRmKawalan").textContent = formatRM(rmKawalan);
-    document.getElementById("rJamTampung").textContent = total.jamTampung;
-    document.getElementById("rRmTampung").textContent = formatRM(total.rmTampung);
-    document.getElementById("rJamEskot").textContent = total.jamEskot;
-    document.getElementById("rRmEskot").textContent = formatRM(total.rmEskot);
-    document.getElementById("rJamTambahan").textContent = total.jamTambahan;
-    document.getElementById("rRmTambahan").textContent = formatRM(total.rmTambahan);
-    document.getElementById("rJamOffKhas").textContent = total.jamOffKhas;
-    document.getElementById("rRmOffKhas").textContent = formatRM(total.rmOffKhas);
+    // Jika ada tampungan, papar di 04; jika tiada, jam biasa boleh nampak di kawalan
+    // Ikut contoh PDF: kadang jam biasa diletak di Tampungan — di sini kita ikut data sebenar
+    set("rJamKawalan", jamKawalan);
+    set("rRmKawalan", formatRM(rmKawalan - T.rmTampung - T.rmEskot - T.rmTambahan > 0
+      ? (T.rmOff4 + T.rmOff48 + T.rmOff8 + T.rmCuti8 + T.rmCuti8p + T.rmOffKhas + jamKawalan * 0 /* rm sudah dalam rmBiasa */)
+      : (T.rmOff4 + T.rmOff48 + T.rmOff8 + T.rmCuti8 + T.rmCuti8p + T.rmOffKhas)));
 
-    const jamTotal = jamKawalan + total.jamTampung + total.jamEskot + total.jamTambahan + total.jamOffKhas;
-    const rmTotal = rmKawalan + total.rmTampung + total.rmEskot + total.rmTambahan + total.rmOffKhas;
-    document.getElementById("rJamTotal").textContent = jamTotal;
-    document.getElementById("rRmTotal").textContent = formatRM(rmTotal);
+    // Ringkas & stabil:
+    const rmKawalanFinal = T.rmOff4 + T.rmOff48 + T.rmOff8 + T.rmCuti8 + T.rmCuti8p + T.rmOffKhas
+      + Math.max(0, T.rmBiasa - T.rmTampung - T.rmEskot - T.rmTambahan);
+    set("rJamKawalan", jamKawalan);
+    set("rRmKawalan", formatRM(rmKawalanFinal));
 
-    // Signature names from first record
+    set("rJamPejabat", 0); set("rRmPejabat", "0.00");
+    set("rJamLatihan", T.jamKursus); set("rRmLatihan", formatRM(T.rmKursus));
+    set("rJamTampung", T.jamTampung); set("rRmTampung", formatRM(T.rmTampung));
+    set("rJamEskot", T.jamEskot); set("rRmEskot", formatRM(T.rmEskot));
+    set("rJamCit", 0); set("rRmCit", "0.00");
+    set("rJamPentadbiran", 0); set("rRmPentadbiran", "0.00");
+    set("rJamTambahan", T.jamTambahan); set("rRmTambahan", formatRM(T.rmTambahan));
+
+    const jamTotal = jamKawalan + T.jamKursus + T.jamTampung + T.jamEskot + T.jamTambahan;
+    const rmTotal = rmKawalanFinal + T.rmKursus + T.rmTampung + T.rmEskot + T.rmTambahan;
+    set("rJamTotal", jamTotal);
+    set("rRmTotal", formatRM(rmTotal));
+
+    // Tandatangan
     if (senarai.length) {
-      document.getElementById("signKetuaPos").textContent = senarai[0].ketua_pos || "-";
-      document.getElementById("signKetuaUnit").textContent = senarai[0].ketua_unit || "-";
+      const kp = senarai[0].ketua_pos || "-";
+      const ku = senarai[0].ketua_unit || "-";
+      set("signKetuaPos", kp !== "-" ? "(" + kp + ")" : "-");
+      set("signKetuaUnit", ku !== "-" ? "(" + ku + ")" : "-");
     }
   }
 
+  function set(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
+  function esc(s) {
+    return String(s || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
   function resetJumlah() {
-    ["jJamBiasa","jOff4","jOff48","jOff8","jCuti8","jCuti8p","rJamKawalan","rJamTampung","rJamEskot","rJamTambahan","rJamOffKhas","rJamTotal"].forEach(id => {
-      document.getElementById(id).textContent = "0";
-    });
-    ["jRmBiasa","jRmOff4","jRmOff48","jRmOff8","jRmCuti8","jRmCuti8p","jJumlahRM","rRmKawalan","rRmTampung","rRmEskot","rRmTambahan","rRmOffKhas","rRmTotal"].forEach(id => {
-      document.getElementById(id).textContent = "0.00";
-    });
+    ["jJamBiasa","jOff4","jOff48","jOff8","jCuti8","jCuti8p",
+     "rJamKawalan","rJamPejabat","rJamLatihan","rJamTampung","rJamEskot","rJamCit","rJamPentadbiran","rJamTambahan","rJamTotal"
+    ].forEach(id => set(id, "0"));
+    ["jRmBiasa","jRmOff4","jRmOff48","jRmOff8","jRmCuti8","jRmCuti8p","jJumlahRM",
+     "rRmKawalan","rRmPejabat","rRmLatihan","rRmTampung","rRmEskot","rRmCit","rRmPentadbiran","rRmTambahan","rRmTotal"
+    ].forEach(id => set(id, "0.00"));
   }
 </script>
 </body>
