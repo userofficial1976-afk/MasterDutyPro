@@ -773,40 +773,94 @@ async function simpanDuty() {
       return paparPopup("Data tidak lengkap. Sila semak semula.", "error");
     }
 
-    // =====================================================
-    // SEMAK REKOD SUDAN WUJUD (No.SKB + Tarikh)
-    // =====================================================
-    const { data: rekodSediaAda, error: errorSemak } = await supabaseClient
+// =====================================================
+// SEMAK REKOD SUDAN WUJUD (No.SKB + Tarikh)
+// =====================================================
+const { data: rekodSediaAda, error: errorSemak } = await supabaseClient
+  .from("jadual_duty")
+  .select("id, no_skb, tarikh, nama_anggota")
+  .eq("no_skb", String(noSkb))
+  .eq("tarikh", tarikh);
+
+if (errorSemak) throw errorSemak;
+
+console.log("HASIL SEMAKAN REKOD:", rekodSediaAda);
+
+let modeUpdate = false;
+let idUntukUpdate = null;
+
+if (rekodSediaAda && rekodSediaAda.length > 0) {
+  const rekod = rekodSediaAda[0];
+  
+  const yakin = confirm(
+    `Rekod untuk ${rekod.nama_anggota || anggota.nama} pada tarikh ${formatTarikh(tarikh)} sudah wujud.\n\nAdakah anda mahu KEMASKINI rekod tersebut?`
+  );
+
+  if (!yakin) {
+    paparPopup("Simpanan dibatalkan.", "error");
+    return;
+  }
+
+  modeUpdate = true;
+  idUntukUpdate = rekod.id;
+}
+
+// Jika sedang dalam mode edit manual
+if (dutySedangEdit) {
+  modeUpdate = true;
+  idUntukUpdate = dutySedangEdit;
+}
+
+console.log("MODE UPDATE:", modeUpdate, "ID:", idUntukUpdate);
+
+// =====================================================
+// SIMPAN ATAU UPDATE
+// =====================================================
+let result;
+
+if (modeUpdate && idUntukUpdate) {
+  // UPDATE — cuba kedua-dua cara (string & number)
+  result = await supabaseClient
+    .from("jadual_duty")
+    .update(dataDuty)
+    .eq("id", idUntukUpdate)
+    .select();
+
+  // Jika masih 0 row, cuba convert ke number
+  if ((!result.data || result.data.length === 0) && !isNaN(idUntukUpdate)) {
+    console.log("Cuba update dengan Number(id)...");
+    result = await supabaseClient
       .from("jadual_duty")
-      .select("id")
-      .eq("no_skb", noSkb)
-      .eq("tarikh", tarikh)
-      .maybeSingle();
+      .update(dataDuty)
+      .eq("id", Number(idUntukUpdate))
+      .select();
+  }
 
-    if (errorSemak) throw errorSemak;
+  if (result.error) throw result.error;
 
-    let modeUpdate = false;
-    let idUntukUpdate = null;
+  console.log("HASIL UPDATE:", result);
 
-    if (rekodSediaAda && rekodSediaAda.id) {
-      const yakin = confirm(
-        `Rekod untuk ${anggota.nama} pada tarikh ${formatTarikh(tarikh)} sudah wujud.\n\nAdakah anda mahu KEMASKINI rekod tersebut?`
-      );
+  if (!result.data || result.data.length === 0) {
+    paparPopup("Update dihantar tapi tiada rekod dikemaskini. Sila semak ID di console.", "error");
+    return;
+  }
 
-      if (!yakin) {
-        paparPopup("Simpanan dibatalkan.", "error");
-        return;
-      }
+  paparPopup("Rekod Duty berjaya dikemaskini!", "success");
+} else {
+  // INSERT BAHARU
+  result = await supabaseClient
+    .from("jadual_duty")
+    .insert([dataDuty])
+    .select();
 
-      modeUpdate = true;
-      idUntukUpdate = rekodSediaAda.id;
-    }
+  if (result.error) throw result.error;
 
-    // Jika sedang dalam mode edit manual
-    if (dutySedangEdit) {
-      modeUpdate = true;
-      idUntukUpdate = dutySedangEdit;
-    }
+  console.log("INSERT BERJAYA:", result.data);
+  paparPopup("Rekod Duty berjaya disimpan!", "success");
+}
+
+dutySedangEdit = null;
+await paparDuty();
 
     // =====================================================
     // SEDIAKAN DATA
