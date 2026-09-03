@@ -6,6 +6,7 @@
   <title>Dashboard — Master Duty Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -44,17 +45,18 @@
       border-color: rgba(45, 212, 191, 0.3);
     }
     .menu-hidden { display: none !important; }
+    .status-card { cursor: pointer; transition: all 0.2s ease; }
+    .status-card:hover { transform: scale(1.03); }
   </style>
 </head>
 <body class="font-sans text-slate-200">
-
   <div class="flex min-h-screen">
     
     <!-- Sidebar -->
-    <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block">
+    <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto">
       <div class="p-6 h-full flex flex-col">
         <!-- Brand -->
-        <div class="flex items-center gap-3 mb-10">
+        <div class="flex items-center gap-3 mb-8">
           <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center shadow-lg">
             <i class="fas fa-shield-halved text-white text-xl"></i>
           </div>
@@ -64,35 +66,36 @@
           </div>
         </div>
 
+        <!-- User Info -->
+        <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
+          <p id="sidebarUserName" class="text-sm font-semibold text-white truncate">-</p>
+          <p id="sidebarUserJawatan" class="text-xs text-teal-400 mt-1">-</p>
+        </div>
+
         <!-- Navigation -->
         <nav class="space-y-1 flex-1">
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Utama</p>
           
-          <!-- Dashboard - Admin only -->
           <a href="dashboard.html" id="menu-dashboard" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition">
             <i class="fas fa-chart-pie w-5"></i>
             Dashboard
           </a>
           
-          <!-- Pengurusan Anggota - Admin only -->
           <a href="#" id="menu-anggota" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-users w-5"></i>
             Pengurusan Anggota
           </a>
           
-          <!-- Pengisian Kod Duty - Semua -->
           <a href="kod-duty.html" id="menu-kod-duty" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-code w-5"></i>
             Kod Waktu Kerja
           </a>
           
-          <!-- Pengisian Kod Tempat Kerja - Semua -->
           <a href="kod-tempat-kerja.html" id="menu-kod-tempat" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-map-marker-alt w-5"></i>
             Kod Tempat Kerja
           </a>
           
-          <!-- Pengisian Jadual Tugas - Semua -->
           <a href="jadual-duty.html" id="menu-jadual" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-calendar-check w-5"></i>
             Pengisian Jadual Tugas
@@ -100,19 +103,16 @@
 
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Laporan</p>
           
-          <!-- Laporan Wilayah - Admin only -->
           <a href="#" id="menu-laporan-wilayah" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-file-alt w-5"></i>
             Laporan Wilayah
           </a>
           
-          <!-- Anggaran RK02 - Semua -->
           <a href="#" id="menu-rk02" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-chart-bar w-5"></i>
             Anggaran RK02
           </a>
           
-          <!-- Anggaran RK01 - Semua -->
           <a href="#" id="menu-rk01" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-chart-line w-5"></i>
             Anggaran RK01
@@ -120,13 +120,12 @@
 
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Sistem</p>
           
-          <!-- Tetapan - Admin only -->
           <a href="#" id="menu-tetapan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
             <i class="fas fa-cog w-5"></i>
             Tetapan
           </a>
           
-          <a href="login.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
+          <a href="#" onclick="logKeluar()" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
             <i class="fas fa-sign-out-alt w-5"></i>
             Log Keluar
           </a>
@@ -187,7 +186,7 @@
               </div>
             </div>
             <p class="text-sm text-slate-400">Jumlah Anggota Aktif</p>
-            <p class="text-3xl font-bold text-white mt-1">128</p>
+            <p class="text-3xl font-bold text-white mt-1" id="jumlahAnggota">-</p>
           </div>
 
           <div class="stat-card glass rounded-2xl p-5">
@@ -197,7 +196,7 @@
               </div>
             </div>
             <p class="text-sm text-slate-400">Bertugas Hari Ini</p>
-            <p class="text-3xl font-bold text-white mt-1">87</p>
+            <p class="text-3xl font-bold text-white mt-1" id="jumlahDutyHariIni">-</p>
           </div>
 
           <div class="stat-card glass rounded-2xl p-5">
@@ -207,7 +206,7 @@
               </div>
             </div>
             <p class="text-sm text-slate-400">Jam Kerja Hari Ini</p>
-            <p class="text-3xl font-bold text-white mt-1">696</p>
+            <p class="text-3xl font-bold text-white mt-1" id="jumlahJamKerja">-</p>
           </div>
 
           <div class="stat-card glass rounded-2xl p-5">
@@ -217,7 +216,7 @@
               </div>
             </div>
             <p class="text-sm text-slate-400">Jam KLM Hari Ini</p>
-            <p class="text-3xl font-bold text-white mt-1">42</p>
+            <p class="text-3xl font-bold text-white mt-1" id="jumlahJamKlm">-</p>
           </div>
 
           <div class="stat-card glass rounded-2xl p-5">
@@ -227,7 +226,7 @@
               </div>
             </div>
             <p class="text-sm text-slate-400">RM KLM Hari Ini</p>
-            <p class="text-3xl font-bold text-white mt-1">RM 1,260</p>
+            <p class="text-3xl font-bold text-white mt-1" id="jumlahRmKlm">-</p>
           </div>
         </div>
 
@@ -238,35 +237,48 @@
             <div class="flex items-center justify-between mb-6">
               <div>
                 <h3 class="text-lg font-semibold text-white">Status Tidak Bertugas Hari Ini</h3>
-                <p class="text-sm text-slate-400">Ringkasan status cuti & tidak bertugas</p>
+                <p class="text-sm text-slate-400">Klik kad untuk lihat senarai nama</p>
               </div>
             </div>
             
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div class="bg-orange-500/15 border border-orange-500/30 rounded-xl p-4 text-center">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div class="status-card bg-orange-500/15 border border-orange-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('OFFDAY')">
                 <p class="text-xs text-orange-300 font-medium">OFF / GOFF</p>
-                <p class="text-2xl font-bold text-orange-400 mt-1">12</p>
+                <p class="text-2xl font-bold text-orange-400 mt-1" id="jumlahOffday">-</p>
               </div>
-              <div class="bg-emerald-500/15 border border-emerald-500/30 rounded-xl p-4 text-center">
+              <div class="status-card bg-emerald-500/15 border border-emerald-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('CT')">
                 <p class="text-xs text-emerald-300 font-medium">Cuti Tahunan</p>
-                <p class="text-2xl font-bold text-emerald-400 mt-1">8</p>
+                <p class="text-2xl font-bold text-emerald-400 mt-1" id="jumlahCT">-</p>
               </div>
-              <div class="bg-red-500/15 border border-red-500/30 rounded-xl p-4 text-center">
+              <div class="status-card bg-red-500/15 border border-red-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('MC')">
                 <p class="text-xs text-red-300 font-medium">Cuti Sakit</p>
-                <p class="text-2xl font-bold text-red-400 mt-1">5</p>
+                <p class="text-2xl font-bold text-red-400 mt-1" id="jumlahMC">-</p>
               </div>
-              <div class="bg-blue-500/15 border border-blue-500/30 rounded-xl p-4 text-center">
+              <div class="status-card bg-blue-500/15 border border-blue-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('KUR')">
                 <p class="text-xs text-blue-300 font-medium">Kursus</p>
-                <p class="text-2xl font-bold text-blue-400 mt-1">3</p>
+                <p class="text-2xl font-bold text-blue-400 mt-1" id="jumlahKUR">-</p>
               </div>
-              <div class="bg-yellow-500/15 border border-yellow-500/30 rounded-xl p-4 text-center">
+              <div class="status-card bg-yellow-500/15 border border-yellow-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('CA')">
                 <p class="text-xs text-yellow-300 font-medium">Cuti Am</p>
-                <p class="text-2xl font-bold text-yellow-400 mt-1">2</p>
+                <p class="text-2xl font-bold text-yellow-400 mt-1" id="jumlahCA">-</p>
               </div>
-              <div class="bg-slate-500/15 border border-slate-500/30 rounded-xl p-4 text-center">
-                <p class="text-xs text-slate-300 font-medium">Jumlah</p>
-                <p class="text-2xl font-bold text-white mt-1">41</p>
+              <div class="status-card bg-purple-500/15 border border-purple-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('CG')">
+                <p class="text-xs text-purple-300 font-medium">Cuti Ganti</p>
+                <p class="text-2xl font-bold text-purple-400 mt-1" id="jumlahCG">-</p>
               </div>
+              <div class="status-card bg-cyan-500/15 border border-cyan-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('CE')">
+                <p class="text-xs text-cyan-300 font-medium">Cuti Ehsan</p>
+                <p class="text-2xl font-bold text-cyan-400 mt-1" id="jumlahCE">-</p>
+              </div>
+              <div class="status-card bg-slate-500/15 border border-slate-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('CTR')">
+                <p class="text-xs text-slate-300 font-medium">Cuti Tanpa Rekod</p>
+                <p class="text-2xl font-bold text-slate-300 mt-1" id="jumlahCTR">-</p>
+              </div>
+            </div>
+
+            <div class="mt-5 p-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+              <span class="text-sm text-slate-400">Jumlah Tidak Bertugas</span>
+              <span class="text-2xl font-bold text-white" id="jumlahTidakBertugas">-</span>
             </div>
           </div>
 
@@ -274,7 +286,7 @@
             <h3 class="text-lg font-semibold text-white mb-5">Quick Actions</h3>
             
             <div class="space-y-3">
-              <a href="#" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
+              <a href="jadual-duty.html" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
                 <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450 group-hover:scale-110 transition">
                   <i class="fas fa-calendar-plus"></i>
                 </div>
@@ -284,7 +296,7 @@
                 </div>
               </a>
               
-              <a href="#" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
+              <a href="kod-duty.html" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
                 <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450 group-hover:scale-110 transition">
                   <i class="fas fa-code"></i>
                 </div>
@@ -294,13 +306,13 @@
                 </div>
               </a>
               
-              <a href="#" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
+              <a href="kod-tempat-kerja.html" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
                 <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450 group-hover:scale-110 transition">
-                  <i class="fas fa-file-export"></i>
+                  <i class="fas fa-map-marker-alt"></i>
                 </div>
                 <div>
-                  <p class="font-medium text-white">Export Laporan</p>
-                  <p class="text-xs text-slate-400">PDF / Excel</p>
+                  <p class="font-medium text-white">Kod Tempat Kerja</p>
+                  <p class="text-xs text-slate-400">Urus pos & lokasi</p>
                 </div>
               </a>
             </div>
@@ -316,33 +328,263 @@
   </div>
 
   <script>
-    // Semak login
-    const user = JSON.parse(localStorage.getItem('mdp_user') || 'null');
-    
-    if (!user) {
-      window.location.href = 'login.html';
-    } else {
-      // Papar maklumat pengguna
-      document.getElementById('userName').textContent = user.name;
-      document.getElementById('userJawatan').textContent = user.jawatan;
-      document.getElementById('welcomeName').textContent = user.name.split(' ')[0];
-      document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+    // =====================================================
+    // SUPABASE
+    // =====================================================
+    const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      // Tapisan menu berdasarkan jawatan
-      const isAdmin = user.isAdmin === true; // PTW, PPOW, POW
+    let dataDutyHariIni = [];
+    let currentUser = null;
 
-      if (!isAdmin) {
-        // Sembunyikan menu Admin sahaja
-        document.getElementById('menu-dashboard').classList.add('menu-hidden');
-        document.getElementById('menu-anggota').classList.add('menu-hidden');
-        document.getElementById('menu-laporan-wilayah').classList.add('menu-hidden');
-        document.getElementById('menu-tetapan').classList.add('menu-hidden');
+    // =====================================================
+    // INIT
+    // =====================================================
+    document.addEventListener("DOMContentLoaded", async function () {
+      currentUser = bacaPengguna();
+
+      if (!currentUser) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Dashboard untuk Admin sahaja
+      if (!currentUser.isAdmin) {
+        window.location.href = "jadual-duty.html";
+        return;
+      }
+
+      paparMaklumatPengguna();
+      kawalMenuMengikutPeranan();
+
+      // Tarikh
+      const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+      document.getElementById("currentDate").textContent = new Date().toLocaleDateString("ms-MY", options);
+
+      await muatDashboard();
+    });
+
+    function bacaPengguna() {
+      try {
+        const data = localStorage.getItem("mdp_user");
+        return data ? JSON.parse(data) : null;
+      } catch {
+        return null;
       }
     }
 
-    // Tarikh hari ini
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ms-MY', options);
+    function paparMaklumatPengguna() {
+      if (!currentUser) return;
+
+      const name = currentUser.name || currentUser.noSkb || "-";
+      const jawatan = currentUser.jawatan || "-";
+
+      document.getElementById("userName").textContent = name;
+      document.getElementById("userJawatan").textContent = jawatan;
+      document.getElementById("sidebarUserName").textContent = name;
+      document.getElementById("sidebarUserJawatan").textContent = jawatan;
+      document.getElementById("welcomeName").textContent = name.split(" ")[0];
+      document.getElementById("userAvatar").textContent = name.charAt(0).toUpperCase();
+    }
+
+    function kawalMenuMengikutPeranan() {
+      if (!currentUser || currentUser.isAdmin) return;
+
+      ["menu-dashboard", "menu-anggota", "menu-laporan-wilayah", "menu-tetapan"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("menu-hidden");
+      });
+    }
+
+    function logKeluar() {
+      localStorage.removeItem("mdp_user");
+      window.location.href = "login.html";
+    }
+
+    // =====================================================
+    // MUAT DASHBOARD
+    // =====================================================
+    async function muatDashboard() {
+      await jumlahAnggotaAktif();
+      await statistikDutyHariIni();
+      await statusTidakBertugasHariIni();
+    }
+
+    // =====================================================
+    // JUMLAH ANGGOTA AKTIF
+    // =====================================================
+    async function jumlahAnggotaAktif() {
+      const { count, error } = await supabaseClient
+        .from("Data_Anggota")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "Aktif");
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      document.getElementById("jumlahAnggota").textContent = count || 0;
+    }
+
+    // =====================================================
+    // STATISTIK DUTY HARI INI
+    // =====================================================
+    async function statistikDutyHariIni() {
+      const hariIni = new Date().toISOString().split("T")[0];
+
+      const { data, error } = await supabaseClient
+        .from("jadual_duty")
+        .select("jam_kerja, jam_klm, rm_klm_seluruh, rm_klm_hari_biasa, rm_klm_tampungan")
+        .eq("tarikh", hariIni);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      const rows = data || [];
+
+      const jumlahJamKerja = rows.reduce((t, r) => t + Number(r.jam_kerja || 0), 0);
+      const jumlahJamKlm = rows.reduce((t, r) => t + Number(r.jam_klm || 0), 0);
+
+      // Cuba guna rm_klm_seluruh, fallback kepada jumlah medan RM lain
+      const jumlahRmKlm = rows.reduce((t, r) => {
+        let nilai = Number(r.rm_klm_seluruh || 0);
+        if (!nilai) {
+          nilai = Number(r.rm_klm_hari_biasa || 0) + Number(r.rm_klm_tampungan || 0);
+        }
+        return t + nilai;
+      }, 0);
+
+      document.getElementById("jumlahJamKerja").textContent = jumlahJamKerja;
+      document.getElementById("jumlahJamKlm").textContent = jumlahJamKlm;
+      document.getElementById("jumlahRmKlm").textContent = "RM " + jumlahRmKlm.toFixed(2);
+    }
+
+    // =====================================================
+    // STATUS TIDAK BERTUGAS HARI INI
+    // =====================================================
+    async function statusTidakBertugasHariIni() {
+      const hariIni = new Date().toISOString().split("T")[0];
+
+      const { data, error } = await supabaseClient
+        .from("jadual_duty")
+        .select("nama_anggota, kod_waktu_kerja, kod_duty")
+        .eq("tarikh", hariIni);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      dataDutyHariIni = (data || []).map(row => ({
+        ...row,
+        kod_waktu_kerja: row.kod_waktu_kerja || row.kod_duty || ""
+      }));
+
+      const OFF = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "OFF" || x.kod_waktu_kerja === "GOFF").length;
+      const CT  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CT").length;
+      const MC  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "MC").length;
+      const KUR = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "KUR").length;
+      const CA  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CA").length;
+      const CG  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CG").length;
+      const CE  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CE").length;
+      const CTR = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CTR").length;
+
+      document.getElementById("jumlahOffday").textContent = OFF;
+      document.getElementById("jumlahCT").textContent = CT;
+      document.getElementById("jumlahMC").textContent = MC;
+      document.getElementById("jumlahKUR").textContent = KUR;
+      document.getElementById("jumlahCA").textContent = CA;
+      document.getElementById("jumlahCG").textContent = CG;
+      document.getElementById("jumlahCE").textContent = CE;
+      document.getElementById("jumlahCTR").textContent = CTR;
+
+      const jumlahTidakBertugas = OFF + CT + MC + KUR + CA + CG + CE + CTR;
+      document.getElementById("jumlahTidakBertugas").textContent = jumlahTidakBertugas;
+
+      // Bertugas = total rekod hari ini tolak yang tidak bertugas
+      const jumlahBertugas = Math.max(0, dataDutyHariIni.length - jumlahTidakBertugas);
+      document.getElementById("jumlahDutyHariIni").textContent = jumlahBertugas;
+    }
+
+    // =====================================================
+    // POPUP SENARAI NAMA
+    // =====================================================
+    function paparSenarai(kategori) {
+      const tajukKategori = {
+        OFFDAY: "Senarai Anggota Offday / Ganti Offday",
+        CT: "Senarai Anggota Cuti Tahunan",
+        MC: "Senarai Anggota Cuti Sakit",
+        KUR: "Senarai Anggota Menghadiri Kursus",
+        CA: "Senarai Anggota Cuti Am",
+        CG: "Senarai Anggota Cuti Ganti",
+        CE: "Senarai Anggota Cuti Ehsan",
+        CTR: "Senarai Anggota Cuti Tanpa Rekod"
+      };
+
+      let senarai = [];
+
+      switch (kategori) {
+        case "OFFDAY":
+          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "OFF" || x.kod_waktu_kerja === "GOFF");
+          break;
+        case "CT":
+          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CT");
+          break;
+        case "MC":
+          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "MC");
+          break;
+        case "KUR":
+          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "KUR");
+          break;
+        case "CA":
+          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CA");
+          break;
+        case "CG":
+          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CG");
+          break;
+        case "CE":
+          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CE");
+          break;
+        case "CTR":
+          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CTR");
+          break;
+      }
+
+      const namaList = senarai.length > 0
+        ? senarai.map((x, i) => `<li class="py-1">${i + 1}. ${x.nama_anggota || "-"}</li>`).join("")
+        : `<li class="text-slate-500">Tiada rekod dijumpai</li>`;
+
+      const popup = document.createElement("div");
+      popup.innerHTML = `
+        <div data-popup onclick="this.remove()"
+          style="position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center;z-index:99999;">
+          <div onclick="event.stopPropagation()"
+            style="background:#0f172a;width:560px;max-width:95%;border-radius:16px;padding:24px;border:1px solid rgba(45,212,191,0.2);box-shadow:0 20px 40px rgba(0,0,0,.4);">
+            <h3 style="color:#2dd4bf;margin-bottom:8px;font-size:18px;font-weight:700;">
+              ${tajukKategori[kategori]}
+            </h3>
+            <hr style="border-color:rgba(148,163,184,0.2);margin-bottom:14px;">
+            <div style="max-height:300px;overflow-y:auto;border:1px solid rgba(148,163,184,0.15);border-radius:10px;padding:12px;background:rgba(15,23,42,0.6);">
+              <ol style="margin-left:18px;line-height:1.9;color:#e2e8f0;">
+                ${namaList}
+              </ol>
+            </div>
+            <div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;">
+              <strong style="color:#94a3b8;">Jumlah : ${senarai.length} Anggota</strong>
+              <button onclick="this.closest('[data-popup]').remove()"
+                style="background:#dc2626;color:white;border:none;padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;">
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(popup);
+    }
   </script>
 </body>
 </html>
