@@ -603,22 +603,52 @@
 
       let hasil;
 
-      if (modeUpdate && idUntukUpdate) {
-        hasil = await supabaseClient.from("jadual_duty").update(dataDuty).eq("id", idUntukUpdate).select();
-        if ((!hasil.data || hasil.data.length === 0) && !isNaN(idUntukUpdate)) {
-          hasil = await supabaseClient.from("jadual_duty").update(dataDuty).eq("id", Number(idUntukUpdate)).select();
-        }
-        if (hasil.error) throw hasil.error;
-        if (!hasil.data || hasil.data.length === 0) {
-          paparPopup("Update dihantar tapi tiada rekod dikemaskini.", "error");
-          return;
-        }
-        paparPopup("Rekod Duty berjaya dikemaskini!", "success");
-      } else {
-        hasil = await supabaseClient.from("jadual_duty").insert([dataDuty]).select();
-        if (hasil.error) throw hasil.error;
-        paparPopup("Rekod Duty berjaya disimpan!", "success");
+if (modeUpdate) {
+  // Update menggunakan No.SKB + Tarikh (lebih stabil)
+  const { data, error } = await supabaseClient
+    .from("jadual_duty")
+    .update(dataDuty)
+    .eq("no_skb", String(noSkb))
+    .eq("tarikh", tarikh)
+    .select();
+
+  if (error) throw error;
+
+  console.log("HASIL UPDATE:", data);
+
+  if (!data || data.length === 0) {
+    // Cuba sekali lagi dengan id jika ada
+    if (idUntukUpdate) {
+      const { data: data2, error: error2 } = await supabaseClient
+        .from("jadual_duty")
+        .update(dataDuty)
+        .eq("id", idUntukUpdate)
+        .select();
+
+      if (error2) throw error2;
+
+      if (!data2 || data2.length === 0) {
+        paparPopup("Update dihantar tapi tiada rekod dikemaskini. Sila semak data di Supabase.", "error");
+        return;
       }
+    } else {
+      paparPopup("Update dihantar tapi tiada rekod dikemaskini.", "error");
+      return;
+    }
+  }
+
+  paparPopup("Rekod Duty berjaya dikemaskini!", "success");
+} else {
+  // INSERT BAHARU
+  const { data, error } = await supabaseClient
+    .from("jadual_duty")
+    .insert([dataDuty])
+    .select();
+
+  if (error) throw error;
+
+  paparPopup("Rekod Duty berjaya disimpan!", "success");
+}
 
       dutySedangEdit = null;
       await paparDuty();
