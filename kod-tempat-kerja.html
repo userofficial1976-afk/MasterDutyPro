@@ -1,1585 +1,529 @@
-```html
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Kod Tempat Kerja | Master Duty Pro</title>
-
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Font Awesome -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100%;
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system,
-                BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background:
-                linear-gradient(
-                    135deg,
-                    #071f25 0%,
-                    #0b3038 45%,
-                    #0d4148 100%
-                );
-            color: #e5f4f5;
-        }
-
-        body {
-            min-height: 100vh;
-        }
-
-        /* =====================================================
-           SIDEBAR
-        ===================================================== */
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 288px;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            background:
-                linear-gradient(
-                    180deg,
-                    rgba(4, 28, 34, 0.98),
-                    rgba(6, 42, 48, 0.98)
-                );
-            border-right: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 8px 0 30px rgba(0,0,0,0.20);
-        }
-
-        .brand {
-            padding: 24px 22px 18px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .brand-top {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-        }
-
-        .brand-icon {
-            width: 46px;
-            height: 46px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background:
-                linear-gradient(
-                    135deg,
-                    #0f766e,
-                    #155e75
-                );
-            color: white;
-            font-size: 21px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.22);
-        }
-
-        .brand-title {
-            font-size: 18px;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: .2px;
-        }
-
-        .brand-subtitle {
-            margin-top: 4px;
-            color: #91b9be;
-            font-size: 11px;
-            letter-spacing: .7px;
-            text-transform: uppercase;
-        }
-
-        .nav {
-            flex: 1;
-            overflow-y: auto;
-            padding: 18px 13px;
-        }
-
-        .nav-section {
-            padding: 0 10px 8px;
-            color: #608a90;
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1.3px;
-            text-transform: uppercase;
-        }
-
-        .nav-link {
-            width: 100%;
-            min-height: 45px;
-            margin-bottom: 5px;
-            padding: 11px 13px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-radius: 11px;
-            color: #b9d0d3;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            transition: .18s ease;
-        }
-
-        .nav-link i {
-            width: 20px;
-            text-align: center;
-            color: #7ca8ad;
-            font-size: 14px;
-        }
-
-        .nav-link:hover {
-            color: #ffffff;
-            background: rgba(255,255,255,0.06);
-        }
-
-        .nav-link:hover i {
-            color: #55d2ca;
-        }
-
-        .nav-link.active {
-            color: #ffffff;
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(15,118,110,.95),
-                    rgba(21,94,117,.95)
-                );
-            box-shadow:
-                0 8px 20px rgba(0,0,0,.18);
-        }
-
-        .nav-link.active i {
-            color: #ffffff;
-        }
-
-        .sidebar-user {
-            padding: 15px;
-            border-top: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .sidebar-user-card {
-            padding: 11px;
-            border-radius: 13px;
-            background: rgba(255,255,255,0.045);
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .sidebar-user-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #0f766e;
-            color: white;
-            font-size: 14px;
-            font-weight: 800;
-        }
-
-        .sidebar-user-name {
-            color: white;
-            font-size: 12px;
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .sidebar-user-role {
-            margin-top: 2px;
-            color: #7fa7ac;
-            font-size: 10px;
-        }
-
-        /* =====================================================
-           MAIN
-        ===================================================== */
-
-        .main {
-            margin-left: 288px;
-            min-height: 100vh;
-            padding: 0 28px 35px;
-        }
-
-        .topbar {
-            height: 82px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .top-title {
-            color: #ffffff;
-            font-size: 21px;
-            font-weight: 800;
-        }
-
-        .top-subtitle {
-            margin-top: 3px;
-            color: #83aeb3;
-            font-size: 12px;
-        }
-
-        .online-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 8px 12px;
-            border-radius: 999px;
-            background: rgba(16,185,129,.10);
-            border: 1px solid rgba(52,211,153,.20);
-            color: #8ce8c5;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .online-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #34d399;
-            box-shadow: 0 0 8px rgba(52,211,153,.65);
-        }
-
-        /* =====================================================
-           HERO
-        ===================================================== */
-
-        .hero {
-            position: relative;
-            overflow: hidden;
-            margin-top: 25px;
-            padding: 27px 29px;
-            border-radius: 20px;
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(15,118,110,.96),
-                    rgba(15,76,92,.96)
-                );
-            border: 1px solid rgba(255,255,255,.10);
-            box-shadow: 0 18px 40px rgba(0,0,0,.20);
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            right: -70px;
-            bottom: -100px;
-            width: 330px;
-            height: 220px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,.11);
-            transform: rotate(-12deg);
-        }
-
-        .hero-title {
-            position: relative;
-            z-index: 2;
-            color: #ffffff;
-            font-size: 25px;
-            font-weight: 900;
-            letter-spacing: .3px;
-        }
-
-        .hero-text {
-            position: relative;
-            z-index: 2;
-            max-width: 720px;
-            margin-top: 7px;
-            color: #c8eeed;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        /* =====================================================
-           CARDS
-        ===================================================== */
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 430px) minmax(0, 1fr);
-            gap: 20px;
-            margin-top: 20px;
-            align-items: start;
-        }
-
-        .card {
-            background: rgba(8, 38, 44, .82);
-            border: 1px solid rgba(255,255,255,.075);
-            border-radius: 18px;
-            box-shadow: 0 15px 35px rgba(0,0,0,.16);
-            overflow: hidden;
-        }
-
-        .card-header {
-            padding: 18px 20px;
-            border-bottom: 1px solid rgba(255,255,255,.07);
-        }
-
-        .card-title {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-        .card-title i {
-            color: #4fd1c5;
-        }
-
-        .card-description {
-            margin-top: 4px;
-            color: #769ca1;
-            font-size: 11px;
-            line-height: 1.5;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        /* =====================================================
-           FORM
-        ===================================================== */
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 7px;
-            color: #b8ced1;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .required {
-            color: #fb7185;
-        }
-
-        .input,
-        .select {
-            width: 100%;
-            height: 43px;
-            padding: 0 13px;
-            outline: none;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,.10);
-            background: rgba(2, 25, 31, .72);
-            color: #eaf7f8;
-            font-size: 13px;
-            transition: .18s ease;
-        }
-
-        .input::placeholder {
-            color: #5f858b;
-        }
-
-        .input:focus,
-        .select:focus {
-            border-color: rgba(45,212,191,.70);
-            box-shadow: 0 0 0 3px rgba(45,212,191,.08);
-        }
-
-        .select option {
-            background: #08282f;
-            color: white;
-        }
-
-        .pos-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            gap: 9px;
-        }
-
-        .btn-add-pos {
-            height: 43px;
-            padding: 0 15px;
-            border: 0;
-            border-radius: 10px;
-            cursor: pointer;
-            color: white;
-            background: #0f766e;
-            font-size: 12px;
-            font-weight: 800;
-            transition: .18s ease;
-        }
-
-        .btn-add-pos:hover {
-            background: #0d9488;
-            transform: translateY(-1px);
-        }
-
-        .selected-title {
-            margin: 17px 0 8px;
-            color: #8eb5ba;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: .7px;
-        }
-
-        .selected-pos {
-            min-height: 57px;
-            padding: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            align-content: flex-start;
-            gap: 7px;
-            border-radius: 11px;
-            border: 1px dashed rgba(255,255,255,.12);
-            background: rgba(0,0,0,.10);
-        }
-
-        .empty-pos {
-            color: #577b80;
-            font-size: 11px;
-            padding: 8px 4px;
-        }
-
-        .pos-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 7px 9px 7px 11px;
-            border-radius: 999px;
-            background: rgba(13,148,136,.16);
-            border: 1px solid rgba(45,212,191,.22);
-            color: #bdf4ee;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .pos-tag button {
-            width: 18px;
-            height: 18px;
-            padding: 0;
-            border: 0;
-            border-radius: 50%;
-            cursor: pointer;
-            background: rgba(255,255,255,.08);
-            color: #c7e4e6;
-            line-height: 18px;
-            font-size: 14px;
-        }
-
-        .pos-tag button:hover {
-            background: rgba(239,68,68,.25);
-            color: #fecaca;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 9px;
-            margin-top: 19px;
-        }
-
-        .btn {
-            min-height: 42px;
-            padding: 0 16px;
-            border: 0;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 800;
-            transition: .18s ease;
-        }
-
-        .btn-save {
-            flex: 1;
-            color: white;
-            background:
-                linear-gradient(
-                    135deg,
-                    #0f766e,
-                    #0d9488
-                );
-        }
-
-        .btn-save:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 7px 18px rgba(13,148,136,.25);
-        }
-
-        .btn-reset {
-            color: #b6cdd0;
-            background: rgba(255,255,255,.06);
-            border: 1px solid rgba(255,255,255,.08);
-        }
-
-        .btn-reset:hover {
-            background: rgba(255,255,255,.10);
-        }
-
-        /* =====================================================
-           MESSAGE
-        ===================================================== */
-
-        #mesej {
-            display: none;
-            margin-bottom: 15px;
-            padding: 11px 13px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        #mesej.success {
-            display: block;
-            background: rgba(16,185,129,.10);
-            border: 1px solid rgba(52,211,153,.20);
-            color: #86efac;
-        }
-
-        #mesej.error {
-            display: block;
-            background: rgba(239,68,68,.10);
-            border: 1px solid rgba(248,113,113,.20);
-            color: #fca5a5;
-        }
-
-        /* =====================================================
-           FILTER
-        ===================================================== */
-
-        .filter-row {
-            display: flex;
-            align-items: end;
-            gap: 12px;
-        }
-
-        .filter-group {
-            flex: 1;
-        }
-
-        .btn-refresh {
-            height: 43px;
-            padding: 0 14px;
-            border: 0;
-            border-radius: 10px;
-            cursor: pointer;
-            background: rgba(255,255,255,.07);
-            color: #b8d1d4;
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .btn-refresh:hover {
-            background: rgba(255,255,255,.11);
-            color: white;
-        }
-
-        /* =====================================================
-           TABLE
-        ===================================================== */
-
-        .table-wrap {
-            overflow-x: auto;
-            margin-top: 16px;
-            border: 1px solid rgba(255,255,255,.07);
-            border-radius: 12px;
-        }
-
-        table {
-            width: 100%;
-            min-width: 720px;
-            border-collapse: collapse;
-        }
-
-        thead th {
-            padding: 12px 11px;
-            background: rgba(255,255,255,.045);
-            color: #86adb2;
-            border-bottom: 1px solid rgba(255,255,255,.08);
-            font-size: 10px;
-            font-weight: 800;
-            text-align: left;
-            text-transform: uppercase;
-            letter-spacing: .6px;
-            white-space: nowrap;
-        }
-
-        tbody td {
-            padding: 12px 11px;
-            color: #bdd0d3;
-            border-bottom: 1px solid rgba(255,255,255,.055);
-            font-size: 11px;
-            vertical-align: middle;
-        }
-
-        tbody tr:last-child td {
-            border-bottom: 0;
-        }
-
-        tbody tr:hover {
-            background: rgba(255,255,255,.025);
-        }
-
-        .bil {
-            width: 45px;
-            color: #75999e;
-        }
-
-        .kod-cell {
-            color: #ffffff;
-            font-weight: 900;
-            letter-spacing: .5px;
-        }
-
-        .pos-cell {
-            max-width: 340px;
-            line-height: 1.5;
-        }
-
-        .badge {
-            display: inline-flex;
-            padding: 5px 9px;
-            border-radius: 999px;
-            font-size: 10px;
-            font-weight: 800;
-        }
-
-        .badge-aktif {
-            color: #86efac;
-            background: rgba(34,197,94,.10);
-            border: 1px solid rgba(74,222,128,.16);
-        }
-
-        .badge-tidak-aktif {
-            color: #fca5a5;
-            background: rgba(239,68,68,.10);
-            border: 1px solid rgba(248,113,113,.16);
-        }
-
-        .actions {
-            display: flex;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .btn-edit,
-        .btn-danger {
-            min-height: 31px;
-            padding: 0 9px;
-            border-radius: 7px;
-            border: 1px solid transparent;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: 800;
-        }
-
-        .btn-edit {
-            color: #93c5fd;
-            background: rgba(59,130,246,.10);
-            border-color: rgba(96,165,250,.13);
-        }
-
-        .btn-edit:hover {
-            background: rgba(59,130,246,.18);
-        }
-
-        .btn-danger {
-            color: #fca5a5;
-            background: rgba(239,68,68,.09);
-            border-color: rgba(248,113,113,.13);
-        }
-
-        .btn-danger:hover {
-            background: rgba(239,68,68,.18);
-        }
-
-        .loading-cell,
-        .empty-cell,
-        .error-cell {
-            padding: 30px !important;
-            color: #648b90 !important;
-            text-align: center !important;
-        }
-
-        .error-cell {
-            color: #fca5a5 !important;
-        }
-
-        /* =====================================================
-           FOOTER
-        ===================================================== */
-
-        .footer {
-            padding: 22px 5px 0;
-            color: #567c81;
-            text-align: center;
-            font-size: 10px;
-        }
-
-        /* =====================================================
-           MOBILE NAV
-        ===================================================== */
-
-        .mobile-nav {
-            display: none;
-        }
-
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
-
-        @media (max-width: 1100px) {
-            .content-grid {
-                grid-template-columns: 1fr;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kod Tempat Kerja — Master Duty Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            teal: {
+              450: '#2dd4bf',
+              550: '#14b8a6',
+              650: '#0d9488',
+              750: '#0f766e',
             }
+          }
         }
-
-        @media (max-width: 800px) {
-
-            .sidebar {
-                display: none;
-            }
-
-            .main {
-                margin-left: 0;
-                padding:
-                    0
-                    13px
-                    86px;
-            }
-
-            .topbar {
-                height: 72px;
-            }
-
-            .top-title {
-                font-size: 17px;
-            }
-
-            .top-subtitle {
-                font-size: 10px;
-            }
-
-            .online-badge {
-                padding: 7px 9px;
-                font-size: 9px;
-            }
-
-            .hero {
-                margin-top: 16px;
-                padding: 22px 19px;
-                border-radius: 16px;
-            }
-
-            .hero-title {
-                font-size: 20px;
-            }
-
-            .hero-text {
-                font-size: 11px;
-            }
-
-            .content-grid {
-                margin-top: 14px;
-                gap: 14px;
-            }
-
-            .card {
-                border-radius: 15px;
-            }
-
-            .card-header {
-                padding: 15px;
-            }
-
-            .card-body {
-                padding: 15px;
-            }
-
-            .filter-row {
-                align-items: stretch;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .btn-refresh {
-                width: 100%;
-            }
-
-            .pos-row {
-                grid-template-columns: 1fr;
-            }
-
-            .btn-add-pos {
-                width: 100%;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .mobile-nav {
-                position: fixed;
-                left: 10px;
-                right: 10px;
-                bottom: 10px;
-                z-index: 200;
-                height: 62px;
-                padding: 5px;
-                display: grid;
-                grid-template-columns: repeat(5, 1fr);
-                gap: 3px;
-                border-radius: 17px;
-                background: rgba(4,29,35,.96);
-                border: 1px solid rgba(255,255,255,.09);
-                box-shadow: 0 10px 35px rgba(0,0,0,.35);
-                backdrop-filter: blur(16px);
-            }
-
-            .mobile-link {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 3px;
-                border-radius: 12px;
-                color: #75999e;
-                text-decoration: none;
-                font-size: 8px;
-                font-weight: 700;
-            }
-
-            .mobile-link i {
-                font-size: 14px;
-            }
-
-            .mobile-link.active {
-                color: #ffffff;
-                background: rgba(13,148,136,.22);
-            }
-
-            .mobile-link.active i {
-                color: #5eead4;
-            }
-
-            .selected-pos {
-                min-height: 62px;
-            }
-        }
-
-        @media (max-width: 420px) {
-            .main {
-                padding-left: 9px;
-                padding-right: 9px;
-            }
-
-            .hero-title {
-                font-size: 18px;
-            }
-
-            .top-subtitle {
-                display: none;
-            }
-
-            .online-badge {
-                padding: 6px 8px;
-            }
-
-            .card-title {
-                font-size: 14px;
-            }
-        }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body { background: #0b1220; font-family: 'Segoe UI', system-ui, sans-serif; }
+    .glass {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(45, 212, 191, 0.12);
+    }
+    .sidebar-link.active {
+      background: linear-gradient(90deg, rgba(20, 184, 166, 0.2), transparent);
+      border-left: 3px solid #14b8a6;
+      color: #2dd4bf;
+    }
+  </style>
 </head>
+<body class="text-slate-200">
 
-<body>
-
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
-
-    <aside class="sidebar">
-
-        <div class="brand">
-
-            <div class="brand-top">
-
-                <div class="brand-icon">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-
-                <div>
-                    <div class="brand-title">
-                        Master Duty Pro
-                    </div>
-
-                    <div class="brand-subtitle">
-                        Polis Bantuan FGV
-                    </div>
-                </div>
-
-            </div>
-
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block">
+      <div class="p-6">
+        <div class="flex items-center gap-3 mb-10">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center">
+            <i class="fas fa-shield-halved text-white text-xl"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-white text-lg">Master Duty Pro</h1>
+            <p class="text-xs text-teal-450">Wilayah Terengganu</p>
+          </div>
         </div>
 
+        <nav class="space-y-1">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Utama</p>
+          
+          <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-chart-pie w-5"></i> Dashboard
+          </a>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-users w-5"></i> Pengurusan Anggota
+          </a>
+          <a href="kod-duty.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-code w-5"></i> Pengisian Kod Duty
+          </a>
+          <a href="kod-tempat-kerja.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium">
+            <i class="fas fa-map-marker-alt w-5"></i> Kod Tempat Kerja
+          </a>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-calendar-check w-5"></i> Pengisian Jadual Tugas
+          </a>
 
-        <nav class="nav">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Laporan</p>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-file-alt w-5"></i> Laporan Wilayah
+          </a>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-chart-bar w-5"></i> Anggaran RK02
+          </a>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-chart-line w-5"></i> Anggaran RK01
+          </a>
 
-            <div class="nav-section">
-                Utama
-            </div>
-
-            <a
-                href="dashboard.html"
-                class="nav-link"
-            >
-                <i class="fa-solid fa-gauge-high"></i>
-                <span>Dashboard</span>
-            </a>
-
-
-            <a
-                href="#"
-                class="nav-link"
-                id="menuAnggota"
-            >
-                <i class="fa-solid fa-users"></i>
-                <span>Pengurusan Anggota</span>
-            </a>
-
-
-            <div class="nav-section mt-5">
-                Pengurusan Duty
-            </div>
-
-
-            <a
-                href="kod-duty.html"
-                class="nav-link"
-            >
-                <i class="fa-solid fa-code"></i>
-                <span>Pengisian Kod Duty</span>
-            </a>
-
-
-            <a
-                href="kod-tempat-kerja.html"
-                class="nav-link active"
-            >
-                <i class="fa-solid fa-location-dot"></i>
-                <span>Pengisian Kod Tempat Kerja</span>
-            </a>
-
-
-            <a
-                href="#"
-                class="nav-link"
-            >
-                <i class="fa-solid fa-calendar-days"></i>
-                <span>Pengisian Jadual Tugas</span>
-            </a>
-
-
-            <div class="nav-section mt-5">
-                Laporan
-            </div>
-
-
-            <a
-                href="#"
-                class="nav-link"
-                id="menuLaporan"
-            >
-                <i class="fa-solid fa-chart-column"></i>
-                <span>Laporan Wilayah</span>
-            </a>
-
-
-            <a
-                href="#"
-                class="nav-link"
-            >
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-                <span>Anggaran RK02</span>
-            </a>
-
-
-            <a
-                href="#"
-                class="nav-link"
-            >
-                <i class="fa-solid fa-file-lines"></i>
-                <span>Anggaran RK01</span>
-            </a>
-
-
-            <div class="nav-section mt-5">
-                Sistem
-            </div>
-
-
-            <a
-                href="#"
-                class="nav-link"
-                id="menuTetapan"
-            >
-                <i class="fa-solid fa-gear"></i>
-                <span>Tetapan</span>
-            </a>
-
-
-            <a
-                href="login.html"
-                class="nav-link"
-                onclick="logKeluar()"
-            >
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Log Keluar</span>
-            </a>
-
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Sistem</p>
+          <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+            <i class="fas fa-cog w-5"></i> Tetapan
+          </a>
+          <a href="login.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
+            <i class="fas fa-sign-out-alt w-5"></i> Log Keluar
+          </a>
         </nav>
-
-
-        <div class="sidebar-user">
-
-            <div class="sidebar-user-card">
-
-                <div class="sidebar-user-row">
-
-                    <div
-                        class="sidebar-avatar"
-                        id="userAvatar"
-                    >
-                        U
-                    </div>
-
-                    <div class="min-w-0">
-
-                        <div
-                            class="sidebar-user-name"
-                            id="userName"
-                        >
-                            Pengguna
-                        </div>
-
-                        <div
-                            class="sidebar-user-role"
-                            id="userJawatan"
-                        >
-                            Pengguna
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
+      </div>
     </aside>
 
+    <!-- Main -->
+    <main class="flex-1 lg:ml-72">
+      <header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-white">Pengisian Kod Tempat Kerja</h2>
+            <p class="text-sm text-slate-400">Urus kod tempat kerja mengikut unit & pos</p>
+          </div>
+          <div class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
+            <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
+            System Online
+          </div>
+        </div>
+      </header>
 
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
+      <div class="p-6 space-y-6">
 
-    <main class="main">
+        <!-- Form Card -->
+        <div class="glass rounded-2xl p-6">
+          <h3 class="text-lg font-semibold text-white mb-5" id="tajukBorang">Tambah Kod Tempat Kerja</h3>
+          
+          <div id="mesej" class="mb-4"></div>
 
-        <!-- TOPBAR -->
-
-        <header class="topbar">
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            <div>
+              <label class="block text-sm text-slate-400 mb-2">Unit</label>
+              <select id="unit" class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
+                <option value="">-- Pilih Unit --</option>
+                <option value="Jerangau">Jerangau</option>
+                <option value="Chador">Chador</option>
+                <option value="Terengganu">Terengganu</option>
+                <option value="Setiu">Setiu</option>
+                <option value="Rantau Abang">Rantau Abang</option>
+                <option value="Kerteh">Kerteh</option>
+              </select>
+            </div>
 
             <div>
-
-                <div class="top-title">
-                    Kod Tempat Kerja
-                </div>
-
-                <div class="top-subtitle">
-                    Master Duty Pro / Pengurusan Kod Tempat Kerja
-                </div>
-
+              <label class="block text-sm text-slate-400 mb-2">Kod TK</label>
+              <input type="text" id="kodTempatKerja" placeholder="Contoh: W" maxlength="10"
+                class="w-full bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550 uppercase">
             </div>
 
-
-            <div class="online-badge">
-
-                <span class="online-dot"></span>
-
-                Sistem Online
-
+            <div>
+              <label class="block text-sm text-slate-400 mb-2">Pos (Tempat Kerja)</label>
+              <div class="flex gap-2">
+                <select id="pos" class="flex-1 bg-slate-900/60 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-teal-550">
+                  <option value="">-- Pilih Pos --</option>
+                </select>
+                <button type="button" onclick="tambahPos()" class="bg-teal-600 hover:bg-teal-500 text-white px-4 rounded-xl font-semibold transition">
+                  +
+                </button>
+              </div>
             </div>
+          </div>
 
-        </header>
-
-
-        <!-- HERO -->
-
-        <section class="hero">
-
-            <div class="hero-title">
-                PENGURUSAN KOD TEMPAT KERJA
+          <!-- Pos Dipilih -->
+          <div class="mt-5">
+            <p class="text-sm text-slate-400 mb-2">Pos Dipilih</p>
+            <div id="posDipilih" class="min-h-[52px] p-3 rounded-xl border border-dashed border-slate-700 bg-slate-900/40 flex flex-wrap gap-2">
+              <span class="text-slate-500 text-sm">Belum ada Pos dipilih</span>
             </div>
-
-            <div class="hero-text">
-                Tambah dan urus Kod Tempat Kerja mengikut Unit dan Pos
-                untuk digunakan dalam sistem Master Duty Pro.
-            </div>
-
-        </section>
-
-
-        <!-- CONTENT -->
-
-        <section class="content-grid">
-
-
-            <!-- =================================================
-                 BORANG
-            ================================================== -->
-
-            <div class="card">
-
-                <div class="card-header">
-
-                    <div class="card-title">
-
-                        <i class="fa-solid fa-plus-circle"></i>
-
-                        <span id="tajukBorang">
-                            Tambah Kod Tempat Kerja
-                        </span>
-
-                    </div>
-
-                    <div class="card-description">
-                        Isi maklumat Kod TK dan pilih satu atau lebih Pos.
-                    </div>
-
-                </div>
-
-
-                <div class="card-body">
-
-                    <div id="mesej"></div>
-
-
-                    <!-- UNIT -->
-
-                    <div class="form-group">
-
-                        <label
-                            class="form-label"
-                            for="unit"
-                        >
-                            Unit <span class="required">*</span>
-                        </label>
-
-                        <select
-                            id="unit"
-                            class="select"
-                        >
-
-                            <option value="">
-                                -- Pilih Unit --
-                            </option>
-
-                            <option value="Jerangau">
-                                Jerangau
-                            </option>
-
-                            <option value="Chador">
-                                Chador
-                            </option>
-
-                            <option value="Terengganu">
-                                Terengganu
-                            </option>
-
-                            <option value="Setiu">
-                                Setiu
-                            </option>
-
-                            <option value="Rantau Abang">
-                                Rantau Abang
-                            </option>
-
-                            <option value="Kerteh">
-                                Kerteh
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- KOD TK -->
-
-                    <div class="form-group">
-
-                        <label
-                            class="form-label"
-                            for="kodTempatKerja"
-                        >
-                            Kod Tempat Kerja
-                            <span class="required">*</span>
-                        </label>
-
-                        <input
-                            type="text"
-                            id="kodTempatKerja"
-                            class="input"
-                            maxlength="10"
-                            autocomplete="off"
-                            placeholder="Contoh: W"
-                        >
-
-                    </div>
-
-
-                    <!-- POS -->
-
-                    <div class="form-group">
-
-                        <label
-                            class="form-label"
-                            for="pos"
-                        >
-                            Pos <span class="required">*</span>
-                        </label>
-
-
-                        <div class="pos-row">
-
-                            <select
-                                id="pos"
-                                class="select"
-                            >
-
-                                <option value="">
-                                    Sedang memuatkan Pos...
-                                </option>
-
-                            </select>
-
-
-                            <button
-                                type="button"
-                                class="btn-add-pos"
-                                onclick="tambahPos()"
-                            >
-                                <i class="fa-solid fa-plus"></i>
-                                Tambah Pos
-                            </button>
-
-                        </div>
-
-
-                        <div class="selected-title">
-                            Pos Dipilih
-                        </div>
-
-
-                        <div
-                            id="posDipilih"
-                            class="selected-pos"
-                        >
-
-                            <span class="empty-pos">
-                                Belum ada Pos dipilih
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ACTION -->
-
-                    <div class="form-actions">
-
-                        <button
-                            type="button"
-                            class="btn btn-save"
-                            onclick="simpanTempatKerja()"
-                            id="btnSimpan"
-                        >
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            SIMPAN
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="btn btn-reset"
-                            onclick="resetBorang()"
-                        >
-                            <i class="fa-solid fa-rotate-left"></i>
-                            RESET
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 SENARAI
-            ================================================== -->
-
-            <div class="card">
-
-                <div class="card-header">
-
-                    <div class="card-title">
-
-                        <i class="fa-solid fa-list"></i>
-
-                        Senarai Kod Tempat Kerja
-
-                    </div>
-
-                    <div class="card-description">
-                        Senarai Kod TK yang telah direkodkan dalam sistem.
-                    </div>
-
-                </div>
-
-
-                <div class="card-body">
-
-
-                    <!-- FILTER -->
-
-                    <div class="filter-row">
-
-                        <div class="filter-group">
-
-                            <label
-                                class="form-label"
-                                for="filterUnit"
-                            >
-                                Tapis Unit
-                            </label>
-
-                            <select
-                                id="filterUnit"
-                                class="select"
-                            >
-
-                                <option value="">
-                                    Semua Unit
-                                </option>
-
-                                <option value="Jerangau">
-                                    Jerangau
-                                </option>
-
-                                <option value="Chador">
-                                    Chador
-                                </option>
-
-                                <option value="Terengganu">
-                                    Terengganu
-                                </option>
-
-                                <option value="Setiu">
-                                    Setiu
-                                </option>
-
-                                <option value="Rantau Abang">
-                                    Rantau Abang
-                                </option>
-
-                                <option value="Kerteh">
-                                    Kerteh
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            class="btn-refresh"
-                            onclick="muatkanTempatKerja()"
-                        >
-                            <i class="fa-solid fa-arrows-rotate"></i>
-                            Refresh
-                        </button>
-
-                    </div>
-
-
-                    <!-- TABLE -->
-
-                    <div class="table-wrap">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>
-                                        Bil
-                                    </th>
-
-                                    <th>
-                                        Unit
-                                    </th>
-
-                                    <th>
-                                        Kod TK
-                                    </th>
-
-                                    <th>
-                                        Pos Tempat Kerja
-                                    </th>
-
-                                    <th>
-                                        Status
-                                    </th>
-
-                                    <th>
-                                        Tindakan
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody id="senaraiTempatKerja">
-
-                                <tr>
-
-                                    <td
-                                        colspan="6"
-                                        class="loading-cell"
-                                    >
-                                        Sedang memuatkan data...
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <footer class="footer">
-            Master Duty Pro — Polis Bantuan FGV • Wilayah Terengganu © 2026
-        </footer>
-
+          </div>
+
+          <div class="flex gap-3 mt-6">
+            <button onclick="simpanTempatKerja()" class="bg-teal-600 hover:bg-teal-500 text-white font-semibold px-6 py-3 rounded-xl transition">
+              <i class="fas fa-save mr-2"></i> Simpan Kod Tempat Kerja
+            </button>
+            <button id="btnBatal" onclick="resetBorang()" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-semibold px-6 py-3 rounded-xl transition">
+              Batal Edit
+            </button>
+          </div>
+        </div>
+
+        <!-- Senarai -->
+        <div class="glass rounded-2xl p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+            <h3 class="text-lg font-semibold text-white">Senarai Kod Tempat Kerja</h3>
+            
+            <select id="filterUnit" onchange="muatkanTempatKerja()" class="bg-slate-900/60 border border-slate-700 text-white rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-teal-550">
+              <option value="">Semua Unit</option>
+              <option value="Jerangau">Jerangau</option>
+              <option value="Chador">Chador</option>
+              <option value="Terengganu">Terengganu</option>
+              <option value="Setiu">Setiu</option>
+              <option value="Rantau Abang">Rantau Abang</option>
+              <option value="Kerteh">Kerteh</option>
+            </select>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-700">
+                  <th class="text-left py-3 px-3">Bil</th>
+                  <th class="text-left py-3 px-3">Unit</th>
+                  <th class="text-left py-3 px-3">Kod TK</th>
+                  <th class="text-left py-3 px-3">Pos Tempat Kerja</th>
+                  <th class="text-left py-3 px-3">Status</th>
+                  <th class="text-left py-3 px-3">Tindakan</th>
+                </tr>
+              </thead>
+              <tbody id="senaraiTempatKerja">
+                <tr>
+                  <td colspan="6" class="py-8 text-center text-slate-500">Memuatkan data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="text-center text-slate-500 text-sm py-4">
+          Master Duty Pro — Wilayah Terengganu © 2026
+        </div>
+      </div>
     </main>
+  </div>
 
+  <script>
+    // =====================================================
+    // SUPABASE
+    // =====================================================
+    const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    <!-- =====================================================
-         MOBILE NAV
-    ====================================================== -->
+    const TABLE_TEMPAT_KERJA = "kod_tempat_kerja";
+    const TABLE_ANGGOTA = "Data_Anggota";
 
-    <nav class="mobile-nav">
+    let posDipilih = [];
+    let dataTempatKerja = [];
+    let idSedangEdit = null;
 
-        <a
-            href="dashboard.html"
-            class="mobile-link"
-        >
-            <i class="fa-solid fa-gauge-high"></i>
-            <span>Dashboard</span>
-        </a>
+    // =====================================================
+    // INIT
+    // =====================================================
+    document.addEventListener("DOMContentLoaded", function () {
+      muatkanPos();
+      muatkanTempatKerja();
 
+      const unit = document.getElementById("unit");
+      if (unit) {
+        unit.addEventListener("change", function () {
+          posDipilih = [];
+          paparPosDipilih();
+          muatkanPos();
+        });
+      }
+    });
 
-        <a
-            href="kod-duty.html"
-            class="mobile-link"
-        >
-            <i class="fa-solid fa-code"></i>
-            <span>Kod Duty</span>
-        </a>
+    // =====================================================
+    // LOAD POS
+    // =====================================================
+    async function muatkanPos() {
+      const dropdown = document.getElementById("pos");
+      if (!dropdown) return;
 
+      dropdown.innerHTML = `<option value="">Sedang memuatkan Pos...</option>`;
 
-        <a
-            href="kod-tempat-kerja.html"
-            class="mobile-link active"
-        >
-            <i class="fa-solid fa-location-dot"></i>
-            <span>Kod TK</span>
-        </a>
+      try {
+        const { data, error } = await supabaseClient.from(TABLE_ANGGOTA).select("pos");
+        if (error) throw error;
 
+        const senaraiPos = [
+          ...new Set(
+            (data || [])
+              .map(row => row.pos)
+              .filter(pos => pos !== null && pos !== undefined && String(pos).trim() !== "")
+              .map(pos => String(pos).trim())
+          )
+        ];
 
-        <a
-            href="#"
-            class="mobile-link"
-        >
-            <i class="fa-solid fa-calendar-days"></i>
-            <span>Duty</span>
-        </a>
+        senaraiPos.sort((a, b) => a.localeCompare(b, "ms"));
 
+        dropdown.innerHTML = `<option value="">-- Pilih Pos --</option>`;
+        senaraiPos.forEach(pos => {
+          const option = document.createElement("option");
+          option.value = pos;
+          option.textContent = pos;
+          dropdown.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Gagal memuatkan Pos:", error);
+        dropdown.innerHTML = `<option value="">Gagal memuatkan Pos</option>`;
+        paparkanMesej("Gagal memuatkan Pos: " + error.message, "error");
+      }
+    }
 
-        <a
-            href="#"
-            class="mobile-link"
-        >
-            <i class="fa-solid fa-file-invoice-dollar"></i>
-            <span>RK02</span>
-        </a>
+    // =====================================================
+    // TAMBAH / BUANG POS
+    // =====================================================
+    function tambahPos() {
+      const dropdown = document.getElementById("pos");
+      if (!dropdown) return;
 
-    </nav>
+      const pos = dropdown.value.trim();
+      if (!pos) {
+        paparkanMesej("Sila pilih Pos dahulu.", "error");
+        return;
+      }
+      if (posDipilih.includes(pos)) {
+        paparkanMesej("Pos tersebut telah dipilih.", "error");
+        return;
+      }
 
+      posDipilih.push(pos);
+      paparPosDipilih();
+      dropdown.value = "";
+      paparkanMesej("Pos berjaya ditambah.", "success");
+    }
 
-    <!-- =====================================================
-         SUPABASE
-    ====================================================== -->
+    function buangPos(index) {
+      posDipilih.splice(index, 1);
+      paparPosDipilih();
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    function paparPosDipilih() {
+      const container = document.getElementById("posDipilih");
+      if (!container) return;
 
-    <!-- JS PAGE -->
-    <script src="kod-tempat-kerja.js"></script>
+      if (posDipilih.length === 0) {
+        container.innerHTML = `<span class="text-slate-500 text-sm">Belum ada Pos dipilih</span>`;
+        return;
+      }
 
+      container.innerHTML = posDipilih.map((pos, index) => `
+        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-550/15 border border-teal-550/30 text-teal-300 text-sm font-medium">
+          ${escapeHTML(pos)}
+          <button type="button" onclick="buangPos(${index})" class="text-red-400 hover:text-red-300 font-bold">×</button>
+        </span>
+      `).join("");
+    }
+
+    // =====================================================
+    // SIMPAN
+    // =====================================================
+    async function simpanTempatKerja() {
+      const unit = document.getElementById("unit").value.trim();
+      const kodTK = document.getElementById("kodTempatKerja").value.trim().toUpperCase();
+
+      if (!unit) return paparkanMesej("Sila pilih Unit.", "error");
+      if (!kodTK) return paparkanMesej("Sila masukkan Kod TK.", "error");
+      if (posDipilih.length === 0) return paparkanMesej("Sila pilih sekurang-kurangnya satu Pos.", "error");
+
+      const namaTempatKerja = posDipilih.join(" & ");
+
+      try {
+        let querySemak = supabaseClient
+          .from(TABLE_TEMPAT_KERJA)
+          .select("id")
+          .eq("unit", unit)
+          .eq("kod_tempat_kerja", kodTK);
+
+        if (idSedangEdit) {
+          querySemak = querySemak.neq("id", idSedangEdit);
+        }
+
+        const { data: semakan, error: errorSemakan } = await querySemak;
+        if (errorSemakan) throw errorSemakan;
+
+        if (semakan && semakan.length > 0) {
+          paparkanMesej("Kod TK tersebut sudah wujud untuk Unit ini.", "error");
+          return;
+        }
+
+        const rekod = {
+          unit: unit,
+          kod_tempat_kerja: kodTK,
+          nama_tempat_kerja: namaTempatKerja,
+          status: "Aktif"
+        };
+
+        let response;
+        if (idSedangEdit) {
+          response = await supabaseClient.from(TABLE_TEMPAT_KERJA).update(rekod).eq("id", idSedangEdit);
+        } else {
+          response = await supabaseClient.from(TABLE_TEMPAT_KERJA).insert([rekod]);
+        }
+
+        if (response.error) throw response.error;
+
+        paparkanMesej(idSedangEdit ? "Kod Tempat Kerja berjaya dikemaskini." : "Kod Tempat Kerja berjaya disimpan.", "success");
+        resetBorang();
+        await muatkanTempatKerja();
+      } catch (error) {
+        console.error("RALAT SIMPAN:", error);
+        paparkanMesej("Gagal simpan data: " + error.message, "error");
+      }
+    }
+
+    // =====================================================
+    // LOAD & PAPAR SENARAI
+    // =====================================================
+    async function muatkanTempatKerja() {
+      const tbody = document.getElementById("senaraiTempatKerja");
+      if (!tbody) return;
+
+      tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500">Sedang memuatkan data...</td></tr>`;
+
+      try {
+        const filterUnit = document.getElementById("filterUnit")?.value || "";
+        let query = supabaseClient
+          .from(TABLE_TEMPAT_KERJA)
+          .select("id, unit, kod_tempat_kerja, nama_tempat_kerja, status");
+
+        if (filterUnit) query = query.eq("unit", filterUnit);
+
+        const { data, error } = await query.order("unit", { ascending: true });
+        if (error) throw error;
+
+        dataTempatKerja = data || [];
+        paparSenaraiTempatKerja();
+      } catch (error) {
+        console.error("Gagal memuatkan data:", error);
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-red-400">Gagal memuatkan data: ${escapeHTML(error.message)}</td></tr>`;
+      }
+    }
+
+    function paparSenaraiTempatKerja() {
+      const tbody = document.getElementById("senaraiTempatKerja");
+      if (!tbody) return;
+
+      if (dataTempatKerja.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500">Tiada data.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = dataTempatKerja.map((item, index) => {
+        const status = item.status || "Aktif";
+        const statusClass = String(status).toLowerCase() === "aktif"
+          ? "bg-emerald-500/15 text-emerald-400"
+          : "bg-red-500/15 text-red-400";
+
+        return `
+          <tr class="border-b border-slate-800 hover:bg-white/5">
+            <td class="py-3 px-3">${index + 1}</td>
+            <td class="py-3 px-3 font-medium text-white">${escapeHTML(item.unit)}</td>
+            <td class="py-3 px-3 font-bold text-teal-450">${escapeHTML(item.kod_tempat_kerja)}</td>
+            <td class="py-3 px-3">${escapeHTML(item.nama_tempat_kerja)}</td>
+            <td class="py-3 px-3"><span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${statusClass}">${escapeHTML(status)}</span></td>
+            <td class="py-3 px-3">
+              <button onclick="editTempatKerja('${escapeJS(item.id)}')" class="text-amber-400 hover:text-amber-300 mr-3 text-sm">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button onclick="padamTempatKerja('${escapeJS(item.id)}')" class="text-red-400 hover:text-red-300 text-sm">
+                <i class="fas fa-trash"></i> Padam
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // =====================================================
+    // EDIT & PADAM
+    // =====================================================
+    function editTempatKerja(id) {
+      const item = dataTempatKerja.find(row => String(row.id) === String(id));
+      if (!item) return;
+
+      idSedangEdit = item.id;
+      document.getElementById("unit").value = item.unit || "";
+      document.getElementById("kodTempatKerja").value = item.kod_tempat_kerja || "";
+
+      posDipilih = String(item.nama_tempat_kerja || "")
+        .split("&")
+        .map(pos => pos.trim())
+        .filter(Boolean);
+
+      paparPosDipilih();
+      muatkanPos();
+      document.getElementById("tajukBorang").textContent = "Edit Kod Tempat Kerja";
+      document.getElementById("btnBatal").classList.remove("hidden");
+      paparkanMesej("Mod edit aktif. Ubah data dan klik SIMPAN.", "success");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function padamTempatKerja(id) {
+      const item = dataTempatKerja.find(row => String(row.id) === String(id));
+      if (!item) return;
+
+      if (!confirm("Padam Kod TK " + item.kod_tempat_kerja + " untuk Unit " + item.unit + "?")) return;
+
+      try {
+        const { error } = await supabaseClient.from(TABLE_TEMPAT_KERJA).delete().eq("id", id);
+        if (error) throw error;
+        paparkanMesej("Data berjaya dipadam.", "success");
+        await muatkanTempatKerja();
+      } catch (error) {
+        paparkanMesej("Gagal padam data: " + error.message, "error");
+      }
+    }
+
+    // =====================================================
+    // RESET & MESEJ
+    // =====================================================
+    function resetBorang() {
+      idSedangEdit = null;
+      posDipilih = [];
+      document.getElementById("unit").value = "";
+      document.getElementById("kodTempatKerja").value = "";
+      document.getElementById("pos").value = "";
+      document.getElementById("tajukBorang").textContent = "Tambah Kod Tempat Kerja";
+      document.getElementById("btnBatal").classList.add("hidden");
+      paparPosDipilih();
+    }
+
+    function paparkanMesej(mesej, jenis = "success") {
+      const el = document.getElementById("mesej");
+      if (!el) return;
+      const warna = jenis === "success"
+        ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+        : "bg-red-500/15 text-red-400 border-red-500/30";
+      el.innerHTML = `<div class="border rounded-xl px-4 py-3 text-sm ${warna}">${mesej}</div>`;
+      setTimeout(() => el.innerHTML = "", 4000);
+    }
+
+    function escapeHTML(value) {
+      if (value === null || value === undefined) return "";
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeJS(value) {
+      return String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+    }
+  </script>
 </body>
 </html>
-```
