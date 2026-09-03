@@ -778,17 +778,17 @@ async function simpanDuty() {
     // =====================================================
     const { data: rekodSediaAda, error: errorSemak } = await supabaseClient
       .from("jadual_duty")
-      .select("id, nama_anggota, tarikh")
+      .select("id")
       .eq("no_skb", noSkb)
       .eq("tarikh", tarikh)
-      .limit(1);
+      .maybeSingle();
 
     if (errorSemak) throw errorSemak;
 
+    let modeUpdate = false;
     let idUntukUpdate = null;
 
-    if (rekodSediaAda && rekodSediaAda.length > 0) {
-      // Rekod sudah wujud
+    if (rekodSediaAda && rekodSediaAda.id) {
       const yakin = confirm(
         `Rekod untuk ${anggota.nama} pada tarikh ${formatTarikh(tarikh)} sudah wujud.\n\nAdakah anda mahu KEMASKINI rekod tersebut?`
       );
@@ -798,8 +798,14 @@ async function simpanDuty() {
         return;
       }
 
-      // Pengguna pilih Ya → Update
-      idUntukUpdate = rekodSediaAda[0].id;
+      modeUpdate = true;
+      idUntukUpdate = rekodSediaAda.id;
+    }
+
+    // Jika sedang dalam mode edit manual
+    if (dutySedangEdit) {
+      modeUpdate = true;
+      idUntukUpdate = dutySedangEdit;
     }
 
     // =====================================================
@@ -823,7 +829,7 @@ async function simpanDuty() {
       ketua_unit: anggota.ketua_unit,
       ketua_pos: anggota.ketua_pos,
       pos: anggota.pos,
-      pos_tampungan: getValue("posTampungan"),
+      pos_tampungan: getValue("posTampungan") || null,
       jam_tampungan: Number(getValue("jamTampung") || 0),
       waktu_tugasan: duty.waktu_tugasan,
       jam_kerja: duty.jam_kerja,
@@ -855,34 +861,37 @@ async function simpanDuty() {
     // =====================================================
     let result;
 
-    if (idUntukUpdate || dutySedangEdit) {
-      // Update
-      const idUpdate = idUntukUpdate || dutySedangEdit;
+    if (modeUpdate && idUntukUpdate) {
+      // UPDATE
       result = await supabaseClient
         .from("jadual_duty")
         .update(dataDuty)
-        .eq("id", idUpdate);
+        .eq("id", idUntukUpdate)
+        .select();
+
+      if (result.error) throw result.error;
+
+      console.log("UPDATE BERJAYA:", result.data);
+      paparPopup("Rekod Duty berjaya dikemaskini!", "success");
     } else {
-      // Insert baharu
+      // INSERT BAHARU
       result = await supabaseClient
         .from("jadual_duty")
-        .insert([dataDuty]);
+        .insert([dataDuty])
+        .select();
+
+      if (result.error) throw result.error;
+
+      console.log("INSERT BERJAYA:", result.data);
+      paparPopup("Rekod Duty berjaya disimpan!", "success");
     }
 
-    if (result.error) throw result.error;
-
     dutySedangEdit = null;
-    paparPopup(
-      idUntukUpdate || dutySedangEdit
-        ? "Rekod Duty berjaya dikemaskini!"
-        : "Rekod Duty berjaya disimpan!",
-      "success"
-    );
     await paparDuty();
 
   } catch (e) {
-    console.error(e);
-    paparPopup("Gagal simpan: " + e.message, "error");
+    console.error("RALAT SIMPAN/UPDATE:", e);
+    paparPopup("Gagal simpan/kemaskini: " + e.message, "error");
   }
 }
 
