@@ -643,7 +643,7 @@ GAJI POKOK (RM)
     if (!bulanNo || !tahun) return alert("Sila pilih Bulan & Tahun");
 
     document.getElementById("namaPos").textContent = pos || "Semua Pos (" + unit + ")";
-    document.getElementById("namaKawasan").textContent = unit + " / Wilayah Terengganu";
+    
     document.getElementById("bulanLaporan").textContent = SENARAI_BULAN_UPPER[bulanNo] + " " + tahun;
 
     let query = supabaseClient
@@ -669,6 +669,12 @@ GAJI POKOK (RM)
     }
     dataDuty = data || [];
 
+    if (dataDuty.length > 0) {
+    document.getElementById("namaKawasan").textContent =
+    dataDuty[0].kawasan || "-";
+    }
+
+    
     await muatCutiAwam(bulanNo, tahun);
     prosesDanPapar();
   }
