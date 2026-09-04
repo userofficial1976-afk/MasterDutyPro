@@ -421,6 +421,10 @@ line-height:1;
 
 <script>
 
+let currentUser = null;
+
+
+    
 // =====================================================
 // BINA TARIKH BULANAN
 // =====================================================
@@ -492,12 +496,102 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
+        currentUser = bacaPengguna();
+
+        if (!currentUser) {
+
+            window.location.href = "login.html";
+
+            return;
+
+        }
+
+        paparMaklumatPengguna();
+
+        kawalMenuMengikutPeranan();
+
         janaMatrixRK01();
 
         binaRumusanRK01();
 
     }
 );
+
+function bacaPengguna() {
+
+    try {
+
+        const data =
+            localStorage.getItem(
+                "mdp_user"
+            );
+
+        return data
+            ? JSON.parse(data)
+            : null;
+
+    }
+    catch {
+
+        return null;
+
+    }
+}
+
+function paparMaklumatPengguna() {
+
+    if (!currentUser) return;
+
+    document.getElementById(
+        "userName"
+    ).textContent =
+        currentUser.name ||
+        currentUser.noSkb ||
+        "-";
+
+    document.getElementById(
+        "userJawatan"
+    ).textContent =
+        currentUser.jawatan ||
+        "-";
+}
+
+function kawalMenuMengikutPeranan() {
+
+    if (
+        !currentUser ||
+        currentUser.isAdmin
+    ) return;
+
+    [
+        "menuDashboard",
+        "menuAnggota",
+        "menuLaporan",
+        "menuTetapan"
+    ].forEach(id => {
+
+        const el =
+            document.getElementById(
+                id
+            );
+
+        if (el)
+            el.style.display =
+                "none";
+
+    });
+}
+
+function logKeluar() {
+
+    localStorage.removeItem(
+        "mdp_user"
+    );
+
+    window.location.href =
+        "login.html";
+}
+
 
     
 // =====================================================
