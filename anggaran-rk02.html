@@ -33,12 +33,18 @@
     select:disabled { opacity: 0.7; cursor: not-allowed; }
 
     .rk02-table { width: 100%; border-collapse: collapse; }
-    .rk02-table th, .rk02-table td {
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      padding: 5px 4px;
-      text-align: center;
-      font-size: 11px;
-    }
+.rk02-table th,
+.rk02-table td{
+  border:1px solid rgba(148,163,184,.3);
+  padding:2px 3px;
+  text-align:center;
+  font-size:9px;
+  line-height:1.1;
+}
+
+.rk02-table td{
+  height:20px;
+}
     .rk02-table th {
       background: rgba(20, 184, 166, 0.15);
       color: #2dd4bf;
@@ -52,6 +58,23 @@
 
     /* ========== PRINT / PDF — ikut borang rasmi ========== */
     @media print {
+      
+      #printArea{
+  zoom:0.88;
+}
+
+.rk02-table{
+  table-layout:fixed;
+}
+
+.report-title{
+  margin-bottom:6px !important;
+}
+      
+      
+      
+      
+      
       @page {
         size: A4 landscape;
         margin: 6mm;
@@ -97,15 +120,15 @@
         border: 1px solid #000 !important;
         color: #000 !important;
         background: #fff !important;
-        padding: 3px 6px !important;
+        padding: 2px 5px !important;
         font-size: 9pt !important;
       }
       .bottom-table td, .bottom-table th {
         border: 1px solid #000 !important;
         color: #000 !important;
         background: #fff !important;
-        padding: 3px 5px !important;
-        font-size: 8pt !important;
+        padding: 2px 4px !important;
+        font-size: 7.5pt !important;
       }
       .bottom-table th {
         background: #e8e8e8 !important;
@@ -116,7 +139,7 @@
         border: 1px solid #000 !important;
         color: #000 !important;
         background: #fff !important;
-        min-height: 105px;
+        min-height: 80px;
       }
       .sign-box * { color: #000 !important; }
       .text-teal-400, .text-teal-450, .text-white,
@@ -278,10 +301,19 @@
           <table class="rk02-table">
             <thead>
               <tr>
-                <th rowspan="3" style="width:28px">BIL</th>
-                <th rowspan="3" style="width:90px">SKB / NO ANGGOTA</th>
-                <th rowspan="3" style="width:140px">NAMA ANGGOTA</th>
-                <th rowspan="3" style="width:70px">GAJI POKOK<br>(RM)</th>
+<th rowspan="3" style="width:25px">BIL</th>
+
+<th rowspan="3" style="width:85px">
+SKB / NO ANGGOTA
+</th>
+
+<th rowspan="3" style="width:180px">
+NAMA ANGGOTA
+</th>
+
+<th rowspan="3" style="width:65px">
+GAJI POKOK (RM)
+</th>
                 <th colspan="2">HARI BIASA</th>
                 <th colspan="6">HARI OFF</th>
                 <th colspan="4">HARI CUTI AM</th>
