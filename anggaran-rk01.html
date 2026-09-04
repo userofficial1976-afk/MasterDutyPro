@@ -2570,52 +2570,79 @@ function normalisePangkat(pangkat){
         .trim()
         .toUpperCase();
 
-    // Buang titik
+    /* =========================================
+       BUANG TITIK
+    ========================================= */
+
     p = p.replace(/\./g, "");
 
-    // Buang semua ruang
-    p = p.replace(/\s+/g, "");
+    /* =========================================
+       L/KPL
+       
+       TERIMA:
+       L/KPL
+       L/Kpl
+       L / Kpl
+       L/ KPL
+       L /KPL
+       LKPL
+    ========================================= */
 
-    // Normalisasi L/KPL
-    if (
-        p === "L/KPL" ||
-        p === "LKPL" ||
-        p === "L/KOPERAL" ||
-        p === "LKOPERAL"
+    if(
+        /^L\s*\/\s*KPL$/i.test(p) ||
+        /^L\s*KPL$/i.test(p) ||
+        /^L\s*\/\s*KOPERAL$/i.test(p)
     ){
         return "L/KPL";
     }
 
-    // SJN
-    if (
+
+    /* =========================================
+       SJN
+    ========================================= */
+
+    if(
         p === "SJN" ||
         p === "SARJAN"
     ){
         return "SJN";
     }
 
-    // KPL
-    if (
+
+    /* =========================================
+       KPL
+    ========================================= */
+
+    if(
         p === "KPL" ||
         p === "KOPERAL"
     ){
         return "KPL";
     }
 
-    // KONST
-    if (
+
+    /* =========================================
+       KONST
+    ========================================= */
+
+    if(
         p === "KONST" ||
         p === "KONSTABEL"
     ){
         return "KONST";
     }
 
-    // PPB
-    if (
+
+    /* =========================================
+       PPB
+    ========================================= */
+
+    if(
         p === "PPB"
     ){
         return "PPB";
     }
+
 
     return p;
 }
@@ -2646,53 +2673,69 @@ function normalisePangkat(pangkat){
        KEMUDIAN NO ANGGOTA
     ===================================================== */
 
-    senarai.sort((a, b) => {
+senarai.sort((a, b) => {
 
-        const pangkatA =
-            normalisePangkat(a.pangkat);
+    const pangkatA =
+        normalisePangkat(a.pangkat);
 
-        const pangkatB =
-            normalisePangkat(b.pangkat);
-
-        const rankA =
-            susunanPangkat[pangkatA] ?? 99;
-
-        const rankB =
-            susunanPangkat[pangkatB] ?? 99;
+    const pangkatB =
+        normalisePangkat(b.pangkat);
 
 
-        /* ===============================
-           1. PANGKAT
-        =============================== */
+    const susunanPangkat = {
+        "SJN": 1,
+        "KPL": 2,
+        "L/KPL": 3,
+        "KONST": 4,
+        "PPB": 5
+    };
 
-        if(rankA !== rankB){
-            return rankA - rankB;
+
+    const rankA =
+        susunanPangkat[pangkatA] ?? 99;
+
+    const rankB =
+        susunanPangkat[pangkatB] ?? 99;
+
+
+    /* =========================================
+       PANGKAT
+    ========================================= */
+
+    if(rankA !== rankB){
+
+        return rankA - rankB;
+
+    }
+
+
+    /* =========================================
+       NO ANGGOTA
+       JIKA PANGKAT SAMA
+    ========================================= */
+
+    const noA =
+        String(
+            a.no_anggota || ""
+        ).trim();
+
+
+    const noB =
+        String(
+            b.no_anggota || ""
+        ).trim();
+
+
+    return noA.localeCompare(
+        noB,
+        "ms",
+        {
+            numeric: true,
+            sensitivity: "base"
         }
+    );
 
-
-        /* ===============================
-           2. NO ANGGOTA
-        =============================== */
-
-        const noA =
-            String(a.no_anggota || "")
-                .trim();
-
-        const noB =
-            String(b.no_anggota || "")
-                .trim();
-
-        return noA.localeCompare(
-            noB,
-            "ms",
-            {
-                numeric: true,
-                sensitivity: "base"
-            }
-        );
-
-    });
-
+});
 
     /* =====================================================
        DEBUG — WAJIB SEMAK CONSOLE
@@ -2706,49 +2749,50 @@ function normalisePangkat(pangkat){
         "SORT PANGKAT RK01"
     );
 
-    console.table(
-        senarai.map((anggota, index) => {
+console.table(
+    senarai.map((anggota, index) => {
 
-            const pangkatAsal =
-                String(
-                    anggota.pangkat || ""
-                ).trim();
+        const asal =
+            String(
+                anggota.pangkat || ""
+            ).trim();
 
-            const pangkatNormal =
-                normalisePangkat(
-                    anggota.pangkat
-                );
+        const normal =
+            normalisePangkat(
+                anggota.pangkat
+            );
 
-            return {
+        const susunan = {
+            "SJN": 1,
+            "KPL": 2,
+            "L/KPL": 3,
+            "KONST": 4,
+            "PPB": 5
+        };
 
-                Bil: index + 1,
+        return {
 
-                "Pangkat Asal":
-                    pangkatAsal,
+            Bil: index + 1,
 
-                "Pangkat Normal":
-                    pangkatNormal,
+            "PANGKAT ASAL":
+                asal,
 
-                "Rank":
-                    susunanPangkat[
-                        pangkatNormal
-                    ] ?? 99,
+            "PANGKAT NORMAL":
+                normal,
 
-                "No Anggota":
-                    anggota.no_anggota,
+            "RANK":
+                susunan[normal] ?? 99,
 
-                Nama:
-                    anggota.nama,
+            "NO ANGGOTA":
+                anggota.no_anggota,
 
-                Unit:
-                    anggota.unit,
+            "NAMA":
+                anggota.nama
 
-                Pos:
-                    anggota.pos
-            };
+        };
 
-        })
-    );
+    })
+);
 
     console.log(
         "================================="
