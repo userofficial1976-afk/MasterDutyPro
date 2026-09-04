@@ -2560,80 +2560,101 @@ function binaAnggotaLaporan(){
        NORMALISASI PANGKAT
        ===================================================== */
 
-    function normalisePangkat(pangkat){
+   function normalisePangkat(pangkat){
 
-        let p = String(pangkat ?? "")
-            .trim()
-            .toUpperCase()
-            .normalize("NFKC");
+    let p = String(pangkat ?? "")
+        .trim()
+        .toUpperCase()
+        .normalize("NFKC");
 
-        /*
-        Buang semua aksara selain A-Z.
+    /*
+    =====================================================
+    BUANG SIMBOL DAN RUANG UNTUK PERBANDINGAN
+    =====================================================
+    */
 
-        Contoh:
-
-        L/Kpl       -> LKPL
-        L / Kpl     -> LKPL
-        L-Kpl       -> LKPL
-        L.Kpl       -> LKPL
-        L / KPL     -> LKPL
-        */
-
-        const compact =
-            p.replace(/[^A-Z]/g, "");
+    const compact =
+        p.replace(/[^A-Z]/g, "");
 
 
-        /* L/KPL */
+    /*
+    =====================================================
+    SJN / SARJAN
+    =====================================================
+    */
 
-        if(
-            compact === "LKPL" ||
-            compact === "LKOPERAL"
-        ){
-            return "L/KPL";
-        }
-
-
-        /* SJN */
-
-        if(
-            compact === "SJN" ||
-            compact === "SARJAN"
-        ){
-            return "SJN";
-        }
-
-
-        /* KPL */
-
-        if(
-            compact === "KPL" ||
-            compact === "KOPERAL"
-        ){
-            return "KPL";
-        }
-
-
-        /* KONST */
-
-        if(
-            compact === "KONST" ||
-            compact === "KONSTABEL"
-        ){
-            return "KONST";
-        }
-
-
-        /* PPB */
-
-        if(
-            compact === "PPB"
-        ){
-            return "PPB";
-        }
-
-
-        return p;
+    if(
+        compact === "SJN" ||
+        compact === "SARJAN"
+    ){
+        return "SJN";
     }
+
+
+    /*
+    =====================================================
+    KPL / KOPERAL
+    =====================================================
+    */
+
+    if(
+        compact === "KPL" ||
+        compact === "KOPERAL"
+    ){
+        return "KPL";
+    }
+
+
+    /*
+    =====================================================
+    L/KPL / LANS KOPERAL
+    =====================================================
+    */
+
+    if(
+        compact === "LKPL" ||
+        compact === "LKOPERAL" ||
+        compact === "LANSKOPERAL"
+    ){
+        return "L/KPL";
+    }
+
+
+    /*
+    =====================================================
+    KONST / KONSTABEL
+    =====================================================
+    */
+
+    if(
+        compact === "KONST" ||
+        compact === "KONSTABEL"
+    ){
+        return "KONST";
+    }
+
+
+    /*
+    =====================================================
+    PPB
+    =====================================================
+    */
+
+    if(
+        compact === "PPB"
+    ){
+        return "PPB";
+    }
+
+
+    /*
+    =====================================================
+    PANGKAT LAIN
+    =====================================================
+    */
+
+    return p;
+}
 
 
     /* =====================================================
