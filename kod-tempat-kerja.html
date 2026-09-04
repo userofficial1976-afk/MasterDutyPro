@@ -332,29 +332,20 @@ async function muatkanPos() {
 
   try {
 
+    const unitDipilih = document.getElementById("unit").value;
+
     let query = supabaseClient
       .from(TABLE_POS)
       .select("pos, unit")
       .eq("status", "Aktif");
 
-const unitDipilih =
-  document.getElementById("unit").value;
+    if (unitDipilih) {
+      query = query.or(
+        `unit.eq."${unitDipilih}",unit.eq."Semua"`
+      );
+    }
 
-let query = supabaseClient
-  .from("data_pos")
-  .select("pos, unit");
-
-if (unitDipilih) {
-
-  query = query.or(
-    `unit.eq."${unitDipilih}",unit.eq."Semua"`
-  );
-
-}
-
-const { data, error } = await query;
-
-console.log(data);
+    const { data, error } = await query;
 
     if (error) throw error;
 
@@ -370,12 +361,9 @@ console.log(data);
       `<option value="">-- Pilih Pos --</option>`;
 
     senaraiPos.forEach(pos => {
-
       const option = document.createElement("option");
-
       option.value = pos;
       option.textContent = pos;
-
       dropdown.appendChild(option);
     });
 
