@@ -292,20 +292,32 @@
         </div>
 
         <!-- Info header -->
-        <table class="info-table w-full text-sm mb-4" style="border-collapse:collapse">
-          <tr>
-            <td class="border border-slate-600 p-2" style="width:14%"><b>NAMA POS :</b></td>
-            <td class="border border-slate-600 p-2" id="namaPos" style="width:46%">-</td>
-            <td class="border border-slate-600 p-2 text-right font-bold text-teal-450" style="width:40%">RK-02</td>
-          </tr>
-          <tr>
-            <td class="border border-slate-600 p-2"><b>KAWASAN :</b></td>
-            <td class="border border-slate-600 p-2" id="namaKawasan">-</td>
-            <td class="border border-slate-600 p-2">
-              <b>BULAN :</b> <span id="bulanLaporan">-</span>
-            </td>
-          </tr>
-        </table>
+<div class="mb-4 text-sm">
+
+  <div class="flex justify-between items-start">
+    <div>
+      <span class="font-bold">NAMA POS :</span>
+      <span id="namaPos">-</span>
+    </div>
+
+    <div class="font-bold">
+      RK-02
+    </div>
+  </div>
+
+  <div class="mt-1 flex justify-between items-start">
+    <div>
+      <span class="font-bold">KAWASAN / WILAYAH :</span>
+      <span id="namaKawasan">-</span>
+    </div>
+
+    <div>
+      <span class="font-bold">BULAN :</span>
+      <span id="bulanLaporan">-</span>
+    </div>
+  </div>
+
+</div>
 
         <!-- Jadual utama -->
         <div class="overflow-x-auto">
