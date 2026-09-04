@@ -2505,221 +2505,251 @@ async function muatDataDuty(){
 
 function binaAnggotaLaporan(){
 
-    const filter =
-        dapatkanFilter();
+    const filter = dapatkanFilter();
+
+    let senarai = dataAnggota.filter(anggota => {
+
+        const unitAnggota =
+            String(anggota.unit || "")
+                .trim();
+
+        const posAnggota =
+            String(anggota.pos || "")
+                .trim();
+
+        if(
+            filter.unit &&
+            unitAnggota !== String(filter.unit).trim()
+        ){
+            return false;
+        }
+
+        if(
+            filter.pos &&
+            posAnggota !== String(filter.pos).trim()
+        ){
+            return false;
+        }
+
+        return true;
+    });
 
 
-    let senarai =
-        dataAnggota.filter(
-            anggota => {
+    /* =====================================================
+       KETUA POS
+       PAKSA UNIT + POS SENDIRI
+    ===================================================== */
 
-                /* =========================================
-                   FILTER UNIT
-                ========================================= */
+    if(rolePengguna() === "ketua_pos"){
 
-                if(
-                    filter.unit &&
-                    String(
-                        anggota.unit || ""
-                    ).trim() !==
-                    filter.unit
-                ){
+        const unitUser =
+            String(unitPengguna() || "").trim();
 
-                    return false;
+        const posUser =
+            String(posPengguna() || "").trim();
 
-                }
+        senarai = senarai.filter(anggota => {
 
-
-                /* =========================================
-                   FILTER POS
-                ========================================= */
-
-                if(
-                    filter.pos &&
-                    String(
-                        anggota.pos || ""
-                    ).trim() !==
-                    filter.pos
-                ){
-
-                    return false;
-
-                }
-
-
-                return true;
-
-            }
-        );
-
-
-    /* ================================================
-       KHAS KETUA POS
-       UNIT + POS WAJIB SAMA DENGAN USER
-    ================================================= */
-
-    if(
-        rolePengguna() ===
-        "ketua_pos"
-    ){
-
-        const pos =
-            posPengguna();
-
-        const unit =
-            unitPengguna();
-
-
-        senarai =
-            senarai.filter(
-                anggota => {
-
-                    return (
-                        String(
-                            anggota.unit || ""
-                        ).trim() === unit
-
-                        &&
-
-                        String(
-                            anggota.pos || ""
-                        ).trim() === pos
-                    );
-
-                }
+            return (
+                String(anggota.unit || "").trim() === unitUser &&
+                String(anggota.pos || "").trim() === posUser
             );
+
+        });
 
     }
 
 
-    /* ================================================
+    /* =====================================================
+       NORMALISE PANGKAT
+    ===================================================== */
+
+    function normalisePangkat(pangkat){
+
+        let p =
+            String(pangkat || "")
+                .trim()
+                .toUpperCase();
+
+        /* buang titik */
+        p = p.replace(/\./g, "");
+
+        /* buang ruang berlebihan */
+        p = p.replace(/\s+/g, " ");
+
+        /* normalisasi variasi pangkat */
+
+        if(
+            p === "SJN" ||
+            p === "SARJAN"
+        ){
+            return "SJN";
+        }
+
+        if(
+            p === "KPL" ||
+            p === "KOPERAL"
+        ){
+            return "KPL";
+        }
+
+        if(
+            p === "L/KPL" ||
+            p === "LKPL" ||
+            p === "L KPL" ||
+            p === "LAN KPL" ||
+            p === "LANS KPL"
+        ){
+            return "L/KPL";
+        }
+
+        if(
+            p === "KONST" ||
+            p === "KONSTABEL" ||
+            p === "CONSTABLE"
+        ){
+            return "KONST";
+        }
+
+        if(
+            p === "PPB" ||
+            p === "PEMBANTU PEGAWAI BAWAH"
+        ){
+            return "PPB";
+        }
+
+        return p;
+    }
+
+
+    /* =====================================================
        SUSUNAN PANGKAT
-    ================================================= */
+       
+       1. SJN
+       2. KPL
+       3. L/KPL
+       4. KONST
+       5. PPB
+    ===================================================== */
 
     const susunanPangkat = {
-
         "SJN": 1,
         "KPL": 2,
         "L/KPL": 3,
         "KONST": 4,
         "PPB": 5
-
     };
 
 
-    /* ================================================
-       SORT ANGGOTA
+    /* =====================================================
+       SORT
        
-       UTAMA:
-       → PANGKAT
+       PANGKAT TERLEBIH DAHULU
+       KEMUDIAN NO ANGGOTA
+    ===================================================== */
 
-       KEDUA:
-       → NO. ANGGOTA
-    ================================================= */
+    senarai.sort((a, b) => {
 
-    senarai.sort(
-        (a, b) => {
+        const pangkatA =
+            normalisePangkat(a.pangkat);
 
-            const pangkatA =
-                String(
-                    a.pangkat || ""
-                )
-                .trim()
-                .toUpperCase();
+        const pangkatB =
+            normalisePangkat(b.pangkat);
 
+        const rankA =
+            susunanPangkat[pangkatA] ?? 99;
 
-            const pangkatB =
-                String(
-                    b.pangkat || ""
-                )
-                .trim()
-                .toUpperCase();
+        const rankB =
+            susunanPangkat[pangkatB] ?? 99;
 
 
-            const rankA =
-                susunanPangkat[
-                    pangkatA
-                ] ?? 99;
+        /* ===============================
+           1. PANGKAT
+        =============================== */
 
-
-            const rankB =
-                susunanPangkat[
-                    pangkatB
-                ] ?? 99;
-
-
-            /* =========================================
-               PANGKAT BERBEZA
-            ========================================= */
-
-            if(
-                rankA !== rankB
-            ){
-
-                return rankA - rankB;
-
-            }
-
-
-            /* =========================================
-               PANGKAT SAMA
-               → NO ANGGOTA
-            ========================================= */
-
-            const noA =
-                String(
-                    a.no_anggota || ""
-                )
-                .trim();
-
-
-            const noB =
-                String(
-                    b.no_anggota || ""
-                )
-                .trim();
-
-
-            return noA.localeCompare(
-                noB,
-                "ms",
-                {
-                    numeric:true,
-                    sensitivity:"base"
-                }
-            );
-
+        if(rankA !== rankB){
+            return rankA - rankB;
         }
-    );
 
+
+        /* ===============================
+           2. NO ANGGOTA
+        =============================== */
+
+        const noA =
+            String(a.no_anggota || "")
+                .trim();
+
+        const noB =
+            String(b.no_anggota || "")
+                .trim();
+
+        return noA.localeCompare(
+            noB,
+            "ms",
+            {
+                numeric: true,
+                sensitivity: "base"
+            }
+        );
+
+    });
+
+
+    /* =====================================================
+       DEBUG — WAJIB SEMAK CONSOLE
+    ===================================================== */
 
     console.log(
         "================================="
     );
 
     console.log(
-        "SUSUNAN ANGGOTA RK01:"
+        "SORT PANGKAT RK01"
     );
 
     console.table(
-        senarai.map(
-            anggota => ({
-                pangkat:
-                    anggota.pangkat,
+        senarai.map((anggota, index) => {
 
-                no_anggota:
+            const pangkatAsal =
+                String(
+                    anggota.pangkat || ""
+                ).trim();
+
+            const pangkatNormal =
+                normalisePangkat(
+                    anggota.pangkat
+                );
+
+            return {
+
+                Bil: index + 1,
+
+                "Pangkat Asal":
+                    pangkatAsal,
+
+                "Pangkat Normal":
+                    pangkatNormal,
+
+                "Rank":
+                    susunanPangkat[
+                        pangkatNormal
+                    ] ?? 99,
+
+                "No Anggota":
                     anggota.no_anggota,
 
-                nama:
+                Nama:
                     anggota.nama,
 
-                unit:
+                Unit:
                     anggota.unit,
 
-                pos:
+                Pos:
                     anggota.pos
-            })
-        )
+            };
+
+        })
     );
 
     console.log(
@@ -2728,10 +2758,7 @@ function binaAnggotaLaporan(){
 
 
     return senarai;
-
 }
-
-
 /* =====================================================
    DAPATKAN REKOD ANGGOTA
 ===================================================== */
