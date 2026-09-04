@@ -337,24 +337,24 @@ async function muatkanPos() {
       .select("pos, unit")
       .eq("status", "Aktif");
 
-    const unitDipilih =
-      document.getElementById("unit")?.value || "";
+const unitDipilih =
+  document.getElementById("unit").value;
 
-    if (currentUser && !currentUser.isAdmin && currentUser.unit) {
+let query = supabaseClient
+  .from("data_pos")
+  .select("pos, unit");
 
-      query = query.or(
-        `unit.eq.${currentUser.unit},unit.eq.Semua`
-      );
+if (unitDipilih) {
 
-    } else if (unitDipilih) {
+  query = query.or(
+    `unit.eq."${unitDipilih}",unit.eq."Semua"`
+  );
 
-      query = query.or(
-        `unit.eq.${unitDipilih},unit.eq.Semua`
-      );
+}
 
-    }
+const { data, error } = await query;
 
-    const { data, error } = await query;
+console.log(data);
 
     if (error) throw error;
 
