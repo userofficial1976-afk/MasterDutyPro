@@ -332,20 +332,10 @@ async function muatkanPos() {
 
   try {
 
-    const unitDipilih = document.getElementById("unit").value;
-
-    let query = supabaseClient
+    const { data, error } = await supabaseClient
       .from(TABLE_POS)
-      .select("pos, unit")
+      .select("pos")
       .eq("status", "Aktif");
-
-    if (unitDipilih) {
-      query = query.or(
-        `unit.eq."${unitDipilih}",unit.eq."Semua"`
-      );
-    }
-
-    const { data, error } = await query;
 
     if (error) throw error;
 
