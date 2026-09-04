@@ -6,405 +6,868 @@
 
 <title>Anggaran RK01</title>
 
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
 <style>
 
 body{
     background:#0b1220;
-    color:#e2e8f0;
     font-family:'Segoe UI',sans-serif;
-    padding:20px;
 }
 
 .glass{
     background:rgba(15,23,42,.7);
     backdrop-filter:blur(16px);
     border:1px solid rgba(45,212,191,.12);
-    border-radius:20px;
-    padding:20px;
 }
 
-.report-title{
-    text-align:center;
-    margin-bottom:14px;
-}
+.sidebar-link.active{
+    background:linear-gradient(
+        90deg,
+        rgba(20,184,166,.20),
+        transparent
+    );
 
-.report-title .company{
-    font-size:24px;
-    font-weight:700;
-}
-
-.report-title .subtitle{
-    font-size:16px;
-    margin-top:4px;
+    border-left:3px solid #14b8a6;
     color:#2dd4bf;
-    font-weight:600;
-}
-
-.report-info{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:6px;
-    font-size:13px;
 }
 
 .rk01-table,
 .rumusan-table{
+
     width:100%;
     border-collapse:collapse;
+
 }
 
 .rk01-table th,
 .rk01-table td,
 .rumusan-table th,
 .rumusan-table td{
-    border:1px solid rgba(148,163,184,.3);
+
+    border:1px solid rgba(148,163,184,.30);
     text-align:center;
     padding:3px;
     font-size:10px;
+
 }
 
 .rk01-table th,
 .rumusan-table th{
+
     background:rgba(20,184,166,.15);
     color:#2dd4bf;
+
 }
 
 .tarikh-col{
+
     min-width:90px;
-    font-weight:600;
+    width:90px;
+
 }
 
-.rumusan-box{
-    margin-top:15px;
-}
-
-.rumusan-title{
-    text-align:center;
-    font-size:14px;
-    font-weight:700;
-    margin-bottom:8px;
-}
-
-@media print {
+@media print{
 
     @page{
         size:A4 landscape;
         margin:4mm;
     }
 
+    aside,
+    header,
+    .no-print{
+        display:none !important;
+    }
+
+    main{
+        margin:0 !important;
+    }
+
     body{
-        background:#fff;
-        color:#000;
+        background:#fff !important;
+        color:#000 !important;
     }
 
     .glass{
-        background:#fff;
-        border:none;
-        padding:0;
-    }
-
-    .report-title .company,
-    .report-title .subtitle,
-    .report-info{
-        color:#000 !important;
+        border:none !important;
+        background:#fff !important;
+        padding:0 !important;
     }
 
     .rk01-table th,
     .rk01-table td,
     .rumusan-table th,
     .rumusan-table td{
+
         border:1px solid #000 !important;
         color:#000 !important;
         background:#fff !important;
         font-size:7px !important;
         padding:2px !important;
+
     }
 
-    .rk01-table th,
-    .rumusan-table th{
-        background:#ececec !important;
-    }
 }
 
 </style>
 </head>
 
-<body>
+<body class="text-slate-200">
 
-<div class="glass">
+<div class="flex min-h-screen">
 
-    <!-- TAJUK -->
+    <!-- SIDEBAR -->
 
-    <div class="report-title">
+    <aside class="w-72 glass border-r border-teal-550/10 fixed h-full hidden lg:block overflow-y-auto">
 
-        <div class="company">
-            FGV SECURITY SERVICES SDN BHD
+        <div class="p-6">
+
+            <div class="flex items-center gap-3 mb-8">
+
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-400 to-teal-700 flex items-center justify-center">
+
+                    <i class="fas fa-shield-halved text-white text-xl"></i>
+
+                </div>
+
+                <div>
+
+                    <h1 class="font-bold text-white text-lg">
+                        Master Duty Pro
+                    </h1>
+
+                    <p class="text-xs text-teal-400">
+                        Wilayah Terengganu
+                    </p>
+
+                </div>
+
+            </div>
+
+            <nav class="space-y-1">
+
+                <a href="dashboard.html"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl">
+                    <i class="fas fa-chart-pie w-5"></i>
+                    Dashboard
+                </a>
+
+                <a href="kod-duty.html"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl">
+                    <i class="fas fa-code w-5"></i>
+                    Kod Waktu Kerja
+                </a>
+
+                <a href="kod-tempat-kerja.html"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl">
+                    <i class="fas fa-map-marker-alt w-5"></i>
+                    Kod Tempat Kerja
+                </a>
+
+                <a href="jadual-duty.html"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl">
+                    <i class="fas fa-calendar-check w-5"></i>
+                    Pengisian Jadual Tugas
+                </a>
+
+                <a href="anggaran-rk02.html"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl">
+                    <i class="fas fa-chart-bar w-5"></i>
+                    Anggaran RK02
+                </a>
+
+                <a href="anggaran-rk01.html"
+                   class="sidebar-link active flex items-center gap-3 px-K01
+                </a>
+
+            </nav>
+
         </div>
 
-        <div class="subtitle">
-            JADUAL DUTY BULANAN ANGGOTA
+    </aside>
+
+    <!-- MAIN -->
+
+    <main class="flex-1 lg:ml-72">
+
+        <header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="text-xl font-bold text-white">
+                        Anggaran RK01
+                    </h2>
+
+                    <p class="text-sm text-slate-400">
+                        Jadual Duty Bulanan Anggota
+                    </p>
+
+                </div>
+
+                <button
+                    onclick="window.print()"
+                    class="bg-teal-600 hover:bg-teal-500 text-white px-5 py-2 rounded-xl"
+                >
+                    <i class="fas fa-print mr-2"></i>
+                    Cetak / PDF
+                </button>
+
+            </div>
+
+        </header>
+
+        <div class="p-6 space-y-6">
+
+            <!-- FILTER -->
+
+            <div class="glass rounded-2xl p-5 no-print">
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+
+                    <select id="filterUnit">
+                        <option>-- Pilih Unit --</option>
+                    </select>
+
+                    <select id="filterPos">
+                        <option>-- Pilih Pos --</option>
+                    </select>
+
+                    <select id="filterBulan">
+                        <option>September</option>
+                    </select>
+
+                    <select id="filterTahun">
+                        <option>2026</option>
+                    </select>
+
+                    <button
+                        class="bg-teal-600 hover:bg-teal-500 rounded-xl py-2 font-semibold"
+                    >
+                        Jana Laporan
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- LAPORAN RK01 -->
+
+            <div class="glass rounded-2xl p-6 print-area">
+
+                <div class="text-center mb-4">
+
+                    <div class="font-bold text-xl">
+                        FGV SECURITY SERVICES SDN BHD
+                    </div>
+
+                    <div class="text-teal-400 font-semibold mt-1">
+                        JADUAL DUTY BULANAN ANGGOTA
+                    </div>
+
+                </div>
+
+                <div class="flex justify-between text-sm mb-1">
+
+                    <div>
+                        <b>NAMA POS :</b>
+                        <span id="namaPos">
+                            -
+                        </span>
+                    </div>
+
+                    <div>
+                        <b>RK-01</b>
+                    </div>
+
+                </div>
+
+                <div class="flex justify-between text-sm mb-4">
+
+                    <div>
+                        <b>KAWASAN :</b>
+                        <span id="namaKawasan">
+                            -
+                        </span>
+                    </div>
+
+                    <div>
+                        <b>BULAN :</b>
+                        <span id="bulanLaporan">
+                            -
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- MATRIX RK01 -->
+
+                <div class="overflow-x-auto">
+
+                    <table
+                        id="rk01Table"
+                        class="rk01-table"
+                    >
+                    </table>
+
+                </div>
+
+                <!-- RUMUSAN -->
+
+                <div class="mt-5">
+
+                    <div class="text-center font-bold mb-3">
+                        RUMUSAN BY POS
+                    </div>
+
+                    <table
+                        id="rumusanTable"
+                        class="rumusan-table"
+                    >
+                    </table>
+
+                </div>
+
+            </div>
+
         </div>
 
-    </div>
-
-    <!-- INFO -->
-
-    <div class="report-info">
-
-        <div>
-            <strong>NAMA POS :</strong>
-            F105-21 (SJ) FGVPM SETIU 01 (PANCHUR MERAH)
-        </div>
-
-        <div>
-            <strong>RK-01</strong>
-        </div>
-
-    </div>
-
-    <div class="report-info">
-
-        <div>
-            <strong>KAWASAN :</strong>
-            F105-SETIU / WILAYAH TERENGGANU
-        </div>
-
-        <div>
-            <strong>BULAN :</strong>
-            SEPTEMBER 2026
-        </div>
-
-    </div>
-
-    <!-- MATRIX -->
-
-    <table class="rk01-table">
-
-<thead>
-
-<tr>
-
-  <th rowspan="2" class="tarikh-col">
-    TARIKH / HARI
-  </th>
-
-  <th colspan="4">ANGGOTA 1</th>
-  <th colspan="4">ANGGOTA 2</th>
-  <th colspan="4">ANGGOTA 3</th>
-  <th colspan="4">ANGGOTA 4</th>
-  <th colspan="4">ANGGOTA 5</th>
-  <th colspan="4">ANGGOTA 6</th>
-  <th colspan="4">ANGGOTA 7</th>
-  <th colspan="4">ANGGOTA 8</th>
-
-</tr>
-
-<tr>
-
-  <th>KOD</th>
-  <th>KLM</th>
-  <th>OFF</th>
-  <th>PH</th>
-
-  <th>KOD</th>
-  <th>KLM</th>
-  <th>OFF</th>
-  <th>PH</th>
-
-  <th>KOD</th>
-  <th>KLM</th>
-  <th>OFF</th>
-  <th>PH</th>
-
-  <th>KOD</th>
-  <th>KLM</th>
-  <th>OFF</th>
-  <th>PH</th>
-
-  <th>KOD</th>
-  <th>KLM</th>
-  <th>OFF</th>
-  <th>PH</th>
-
-  <th>KOD</th>
-  <th>KLM</th>
-  <th>OFF</th>
-  <th>PH</th>
-
-  <th>KOD</th>
-  <th>KLM</th>
-  <th>OFF</th>
-  <th>PH</th>
-
-  <th>KOD</th>
-  <th>KLM</th>
-  <th>OFF</th>
-  <th>PH</th>
-
-</tr>
-
-</thead>
-
-        <tbody>
-
-            <tr>
-
-                <td class="tarikh-col">
-                    01/09/2026
-                    <br>
-                    <small>Selasa</small>
-                </td>
-
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-            </tr>
-
-            <tr>
-
-                <td class="tarikh-col">
-                    02/09/2026
-                    <br>
-                    <small>Rabu</small>
-                </td>
-
-                <td>A/C</td>
-                <td>5</td>
-                <td></td>
-                <td></td>
-
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-            </tr>
-
-            <tr>
-
-                <td class="tarikh-col">
-                    03/09/2026
-                    <br>
-                    <small>Khamis</small>
-                </td>
-
-                <td>A/C</td>
-                <td></td>
-                <td>1 hari</td>
-                <td></td>
-
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-            </tr>
-
-        </tbody>
-
-    </table>
-
-    <!-- RUMUSAN -->
-
-    <div class="rumusan-box">
-
-        <div class="rumusan-title">
-            RUMUSAN BY POS
-        </div>
-
-        <table class="rumusan-table">
-
-            <thead>
-
-                <tr>
-
-                    <th>NO ANGGOTA</th>
-
-                    <th>NAMA ANGGOTA</th>
-
-                    <th>JUMLAH KLM</th>
-
-                    <th>OFF HARI</th>
-
-                    <th>OFF JAM</th>
-
-                    <th>CUTIAM HARI</th>
-
-                    <th>CUTIAM JAM</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                <tr>
-
-                    <td>KONST 11651</td>
-
-                    <td>
-                        Mohamad Rusli Bin Kasim
-                    </td>
-
-                    <td>18</td>
-
-                    <td>1 hari</td>
-
-                    <td>5 jam</td>
-
-                    <td>1 hari</td>
-
-                    <td>5 jam</td>
-
-                </tr>
-
-                <tr>
-
-                    <td colspan="2">
-                        <strong>
-                            JUMLAH KESELURUHAN KLM
-                        </strong>
-                    </td>
-
-                    <td>
-                        <strong>18</strong>
-                    </td>
-
-                    <td colspan="4">
-                        -
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
+    </main>
 
 </div>
 
-</body>
-</html>
+// =====================================================
+// BINA TARIKH BULANAN
+// =====================================================
+
+function binaTarikhBulanan(tahun, bulan) {
+
+    const senarai = [];
+
+    const jumlahHari =
+        new Date(
+            tahun,
+            bulan,
+            0
+        ).getDate();
+
+    const senaraiHari = [
+        "Ahad",
+        "Isnin",
+        "Selasa",
+        "Rabu",
+        "Khamis",
+        "Jumaat",
+        "Sabtu"
+    ];
+
+    for (
+        let i = 1;
+        i <= jumlahHari;
+        i++
+    ) {
+
+        const tarikhObj =
+            new Date(
+                tahun,
+                bulan - 1,
+                i
+            );
+
+        senarai.push({
+
+            tarikh:
+                String(i)
+                    .padStart(2, "0")
+                + "/"
+                + String(bulan)
+                    .padStart(2, "0")
+                + "/"
+                + tahun,
+
+            hari:
+                senaraiHari[
+                    tarikhObj.getDay()
+                ]
+
+        });
+
+    }
+
+    return senarai;
+
+}
+
+// =====================================================
+// HEADER ANGGOTA
+// =====================================================
+
+function binaHeaderAnggota() {
+    return dataDummyAnggota;
+   
+// =====================================================
+// JANA MATRIX RK01
+// =====================================================
+
+function janaMatrixRK01() {
+
+    const table =
+        document.getElementById(
+            "rk01Table"
+        );
+
+    const tahun = 2026;
+    const bulan = 9;
+
+    const tarikhList =
+        binaTarikhBulanan(
+            tahun,
+            bulan
+        );
+
+    const anggotaList =
+        binaHeaderAnggota();
+
+    let html = "";
+
+    html += `
+    <thead>
+
+        <tr>
+
+            <th rowspan="2"
+                class="tarikh-col">
+
+                TARIKH / HARI
+
+            </th>
+    `;
+
+    anggotaList.forEach(
+        anggota => {
+
+            html += `
+                <th colspan="4">
+
+                    ${anggota.nama}
+
+                    <br>
+
+                    <small>
+                    ${anggota.no}
+                    </small>
+
+                </th>
+            `;
+
+        }
+    );
+
+    html += `
+        </tr>
+
+        <tr>
+    `;
+
+    for(
+        let i=1;
+        i<=8;
+        i++
+    ){
+
+        html += `
+            <th>KOD</th>
+            <th>KLM</th>
+            <th>OFF</th>
+            <th>PH</th>
+        `;
+
+    }
+
+    html += `
+        </tr>
+
+    </thead>
+
+    <tbody>
+    `;
+
+    tarikhList.forEach(
+        item => {
+
+            const pecah =
+                item.tarikh.split("/");
+
+            const key =
+                pecah[2]
+                + "-"
+                + pecah[1]
+                + "-"
+                + pecah[0];
+
+            html += `
+            <tr>
+
+                <td class="tarikh-col">
+
+                    ${item.tarikh}
+
+                    <br>
+
+                    <small>
+                        ${item.hari}
+                    </small>
+
+                </td>
+            `;
+
+            for(
+                let i=0;
+                i<8;
+                i++
+            ){
+
+                const rekod =
+                    dataDummyDuty[key]?.[i];
+
+                html += `
+                    <td>${rekod?.kod || ""}</td>
+                    <td>${rekod?.klm || ""}</td>
+                    <td>${rekod?.off || ""}</td>
+                    <td>${rekod?.ph || ""}</td>
+                `;
+            }
+
+            html += `
+            </tr>
+            `;
+        }
+    );
+
+    html += `
+    </tbody>
+    `;
+
+    table.innerHTML = html;
+}
+
+
+            
+    <thead>
+
+        <tr>
+
+            <th
+                rowspan="2"
+                class="tarikh-col"
+            >
+                TARIKH / HARI
+            </th>
+    `;
+
+    anggotaList.forEach(
+        anggota => {
+
+            html += `
+                <th colspan="4">
+                    ${anggota.nama}
+                    <br>
+                    <small>
+                        ${anggota.no}
+                    </small>
+                </th>
+            `;
+
+        }
+    );
+
+    html += `
+        </tr>
+
+        <tr>
+    `;
+
+    anggotaList.forEach(
+        () => {
+
+            html += `
+                <th>KOD</th>
+                <th>KLM</th>
+                <th>OFF</th>
+                <th>PH</th>
+            `;
+
+        }
+    );
+
+    html += `
+        </tr>
+
+    </thead>
+
+    <tbody>
+    `;
+
+    tarikhList.forEach(
+        item => {
+
+            html += `
+            <tr>
+
+                <td
+                    class="tarikh-col"
+                >
+
+                    ${item.tarikh}
+
+                    <br>
+
+                    <small>
+                        ${item.hari}
+                    </small>
+
+                </td>
+            `;
+
+            for (
+                let i = 1;
+                i <= 8;
+                i++
+            ) {
+
+                html += `
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                `;
+
+            }
+
+            html += `
+            </tr>
+            `;
+
+        }
+    );
+
+    html += `
+    </tbody>
+    `;
+
+    table.innerHTML =
+        html;
+
+}
+
+// =====================================================
+// RUMUSAN BY POS
+// =====================================================
+
+function binaRumusanRK01() {
+
+    const table =
+        document.getElementById(
+            "rumusanTable"
+        );
+
+    table.innerHTML = `
+
+    <thead>
+
+        <tr>
+
+            <th>NO ANGGOTA</th>
+            <th>NAMA ANGGOTA</th>
+            <th>JUMLAH KLM</th>
+            <th>OFF HARI</th>
+            <th>OFF JAM</th>
+            <th>CUTIAM HARI</th>
+            <th>CUTIAM JAM</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr>
+
+            <td>KONST11651</td>
+
+            <td>
+                MOHAMAD RUSLI BIN KASIM
+            </td>
+
+            <td>5</td>
+
+            <td>1</td>
+
+            <td>5</td>
+
+            <td>0</td>
+
+            <td>0</td>
+
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                JUMLAH KESELURUHAN KLM
+            </td>
+
+            <td>
+                5
+            </td>
+
+            <td colspan="4">
+                -
+            </td>
+        </tr>
+
+    </tbody>
+
+    `;
+
+}
+
+// =====================================================
+// PAGE LOAD
+// =====================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        janaMatrixRK01();
+
+        binaRumusanRK01();
+
+    }
+);
+
+// =====================================================
+// DATA DUMMY 8 ANGGOTA
+// =====================================================
+
+const dataDummyAnggota = [
+
+{
+    nama : "MOHAMAD RUSLI BIN KASIM",
+    no   : "KONST 11651"
+},
+
+{
+    nama : "ENGKU MUHAMMAD HAIKAL FIKRI",
+    no   : "PPB01361"
+},
+
+{
+    nama : "MOHD FAISAL BIN OTHMAN",
+    no   : "LKPL13408"
+},
+
+{
+    nama : "MOHD HANAFI BIN WAHAD",
+    no   : "LKPL12816"
+},
+
+{
+    nama : "AHMAD FIKRI BIN ALI",
+    no   : "PB11021"
+},
+
+{
+    nama : "MUHAMMAD ZULKARNAIN",
+    no   : "PB11022"
+},
+
+{
+    nama : "SHAHRIN BIN ALI",
+    no   : "PB11023"
+},
+
+{
+    nama : "NOR AZIZAN BIN YUSOF",
+    no   : "PB11024"
+}
+
+];
+
+
+// =====================================================
+// DUTY DUMMY
+// =====================================================
+
+const dataDummyDuty = {
+
+"2026-09-04": {
+    0 : {
+        kod : "A/C",
+        klm : "5",
+        off : "",
+        ph  : ""
+    }
+},
+
+"2026-09-05": {
+    0 : {
+        kod : "A/C",
+        klm : "",
+        off : "1H",
+        ph  : ""
+    }
+},
+
+"2026-09-06": {
+    0 : {
+        kod : "A/C",
+        klm : "",
+        off : "1H 5J",
+        ph  : ""
+    }
+},
+
+"2026-09-10": {
+    1 : {
+        kod : "G",
+        klm : "8",
+        off : "",
+        ph  : ""
+    }
+},
+
+"2026-09-14": {
+    2 : {
+        kod : "P",
+        klm : "6",
+        off : "",
+        ph : ""
+    }
+},
+
+"2026-09-18": {
+    3 : {
+        kod : "",
+        klm : "",
+        off : "",
+        ph  : "1H"
+    }
+}
+
+};
+
+
+
+            
+            
+            
+
+            
