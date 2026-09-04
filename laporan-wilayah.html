@@ -56,6 +56,34 @@
       background: rgba(15, 23, 42, 0.55);
     }
 
+.glass-card{
+    transition:all .25s ease;
+}
+
+.glass-card:hover{
+    border-color:#14b8a6;
+    background:rgba(20,184,166,.08);
+    transform:translateY(-2px);
+}
+
+.report-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.report-table th{
+    background:rgba(20,184,166,.15);
+    color:#2dd4bf;
+    font-weight:600;
+}
+
+.report-table td,
+.report-table th{
+    border:1px solid rgba(148,163,184,.3);
+    padding:10px;
+}
+
+    
 </style>
 </head>
 
@@ -135,7 +163,7 @@
                         Laporan Wilayah
                     </h2>
 
-                    <p class="text-sm text-slate-400">
+                    <p class="text-sm text-teal-400">
                         Dashboard Rumusan Wilayah Terengganu
                     </p>
 
@@ -158,7 +186,7 @@
 
             <!-- FILTER -->
 
-            <div class="glass rounded-2xl p-5">
+            <div class="glass glass-card rounded-2xl p-5">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 items-end">
 
@@ -204,8 +232,8 @@
 <div id="ringkasanCards"
      class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
 
-    <div class="glass rounded-2xl p-5">
-        <div class="text-slate-400 text-sm">
+    <div class="glass glass-card rounded-2xl p-5">
+        <div class="text-teal-400 text-sm font-semibold">
             Jumlah Anggota
         </div>
 
@@ -214,8 +242,8 @@
         </div>
     </div>
 
-    <div class="glass rounded-2xl p-5">
-        <div class="text-slate-400 text-sm">
+    <div class="glass glass-card rounded-2xl p-5">
+        <div class="text-teal-400 text-sm font-semibold">
             Jumlah Duty
         </div>
 
@@ -224,8 +252,8 @@
         </div>
     </div>
 
-    <div class="glass rounded-2xl p-5">
-        <div class="text-slate-400 text-sm">
+    <div class="glass glass-card rounded-2xl p-5">
+        <div class="text-teal-400 text-sm font-semibold">
             Jumlah Jam Kerja
         </div>
 
@@ -234,8 +262,8 @@
         </div>
     </div>
 
-    <div class="glass rounded-2xl p-5">
-        <div class="text-slate-400 text-sm">
+    <div class="glass glass-card rounded-2xl p-5">
+        <div class="text-teal-400 text-sm font-semibold">
             Jumlah Jam KLM
         </div>
 
@@ -244,8 +272,8 @@
         </div>
     </div>
 
-    <div class="glass rounded-2xl p-5">
-        <div class="text-slate-400 text-sm">
+    <div class="glass glass-card rounded-2xl p-5">
+        <div class="text-teal-400 text-sm font-semibold">
             Jumlah RM
         </div>
 
@@ -261,32 +289,32 @@
 <div id="klmCards"
      class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
 
-    <div class="glass rounded-2xl p-4 cursor-pointer">
-        <p class="text-slate-400 text-sm">KLM Cuti Am</p>
+    <div class="glass glass-card rounded-2xl p-4 cursor-pointer">
+        <p class="text-teal-400 text-sm font-semibold">KLM Cuti Am</p>
         <h3 class="text-2xl font-bold text-white mt-2">120 Jam</h3>
         <p class="text-teal-400">RM 4,235.60</p>
     </div>
 
-    <div class="glass rounded-2xl p-4 cursor-pointer">
-        <p class="text-slate-400 text-sm">KLM Offday</p>
+    <div class="glass glass-card rounded-2xl p-4 cursor-pointer">
+        <p class="text-teal-400 text-sm font-semibold">KLM Offday</p>
         <h3 class="text-2xl font-bold text-white mt-2">98 Jam</h3>
         <p class="text-teal-400">RM 3,652.00</p>
     </div>
 
-    <div class="glass rounded-2xl p-4 cursor-pointer">
-        <p class="text-slate-400 text-sm">KLM Wajib</p>
+    <div class="glass glass-card rounded-2xl p-4 cursor-pointer">
+        <p class="text-teal-400 text-sm font-semibold">KLM Wajib</p>
         <h3 class="text-2xl font-bold text-white mt-2">55 Jam</h3>
         <p class="text-teal-400">RM 1,854.50</p>
     </div>
 
-    <div class="glass rounded-2xl p-4 cursor-pointer">
-        <p class="text-slate-400 text-sm">KLM Cuti Tahun</p>
+    <div class="glass glass-card rounded-2xl p-4 cursor-pointer">
+        <p class="text-teal-400 text-sm font-semibold">KLM Cuti Tahun</p>
         <h3 class="text-2xl font-bold text-white mt-2">44 Jam</h3>
         <p class="text-teal-400">RM 1,240.00</p>
     </div>
 
-    <div class="glass rounded-2xl p-4 cursor-pointer">
-        <p class="text-slate-400 text-sm">KLM Kursus</p>
+    <div class="glass glass-card rounded-2xl p-4 cursor-pointer">
+        <p class="text-teal-400 text-sm font-semibold">KLM Kursus</p>
         <h3 class="text-2xl font-bold text-white mt-2">28 Jam</h3>
         <p class="text-teal-400">RM 850.00</p>
     </div>
@@ -296,13 +324,13 @@
             <!-- RUMUSAN UNIT -->
 
 <div id="rumusanUnit"
-     class="glass rounded-2xl p-5">
+     class="glass glass-card rounded-2xl p-5">
 
     <h3 class="text-lg font-bold text-white mb-4">
         Rumusan Mengikut Unit
     </h3>
 
-    <table class="w-full text-sm">
+    <table class="report-table text-sm">
 
         <thead>
 
@@ -343,13 +371,13 @@
             <!-- RUMUSAN POS -->
 
 <div id="rumusanPos"
-     class="glass rounded-2xl p-5">
+     class="glass glass-card rounded-2xl p-5">
 
     <h3 class="text-lg font-bold text-white mb-4">
         Rumusan Mengikut Pos
     </h3>
 
-    <table class="w-full text-sm">
+    <table class="report-table text-sm">
 
         <thead>
 
@@ -382,13 +410,13 @@
             <!-- TOP 10 -->
 
 <div id="top10"
-     class="glass rounded-2xl p-5">
+     class="glass glass-card rounded-2xl p-5">
 
     <h3 class="text-lg font-bold text-white mb-4">
         Top 10 Anggota KLM Tertinggi
     </h3>
 
-    <table class="w-full text-sm">
+    <table class="report-table text-sm">
 
         <thead>
 
