@@ -874,7 +874,8 @@ kiraSemuaRM();
       const dataDuty = {
         tarikh, bulan: getValue("bulan"), tahun: Number(getValue("tahun")), hari: getValue("hari"),
         no_skb: anggota.no_skb, no_anggota: anggota.no_anggota, nama_anggota: anggota.nama,
-        kawasan: anggota.kawasan, unit: anggota.unit, ketua_unit: anggota.ketua_unit, ketua_pos: anggota.ketua_pos, pos: anggota.pos,
+        kawasan: anggota.kawasan, unit: anggota.unit, ketua_unit: anggota.ketua_unit, ketua_pos: anggota.ketua_pos, nama_ketua_pos: getValue("ketuaPos"),
+nama_pos_asal: getValue("namaPosAsal"), pos: anggota.pos,
         pos_tampungan: getValue("posTampungan") || null, jam_tampungan: Number(getValue("jamTampung") || 0),
         waktu_tugasan: duty.waktu_tugasan, jam_kerja: Number(getValue("jamKerja") || 0),
 jam_klm: Number(getValue("jamKlm") || 0),
