@@ -669,10 +669,10 @@ GAJI POKOK (RM)
     }
     dataDuty = data || [];
 
-    if (dataDuty.length > 0) {
-    document.getElementById("namaKawasan").textContent =
-    dataDuty[0].kawasan || "-";
-    }
+if (dataDuty.length > 0) {
+  document.getElementById("namaKawasan").textContent =
+    (dataDuty[0].kawasan || "-") + " / Wilayah Terengganu";
+}
 
     
     await muatCutiAwam(bulanNo, tahun);
