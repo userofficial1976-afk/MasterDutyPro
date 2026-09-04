@@ -321,56 +321,77 @@
     // =====================================================
     // LOAD POS
     // =====================================================
-    async function muatkanPos() {
-      const dropdown = document.getElementById("pos");
-      if (!dropdown) return;
+async function muatkanPos() {
 
-      dropdown.innerHTML = `<option value="">Sedang memuatkan Pos...</option>`;
+  const dropdown = document.getElementById("pos");
 
-      try {
-        let query = supabaseClient
-  .from(TABLE_POS)
-  .select("pos, unit")
-  .eq("status", "Aktif");
+  if (!dropdown) return;
 
-        // Non-admin: hanya pos dari unit sendiri
-        if (currentUser && !currentUser.isAdmin && currentUser.unit) {
-          query = query.eq("unit", currentUser.unit);
-        }
+  dropdown.innerHTML =
+    `<option value="">Sedang memuatkan Pos...</option>`;
 
-        // Jika unit dipilih (admin), filter ikut unit
-        const unitDipilih = document.getElementById("unit")?.value;
-        if (unitDipilih && (currentUser?.isAdmin || !currentUser?.unit)) {
-          query = query.eq("unit", unitDipilih);
-        }
+  try {
 
-        const { data, error } = await query;
-        if (error) throw error;
+    let query = supabaseClient
+      .from(TABLE_POS)
+      .select("pos, unit")
+      .eq("status", "Aktif");
 
-        const senaraiPos = [
-          ...new Set(
-            (data || [])
-              .map(row => row.pos)
-              .filter(pos => pos !== null && pos !== undefined && String(pos).trim() !== "")
-              .map(pos => String(pos).trim())
-          )
-        ];
+    const unitDipilih =
+      document.getElementById("unit")?.value || "";
 
-        senaraiPos.sort((a, b) => a.localeCompare(b, "ms"));
+    if (currentUser && !currentUser.isAdmin && currentUser.unit) {
 
-        dropdown.innerHTML = `<option value="">-- Pilih Pos --</option>`;
-        senaraiPos.forEach(pos => {
-          const option = document.createElement("option");
-          option.value = pos;
-          option.textContent = pos;
-          dropdown.appendChild(option);
-        });
-      } catch (error) {
-        console.error("Gagal memuatkan Pos:", error);
-        dropdown.innerHTML = `<option value="">Gagal memuatkan Pos</option>`;
-        paparkanMesej("Gagal memuatkan Pos: " + error.message, "error");
-      }
+      query = query.or(
+        `unit.eq.${currentUser.unit},unit.eq.Semua`
+      );
+
+    } else if (unitDipilih) {
+
+      query = query.or(
+        `unit.eq.${unitDipilih},unit.eq.Semua`
+      );
+
     }
+
+    const { data, error } = await query;
+
+    if (error) throw error;
+
+    const senaraiPos = [
+      ...new Set(
+        (data || [])
+          .map(row => row.pos)
+          .filter(Boolean)
+      )
+    ].sort();
+
+    dropdown.innerHTML =
+      `<option value="">-- Pilih Pos --</option>`;
+
+    senaraiPos.forEach(pos => {
+
+      const option = document.createElement("option");
+
+      option.value = pos;
+      option.textContent = pos;
+
+      dropdown.appendChild(option);
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    dropdown.innerHTML =
+      `<option value="">Gagal memuatkan Pos</option>`;
+
+    paparkanMesej(
+      "Gagal memuatkan Pos: " + error.message,
+      "error"
+    );
+  }
+}
 
     // =====================================================
     // TAMBAH / BUANG POS
