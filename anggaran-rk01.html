@@ -2764,6 +2764,23 @@ function binaAnggotaLaporan(){
 
     console.log("ANGGOTA SELEPAS SORT:", senarai);
 
+    console.log("===== UJIAN L/KPL =====");
+
+senarai.forEach((a, i) => {
+
+    console.log(
+        i + 1,
+        "| Asal:",
+        JSON.stringify(a.pangkat),
+        "| Normal:",
+        JSON.stringify(normalisePangkat(a.pangkat)),
+        "| No:",
+        a.no_anggota
+    );
+
+});
+
+    
     return senarai;
 }
 /* =====================================================
