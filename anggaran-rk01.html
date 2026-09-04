@@ -182,9 +182,14 @@ body{
                     Anggaran RK02
                 </a>
 
-                <a href="anggaran-rk01.html"
-                   class="sidebar-link active flex items-center gap-3 px-K01
-                </a>
+<a href="anggaran-rk01.html"
+   class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl">
+
+    <i class="fas fa-table w-5"></i>
+
+    Anggaran RK01
+
+</a>
 
             </nav>
 
@@ -339,9 +344,11 @@ body{
 
         </div>
 
-    </main>
+</main>
 
 </div>
+
+<script>
 
 // =====================================================
 // BINA TARIKH BULANAN
@@ -411,7 +418,7 @@ function binaTarikhBulanan(tahun, bulan) {
 
 function binaHeaderAnggota() {
     return dataDummyAnggota;
-   
+   }
 // =====================================================
 // JANA MATRIX RK01
 // =====================================================
@@ -560,113 +567,7 @@ function janaMatrixRK01() {
 
 
             
-    <thead>
-
-        <tr>
-
-            <th
-                rowspan="2"
-                class="tarikh-col"
-            >
-                TARIKH / HARI
-            </th>
-    `;
-
-    anggotaList.forEach(
-        anggota => {
-
-            html += `
-                <th colspan="4">
-                    ${anggota.nama}
-                    <br>
-                    <small>
-                        ${anggota.no}
-                    </small>
-                </th>
-            `;
-
-        }
-    );
-
-    html += `
-        </tr>
-
-        <tr>
-    `;
-
-    anggotaList.forEach(
-        () => {
-
-            html += `
-                <th>KOD</th>
-                <th>KLM</th>
-                <th>OFF</th>
-                <th>PH</th>
-            `;
-
-        }
-    );
-
-    html += `
-        </tr>
-
-    </thead>
-
-    <tbody>
-    `;
-
-    tarikhList.forEach(
-        item => {
-
-            html += `
-            <tr>
-
-                <td
-                    class="tarikh-col"
-                >
-
-                    ${item.tarikh}
-
-                    <br>
-
-                    <small>
-                        ${item.hari}
-                    </small>
-
-                </td>
-            `;
-
-            for (
-                let i = 1;
-                i <= 8;
-                i++
-            ) {
-
-                html += `
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                `;
-
-            }
-
-            html += `
-            </tr>
-            `;
-
-        }
-    );
-
-    html += `
-    </tbody>
-    `;
-
-    table.innerHTML =
-        html;
-
-}
-
+  
 // =====================================================
 // RUMUSAN BY POS
 // =====================================================
@@ -865,7 +766,13 @@ const dataDummyDuty = {
 };
 
 
-
+</script>
+2
+ 
+3
+</body>
+4
+</html>
             
             
             
