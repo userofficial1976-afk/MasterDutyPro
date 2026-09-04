@@ -228,7 +228,7 @@
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const TABLE_TEMPAT_KERJA = "kod_tempat_kerja";
-    const TABLE_ANGGOTA = "Data_Anggota";
+    const TABLE_ANGGOTA = "data_pos";
 
     let posDipilih = [];
     let dataTempatKerja = [];
@@ -328,7 +328,10 @@
       dropdown.innerHTML = `<option value="">Sedang memuatkan Pos...</option>`;
 
       try {
-        let query = supabaseClient.from(TABLE_ANGGOTA).select("pos, unit");
+        let query = supabaseClient
+  .from(TABLE_POS)
+  .select("pos, unit")
+  .eq("status", "Aktif");
 
         // Non-admin: hanya pos dari unit sendiri
         if (currentUser && !currentUser.isAdmin && currentUser.unit) {
