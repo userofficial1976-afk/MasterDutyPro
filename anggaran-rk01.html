@@ -790,7 +790,8 @@ document.addEventListener(
 
             kawalFilterMengikutPeranan();
 
-            await janaLaporanRK01();
+            kosongkanLaporanRK01();
+            
 
         }
         catch(error){
@@ -3052,6 +3053,81 @@ function binaRumusanRK01(){
 }
 
 
+function kosongkanLaporanRK01(){
+
+    const table =
+        document.getElementById("rk01Table");
+
+    if(table){
+
+        table.innerHTML = `
+            <tbody>
+                <tr>
+                    <td
+                        colspan="33"
+                        class="empty-row"
+                        style="padding:30px;"
+                    >
+                        Sila pilih Unit, Pos, Bulan dan Tahun,
+                        kemudian tekan <b>Jana Laporan</b>.
+                    </td>
+                </tr>
+            </tbody>
+        `;
+
+    }
+
+
+    const rumusan =
+        document.getElementById("rumusanTable");
+
+    if(rumusan){
+
+        rumusan.innerHTML = `
+            <tbody>
+                <tr>
+                    <td style="padding:20px;">
+                        Rumusan akan dipaparkan selepas laporan dijana.
+                    </td>
+                </tr>
+            </tbody>
+        `;
+
+    }
+
+
+    const namaPos =
+        document.getElementById("namaPos");
+
+    const namaKawasan =
+        document.getElementById("namaKawasan");
+
+    const bulanLaporan =
+        document.getElementById("bulanLaporan");
+
+
+    if(namaPos){
+
+        namaPos.textContent = "-";
+
+    }
+
+
+    if(namaKawasan){
+
+        namaKawasan.textContent = "-";
+
+    }
+
+
+    if(bulanLaporan){
+
+        bulanLaporan.textContent = "-";
+
+    }
+
+}
+
 /* =====================================================
    INFO LAPORAN
 ===================================================== */
@@ -3387,19 +3463,6 @@ async function janaLaporanRK01(){
         );
 
 
-        document.getElementById(
-            "rk01Table"
-        ).innerHTML =
-            `
-            <tbody>
-                <tr>
-                    <td class="text-red-400 p-5">
-                        RALAT MEMUATKAN DATA RK01
-                    </td>
-                </tr>
-            </tbody>
-            `;
-
 
     }
     finally{
@@ -3430,28 +3493,7 @@ async function janaLaporanRK01(){
    EVENT BULAN / TAHUN
 ===================================================== */
 
-document
-    .getElementById("filterBulan")
-    ?.addEventListener(
-        "change",
-        function(){
 
-            janaLaporanRK01();
-
-        }
-    );
-
-
-document
-    .getElementById("filterTahun")
-    ?.addEventListener(
-        "change",
-        function(){
-
-            janaLaporanRK01();
-
-        }
-    );
 
 
 
