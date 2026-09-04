@@ -702,41 +702,19 @@
       d.rmBiasa += num(row.rm_klm_hari_biasa);
 
       // Offday bracket
-      const isOff = num(row.hari_offday_bertugas) === 1 || String(row.hari_offday_bertugas) === "1";
-      const jamOff = num(row.jam_offday_bertugas);
-      if (isOff || jamOff > 0) {
-        if (jamOff > 0 && jamOff < 4) {
-          d.off4 += 1;
-          d.rmOff4 += num(row.rm_hari_offday) || d.kadarOffHari;
-        } else if (jamOff >= 4 && jamOff <= 8) {
-          d.off48 += 1;
-          d.rmOff48 += num(row.rm_hari_offday) || d.kadarOffHari;
-        } else if (jamOff > 8) {
-          d.off8 += jamOff;
-          d.rmOff8 += num(row.rm_jam_offday) || (jamOff * d.kadarOffJam);
-          if (num(row.rm_hari_offday)) d.rmOff8 += num(row.rm_hari_offday);
-        } else if (isOff) {
-          d.off48 += 1;
-          d.rmOff48 += num(row.rm_hari_offday) || d.kadarOffHari;
-        }
-      }
+d.off48 += num(row.hari_offday_bertugas);
+d.rmOff48 += num(row.rm_hari_offday);
+
+d.off8 += num(row.jam_offday_bertugas);
+d.rmOff8 += num(row.rm_jam_offday);
 
       // Cuti Am bracket
-      const isCuti = num(row.hari_cutiam_bertugas) === 1 || String(row.hari_cutiam_bertugas) === "1";
-      const jamCuti = num(row.jam_cutiam_bertugas);
-      if (isCuti || jamCuti > 0) {
-        if (jamCuti > 0 && jamCuti < 8) {
-          d.cuti8 += 1;
-          d.rmCuti8 += num(row.rm_hari_cutiam) || d.kadarCutiHari;
-        } else if (jamCuti >= 8) {
-          d.cuti8p += jamCuti;
-          d.rmCuti8p += num(row.rm_jam_cutiam) || (jamCuti * d.kadarCutiJam);
-          if (num(row.rm_hari_cutiam)) d.rmCuti8p += num(row.rm_hari_cutiam);
-        } else if (isCuti) {
-          d.cuti8 += 1;
-          d.rmCuti8 += num(row.rm_hari_cutiam) || d.kadarCutiHari;
-        }
-      }
+d.cuti8 += num(row.hari_cutiam_bertugas);
+d.rmCuti8 += num(row.rm_hari_cutiam);
+
+d.cuti8p += num(row.jam_cutiam_bertugas);
+d.rmCuti8p += num(row.rm_jam_cutiam);
+`
 
       // Kategori lain
       d.jamTampung += num(row.jam_tampungan);
