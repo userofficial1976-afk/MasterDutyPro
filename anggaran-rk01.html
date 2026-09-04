@@ -245,6 +245,26 @@ button{
     margin-top: 3px;
     font-weight: 600;
 }
+
+
+.kod-cell,
+.off-cell,
+.ph-cell {
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.1;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.kod-cell div,
+.off-cell div,
+.ph-cell div {
+    white-space: normal;
+    line-height: 1.1;
+}
+
     
 </style>
 </head>
@@ -2428,9 +2448,11 @@ function nilaiPH(rekod) {
    JANA MATRIX RK01
    - SENTIASA 8 ANGGOTA
    - TARIKH + HARI = 1 KOLUM
-   - KOD PAPAR:
+   - SETIAP ANGGOTA:
+       KOD | KLM | OFF | PH
+   - KOD:
        kod_duty
-       kod_waktu_kerja
+       kod_tempat_kerja
      DALAM SEL YANG SAMA
 ===================================================== */
 
@@ -2470,10 +2492,11 @@ function janaMatrixRK01() {
 
 
     /* =================================================
-       HEADER
+       HEADER UTAMA
     ================================================= */
 
     let html = `
+
         <thead>
 
             <tr>
@@ -2488,7 +2511,7 @@ function janaMatrixRK01() {
 
 
     /* =================================================
-       8 ANGGOTA
+       HEADER 8 ANGGOTA
     ================================================= */
 
     anggota8.forEach(
@@ -2506,6 +2529,7 @@ function janaMatrixRK01() {
 
 
             html += `
+
                 <th
                     colspan="4"
                     class="anggota-head"
@@ -2520,6 +2544,7 @@ function janaMatrixRK01() {
                     </div>
 
                 </th>
+
             `;
 
         }
@@ -2527,6 +2552,7 @@ function janaMatrixRK01() {
 
 
     html += `
+
             </tr>
 
             <tr>
@@ -2535,28 +2561,42 @@ function janaMatrixRK01() {
 
     /* =================================================
        SUB HEADER
-       SETIAP ANGGOTA:
        KOD | KLM | OFF | PH
     ================================================= */
 
     anggota8.forEach(() => {
 
         html += `
-            <th class="sub-col">KOD</th>
-            <th class="sub-col">KLM</th>
-            <th class="sub-col">OFF</th>
-            <th class="sub-col">PH</th>
+
+            <th class="sub-col">
+                KOD
+            </th>
+
+            <th class="sub-col">
+                KLM
+            </th>
+
+            <th class="sub-col">
+                OFF
+            </th>
+
+            <th class="sub-col">
+                PH
+            </th>
+
         `;
 
     });
 
 
     html += `
+
             </tr>
 
         </thead>
 
         <tbody>
+
     `;
 
 
@@ -2586,6 +2626,7 @@ function janaMatrixRK01() {
     ) {
 
         html += `
+
             <tr>
 
                 <td
@@ -2596,6 +2637,7 @@ function janaMatrixRK01() {
                 </td>
 
             </tr>
+
         `;
 
         html += `
@@ -2606,11 +2648,12 @@ function janaMatrixRK01() {
             html;
 
         return;
+
     }
 
 
     /* =================================================
-       SENARAI TARIKH
+       SENARAI TARIKH BULAN
     ================================================= */
 
     const senaraiTarikh =
@@ -2621,17 +2664,24 @@ function janaMatrixRK01() {
 
 
     /* =================================================
-       LOOP TARIKH
+       LOOP SETIAP TARIKH
     ================================================= */
 
     senaraiTarikh.forEach(
         item => {
 
             html += `
+
                 <tr>
 
-                    <td class="tarikh-hari-col">
-                    
+                    <!-- =========================
+                         TARIKH + HARI
+                    ========================== -->
+
+                    <td
+                        class="tarikh-hari-col"
+                    >
+
                         <div>
                             ${item.tarikh}
                         </div>
@@ -2641,6 +2691,7 @@ function janaMatrixRK01() {
                         </div>
 
                     </td>
+
             `;
 
 
@@ -2648,42 +2699,8 @@ function janaMatrixRK01() {
                8 ANGGOTA
             ========================================= */
 
-        anggota8.forEach(anggota => {
-
-            const rekod = rekodAnggota(
-                anggota.no_skb,
-                item.iso
-            );
-
-            html += `
-                <td class="kod-cell">
-                    ${nilaiKodDuty(rekod)}
-                </td>
-
-                <td class="klm-cell">
-                    ${nilaiKLM(rekod)}
-                </td>
-
-                <td class="off-cell">
-                    ${nilaiOFF(rekod)}
-                </td>
-
-                <td class="ph-cell">
-                    ${nilaiPH(rekod)}
-                </td>
-            `;
-        });
-
-        html += `
-            </tr>
-        `;
-    }
-);
-
-
-                    /* ---------------------------------
-                       CARI REKOD DUTY
-                    --------------------------------- */
+            anggota8.forEach(
+                anggota => {
 
                     const rekod =
                         rekodAnggota(
@@ -2692,9 +2709,9 @@ function janaMatrixRK01() {
                         );
 
 
-                    /* ---------------------------------
-                       NILAI
-                    --------------------------------- */
+                    /* =============================
+                       KOD
+                    ============================== */
 
                     const kod =
                         nilaiKodDuty(
@@ -2702,11 +2719,19 @@ function janaMatrixRK01() {
                         );
 
 
+                    /* =============================
+                       KLM
+                    ============================== */
+
                     const klm =
                         nilaiKLM(
                             rekod
                         );
 
+
+                    /* =============================
+                       OFF
+                    ============================== */
 
                     const off =
                         nilaiOFF(
@@ -2714,32 +2739,38 @@ function janaMatrixRK01() {
                         );
 
 
+                    /* =============================
+                       PH
+                    ============================== */
+
                     const ph =
                         nilaiPH(
                             rekod
                         );
 
 
-                    /* ---------------------------------
-                       PAPAR
-                    --------------------------------- */
+                    /* =============================
+                       PAPAR 4 KOLUM
+                    ============================== */
 
                     html += `
+
                         <td class="kod-cell">
                             ${kod}
                         </td>
 
-                        <td>
+                        <td class="klm-cell">
                             ${klm}
                         </td>
 
-                        <td>
+                        <td class="off-cell">
                             ${off}
                         </td>
 
-                        <td>
+                        <td class="ph-cell">
                             ${ph}
                         </td>
+
                     `;
 
                 }
@@ -2747,15 +2778,23 @@ function janaMatrixRK01() {
 
 
             html += `
+
                 </tr>
+
             `;
 
         }
     );
 
 
+    /* =================================================
+       TUTUP TABLE
+    ================================================= */
+
     html += `
+
         </tbody>
+
     `;
 
 
@@ -2763,7 +2802,6 @@ function janaMatrixRK01() {
         html;
 
 }
-
 
 /* =====================================================
    RUMUSAN BY POS
@@ -3411,23 +3449,7 @@ document
         }
     );
 
-.kod-cell,
-.off-cell,
-.ph-cell {
-    white-space: normal !important;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    line-height: 1.1;
-    vertical-align: middle;
-    text-align: center;
-}
 
-.kod-cell div,
-.off-cell div,
-.ph-cell div {
-    white-space: normal;
-    line-height: 1.1;
-}
 
     
 </script>
