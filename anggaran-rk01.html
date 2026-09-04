@@ -64,9 +64,9 @@ body{
     color:#2dd4bf;
 }
 
-.tarikh-col{
-    min-width:70px;
-    width:70px;
+.tarikh-hari-col{
+    min-width:65px;
+    width:65px;
 }
 
 .hari-duty{
@@ -205,9 +205,9 @@ button{
         font-size:6px !important;
     }
 
-    .tarikh-col{
-        width:45px !important;
-    }
+.tarikh-hari-col{
+    width:45px !important;
+}
 
     .rk01-table small,
     .hari-duty{
@@ -220,6 +220,32 @@ button{
     }
 }
 
+.kod-cell {
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.kod-cell div {
+    white-space: normal;
+}
+
+.tarikh-hari-col {
+    min-width: 85px;
+    width: 85px;
+    white-space: normal !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.hari-text {
+    margin-top: 3px;
+    font-weight: 600;
+}
+    
 </style>
 </head>
 
@@ -2222,31 +2248,7 @@ function rekodAnggota(
 
 }
 
-.kod-cell {
-    white-space: normal !important;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    line-height: 1.25;
-    vertical-align: middle;
-    text-align: center;
-}
 
-.kod-cell div {
-    white-space: normal;
-}
-
-.tarikh-hari-col {
-    min-width: 85px;
-    width: 85px;
-    white-space: normal !important;
-    text-align: center;
-    vertical-align: middle;
-}
-
-.hari-text {
-    margin-top: 3px;
-    font-weight: 600;
-}
 /* =====================================================
    NORMALISE TARIKH
 ===================================================== */
@@ -2426,18 +2428,25 @@ function nilaiPH(
 
 /* =====================================================
    JANA MATRIX RK01
+   - SENTIASA 8 ANGGOTA
+   - TARIKH + HARI = 1 KOLUM
+   - KOD PAPAR:
+       kod_duty
+       kod_waktu_kerja
+     DALAM SEL YANG SAMA
 ===================================================== */
+
 function janaMatrixRK01() {
 
-    const table = document.getElementById("rk01Table");
+    const table =
+        document.getElementById("rk01Table");
 
     if (!table) return;
 
-    /*
-    =====================================================
-    SENTIASA 8 SLOT ANGGOTA
-    =====================================================
-    */
+
+    /* =================================================
+       SENTIASA 8 SLOT ANGGOTA
+    ================================================= */
 
     const anggota8 = [];
 
@@ -2445,7 +2454,9 @@ function janaMatrixRK01() {
 
         if (anggotaLaporan[i]) {
 
-            anggota8.push(anggotaLaporan[i]);
+            anggota8.push(
+                anggotaLaporan[i]
+            );
 
         } else {
 
@@ -2456,56 +2467,65 @@ function janaMatrixRK01() {
             });
 
         }
+
     }
 
 
-    /*
-    =====================================================
-    HEADER
-    =====================================================
-    */
+    /* =================================================
+       HEADER
+    ================================================= */
 
-    let html = 
+    let html = `
         <thead>
 
             <tr>
 
-<th rowspan="2" class="tarikh-hari-col">
-    TARIKH / HARI
-</th>
-
-                <th rowspan="2" class="hari-col">
-                    HARI
+                <th
+                    rowspan="2"
+                    class="tarikh-hari-col"
+                >
+                    TARIKH / HARI
                 </th>
-    ;
+    `;
 
 
-    /*
-    =====================================================
-    8 ANGGOTA
-    =====================================================
-    */
+    /* =================================================
+       8 ANGGOTA
+    ================================================= */
 
-    anggota8.forEach((anggota, index) => {
+    anggota8.forEach(
+        (anggota, index) => {
 
-        const nama = anggota.nama || "";
-        const noAnggota = anggota.no_anggota || "";
+            const nama =
+                escapeHtml(
+                    anggota.nama || ""
+                );
 
-        html += `
-            <th colspan="4" class="anggota-header">
+            const noAnggota =
+                escapeHtml(
+                    anggota.no_anggota || ""
+                );
 
-                <div class="anggota-no">
-                    ${noAnggota}
-                </div>
 
-                <div class="anggota-nama">
-                    ${nama}
-                </div>
+            html += `
+                <th
+                    colspan="4"
+                    class="anggota-head"
+                >
 
-            </th>
-        `;
+                    <div>
+                        ${noAnggota}
+                    </div>
 
-    });
+                    <div>
+                        ${nama}
+                    </div>
+
+                </th>
+            `;
+
+        }
+    );
 
 
     html += `
@@ -2515,19 +2535,19 @@ function janaMatrixRK01() {
     `;
 
 
-    /*
-    =====================================================
-    SUB HEADER SETIAP ANGGOTA
-    =====================================================
-    */
+    /* =================================================
+       SUB HEADER
+       SETIAP ANGGOTA:
+       KOD | KLM | OFF | PH
+    ================================================= */
 
     anggota8.forEach(() => {
 
         html += `
-            <th>KOD</th>
-            <th>KLM</th>
-            <th>OFF</th>
-            <th>PH</th>
+            <th class="sub-col">KOD</th>
+            <th class="sub-col">KLM</th>
+            <th class="sub-col">OFF</th>
+            <th class="sub-col">PH</th>
         `;
 
     });
@@ -2542,177 +2562,185 @@ function janaMatrixRK01() {
     `;
 
 
-    /*
-    =====================================================
-    TARIKH DALAM BULAN
-    =====================================================
-    */
+    /* =================================================
+       BULAN / TAHUN
+    ================================================= */
 
-    const bulan = document.getElementById("filterBulan")?.value || "";
-    const tahun = document.getElementById("filterTahun")?.value || "";
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        )?.value || "";
 
-    const bulanIndex = SENARAI_BULAN.indexOf(bulan);
 
-    if (bulanIndex < 0 || !tahun) {
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        )?.value || "";
+
+
+    const nomborBulanDipilih =
+        nomborBulan(bulan);
+
+
+    if (
+        !nomborBulanDipilih ||
+        !tahun
+    ) {
 
         html += `
             <tr>
-                <td colspan="34" class="empty-row">
+
+                <td
+                    colspan="33"
+                    class="empty-row"
+                >
                     Sila pilih bulan dan tahun.
                 </td>
+
             </tr>
         `;
 
-        html += `</tbody>`;
+        html += `
+            </tbody>
+        `;
 
-        table.innerHTML = html;
+        table.innerHTML =
+            html;
 
         return;
     }
 
 
-    /*
-    =====================================================
-    BILANGAN HARI DALAM BULAN
-    =====================================================
-    */
+    /* =================================================
+       SENARAI TARIKH
+    ================================================= */
 
-    const jumlahHari = new Date(
-        parseInt(tahun),
-        bulanIndex + 1,
-        0
-    ).getDate();
-
-
-    /*
-    =====================================================
-    LOOP SETIAP TARIKH
-    =====================================================
-    */
-
-    for (let hari = 1; hari <= jumlahHari; hari++) {
-
-        const date = new Date(
+    const senaraiTarikh =
+        binaTarikhBulanan(
             parseInt(tahun),
-            bulanIndex,
-            hari
+            nomborBulanDipilih
         );
 
-        const iso = [
-            date.getFullYear(),
-            String(date.getMonth() + 1).padStart(2, "0"),
-            String(date.getDate()).padStart(2, "0")
-        ].join("-");
+
+    /* =================================================
+       LOOP TARIKH
+    ================================================= */
+
+    senaraiTarikh.forEach(
+        item => {
+
+            html += `
+                <tr>
+
+                    <td class="tarikh-hari-col">
+
+                        <div>
+                            ${item.tarikh}
+                        </div>
+
+                        <div class="hari-text">
+                            ${item.hari}
+                        </div>
+
+                    </td>
+            `;
 
 
-        const namaHari = [
-            "Ahad",
-            "Isnin",
-            "Selasa",
-            "Rabu",
-            "Khamis",
-            "Jumaat",
-            "Sabtu"
-        ][date.getDay()];
+            /* =========================================
+               8 ANGGOTA
+            ========================================= */
+
+            anggota8.forEach(
+                anggota => {
+
+                    /* ---------------------------------
+                       SLOT ANGGOTA KOSONG
+                    --------------------------------- */
+
+                    if (!anggota.no_skb) {
+
+                        html += `
+                            <td class="kod-cell"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        `;
+
+                        return;
+                    }
 
 
-        html += `
-            <tr>
+                    /* ---------------------------------
+                       CARI REKOD DUTY
+                    --------------------------------- */
 
-<td class="tarikh-hari-col">
-    <div>
-        ${String(hari).padStart(2, "0")}/${String(bulanIndex + 1).padStart(2, "0")}/${tahun}
-    </div>
-
-    <div class="hari-text">
-        ${namaHari}
-    </div>
-</td>
-        `;
+                    const rekod =
+                        rekodAnggota(
+                            anggota.no_skb,
+                            item.iso
+                        );
 
 
-        /*
-        =================================================
-        8 ANGGOTA
-        =================================================
-        */
+                    /* ---------------------------------
+                       NILAI
+                    --------------------------------- */
 
-        anggota8.forEach((anggota) => {
-
-            /*
-            ---------------------------------------------
-            SLOT KOSONG
-            ---------------------------------------------
-            */
-
-            if (!anggota.no_skb) {
-
-                html += `
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                `;
-
-                return;
-            }
+                    const kod =
+                        nilaiKodDuty(
+                            rekod
+                        );
 
 
-            /*
-            ---------------------------------------------
-            CARI REKOD DUTY
-            ---------------------------------------------
-            */
+                    const klm =
+                        nilaiKLM(
+                            rekod
+                        );
 
-            const rekod = rekodAnggota(
-                anggota.no_skb,
-                iso
+
+                    const off =
+                        nilaiOFF(
+                            rekod
+                        );
+
+
+                    const ph =
+                        nilaiPH(
+                            rekod
+                        );
+
+
+                    /* ---------------------------------
+                       PAPAR
+                    --------------------------------- */
+
+                    html += `
+                        <td class="kod-cell">
+                            ${kod}
+                        </td>
+
+                        <td>
+                            ${klm}
+                        </td>
+
+                        <td>
+                            ${off}
+                        </td>
+
+                        <td>
+                            ${ph}
+                        </td>
+                    `;
+
+                }
             );
 
 
-            /*
-            ---------------------------------------------
-            KOD
-            PAPAR KEDUA-DUA:
-            kod_duty + kod_waktu_kerja
-            ---------------------------------------------
-            */
-
-            const kod = nilaiKodDuty(rekod);
-
-            const klm = nilaiKLM(rekod);
-
-            const off = nilaiOFF(rekod);
-
-            const ph = nilaiPH(rekod);
-
-
             html += `
-                <td class="kod-cell">
-                    ${kod}
-                </td>
-
-                <td>
-                    ${klm}
-                </td>
-
-                <td>
-                    ${off}
-                </td>
-
-                <td>
-                    ${ph}
-                </td>
+                </tr>
             `;
 
-        });
-
-
-        html += `
-            </tr>
-        `;
-
-    }
+        }
+    );
 
 
     html += `
@@ -2720,7 +2748,9 @@ function janaMatrixRK01() {
     `;
 
 
-    table.innerHTML = html;
+    table.innerHTML =
+        html;
+
 }
 
 
