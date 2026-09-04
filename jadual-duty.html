@@ -803,6 +803,30 @@ kiraSemuaRM();
     const jamTampung = Number(getValue("jamTampung") || 0);
     const kadarKlm = Number(anggota.rm_pehariklmbiasa || 0);
 
+const rmKlmWajib =
+  Number(getValue("klmWajib") || 0) * kadarKlm;
+
+const rmKlmMc =
+  Number(getValue("klmMc") || 0) * kadarKlm;
+
+const rmKlmCutiTahun =
+  Number(getValue("klmCutiTahun") || 0) * kadarKlm;
+
+const rmKlmCutiEhsan =
+  Number(getValue("klmCutiEhsan") || 0) * kadarKlm;
+
+const rmKlmKursus =
+  Number(getValue("klmKursus") || 0) * kadarKlm;
+
+const rmKlmTambahan =
+  Number(getValue("klmKawalanTambahan") || 0) * kadarKlm;
+
+const rmKlmOff =
+  Number(getValue("klmOffday") || 0) * kadarKlm;
+
+    
+    
+
     setValue("rmKlmHariBiasa", formatRM(jamKlm * kadarKlm));
     setValue("rmTampung", formatRM(jamTampung * kadarKlm));
     const rmHariOffday = (hariOffday && hariOffday.checked) ? Number(anggota.rm_perharioffday || 0) : 0;
@@ -897,13 +921,29 @@ rm_jam_cutiam: Number(getValue("rmJamCutiam") || 0),
 jumlah_cutiam: Number(getValue("jumlahCutiam") || 0),
 
 jam_klm_off: Number(getValue("klmOffday") || 0),
+rm_klm_off: rmKlmOff,
+
 jam_klm_wajib: Number(getValue("klmWajib") || 0),
+rm_klm_wajib: rmKlmWajib,
+
 jam_klm_mc: Number(getValue("klmMc") || 0),
+rm_klm_mc: rmKlmMc,
+
 jam_klm_cuti_tahun: Number(getValue("klmCutiTahun") || 0),
+rm_klm_cuti_tahun: rmKlmCutiTahun,
+
 jam_klm_cuti_ehsan: Number(getValue("klmCutiEhsan") || 0),
+rm_klm_cuti_ehsan: rmKlmCutiEhsan,
+
 jam_klm_kursus: Number(getValue("klmKursus") || 0),
+rm_klm_kursus: rmKlmKursus,
+
 jam_klm_cuti_ganti: Number(getValue("klmCutiGanti") || 0),
+rm_klm_cuti_ganti:
+  Number(getValue("klmCutiGanti") || 0) * kadarKlm,
+
 jam_klm_tambahan: Number(getValue("klmKawalanTambahan") || 0),
+rm_klm_tambahan: rmKlmTambahan,
         dikemaskini_oleh: currentUser?.name || "Sistem",
         dikemaskini_pada: new Date().toISOString()
       };
