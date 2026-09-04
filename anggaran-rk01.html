@@ -2564,63 +2564,61 @@ function binaAnggotaLaporan(){
        NORMALISE PANGKAT
     ===================================================== */
 
-    function normalisePangkat(pangkat){
+function normalisePangkat(pangkat){
 
-        let p =
-            String(pangkat || "")
-                .trim()
-                .toUpperCase();
+    let p = String(pangkat || "")
+        .trim()
+        .toUpperCase();
 
-        /* buang titik */
-        p = p.replace(/\./g, "");
+    // Buang titik
+    p = p.replace(/\./g, "");
 
-        /* buang ruang berlebihan */
-        p = p.replace(/\s+/g, " ");
+    // Buang semua ruang
+    p = p.replace(/\s+/g, "");
 
-        /* normalisasi variasi pangkat */
-
-        if(
-            p === "SJN" ||
-            p === "SARJAN"
-        ){
-            return "SJN";
-        }
-
-        if(
-            p === "KPL" ||
-            p === "KOPERAL"
-        ){
-            return "KPL";
-        }
-
-        if(
-            p === "L/KPL" ||
-            p === "LKPL" ||
-            p === "L KPL" ||
-            p === "LAN KPL" ||
-            p === "LANS KPL"
-        ){
-            return "L/KPL";
-        }
-
-        if(
-            p === "KONST" ||
-            p === "KONSTABEL" ||
-            p === "CONSTABLE"
-        ){
-            return "KONST";
-        }
-
-        if(
-            p === "PPB" ||
-            p === "PEMBANTU PEGAWAI BAWAH"
-        ){
-            return "PPB";
-        }
-
-        return p;
+    // Normalisasi L/KPL
+    if (
+        p === "L/KPL" ||
+        p === "LKPL" ||
+        p === "L/KOPERAL" ||
+        p === "LKOPERAL"
+    ){
+        return "L/KPL";
     }
 
+    // SJN
+    if (
+        p === "SJN" ||
+        p === "SARJAN"
+    ){
+        return "SJN";
+    }
+
+    // KPL
+    if (
+        p === "KPL" ||
+        p === "KOPERAL"
+    ){
+        return "KPL";
+    }
+
+    // KONST
+    if (
+        p === "KONST" ||
+        p === "KONSTABEL"
+    ){
+        return "KONST";
+    }
+
+    // PPB
+    if (
+        p === "PPB"
+    ){
+        return "PPB";
+    }
+
+    return p;
+}
 
     /* =====================================================
        SUSUNAN PANGKAT
