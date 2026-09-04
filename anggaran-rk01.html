@@ -72,6 +72,11 @@ body{
 
 }
 
+.hari-duty{
+    font-size:inherit;
+    line-height:1;
+}
+    
 .sub-col{
     width:28px;
     min-width:28px;
@@ -83,7 +88,7 @@ body{
 }
 
 .rk01-table small{
-    font-size:8px;
+    font-size:inherit;
     display:block;
 }
 
@@ -168,6 +173,11 @@ line-height:1;
 
 .report-title-sub{
     margin-bottom:2px !important;
+}
+
+.rk01-table small,
+.hari-duty{
+    font-size:inherit !important;
 }
 
     
@@ -614,17 +624,15 @@ function janaMatrixRK01() {
             html += `
             <tr>
 
-                <td class="tarikh-col">
+<td class="tarikh-col">
 
-                    ${item.tarikh}
+    <div>${item.tarikh}</div>
 
-                    <br>
+    <div class="hari-duty">
+        ${item.hari}
+    </div>
 
-                    <small>
-                        ${item.hari}
-                    </small>
-
-                </td>
+</td>
             `;
 
             for(
