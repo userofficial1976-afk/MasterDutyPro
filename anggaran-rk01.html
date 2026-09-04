@@ -1612,6 +1612,11 @@ function kawalFilterMengikutPeranan(){
         );
 
 
+    if(!filterUnit || !filterPos){
+        return;
+    }
+
+
     const role =
         rolePengguna();
 
@@ -1634,6 +1639,13 @@ function kawalFilterMengikutPeranan(){
     );
 
 
+    /* =================================================
+       ADMIN
+
+       UNIT → BOLEH PILIH
+       POS  → BOLEH PILIH
+    ================================================= */
+
     if(role === "admin"){
 
         filterUnit.disabled =
@@ -1642,66 +1654,160 @@ function kawalFilterMengikutPeranan(){
         filterPos.disabled =
             false;
 
+        filterUnit.classList.remove(
+            "opacity-60"
+        );
+
+        filterPos.classList.remove(
+            "opacity-60"
+        );
+
         return;
     }
 
 
+    /* =================================================
+       KETUA UNIT
+
+       UNIT → TERKUNCI
+       POS  → BOLEH PILIH
+    ================================================= */
+
     if(role === "ketua_unit"){
 
-        filterUnit.value =
+        const unitUser =
             unitPengguna();
+
+
+        /* UNIT KETUA UNIT */
+
+        if(unitUser){
+
+            filterUnit.value =
+                unitUser;
+
+        }
+
 
         filterUnit.disabled =
             true;
+
+        filterUnit.classList.add(
+            "opacity-60"
+        );
+
+
+        /* =============================================
+           POS KETUA UNIT MESTI BOLEH PILIH
+        ============================================= */
 
         filterPos.disabled =
             false;
 
+        filterPos.classList.remove(
+            "opacity-60"
+        );
+
+
         return;
     }
 
+
+    /* =================================================
+       KETUA POS
+
+       UNIT → TERKUNCI
+       POS  → TERKUNCI
+    ================================================= */
 
     if(role === "ketua_pos"){
 
-        filterUnit.value =
+        const unitUser =
             unitPengguna();
+
+        const posUser =
+            posPengguna();
+
+
+        /* UNIT */
+
+        if(unitUser){
+
+            filterUnit.value =
+                unitUser;
+
+        }
 
         filterUnit.disabled =
             true;
 
-        filterPos.value =
-            posPengguna();
+        filterUnit.classList.add(
+            "opacity-60"
+        );
+
+
+        /* POS */
+
+        if(posUser){
+
+            filterPos.value =
+                posUser;
+
+        }
 
         filterPos.disabled =
             true;
+
+        filterPos.classList.add(
+            "opacity-60"
+        );
+
 
         return;
     }
 
 
-    if(unitPengguna()){
+    /* =================================================
+       ROLE LAIN
+    ================================================= */
+
+    const unitUser =
+        unitPengguna();
+
+    const posUser =
+        posPengguna();
+
+
+    if(unitUser){
 
         filterUnit.value =
-            unitPengguna();
+            unitUser;
 
         filterUnit.disabled =
             true;
 
+        filterUnit.classList.add(
+            "opacity-60"
+        );
+
     }
 
 
-    if(posPengguna()){
+    if(posUser){
 
         filterPos.value =
-            posPengguna();
+            posUser;
 
         filterPos.disabled =
             true;
+
+        filterPos.classList.add(
+            "opacity-60"
+        );
 
     }
 
 }
-
 
 /* =====================================================
    EVENT UNIT
