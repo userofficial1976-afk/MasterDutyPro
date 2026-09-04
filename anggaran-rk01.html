@@ -2222,7 +2222,31 @@ function rekodAnggota(
 
 }
 
+.kod-cell {
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
+    vertical-align: middle;
+    text-align: center;
+}
 
+.kod-cell div {
+    white-space: normal;
+}
+
+.tarikh-hari-col {
+    min-width: 85px;
+    width: 85px;
+    white-space: normal !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.hari-text {
+    margin-top: 3px;
+    font-weight: 600;
+}
 /* =====================================================
    NORMALISE TARIKH
 ===================================================== */
@@ -2301,18 +2325,27 @@ function normaliseTarikh(
 ===================================================== */
 
 function nilaiKodDuty(rekod) {
+
     if (!rekod) return "";
 
-    const kodDuty = String(rekod.kod_duty || "").trim();
-    const kodWaktu = String(rekod.kod_waktu_kerja || "").trim();
+    const kodDuty =
+        String(rekod.kod_duty || "").trim();
 
-    if (kodDuty && kodWaktu) {
-        return `${kodDuty} / ${kodWaktu}`;
+    const kodWaktuKerja =
+        String(rekod.kod_waktu_kerja || "").trim();
+
+    let html = "";
+
+    if (kodDuty) {
+        html += `<div>${kodDuty}</div>`;
     }
 
-    return kodDuty || kodWaktu || "";
-}
+    if (kodWaktuKerja) {
+        html += `<div>${kodWaktuKerja}</div>`;
+    }
 
+    return html;
+}
 
 /* =====================================================
    KLM
@@ -2432,19 +2465,19 @@ function janaMatrixRK01() {
     =====================================================
     */
 
-    let html = `
+    let html = 
         <thead>
 
             <tr>
 
-                <th rowspan="2" class="tarikh-col">
-                    TARIKH
-                </th>
+<th rowspan="2" class="tarikh-hari-col">
+    TARIKH / HARI
+</th>
 
                 <th rowspan="2" class="hari-col">
                     HARI
                 </th>
-    `;
+    ;
 
 
     /*
@@ -2586,13 +2619,15 @@ function janaMatrixRK01() {
         html += `
             <tr>
 
-                <td class="tarikh-col">
-                    ${String(hari).padStart(2, "0")}
-                </td>
+<td class="tarikh-hari-col">
+    <div>
+        ${String(hari).padStart(2, "0")}/${String(bulanIndex + 1).padStart(2, "0")}/${tahun}
+    </div>
 
-                <td class="hari-col">
-                    ${namaHari}
-                </td>
+    <div class="hari-text">
+        ${namaHari}
+    </div>
+</td>
         `;
 
 
