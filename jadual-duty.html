@@ -196,31 +196,80 @@
       </div>
 
       <!-- 3. Kod Duty & Tempat Kerja -->
-      <div class="glass rounded-2xl p-6">
-        <h3 class="text-lg font-semibold text-white mb-5 flex items-center gap-2">
-          <span class="w-8 h-8 rounded-full bg-teal-550/20 text-teal-450 flex items-center justify-center text-sm font-bold">3</span>
-          Kod Waktu & Tempat Kerja
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          <div>
-            <label>Kod Duty</label>
-            <select id="kodDuty"><option value="">-- Pilih Kod Duty --</option></select>
-          </div>
-          <div><label>Jam Kerja</label><input type="number" id="jamKerja" readonly></div>
-          <div><label>Jam KLM Hari Biasa</label><input type="number" id="jamKlm" readonly></div>
-          <div><label>RM KLM Hari Biasa</label><input type="text" id="rmKlmHariBiasa" readonly value="0.00"></div>
-          <div>
-            <label>Kod Tempat Kerja</label>
-            <select id="kodTempatKerja"><option value="">-- Pilih Kod Tempat Kerja --</option></select>
-          </div>
-          <div>
-            <label>Pos Tampungan</label>
-            <select id="posTampungan"><option value="">-- Pilih Pos Tampungan --</option></select>
-          </div>
-          <div><label>Jam Tampungan</label><input type="number" id="jamTampung" min="0" step="0.5" value="0"></div>
-          <div><label>RM Tampungan</label><input type="text" id="rmTampung" readonly value="0.00"></div>
+<div class="glass rounded-2xl p-6">
+  <h3 class="text-lg font-semibold text-white mb-5 flex items-center gap-2">
+    <span class="w-8 h-8 rounded-full bg-teal-550/20 text-teal-450 flex items-center justify-center text-sm font-bold">3</span>
+    Kod Waktu & Tempat Kerja
+  </h3>
+
+  <div class="grid lg:grid-cols-2 gap-6">
+
+    <!-- KOD WAKTU KERJA -->
+    <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-5">
+      <h4 class="text-teal-400 font-semibold mb-4">
+        <i class="fas fa-clock mr-2"></i>Kod Waktu Kerja
+      </h4>
+
+      <div class="space-y-4">
+        <div>
+          <label>Kod Duty</label>
+          <select id="kodDuty">
+            <option value="">-- Pilih Kod Duty --</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Jam Kerja</label>
+          <input type="number" id="jamKerja" readonly>
+        </div>
+
+        <div>
+          <label>Jam KLM</label>
+          <input type="number" id="jamKlm" readonly>
+        </div>
+
+        <div>
+          <label>RM KLM Hari Biasa</label>
+          <input type="text" id="rmKlmHariBiasa" readonly value="0.00">
         </div>
       </div>
+    </div>
+
+    <!-- TEMPAT KERJA & TAMPUNGAN -->
+    <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-5">
+      <h4 class="text-teal-400 font-semibold mb-4">
+        <i class="fas fa-map-marker-alt mr-2"></i>Tempat Kerja & Tampungan
+      </h4>
+
+      <div class="space-y-4">
+        <div>
+          <label>Kod Tempat Kerja</label>
+          <select id="kodTempatKerja">
+            <option value="">-- Pilih Kod Tempat Kerja --</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Pos Tampungan</label>
+          <select id="posTampungan">
+            <option value="">-- Pilih Pos Tampungan --</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Jam Tampungan</label>
+          <input type="number" id="jamTampung" min="0" step="0.5" value="0">
+        </div>
+
+        <div>
+          <label>RM Tampungan</label>
+          <input type="text" id="rmTampung" readonly value="0.00">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
       <!-- 4. Hari Khas -->
       <div class="glass rounded-2xl p-6">
