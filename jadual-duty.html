@@ -388,7 +388,7 @@
   let semuaKodTempatKerja = [];
   let dutySedangEdit = null;
   let currentUser = null;
-
+  let jamKlmAsal = 0;
   // =====================================================
   // INIT
   // =====================================================
@@ -410,7 +410,8 @@
     pasangEventAnggota();
     pasangEventKodDuty();
     pasangEventPengiraanRM();
-
+    pasangEventHariKhas();
+    
     await muatAnggota();
     isiSenaraiPosTampungan();
     await muatKodDuty();
@@ -677,9 +678,30 @@
       const kod = this.value;
       const data = semuaKodDuty.find(i => normalisasi(i.unit) === normalisasi(unit) && normalisasi(i.kod) === normalisasi(kod));
       if (!data) { setValue("jamKerja",""); setValue("jamKlm",""); return; }
-      setValue("jamKerja", data.jam_kerja);
-      setValue("jamKlm", data.jam_klm);
-      kiraSemuaRM();
+jamKlmAsal = Number(data.jam_klm || 0);
+
+setValue("jamKerja", data.jam_kerja);
+
+const offday = document.getElementById("hariOffday");
+const cutiam = document.getElementById("hariCutiam");
+
+if (offday.checked) {
+
+  setValue("jamOffday", jamKlmAsal);
+  setValue("jamKlm", 0);
+
+} else if (cutiam.checked) {
+
+  setValue("jamCutiam", jamKlmAsal);
+  setValue("jamKlm", 0);
+
+} else {
+
+  setValue("jamKlm", jamKlmAsal);
+
+}
+
+kiraSemuaRM();
     });
   }
 
@@ -702,6 +724,66 @@
     });
   }
 
+  function pasangEventHariKhas() {
+
+  const offday = document.getElementById("hariOffday");
+  const cutiam = document.getElementById("hariCutiam");
+
+  if (!offday || !cutiam) return;
+
+  offday.addEventListener("change", function () {
+
+    if (this.checked) {
+
+      // Tidak boleh serentak dengan Cuti Am
+      cutiam.checked = false;
+
+      setValue("jamCutiam", 0);
+      setValue("jamOffday", jamKlmAsal);
+
+      // Pindahkan Jam KLM ke Offday
+      setValue("jamKlm", 0);
+
+    } else {
+
+      setValue("jamOffday", 0);
+
+      if (!cutiam.checked) {
+        setValue("jamKlm", jamKlmAsal);
+      }
+    }
+
+    kiraSemuaRM();
+  });
+
+  cutiam.addEventListener("change", function () {
+
+    if (this.checked) {
+
+      // Tidak boleh serentak dengan Offday
+      offday.checked = false;
+
+      setValue("jamOffday", 0);
+      setValue("jamCutiam", jamKlmAsal);
+
+      // Pindahkan Jam KLM ke Cuti Am
+      setValue("jamKlm", 0);
+
+    } else {
+
+      setValue("jamCutiam", 0);
+
+      if (!offday.checked) {
+        setValue("jamKlm", jamKlmAsal);
+      }
+    }
+
+    kiraSemuaRM();
+  });
+
+}
+  
+  
   function dapatkanAnggotaSemasa() {
     const noSkb = getValue("noSkb");
     return semuaAnggota.find(a => String(a.no_skb) === String(noSkb));
