@@ -67,11 +67,33 @@ body{
 
 .tarikh-col{
 
-    min-width:90px;
-    width:90px;
+    min-width:70px;
+    width:70px;
 
 }
 
+.sub-col{
+    width:28px;
+    min-width:28px;
+}
+
+.rk01-table th,
+.rk01-table td{
+    white-space:nowrap;
+}
+
+.rk01-table small{
+    font-size:8px;
+    display:block;
+}
+
+.anggota-head{
+    font-size:9px;
+    line-height:1.1;
+    padding:2px;
+}
+
+    
 @media print{
 
     @page{
@@ -113,6 +135,22 @@ body{
 
     }
 
+
+    .rk01-table{
+    table-layout:fixed;
+}
+
+.sub-col{
+    width:22px !important;
+}
+
+.anggota-head{
+    font-size:6px !important;
+}
+
+.tarikh-col{
+    width:55px !important;
+}
 }
 
 </style>
@@ -478,7 +516,7 @@ function janaMatrixRK01() {
         anggota => {
 
             html += `
-                <th colspan="4">
+                <th colspan="4" class="anggota-head">
 
                     ${anggota.nama}
 
@@ -507,10 +545,11 @@ function janaMatrixRK01() {
     ){
 
         html += `
-            <th>KOD</th>
-            <th>KLM</th>
-            <th>OFF</th>
-            <th>PH</th>
+<th class="sub-col">KOD</th>
+<th class="sub-col">KLM</th>
+<th class="sub-col">OFF</th>
+<th class="sub-col">PH</th>
+
         `;
 
     }
