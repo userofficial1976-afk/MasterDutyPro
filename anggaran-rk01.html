@@ -2510,12 +2510,10 @@ function binaAnggotaLaporan(){
     let senarai = dataAnggota.filter(anggota => {
 
         const unitAnggota =
-            String(anggota.unit || "")
-                .trim();
+            String(anggota.unit || "").trim();
 
         const posAnggota =
-            String(anggota.pos || "")
-                .trim();
+            String(anggota.pos || "").trim();
 
         if(
             filter.unit &&
@@ -2536,9 +2534,8 @@ function binaAnggotaLaporan(){
 
 
     /* =====================================================
-       KETUA POS
-       PAKSA UNIT + POS SENDIRI
-    ===================================================== */
+       KHAS KETUA POS
+       ===================================================== */
 
     if(rolePengguna() === "ketua_pos"){
 
@@ -2556,261 +2553,216 @@ function binaAnggotaLaporan(){
             );
 
         });
-
     }
 
 
     /* =====================================================
-       NORMALISE PANGKAT
-    ===================================================== */
+       NORMALISASI PANGKAT
+       ===================================================== */
 
-function normalisePangkat(pangkat){
+    function normalisePangkat(pangkat){
 
-    let p = String(pangkat ?? "")
-        .trim()
-        .toUpperCase()
-        .normalize("NFKC");
+        let p = String(pangkat ?? "")
+            .trim()
+            .toUpperCase()
+            .normalize("NFKC");
 
-    /*
-    =====================================================
-    BUANG SEMUA SIMBOL / RUANG
-    CONTOH:
-    L/Kpl      → LKPL
-    L / Kpl    → LKPL
-    L-Kpl      → LKPL
-    L.Kpl      → LKPL
-    L / KPL    → LKPL
-    =====================================================
-    */
+        /*
+        Buang semua aksara selain A-Z.
 
-    const compact = p.replace(/[^A-Z]/g, "");
+        Contoh:
 
-    /*
-    =====================================================
-    L/KPL
-    =====================================================
-    */
+        L/Kpl       -> LKPL
+        L / Kpl     -> LKPL
+        L-Kpl       -> LKPL
+        L.Kpl       -> LKPL
+        L / KPL     -> LKPL
+        */
 
-    if(
-        compact === "LKPL" ||
-        compact === "LKOPERAL"
-    ){
-        return "L/KPL";
+        const compact =
+            p.replace(/[^A-Z]/g, "");
+
+
+        /* L/KPL */
+
+        if(
+            compact === "LKPL" ||
+            compact === "LKOPERAL"
+        ){
+            return "L/KPL";
+        }
+
+
+        /* SJN */
+
+        if(
+            compact === "SJN" ||
+            compact === "SARJAN"
+        ){
+            return "SJN";
+        }
+
+
+        /* KPL */
+
+        if(
+            compact === "KPL" ||
+            compact === "KOPERAL"
+        ){
+            return "KPL";
+        }
+
+
+        /* KONST */
+
+        if(
+            compact === "KONST" ||
+            compact === "KONSTABEL"
+        ){
+            return "KONST";
+        }
+
+
+        /* PPB */
+
+        if(
+            compact === "PPB"
+        ){
+            return "PPB";
+        }
+
+
+        return p;
     }
 
-    /*
-    =====================================================
-    SJN
-    =====================================================
-    */
-
-    if(
-        compact === "SJN" ||
-        compact === "SARJAN"
-    ){
-        return "SJN";
-    }
-
-    /*
-    =====================================================
-    KPL
-    =====================================================
-    */
-
-    if(
-        compact === "KPL" ||
-        compact === "KOPERAL"
-    ){
-        return "KPL";
-    }
-
-    /*
-    =====================================================
-    KONST
-    =====================================================
-    */
-
-    if(
-        compact === "KONST" ||
-        compact === "KONSTABEL"
-    ){
-        return "KONST";
-    }
-
-    /*
-    =====================================================
-    PPB
-    =====================================================
-    */
-
-    if(
-        compact === "PPB"
-    ){
-        return "PPB";
-    }
-
-    /*
-    =====================================================
-    JIKA PANGKAT LAIN
-    =====================================================
-    */
-
-    return p;
-}
 
     /* =====================================================
        SUSUNAN PANGKAT
-       
-       1. SJN
-       2. KPL
-       3. L/KPL
-       4. KONST
-       5. PPB
-    ===================================================== */
+       ===================================================== */
 
     const susunanPangkat = {
+
         "SJN": 1,
+
         "KPL": 2,
+
         "L/KPL": 3,
+
         "KONST": 4,
+
         "PPB": 5
+
     };
 
 
     /* =====================================================
        SORT
-       
-       PANGKAT TERLEBIH DAHULU
-       KEMUDIAN NO ANGGOTA
-    ===================================================== */
+       ===================================================== */
 
-senarai.sort((a, b) => {
+    senarai.sort((a, b) => {
 
-    const pangkatA =
-        normalisePangkat(a.pangkat);
+        const pangkatA =
+            normalisePangkat(a.pangkat);
 
-    const pangkatB =
-        normalisePangkat(b.pangkat);
+        const pangkatB =
+            normalisePangkat(b.pangkat);
 
 
- const susunanPangkat = {
-    "SJN": 1,
-    "KPL": 2,
-    "L/KPL": 3,
-    "KONST": 4,
-    "PPB": 5
-};
+        const rankA =
+            susunanPangkat[pangkatA] ?? 99;
 
-senarai.sort((a, b) => {
+        const rankB =
+            susunanPangkat[pangkatB] ?? 99;
 
-    const pangkatA =
-        normalisePangkat(a.pangkat);
 
-    const pangkatB =
-        normalisePangkat(b.pangkat);
+        /*
+        -----------------------------------------------
+        PANGKAT BERBEZA
+        -----------------------------------------------
+        */
 
-    const rankA =
-        susunanPangkat[pangkatA] ?? 99;
+        if(rankA !== rankB){
 
-    const rankB =
-        susunanPangkat[pangkatB] ?? 99;
+            return rankA - rankB;
 
-    /*
-    =========================================
-    SUSUN MENGIKUT PANGKAT
-    =========================================
-    */
-
-    if(rankA !== rankB){
-        return rankA - rankB;
-    }
-
-    /*
-    =========================================
-    JIKA PANGKAT SAMA
-    SUSUN NO ANGGOTA
-    =========================================
-    */
-
-    const noA =
-        String(a.no_anggota || "")
-            .trim();
-
-    const noB =
-        String(b.no_anggota || "")
-            .trim();
-
-    return noA.localeCompare(
-        noB,
-        "ms",
-        {
-            numeric: true,
-            sensitivity: "base"
         }
-    );
-});
+
+
+        /*
+        -----------------------------------------------
+        PANGKAT SAMA
+        SUSUN NO ANGGOTA
+        -----------------------------------------------
+        */
+
+        const noA =
+            String(a.no_anggota || "").trim();
+
+        const noB =
+            String(b.no_anggota || "").trim();
+
+
+        return noA.localeCompare(
+            noB,
+            "ms",
+            {
+                numeric: true,
+                sensitivity: "base"
+            }
+        );
+
+    });
+
 
     /* =====================================================
-       DEBUG — WAJIB SEMAK CONSOLE
-    ===================================================== */
+       DEBUG SORT
+       ===================================================== */
 
-    console.log(
-        "================================="
+    console.log("=================================");
+    console.log("SORT PANGKAT RK01");
+    console.log("=================================");
+
+    console.table(
+        senarai.map((anggota, index) => {
+
+            const pangkatAsal =
+                String(anggota.pangkat || "").trim();
+
+            const pangkatNormal =
+                normalisePangkat(anggota.pangkat);
+
+            return {
+
+                Bil: index + 1,
+
+                "Pangkat Asal":
+                    pangkatAsal,
+
+                "Pangkat Normal":
+                    pangkatNormal,
+
+                "Rank":
+                    susunanPangkat[pangkatNormal] ?? 99,
+
+                "No Anggota":
+                    anggota.no_anggota,
+
+                "Nama":
+                    anggota.nama,
+
+                "Unit":
+                    anggota.unit,
+
+                "Pos":
+                    anggota.pos
+
+            };
+
+        })
     );
 
-    console.log(
-        "SORT PANGKAT RK01"
-    );
 
-console.table(
-    senarai.map((anggota, index) => {
-
-        const asal =
-            String(
-                anggota.pangkat || ""
-            ).trim();
-
-        const normal =
-            normalisePangkat(
-                anggota.pangkat
-            );
-
-        const susunan = {
-            "SJN": 1,
-            "KPL": 2,
-            "L/KPL": 3,
-            "KONST": 4,
-            "PPB": 5
-        };
-
-        return {
-
-            Bil: index + 1,
-
-            "PANGKAT ASAL":
-                asal,
-
-            "PANGKAT NORMAL":
-                normal,
-
-            "RANK":
-                susunan[normal] ?? 99,
-
-            "NO ANGGOTA":
-                anggota.no_anggota,
-
-            "NAMA":
-                anggota.nama
-
-        };
-
-    })
-);
-
-    console.log(
-        "================================="
-    );
-
+    console.log("ANGGOTA SELEPAS SORT:", senarai);
 
     return senarai;
 }
