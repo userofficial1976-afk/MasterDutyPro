@@ -1,0 +1,125 @@
+<html>
+
+<body class="text-slate-200">
+
+<div class="flex min-h-screen">
+
+    <!-- SIDEBAR RK02 -->
+    <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto no-print">
+
+        <!-- COPY SIDEBAR RK02 BULAT-BULAT -->
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 lg:ml-72">
+
+        <!-- HEADER RK02 -->
+        <header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4 no-print">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="text-xl font-bold text-white">
+                        Laporan Wilayah
+                    </h2>
+
+                    <p class="text-sm text-slate-400">
+                        Dashboard Rumusan Wilayah Terengganu
+                    </p>
+
+                </div>
+
+                <div class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
+
+                    <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
+
+                    System Online
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- CONTENT -->
+        <div class="p-6 space-y-6">
+
+            <!-- FILTER -->
+
+            <div class="glass rounded-2xl p-5">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 items-end">
+
+                    <div>
+                        <label>Unit</label>
+                        <select id="filterUnit"></select>
+                    </div>
+
+                    <div>
+                        <label>Pos</label>
+                        <select id="filterPos"></select>
+                    </div>
+
+                    <div>
+                        <label>Bulan</label>
+                        <select id="filterBulan"></select>
+                    </div>
+
+                    <div>
+                        <label>Tahun</label>
+                        <select id="filterTahun"></select>
+                    </div>
+
+                    <div>
+                        <button
+                          class="w-full bg-teal-600 hover:bg-teal-500 rounded-xl py-2 font-semibold"
+                        >
+                            Jana Laporan
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- KAD RINGKASAN -->
+
+            <div id="ringkasanCards">
+
+            </div>
+
+            <!-- KAD KLM -->
+
+            <div id="klmCards">
+
+            </div>
+
+            <!-- RUMUSAN UNIT -->
+
+            <div id="rumusanUnit">
+
+            </div>
+
+            <!-- RUMUSAN POS -->
+
+            <div id="rumusanPos">
+
+            </div>
+
+            <!-- TOP 10 -->
+
+            <div id="top10">
+
+            </div>
+
+        </div>
+
+    </main>
+
+</html>
+
+</div>
+
+</body>
