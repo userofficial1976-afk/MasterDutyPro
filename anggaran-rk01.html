@@ -20,6 +20,108 @@
 
 <style>
 
+/* =====================================================
+   LOCK COLUMN RK01
+===================================================== */
+
+/* Jadikan lebar table benar-benar dikawal */
+.rk01-table{
+    table-layout: fixed;
+    width: max-content;
+    min-width: 100%;
+}
+
+/* Kolum Tarikh/Hari */
+.rk01-table .tarikh-hari-col{
+    width: 75px;
+    min-width: 75px;
+    max-width: 75px;
+}
+
+/* Setiap kolum anggota */
+.rk01-table .sub-col,
+.rk01-table td.kod-cell,
+.rk01-table td.klm-cell,
+.rk01-table td.off-cell,
+.rk01-table td.ph-cell{
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+}
+
+/* Header anggota */
+.anggota-head{
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+
+    overflow:hidden;
+}
+
+/* Nama anggota di page */
+.nama-anggota-page{
+    display:block;
+
+    width:100%;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+    line-height:1.1;
+}
+
+
+/* =====================================================
+   PRINT / PDF
+   NAMA PENUH
+===================================================== */
+
+@media print{
+
+    .rk01-table{
+        table-layout:fixed !important;
+        width:100% !important;
+        min-width:100% !important;
+    }
+
+    .rk01-table .tarikh-hari-col{
+        width:45px !important;
+        min-width:45px !important;
+        max-width:45px !important;
+    }
+
+    .rk01-table .sub-col,
+    .rk01-table td.kod-cell,
+    .rk01-table td.klm-cell,
+    .rk01-table td.off-cell,
+    .rk01-table td.ph-cell{
+        width:18px !important;
+        min-width:18px !important;
+        max-width:18px !important;
+    }
+
+    .anggota-head{
+        width:auto !important;
+        min-width:0 !important;
+        max-width:none !important;
+
+        overflow:visible !important;
+    }
+
+    /* PDF → nama penuh */
+    .nama-anggota-page{
+        white-space:normal !important;
+        overflow:visible !important;
+        text-overflow:clip !important;
+        word-break:normal !important;
+        overflow-wrap:normal !important;
+    }
+
+}
+
+
+    
 body{
     background:#0b1220;
     font-family:'Segoe UI',sans-serif;
@@ -2784,9 +2886,12 @@ function janaMatrixRK01() {
                         ${noAnggota}
                     </div>
 
-                    <div>
-                        ${nama}
-                    </div>
+        <div
+            class="nama-anggota-page"
+            title="${nama}"
+        >
+            ${nama}
+        </div>
 
                 </th>
 
