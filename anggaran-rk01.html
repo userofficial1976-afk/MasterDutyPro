@@ -2566,83 +2566,94 @@ function binaAnggotaLaporan(){
 
 function normalisePangkat(pangkat){
 
-    let p = String(pangkat || "")
+    let p = String(pangkat ?? "")
         .trim()
-        .toUpperCase();
+        .toUpperCase()
+        .normalize("NFKC");
 
-    /* =========================================
-       BUANG TITIK
-    ========================================= */
+    /*
+    =====================================================
+    BUANG SEMUA SIMBOL / RUANG
+    CONTOH:
+    L/Kpl      → LKPL
+    L / Kpl    → LKPL
+    L-Kpl      → LKPL
+    L.Kpl      → LKPL
+    L / KPL    → LKPL
+    =====================================================
+    */
 
-    p = p.replace(/\./g, "");
+    const compact = p.replace(/[^A-Z]/g, "");
 
-    /* =========================================
-       L/KPL
-       
-       TERIMA:
-       L/KPL
-       L/Kpl
-       L / Kpl
-       L/ KPL
-       L /KPL
-       LKPL
-    ========================================= */
+    /*
+    =====================================================
+    L/KPL
+    =====================================================
+    */
 
     if(
-        /^L\s*\/\s*KPL$/i.test(p) ||
-        /^L\s*KPL$/i.test(p) ||
-        /^L\s*\/\s*KOPERAL$/i.test(p)
+        compact === "LKPL" ||
+        compact === "LKOPERAL"
     ){
         return "L/KPL";
     }
 
-
-    /* =========================================
-       SJN
-    ========================================= */
+    /*
+    =====================================================
+    SJN
+    =====================================================
+    */
 
     if(
-        p === "SJN" ||
-        p === "SARJAN"
+        compact === "SJN" ||
+        compact === "SARJAN"
     ){
         return "SJN";
     }
 
-
-    /* =========================================
-       KPL
-    ========================================= */
+    /*
+    =====================================================
+    KPL
+    =====================================================
+    */
 
     if(
-        p === "KPL" ||
-        p === "KOPERAL"
+        compact === "KPL" ||
+        compact === "KOPERAL"
     ){
         return "KPL";
     }
 
-
-    /* =========================================
-       KONST
-    ========================================= */
+    /*
+    =====================================================
+    KONST
+    =====================================================
+    */
 
     if(
-        p === "KONST" ||
-        p === "KONSTABEL"
+        compact === "KONST" ||
+        compact === "KONSTABEL"
     ){
         return "KONST";
     }
 
-
-    /* =========================================
-       PPB
-    ========================================= */
+    /*
+    =====================================================
+    PPB
+    =====================================================
+    */
 
     if(
-        p === "PPB"
+        compact === "PPB"
     ){
         return "PPB";
     }
 
+    /*
+    =====================================================
+    JIKA PANGKAT LAIN
+    =====================================================
+    */
 
     return p;
 }
@@ -2682,14 +2693,21 @@ senarai.sort((a, b) => {
         normalisePangkat(b.pangkat);
 
 
-    const susunanPangkat = {
-        "SJN": 1,
-        "KPL": 2,
-        "L/KPL": 3,
-        "KONST": 4,
-        "PPB": 5
-    };
+ const susunanPangkat = {
+    "SJN": 1,
+    "KPL": 2,
+    "L/KPL": 3,
+    "KONST": 4,
+    "PPB": 5
+};
 
+senarai.sort((a, b) => {
+
+    const pangkatA =
+        normalisePangkat(a.pangkat);
+
+    const pangkatB =
+        normalisePangkat(b.pangkat);
 
     const rankA =
         susunanPangkat[pangkatA] ?? 99;
@@ -2697,34 +2715,30 @@ senarai.sort((a, b) => {
     const rankB =
         susunanPangkat[pangkatB] ?? 99;
 
-
-    /* =========================================
-       PANGKAT
-    ========================================= */
+    /*
+    =========================================
+    SUSUN MENGIKUT PANGKAT
+    =========================================
+    */
 
     if(rankA !== rankB){
-
         return rankA - rankB;
-
     }
 
-
-    /* =========================================
-       NO ANGGOTA
-       JIKA PANGKAT SAMA
-    ========================================= */
+    /*
+    =========================================
+    JIKA PANGKAT SAMA
+    SUSUN NO ANGGOTA
+    =========================================
+    */
 
     const noA =
-        String(
-            a.no_anggota || ""
-        ).trim();
-
+        String(a.no_anggota || "")
+            .trim();
 
     const noB =
-        String(
-            b.no_anggota || ""
-        ).trim();
-
+        String(b.no_anggota || "")
+            .trim();
 
     return noA.localeCompare(
         noB,
@@ -2734,7 +2748,6 @@ senarai.sort((a, b) => {
             sensitivity: "base"
         }
     );
-
 });
 
     /* =====================================================
