@@ -1655,20 +1655,16 @@ function binaSenaraiPos(resetPos = false){
 
 
 /* =====================================================
-   KAWAL FILTER ROLE
+   KAWAL FILTER MENGIKUT ROLE
 ===================================================== */
 
 function kawalFilterMengikutPeranan(){
 
     const filterUnit =
-        document.getElementById(
-            "filterUnit"
-        );
+        document.getElementById("filterUnit");
 
     const filterPos =
-        document.getElementById(
-            "filterPos"
-        );
+        document.getElementById("filterPos");
 
 
     if(!filterUnit || !filterPos){
@@ -1681,20 +1677,26 @@ function kawalFilterMengikutPeranan(){
 
 
     console.log(
+        "================================="
+    );
+
+    console.log(
         "ROLE RK01:",
         role
     );
-
 
     console.log(
         "UNIT USER:",
         unitPengguna()
     );
 
-
     console.log(
         "POS USER:",
         posPengguna()
+    );
+
+    console.log(
+        "================================="
     );
 
 
@@ -1707,19 +1709,11 @@ function kawalFilterMengikutPeranan(){
 
     if(role === "admin"){
 
-        filterUnit.disabled =
-            false;
+        filterUnit.disabled = false;
+        filterPos.disabled = false;
 
-        filterPos.disabled =
-            false;
-
-        filterUnit.classList.remove(
-            "opacity-60"
-        );
-
-        filterPos.classList.remove(
-            "opacity-60"
-        );
+        filterUnit.classList.remove("opacity-60");
+        filterPos.classList.remove("opacity-60");
 
         return;
     }
@@ -1730,33 +1724,39 @@ function kawalFilterMengikutPeranan(){
 
        UNIT → TERKUNCI
        POS  → BOLEH PILIH
+       
+       PENTING:
+       POS TIDAK DIISI DENGAN POS USER
+       kerana Ketua Unit boleh pilih:
+       -- Semua Pos --
+       atau Pos tertentu
     ================================================= */
 
-   if(role === "ketua_unit"){
+    if(role === "ketua_unit"){
 
-    filterUnit.value =
-        unitPengguna();
-
-    filterUnit.disabled =
-        true;
+        const unitUser =
+            unitPengguna();
 
 
-    /* POS MESTI BOLEH PILIH */
+        /* UNIT */
 
-    filterPos.disabled =
-        false;
+        if(unitUser){
 
-    filterPos.classList.remove(
-        "opacity-60"
-    );
+            filterUnit.value =
+                unitUser;
 
-    return;
-}
+        }
 
 
-        /* =============================================
-           POS KETUA UNIT MESTI BOLEH PILIH
-        ============================================= */
+        filterUnit.disabled =
+            true;
+
+        filterUnit.classList.add(
+            "opacity-60"
+        );
+
+
+        /* POS MESTI BOLEH PILIH */
 
         filterPos.disabled =
             false;
@@ -1826,6 +1826,9 @@ function kawalFilterMengikutPeranan(){
 
     /* =================================================
        ROLE LAIN
+
+       UNIT → TERKUNCI jika ada
+       POS  → TERKUNCI jika ada
     ================================================= */
 
     const unitUser =
