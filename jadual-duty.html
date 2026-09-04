@@ -884,16 +884,25 @@ jam_klm: Number(getValue("jamKlm") || 0),
         jam_offday_bertugas: Number(getValue("jamOffday") || 0),
         hari_cutiam_bertugas: (hariCutiam && hariCutiam.checked) ? 1 : 0,
         jam_cutiam_bertugas: Number(getValue("jamCutiam") || 0),
-        rm_klm_hari_biasa: Number(getValue("rmKlmHariBiasa") || 0),
-        rm_klm_tampungan: Number(getValue("rmTampung") || 0),
-        jam_klm_off: Number(getValue("klmOffday") || 0),
-        jam_klm_wajib: Number(getValue("klmWajib") || 0),
-        jam_klm_mc: Number(getValue("klmMc") || 0),
-        jam_klm_cuti_tahun: Number(getValue("klmCutiTahun") || 0),
-        jam_klm_cuti_ehsan: Number(getValue("klmCutiEhsan") || 0),
-        jam_klm_kursus: Number(getValue("klmKursus") || 0),
-        jam_klm_cuti_ganti: Number(getValue("klmCutiGanti") || 0),
-        jam_klm_tambahan: Number(getValue("klmKawalanTambahan") || 0),
+rm_klm_hari_biasa: Number(getValue("rmKlmHariBiasa") || 0),
+rm_klm_tampungan: Number(getValue("rmTampung") || 0),
+
+rm_hari_offday: Number(getValue("rmHariOffday") || 0),
+rm_jam_offday: Number(getValue("rmJamOffday") || 0),
+jumlah_offday: Number(getValue("jumlahOffday") || 0),
+
+rm_hari_cutiam: Number(getValue("rmHariCutiam") || 0),
+rm_jam_cutiam: Number(getValue("rmJamCutiam") || 0),
+jumlah_cutiam: Number(getValue("jumlahCutiam") || 0),
+
+jam_klm_off: Number(getValue("klmOffday") || 0),
+jam_klm_wajib: Number(getValue("klmWajib") || 0),
+jam_klm_mc: Number(getValue("klmMc") || 0),
+jam_klm_cuti_tahun: Number(getValue("klmCutiTahun") || 0),
+jam_klm_cuti_ehsan: Number(getValue("klmCutiEhsan") || 0),
+jam_klm_kursus: Number(getValue("klmKursus") || 0),
+jam_klm_cuti_ganti: Number(getValue("klmCutiGanti") || 0),
+jam_klm_tambahan: Number(getValue("klmKawalanTambahan") || 0),
         dikemaskini_oleh: currentUser?.name || "Sistem",
         dikemaskini_pada: new Date().toISOString()
       };
@@ -1020,6 +1029,16 @@ jam_klm: Number(getValue("jamKlm") || 0),
         setValue("jamTampung", duty.jam_tampungan || 0);
         setValue("jamOffday", duty.jam_offday_bertugas || 0);
         setValue("jamCutiam", duty.jam_cutiam_bertugas || 0);
+        
+        setValue("rmHariOffday", duty.rm_hari_offday || 0);
+        setValue("rmJamOffday", duty.rm_jam_offday || 0);
+        setValue("jumlahOffday", duty.jumlah_offday || 0);
+
+        setValue("rmHariCutiam", duty.rm_hari_cutiam || 0);
+        setValue("rmJamCutiam", duty.rm_jam_cutiam || 0);
+        setValue("jumlahCutiam", duty.jumlah_cutiam || 0);
+
+        
         setValue("klmOffday", duty.jam_klm_off || 0);
         setValue("klmWajib", duty.jam_klm_wajib || 0);
         setValue("klmMc", duty.jam_klm_mc || 0);
