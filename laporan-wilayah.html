@@ -8,6 +8,104 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+
+let currentUser = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    currentUser = bacaPengguna();
+
+    if (!currentUser) {
+
+        window.location.href = "login.html";
+        return;
+
+    }
+
+    paparMaklumatPengguna();
+
+    kawalMenuMengikutPeranan();
+
+});
+
+
+function bacaPengguna() {
+
+    try {
+
+        const data =
+            localStorage.getItem(
+                "mdp_user"
+            );
+
+        return data
+            ? JSON.parse(data)
+            : null;
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+function paparMaklumatPengguna() {
+
+    if (!currentUser) return;
+
+    document.getElementById(
+        "userName"
+    ).textContent =
+        currentUser.name ||
+        currentUser.noSkb ||
+        "-";
+
+    document.getElementById(
+        "userJawatan"
+    ).textContent =
+        currentUser.jawatan ||
+        "-";
+
+}
+
+function kawalMenuMengikutPeranan() {
+
+    if (
+        !currentUser ||
+        currentUser.isAdmin
+    ) return;
+
+    [
+        "menuDashboard",
+        "menuAnggota",
+        "menuTetapan"
+    ].forEach(id => {
+
+        const el =
+            document.getElementById(id);
+
+        if (el) {
+            el.style.display = "none";
+        }
+
+    });
+
+}
+
+function logKeluar() {
+
+    localStorage.removeItem(
+        "mdp_user"
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+``
+    
+    
     tailwind.config = {
       theme: {
         extend: {
