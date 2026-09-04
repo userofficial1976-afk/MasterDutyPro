@@ -2382,45 +2382,47 @@ function nilaiKLM(
    OFF
 ===================================================== */
 
-function nilaiOFF(
-    rekod
-){
+function nilaiOFF(rekod) {
+    if (!rekod) return "";
 
-    if(!rekod){
+    const hari = String(rekod.hari_offday_bertugas || "").trim();
+    const jam = String(rekod.jam_offday_bertugas || "").trim();
 
-        return "";
+    let html = "";
+
+    if (hari) {
+        html += `<div>${escapeHtml(hari)}</div>`;
     }
 
+    if (jam) {
+        html += `<div>${escapeHtml(jam)}J</div>`;
+    }
 
-    return formatHariJam(
-        rekod.hari_offday_bertugas,
-        rekod.jam_offday_bertugas
-    );
-
+    return html;
 }
-
 
 /* =====================================================
    PH / CUTI AM
 ===================================================== */
 
-function nilaiPH(
-    rekod
-){
+function nilaiPH(rekod) {
+    if (!rekod) return "";
 
-    if(!rekod){
+    const hari = String(rekod.hari_cutiam_bertugas || "").trim();
+    const jam = String(rekod.jam_cutiam_bertugas || "").trim();
 
-        return "";
+    let html = "";
+
+    if (hari) {
+        html += `<div>${escapeHtml(hari)}</div>`;
     }
 
+    if (jam) {
+        html += `<div>${escapeHtml(jam)}J</div>`;
+    }
 
-    return formatHariJam(
-        rekod.hari_cutiam_bertugas,
-        rekod.jam_cutiam_bertugas
-    );
-
+    return html;
 }
-
 
 /* =====================================================
    JANA MATRIX RK01
@@ -2629,7 +2631,7 @@ function janaMatrixRK01() {
                 <tr>
 
                     <td class="tarikh-hari-col">
-
+                    
                         <div>
                             ${item.tarikh}
                         </div>
@@ -2646,24 +2648,37 @@ function janaMatrixRK01() {
                8 ANGGOTA
             ========================================= */
 
-            anggota8.forEach(
-                anggota => {
+        anggota8.forEach(anggota => {
 
-                    /* ---------------------------------
-                       SLOT ANGGOTA KOSONG
-                    --------------------------------- */
+            const rekod = rekodAnggota(
+                anggota.no_skb,
+                item.iso
+            );
 
-                    if (!anggota.no_skb) {
+            html += `
+                <td class="kod-cell">
+                    ${nilaiKodDuty(rekod)}
+                </td>
 
-                        html += `
-                            <td class="kod-cell"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        `;
+                <td class="klm-cell">
+                    ${nilaiKLM(rekod)}
+                </td>
 
-                        return;
-                    }
+                <td class="off-cell">
+                    ${nilaiOFF(rekod)}
+                </td>
+
+                <td class="ph-cell">
+                    ${nilaiPH(rekod)}
+                </td>
+            `;
+        });
+
+        html += `
+            </tr>
+        `;
+    }
+);
 
 
                     /* ---------------------------------
@@ -3396,7 +3411,25 @@ document
         }
     );
 
+.kod-cell,
+.off-cell,
+.ph-cell {
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.1;
+    vertical-align: middle;
+    text-align: center;
+}
 
+.kod-cell div,
+.off-cell div,
+.ph-cell div {
+    white-space: normal;
+    line-height: 1.1;
+}
+
+    
 </script>
 
 </body>
