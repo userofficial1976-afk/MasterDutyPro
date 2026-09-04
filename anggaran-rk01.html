@@ -872,16 +872,58 @@ function namaPengguna(){
 
 /* =====================================================
    ROLE
+   VERSI ROBUST
+   - ketua unit
+   - ketua_unit
+   - Ketua Unit
+   - KETUA_UNIT
+   semua akan dikesan sebagai ketua_unit
 ===================================================== */
 
 function rolePengguna(){
 
-    const nilai = String(
+    let nilai = String(
         currentUser?.role ||
         currentUser?.peranan ||
+        currentUser?.roles ||
         ""
-    ).trim().toLowerCase();
+    )
+    .trim()
+    .toLowerCase();
 
+
+    /* ================================================
+       NORMALISE ROLE
+
+       ketua_unit
+       ketua-unit
+       ketua unit
+
+       → ketua unit
+    ================================================ */
+
+    nilai = nilai
+        .replace(/[_-]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+
+    console.log(
+        "ROLE RAW RK01:",
+        currentUser?.role ||
+        currentUser?.peranan ||
+        currentUser?.roles
+    );
+
+    console.log(
+        "ROLE NORMALISE RK01:",
+        nilai
+    );
+
+
+    /* ================================================
+       ADMIN
+    ================================================ */
 
     if(
         currentUser?.isAdmin === true ||
@@ -891,28 +933,45 @@ function rolePengguna(){
     ){
 
         return "admin";
+
     }
 
 
+    /* ================================================
+       KETUA UNIT
+    ================================================ */
+
     if(
+        nilai === "ketua unit" ||
         nilai.includes("ketua unit")
     ){
 
         return "ketua_unit";
+
     }
 
 
+    /* ================================================
+       KETUA POS
+    ================================================ */
+
     if(
+        nilai === "ketua pos" ||
         nilai.includes("ketua pos")
     ){
 
         return "ketua_pos";
+
     }
 
 
-    return "lain";
-}
+    /* ================================================
+       ROLE LAIN
+    ================================================ */
 
+    return "lain";
+
+}
 
 /* =====================================================
    UNIT USER
@@ -1673,28 +1732,26 @@ function kawalFilterMengikutPeranan(){
        POS  → BOLEH PILIH
     ================================================= */
 
-    if(role === "ketua_unit"){
+   if(role === "ketua_unit"){
 
-        const unitUser =
-            unitPengguna();
+    filterUnit.value =
+        unitPengguna();
 
-
-        /* UNIT KETUA UNIT */
-
-        if(unitUser){
-
-            filterUnit.value =
-                unitUser;
-
-        }
+    filterUnit.disabled =
+        true;
 
 
-        filterUnit.disabled =
-            true;
+    /* POS MESTI BOLEH PILIH */
 
-        filterUnit.classList.add(
-            "opacity-60"
-        );
+    filterPos.disabled =
+        false;
+
+    filterPos.classList.remove(
+        "opacity-60"
+    );
+
+    return;
+}
 
 
         /* =============================================
