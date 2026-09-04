@@ -2565,24 +2565,48 @@ function binaAnggotaLaporan(){
     }
 
 
-    senarai.sort(
-        (a,b) =>
-            String(
-                a.nama || ""
-            )
-            .localeCompare(
-                String(
-                    b.nama || ""
-                ),
-                "ms"
-            )
+senarai.sort((a, b) => {
+
+    const susunanPangkat = {
+        "SJN": 1,
+        "KPL": 2,
+        "L/KPL": 3,
+        "KONST": 4,
+        "PPB": 5
+    };
+
+    const pangkatA = String(a.pangkat || "")
+        .trim()
+        .toUpperCase();
+
+    const pangkatB = String(b.pangkat || "")
+        .trim()
+        .toUpperCase();
+
+    const rankA = susunanPangkat[pangkatA] ?? 99;
+    const rankB = susunanPangkat[pangkatB] ?? 99;
+
+    // Susun ikut pangkat dahulu
+    if(rankA !== rankB){
+        return rankA - rankB;
+    }
+
+    // Jika pangkat sama, susun ikut No. Anggota
+    const noA = String(a.no_anggota || "")
+        .trim();
+
+    const noB = String(b.no_anggota || "")
+        .trim();
+
+    return noA.localeCompare(
+        noB,
+        "ms",
+        {
+            numeric: true,
+            sensitivity: "base"
+        }
     );
-
-
-    return senarai;
-
-}
-
+});
 
 /* =====================================================
    DAPATKAN REKOD ANGGOTA
