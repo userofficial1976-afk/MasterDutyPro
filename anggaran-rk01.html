@@ -2406,16 +2406,18 @@ function nilaiOFF(rekod) {
     if (!rekod) return "";
 
     const hari = String(rekod.hari_offday_bertugas || "").trim();
-    const jam = String(rekod.jam_offday_bertugas || "").trim();
+    const jam = nombor(rekod.jam_offday_bertugas);
 
     let html = "";
 
-    if (hari) {
-        html += `<div>${escapeHtml(hari)}</div>`;
+    // Hari hanya papar jika bukan 0
+    if (hari && nombor(hari.replace(/[^\d.-]/g, "")) !== 0) {
+        html += `<div>${escapeHtml(hari)}Hari</div>`;
     }
 
-    if (jam) {
-        html += `<div>${escapeHtml(jam)}J</div>`;
+    // Jam hanya papar jika bukan 0
+    if (jam !== 0) {
+        html += `<div>${formatNombor(jam)}Jam</div>`;
     }
 
     return html;
@@ -2429,16 +2431,18 @@ function nilaiPH(rekod) {
     if (!rekod) return "";
 
     const hari = String(rekod.hari_cutiam_bertugas || "").trim();
-    const jam = String(rekod.jam_cutiam_bertugas || "").trim();
+    const jam = nombor(rekod.jam_cutiam_bertugas);
 
     let html = "";
 
-    if (hari) {
-        html += `<div>${escapeHtml(hari)}</div>`;
+    // Hari hanya papar jika bukan 0
+    if (hari && nombor(hari.replace(/[^\d.-]/g, "")) !== 0) {
+        html += `<div>${escapeHtml(hari)}Hari</div>`;
     }
 
-    if (jam) {
-        html += `<div>${escapeHtml(jam)}J</div>`;
+    // Jam hanya papar jika bukan 0
+    if (jam !== 0) {
+        html += `<div>${formatNombor(jam)}Jam</div>`;
     }
 
     return html;
