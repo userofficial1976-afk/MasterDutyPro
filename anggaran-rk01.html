@@ -1342,9 +1342,15 @@ function binaSenaraiUnit(){
 
 /* =====================================================
    BINA POS
+
+   resetPos = true
+   → bila UNIT berubah, POS kembali -- Semua Pos --
+
+   resetPos = false
+   → bila tekan JANA, kekalkan POS yang dipilih
 ===================================================== */
 
-function binaSenaraiPos(){
+function binaSenaraiPos(resetPos = false){
 
     const selectUnit =
         document.getElementById(
@@ -1360,7 +1366,6 @@ function binaSenaraiPos(){
         !selectUnit ||
         !selectPos
     ){
-
         return;
     }
 
@@ -1371,13 +1376,20 @@ function binaSenaraiPos(){
     const unit =
         selectUnit.value;
 
+    /* Simpan POS yang sedang dipilih */
+    const posSebelum =
+        selectPos.value;
+
+
+    /* =================================================
+       DAPATKAN DATA POS MENGIKUT UNIT
+    ================================================= */
 
     let data =
         dataAnggota.filter(
             a => {
 
                 if(!unit){
-
                     return true;
                 }
 
@@ -1407,8 +1419,11 @@ function binaSenaraiPos(){
     posList.sort();
 
 
-    selectPos.innerHTML =
-        "";
+    /* =================================================
+       BINA SEMULA DROPDOWN POS
+    ================================================= */
+
+    selectPos.innerHTML = "";
 
 
     const semua =
@@ -1448,6 +1463,46 @@ function binaSenaraiPos(){
     );
 
 
+    /* =================================================
+       JIKA UNIT BERUBAH
+       → POS RESET KE SEMUA POS
+    ================================================= */
+
+    if(resetPos){
+
+        selectPos.value = "";
+
+    }
+    else{
+
+        /* =================================================
+           CUBA KEKALKAN POS SEBELUMNYA
+        ================================================= */
+
+        const posMasihAda =
+            [...selectPos.options]
+                .some(
+                    option =>
+                        option.value ===
+                        posSebelum
+                );
+
+
+        if(posSebelum && posMasihAda){
+
+            selectPos.value =
+                posSebelum;
+
+        }
+        else{
+
+            selectPos.value = "";
+
+        }
+
+    }
+
+
     /* ================================================
        KETUA POS
     ================================================= */
@@ -1464,7 +1519,8 @@ function binaSenaraiPos(){
                 [...selectPos.options]
                     .some(
                         o =>
-                            o.value === posUser
+                            o.value ===
+                            posUser
                     );
 
 
@@ -1503,6 +1559,7 @@ function binaSenaraiPos(){
 
 
         return;
+
     }
 
 
@@ -1520,6 +1577,7 @@ function binaSenaraiPos(){
         );
 
         return;
+
     }
 
 
@@ -1647,6 +1705,8 @@ function kawalFilterMengikutPeranan(){
 
 /* =====================================================
    EVENT UNIT
+   BILA UNIT BERUBAH:
+   → POS RESET KE -- Semua Pos --
 ===================================================== */
 
 document
@@ -1655,24 +1715,38 @@ document
         "change",
         function(){
 
-            binaSenaraiPos();
-
             const role =
                 rolePengguna();
 
+
+            /* =========================================
+               KETUA POS
+               UNIT TIDAK BOLEH DIUBAH
+            ========================================= */
 
             if(role === "ketua_pos"){
 
                 this.value =
                     unitPengguna();
 
-                binaSenaraiPos();
+                binaSenaraiPos(false);
+
+                return;
 
             }
 
+
+            /* =========================================
+               ADMIN / KETUA UNIT
+
+               UNIT berubah
+               → POS kembali -- Semua Pos --
+            ========================================= */
+
+            binaSenaraiPos(true);
+
         }
     );
-
 
 /* =====================================================
    ESCAPE HTML
@@ -3378,7 +3452,7 @@ async function janaLaporanRK01(){
            PASTIKAN ROLE FILTER BETUL
         ============================================= */
 
-        binaSenaraiPos();
+        binaSenaraiPos(false);
 
         kawalFilterMengikutPeranan();
 
