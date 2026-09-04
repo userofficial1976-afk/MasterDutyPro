@@ -2300,22 +2300,17 @@ function normaliseTarikh(
    KOD UNTUK RK01
 ===================================================== */
 
-function nilaiKodDuty(
-    rekod
-){
+function nilaiKodDuty(rekod) {
+    if (!rekod) return "";
 
-    if(!rekod){
+    const kodDuty = String(rekod.kod_duty || "").trim();
+    const kodWaktu = String(rekod.kod_waktu_kerja || "").trim();
 
-        return "";
+    if (kodDuty && kodWaktu) {
+        return `${kodDuty} / ${kodWaktu}`;
     }
 
-
-    return String(
-        rekod.kod_waktu_kerja ||
-        rekod.kod_duty ||
-        ""
-    ).trim();
-
+    return kodDuty || kodWaktu || "";
 }
 
 
@@ -2399,136 +2394,85 @@ function nilaiPH(
 /* =====================================================
    JANA MATRIX RK01
 ===================================================== */
+function janaMatrixRK01() {
 
-function janaMatrixRK01(){
+    const table = document.getElementById("rk01Table");
 
-    const table =
-        document.getElementById(
-            "rk01Table"
-        );
+    if (!table) return;
 
+    /*
+    =====================================================
+    SENTIASA 8 SLOT ANGGOTA
+    =====================================================
+    */
 
-    if(!table){
+    const anggota8 = [];
 
-        return;
+    for (let i = 0; i < 8; i++) {
+
+        if (anggotaLaporan[i]) {
+
+            anggota8.push(anggotaLaporan[i]);
+
+        } else {
+
+            anggota8.push({
+                no_skb: "",
+                no_anggota: "",
+                nama: ""
+            });
+
+        }
     }
 
 
-    const tahun =
-        parseInt(
-            document.getElementById(
-                "filterTahun"
-            ).value
-        );
+    /*
+    =====================================================
+    HEADER
+    =====================================================
+    */
 
-
-    const bulanNama =
-        document.getElementById(
-            "filterBulan"
-        ).value;
-
-
-    const bulan =
-        nomborBulan(
-            bulanNama
-        );
-
-
-    if(
-        !tahun ||
-        !bulan
-    ){
-
-        table.innerHTML =
-            `<tbody>
-                <tr>
-                    <td>
-                        Sila pilih bulan dan tahun.
-                    </td>
-                </tr>
-             </tbody>`;
-
-        return;
-    }
-
-
-    const tarikhList =
-        binaTarikhBulanan(
-            tahun,
-            bulan
-        );
-
-
-    const anggotaList =
-        anggotaLaporan;
-
-
-    if(!anggotaList.length){
-
-        table.innerHTML =
-            `<tbody>
-                <tr>
-                    <td>
-                        TIADA ANGGOTA UNTUK FILTER DIPILIH
-                    </td>
-                </tr>
-             </tbody>`;
-
-        return;
-    }
-
-
-    let html = "";
-
-
-    /* =================================================
-       HEADER
-    ================================================= */
-
-    html += `
+    let html = `
         <thead>
 
             <tr>
 
-                <th rowspan="2"
-                    class="tarikh-col">
+                <th rowspan="2" class="tarikh-col">
+                    TARIKH
+                </th>
 
-                    TARIKH / HARI
-
+                <th rowspan="2" class="hari-col">
+                    HARI
                 </th>
     `;
 
 
-    anggotaList.forEach(
-        anggota => {
+    /*
+    =====================================================
+    8 ANGGOTA
+    =====================================================
+    */
 
-            html += `
+    anggota8.forEach((anggota, index) => {
 
-                <th
-                    colspan="4"
-                    class="anggota-head"
-                >
+        const nama = anggota.nama || "";
+        const noAnggota = anggota.no_anggota || "";
 
-                    ${escapeHtml(
-                        anggota.nama || "-"
-                    )}
+        html += `
+            <th colspan="4" class="anggota-header">
 
-                    <br>
+                <div class="anggota-no">
+                    ${noAnggota}
+                </div>
 
-                    <small>
-                        ${escapeHtml(
-                            anggota.no_anggota ||
-                            anggota.no_skb ||
-                            "-"
-                        )}
-                    </small>
+                <div class="anggota-nama">
+                    ${nama}
+                </div>
 
-                </th>
+            </th>
+        `;
 
-            `;
-
-        }
-    );
+    });
 
 
     html += `
@@ -2538,29 +2482,22 @@ function janaMatrixRK01(){
     `;
 
 
-    anggotaList.forEach(
-        () => {
+    /*
+    =====================================================
+    SUB HEADER SETIAP ANGGOTA
+    =====================================================
+    */
 
-            html += `
-                <th class="sub-col">
-                    KOD
-                </th>
+    anggota8.forEach(() => {
 
-                <th class="sub-col">
-                    KLM
-                </th>
+        html += `
+            <th>KOD</th>
+            <th>KLM</th>
+            <th>OFF</th>
+            <th>PH</th>
+        `;
 
-                <th class="sub-col">
-                    OFF
-                </th>
-
-                <th class="sub-col">
-                    PH
-                </th>
-            `;
-
-        }
-    );
+    });
 
 
     html += `
@@ -2572,88 +2509,175 @@ function janaMatrixRK01(){
     `;
 
 
-    /* =================================================
-       TARIKH
-    ================================================= */
+    /*
+    =====================================================
+    TARIKH DALAM BULAN
+    =====================================================
+    */
 
-    tarikhList.forEach(
-        item => {
+    const bulan = document.getElementById("filterBulan")?.value || "";
+    const tahun = document.getElementById("filterTahun")?.value || "";
 
-            html += `
+    const bulanIndex = SENARAI_BULAN.indexOf(bulan);
 
-                <tr>
+    if (bulanIndex < 0 || !tahun) {
 
-                    <td class="tarikh-col">
+        html += `
+            <tr>
+                <td colspan="34" class="empty-row">
+                    Sila pilih bulan dan tahun.
+                </td>
+            </tr>
+        `;
 
-                        <div>
-                            ${item.tarikh}
-                        </div>
+        html += `</tbody>`;
 
-                        <div class="hari-duty">
-                            ${item.hari}
-                        </div>
+        table.innerHTML = html;
 
-                    </td>
-
-            `;
-
-
-            anggotaList.forEach(
-                anggota => {
-
-                    const rekod =
-                        rekodAnggota(
-                            anggota.no_skb,
-                            item.iso
-                        );
+        return;
+    }
 
 
-                    html += `
+    /*
+    =====================================================
+    BILANGAN HARI DALAM BULAN
+    =====================================================
+    */
 
-                        <td>
-                            ${escapeHtml(
-                                nilaiKodDuty(
-                                    rekod
-                                )
-                            )}
-                        </td>
+    const jumlahHari = new Date(
+        parseInt(tahun),
+        bulanIndex + 1,
+        0
+    ).getDate();
 
-                        <td>
-                            ${escapeHtml(
-                                nilaiKLM(
-                                    rekod
-                                )
-                            )}
-                        </td>
 
-                        <td>
-                            ${escapeHtml(
-                                nilaiOFF(
-                                    rekod
-                                )
-                            )}
-                        </td>
+    /*
+    =====================================================
+    LOOP SETIAP TARIKH
+    =====================================================
+    */
 
-                        <td>
-                            ${escapeHtml(
-                                nilaiPH(
-                                    rekod
-                                )
-                            )}
-                        </td>
+    for (let hari = 1; hari <= jumlahHari; hari++) {
 
-                    `;
+        const date = new Date(
+            parseInt(tahun),
+            bulanIndex,
+            hari
+        );
 
-                }
+        const iso = [
+            date.getFullYear(),
+            String(date.getMonth() + 1).padStart(2, "0"),
+            String(date.getDate()).padStart(2, "0")
+        ].join("-");
+
+
+        const namaHari = [
+            "Ahad",
+            "Isnin",
+            "Selasa",
+            "Rabu",
+            "Khamis",
+            "Jumaat",
+            "Sabtu"
+        ][date.getDay()];
+
+
+        html += `
+            <tr>
+
+                <td class="tarikh-col">
+                    ${String(hari).padStart(2, "0")}
+                </td>
+
+                <td class="hari-col">
+                    ${namaHari}
+                </td>
+        `;
+
+
+        /*
+        =================================================
+        8 ANGGOTA
+        =================================================
+        */
+
+        anggota8.forEach((anggota) => {
+
+            /*
+            ---------------------------------------------
+            SLOT KOSONG
+            ---------------------------------------------
+            */
+
+            if (!anggota.no_skb) {
+
+                html += `
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                `;
+
+                return;
+            }
+
+
+            /*
+            ---------------------------------------------
+            CARI REKOD DUTY
+            ---------------------------------------------
+            */
+
+            const rekod = rekodAnggota(
+                anggota.no_skb,
+                iso
             );
 
 
+            /*
+            ---------------------------------------------
+            KOD
+            PAPAR KEDUA-DUA:
+            kod_duty + kod_waktu_kerja
+            ---------------------------------------------
+            */
+
+            const kod = nilaiKodDuty(rekod);
+
+            const klm = nilaiKLM(rekod);
+
+            const off = nilaiOFF(rekod);
+
+            const ph = nilaiPH(rekod);
+
+
             html += `
-                </tr>
+                <td class="kod-cell">
+                    ${kod}
+                </td>
+
+                <td>
+                    ${klm}
+                </td>
+
+                <td>
+                    ${off}
+                </td>
+
+                <td>
+                    ${ph}
+                </td>
             `;
 
-        }
-    );
+        });
+
+
+        html += `
+            </tr>
+        `;
+
+    }
 
 
     html += `
@@ -2661,9 +2685,7 @@ function janaMatrixRK01(){
     `;
 
 
-    table.innerHTML =
-        html;
-
+    table.innerHTML = html;
 }
 
 
