@@ -216,28 +216,36 @@ async function janaLaporan() {
     const tahun =
         document.getElementById("filterTahun").value;
 
-    let query = supabaseClient
-        .from("jadual_duty");
-        
+  
+let query = supabaseClient
+    .from("jadual_duty")
+    .select(`
+        *,
+        Data_Anggota (
+            gaji_pokok
+        )
+    `);
 
-    if (unit) {
-        query = query.eq("unit", unit);
-    }
+if (unit) {
+    query = query.eq("unit", unit);
+}
 
-    if (pos) {
-        query = query.eq("pos", pos);
-    }
+if (pos) {
+    query = query.eq("pos", pos);
+}
 
-    if (bulan) {
-        query = query.eq("bulan", bulan);
-    }
+if (bulan) {
+    query = query.eq("bulan", bulan);
+}
 
-    if (tahun) {
-        query = query.eq("tahun", tahun);
-    }
+if (tahun) {
+    query = query.eq("tahun", tahun);
+}
 
-   const { data, error } = await query.select(`*,Data_Anggota (gaji_pokok)`);
+const { data, error } = await query;
 
+  console.log(data);
+  
     if (error) {
         console.error(error);
         return;
