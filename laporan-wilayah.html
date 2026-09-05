@@ -276,10 +276,17 @@ rows.filter(r =>
             0
         );
 
+const jumlahHariCutiAm =
+senaraiCutiAm.reduce(
+    (t,r) =>
+        t + Number(r.hari_cutiam_bertugas || 0),
+    0
+);
+
 const jumlahJamCutiAm =
 senaraiCutiAm.reduce(
     (t,r) =>
-        t + Number(r.jam_klm || 0),
+        t + Number(r.jam_cutiam_bertugas || 0),
     0
 );
 
@@ -293,7 +300,10 @@ senaraiCutiAm.reduce(
 document.getElementById(
     "jamKlmCutiAm"
 ).textContent =
-jumlahJamCutiAm.toFixed(2) + " Jam";
+jumlahHariCutiAm +
+" Hari / " +
+jumlahJamCutiAm +
+" Jam";
 
 document.getElementById(
     "rmKlmCutiAm"
