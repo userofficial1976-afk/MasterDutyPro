@@ -27,7 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
     kawalMenuMengikutPeranan();
     
     isiDropdown();
-  
+
+    janaLaporan();
 });
 
 
@@ -161,6 +162,131 @@ function logKeluar() {
         }
       }
     }
+
+async function janaLaporan() {
+
+    const unit =
+        document.getElementById("filterUnit").value;
+
+    const pos =
+        document.getElementById("filterPos").value;
+
+    const bulan =
+        document.getElementById("filterBulan").value;
+
+    const tahun =
+        document.getElementById("filterTahun").value;
+
+    let query = supabaseClient
+        .from("jadual_duty")
+        .select("*");
+
+    if (unit) {
+        query = query.eq("unit", unit);
+    }
+
+    if (pos) {
+        query = query.eq("pos", pos);
+    }
+
+    if (bulan) {
+        query = query.eq("bulan", bulan);
+    }
+
+    if (tahun) {
+        query = query.eq("tahun", tahun);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    const rows = data || [];
+
+    // JUMLAH ANGGOTA
+    const jumlahAnggota =
+        new Set(
+            rows.map(r => r.no_skb)
+        ).size;
+
+    // JUMLAH DUTY
+    const jumlahDuty =
+        rows.length;
+
+    // JUMLAH JAM KERJA
+    const jumlahJamKerja =
+        rows.reduce(
+            (t, r) =>
+                t + Number(r.jam_kerja || 0),
+            0
+        );
+
+    // JUMLAH JAM KLM
+    const jumlahJamKLM =
+        rows.reduce(
+            (t, r) =>
+                t + Number(r.jam_klm || 0),
+            0
+        );
+
+    // JUMLAH RM
+    const jumlahRM =
+        rows.reduce(
+            (t, r) =>
+                t + Number(r.rm_klm_seluruh || 0),
+            0
+        );
+
+    document.getElementById(
+        "cardJumlahAnggota"
+    ).textContent =
+        jumlahAnggota;
+
+    document.getElementById(
+        "cardJumlahDuty"
+    ).textContent =
+        jumlahDuty;
+
+    document.getElementById(
+        "cardJumlahJamKerja"
+    ).textContent =
+        jumlahJamKerja.toFixed(2);
+
+    document.getElementById(
+        "cardJumlahJamKLM"
+    ).textContent =
+        jumlahJamKLM.toFixed(2);
+
+    document.getElementById(
+        "cardJumlahRM"
+    ).textContent =
+        "RM " +
+        jumlahRM.toLocaleString(
+            "ms-MY",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    const btn =
+    document.getElementById("btnJanaLaporan");
+
+    if (btn) {
+        btn.addEventListener(
+            "click",
+            janaLaporan
+        );
+    }
+
+});  
   </script>
 <style>
 
@@ -390,7 +516,7 @@ class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py
                     </div>
 
                     <div>
-<button
+<button id="btnJanaLaporan"
   class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-xl transition">
 
   <i class="fas fa-sync-alt mr-2"></i>
