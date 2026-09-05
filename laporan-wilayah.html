@@ -253,7 +253,10 @@ const { data, error } = await query;
 
     const rows = data || [];
 
-const senaraiCutiAm = data || [];
+const senaraiCutiAm =
+rows.filter(r =>
+    Number(r.rm_klm_seluruh || 0) > 0
+);
   
     // JUMLAH ANGGOTA
     const jumlahAnggota =
