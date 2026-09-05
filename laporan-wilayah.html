@@ -319,30 +319,26 @@ async function janaLaporan() {
 
 }
 
-  document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
 
     const btn =
     document.getElementById("btnJanaLaporan");
 
     if (btn) {
-    btn.addEventListener(
-        "click",
-        janaLaporan
-    );
-}
-
-document
-.getElementById("cardKlmCutiAm")
-?.addEventListener(
-    "click",
-    bukaKlmCutiAm
-);
-
-      
-    
+        btn.addEventListener(
+            "click",
+            janaLaporan
+        );
     }
 
-});  
+    document
+    .getElementById("cardKlmCutiAm")
+    ?.addEventListener(
+        "click",
+        bukaKlmCutiAm
+    );
+
+}); 
   </script>
 <style>
 
