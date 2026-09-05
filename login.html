@@ -12,7 +12,7 @@
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  >
+  />
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -56,9 +56,9 @@
 
 <body class="flex items-center justify-center p-4">
 
-  <div class="w-full max-w-md">
+  <div class="w-full max-w-md"></div>
 
-```
+
 <!-- =====================================================
      LOGO
 ====================================================== -->
@@ -310,7 +310,7 @@
 
 
 </div>
-```
+
 
   </div>
 
@@ -345,9 +345,13 @@
     // PASSWORD SEMENTARA
     // =====================================================
 
-    const TEMP_PASSWORD = "123456";
+if (!data) {
+  throw new Error("No.SKB tidak dijumpai.");
+}
 
-
+if (String(data.password) !== password) {
+  throw new Error("Kata laluan salah.");
+}
 
     // =====================================================
     // JAWATAN ADMIN
@@ -726,30 +730,23 @@
             // 2. CARI DATA ANGGOTA
             // =================================================
 
-            const {
-              data,
-              error
-            } = await supabaseClient
-
-              .from("Data_Anggota")
-
-              .select(`
-                no_skb,
-                nama,
-                unit,
-                pos,
-                jawatan,
-                ketua_unit,
-                ketua_pos,
-                status
-              `)
-
-              .eq(
-                "no_skb",
-                noSkb
-              )
-
-              .maybeSingle();
+const { data, error } = await supabaseClient
+  .from("data_login")
+  .select(`
+    no_skb,
+    wilayah,
+    kawasan,
+    pangkat,
+    no_anggota,
+    pos,
+    unit,
+    jawatan,
+    nama_ketua,
+    password,
+    status
+  `)
+  .eq("no_skb", noSkb)
+  .maybeSingle();
 
 
 
@@ -790,37 +787,15 @@
             // 5. SEMAK STATUS
             // =================================================
 
-            const status =
+const status = String(data.status || "")
+  .trim()
+  .toLowerCase();
 
-              String(
-                data.status || ""
-              )
-              .trim()
-              .toLowerCase();
-
-
-
-            if (
-
-              status &&
-
-              [
-
-                "tidak aktif",
-                "inactive",
-                "disabled",
-                "terminated",
-                "keluar"
-
-              ].includes(status)
-
-            ) {
-
-              throw new Error(
-                "Akaun anda tidak aktif. Sila hubungi Admin."
-              );
-
-            }
+if (status !== "aktif") {
+  throw new Error(
+    "Akaun anda tidak aktif."
+  );
+}
 
 
 
@@ -838,11 +813,12 @@
 
 
 
-            const isAdmin =
-
-              ADMIN_JAWATAN.includes(
-                jawatan
-              );
+const isAdmin =
+  ADMIN_JAWATAN.includes(
+    String(data.jawatan || "")
+      .trim()
+      .toUpperCase()
+  );
 
 
 
@@ -930,45 +906,24 @@
             // 11. BINA DATA USER
             // =================================================
 
-            const userData = {
+const userData = {
+  noSkb: data.no_skb,
+  wilayah: data.wilayah,
+  kawasan: data.kawasan,
+  pangkat: data.pangkat,
+  noAnggota: data.no_anggota,
+  nama: data.nama_ketua,
+  unit: data.unit,
+  pos: data.pos,
+  jawatan: data.jawatan,
+  status: data.status,
+  role: isAdmin ? "admin" : "user"
+};
 
-              noSkb:
-                String(data.no_skb),
-
-              name:
-                data.nama || "",
-
-              jawatan:
-                data.jawatan || "",
-
-              unit:
-                data.unit || "",
-
-              pos:
-                data.pos || "",
-
-              ketua_unit:
-                data.ketua_unit || "",
-
-              ketua_pos:
-                data.ketua_pos || "",
-
-              status:
-                data.status || "",
-
-              isAdmin:
-                isAdmin,
-
-              isKetuaPos:
-                isKetuaPos,
-
-              isKetuaUnit:
-                isKetuaUnit,
-
-              role:
-                role
-
-            };
+localStorage.setItem(
+  "mdp_user",
+  JSON.stringify(userData)
+);
 
 
 
@@ -1040,12 +995,11 @@
             // =================================================
 
             // ADMIN
-            if (isAdmin) {
-
-              window.location.href =
-                "dashboard.html";
-
-            }
+if (isAdmin) {
+  window.location.href = "dashboard.html";
+} else {
+  window.location.href = "jadual-duty.html";
+}
 
 
             // KETUA UNIT
