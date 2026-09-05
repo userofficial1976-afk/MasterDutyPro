@@ -119,6 +119,31 @@ function logKeluar() {
 
 }
 
+function bukaKlmCutiAm(){
+
+    document
+    .getElementById(
+        "detailKlmCutiAm"
+    )
+    .classList.remove("hidden");
+
+}
+
+function tutupKlmCutiAm(){
+
+    document
+    .getElementById(
+        "detailKlmCutiAm"
+    )
+    .classList.add("hidden");
+
+}
+    
+
+
+
+
+    
     function isiDropdown() {
 
     // UNIT
@@ -209,7 +234,7 @@ async function janaLaporan() {
         query = query.eq("tahun", tahun);
     }
 
-    const { data, error } = await query;
+   const { data, error } = await query.select(`*,Data_Anggota (gaji_pokok)`);
 
     if (error) {
         console.error(error);
@@ -218,6 +243,12 @@ async function janaLaporan() {
 
     const rows = data || [];
 
+    const senaraiCutiAm =
+    rows.filter(r =>
+    Number(r.hari_cutiam_bertugas || 0) > 0 ||
+    Number(r.jam_cutiam_bertugas || 0) > 0
+    );
+  
     // JUMLAH ANGGOTA
     const jumlahAnggota =
         new Set(
@@ -296,6 +327,15 @@ async function janaLaporan() {
             "click",
             janaLaporan
         );
+document
+.getElementById("cardKlmCutiAm")
+?.addEventListener(
+    "click",
+    bukaKlmCutiAm
+);
+
+      
+    
     }
 
 });  
@@ -604,14 +644,24 @@ class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py
 
             <!-- KAD KLM -->
 
-<div id="klmCards"
-     class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
+<div id="cardKlmCutiAm"
+     class="glass glass-card rounded-2xl p-4 cursor-pointer">
 
-    <div class="glass glass-card rounded-2xl p-4 cursor-pointer">
-        <p class="text-teal-400 text-sm font-semibold">KLM Cuti Am</p>
-        <h3 class="text-2xl font-bold text-white mt-2">120 Jam</h3>
-        <p class="text-teal-400">RM 4,235.60</p>
-    </div>
+    <p class="text-teal-400 text-sm font-semibold">
+        KLM Cuti Am
+    </p>
+
+    <h3 id="jamKlmCutiAm"
+        class="text-2xl font-bold text-white mt-2">
+        0 Jam
+    </h3>
+
+    <p id="rmKlmCutiAm"
+       class="text-teal-400">
+       RM 0.00
+    </p>
+
+</div>
 
     <div class="glass glass-card rounded-2xl p-4 cursor-pointer">
         <p class="text-teal-400 text-sm font-semibold">KLM Offday</p>
@@ -710,6 +760,51 @@ class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py
   
 </div>
 
+
+<div id="detailKlmCutiAm"
+     class="glass glass-card rounded-2xl p-5 hidden">
+
+    <div class="flex items-center justify-between mb-4">
+
+        <h3 class="text-lg font-bold text-white">
+            Senarai KLM Cuti Am
+        </h3>
+
+        <button onclick="tutupKlmCutiAm()"
+                class="bg-red-600 px-3 py-2 rounded-lg text-white">
+            Tutup
+        </button>
+
+    </div>
+
+    <div class="overflow-x-auto">
+
+        <table class="report-table text-sm">
+
+            <thead>
+
+                <tr>
+                    <th>NO SKB</th>
+                    <th>NAMA ANGGOTA</th>
+                    <th>BASIC GAJI</th>
+                    <th>HARI</th>
+                    <th>JAM</th>
+                    <th>JUMLAH KLM (RM)</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="senaraiKlmCutiAm">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+      
+      
             <!-- RUMUSAN UNIT -->
 
 <div id="rumusanUnit"
