@@ -908,7 +908,7 @@ const rmKlmOff =
 
       Number(getValue("rmKlmHariBiasa") || 0);
 
-      
+      console.log("rm_klm_seluruh", rm_klm_seluruh);
       
       const dataDuty = {
         tarikh, bulan: getValue("bulan"), tahun: Number(getValue("tahun")), hari: getValue("hari"),
@@ -971,6 +971,9 @@ rm_klm_tambahan:
         dikemaskini_pada: new Date().toISOString()
       };
 
+      console.log(dataDuty);
+
+      
       if (modeUpdate) {
         const { error } = await supabaseClient
           .from("jadual_duty")
