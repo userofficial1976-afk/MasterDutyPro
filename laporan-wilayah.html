@@ -253,11 +253,7 @@ const { data, error } = await query;
 
     const rows = data || [];
 
-    const senaraiCutiAm =
-    rows.filter(r =>
-    Number(r.hari_cutiam_bertugas || 0) > 0 ||
-    Number(r.jam_cutiam_bertugas || 0) > 0
-    );
+const senaraiCutiAm = data || [];
   
     // JUMLAH ANGGOTA
     const jumlahAnggota =
