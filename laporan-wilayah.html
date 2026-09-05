@@ -273,6 +273,38 @@ const senaraiCutiAm = data || [];
             0
         );
 
+const jumlahJamCutiAm =
+senaraiCutiAm.reduce(
+    (t,r) =>
+        t + Number(r.jam_klm || 0),
+    0
+);
+
+const jumlahRmCutiAm =
+senaraiCutiAm.reduce(
+    (t,r) =>
+        t + Number(r.rm_klm_seluruh || 0),
+    0
+);
+
+document.getElementById(
+    "jamKlmCutiAm"
+).textContent =
+jumlahJamCutiAm.toFixed(2) + " Jam";
+
+document.getElementById(
+    "rmKlmCutiAm"
+).textContent =
+"RM " +
+jumlahRmCutiAm.toLocaleString(
+    "ms-MY",
+    {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    }
+);
+
+  
     // JUMLAH JAM KLM
     const jumlahJamKLM =
         rows.reduce(
