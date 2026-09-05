@@ -320,8 +320,43 @@ const senaraiCutiAm = data || [];
                 maximumFractionDigits: 2
             }
         );
+const tbody =
+document.getElementById(
+    "senaraiKlmCutiAm"
+);
+
+if (tbody) {
+
+    tbody.innerHTML =
+    senaraiCutiAm.map(r => `
+
+        <tr>
+            <td>${r.no_skb ?? ""}</td>
+            <td>${r.nama ?? r.nama_anggota ?? "-"}</td>
+            <td>
+                RM ${Number(
+                    r.Data_Anggota?.gaji_pokok || 0
+                ).toLocaleString("ms-MY")}
+            </td>
+            <td>${r.hari_cutiam_bertugas ?? 0}</td>
+            <td>${r.jam_cutiam_bertugas ?? 0}</td>
+            <td>
+                RM ${Number(
+                    r.rm_klm_seluruh || 0
+                ).toLocaleString("ms-MY",{
+                    minimumFractionDigits:2,
+                    maximumFractionDigits:2
+                })}
+            </td>
+        </tr>
+
+    `).join("");
 
 }
+}
+
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
