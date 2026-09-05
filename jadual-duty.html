@@ -896,6 +896,19 @@ const rmKlmOff =
       const hariCutiam = document.getElementById("hariCutiam");
       const kadarKlm = Number(anggota.rm_pehariklmbiasa || 0);
 
+      const rm_klm_seluruh =
+
+      Number(getValue("rmHariOffday") || 0) +
+
+      Number(getValue("rmHariCutiam") || 0) +
+
+      Number(getValue("rmJamOffday") || 0) +
+
+      Number(getValue("rmJamCutiam") || 0) +
+
+      Number(getValue("rmKlmHariBiasa") || 0);
+
+      
       
       const dataDuty = {
         tarikh, bulan: getValue("bulan"), tahun: Number(getValue("tahun")), hari: getValue("hari"),
