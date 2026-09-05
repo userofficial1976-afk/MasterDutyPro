@@ -255,7 +255,7 @@ const { data, error } = await query;
 
 const senaraiCutiAm =
 rows.filter(r =>
-    Number(r.rm_klm_seluruh || 0) > 0
+    Number(r.jumlah_cutiam || 0) > 0
 );
   
     // JUMLAH ANGGOTA
@@ -286,7 +286,7 @@ senaraiCutiAm.reduce(
 const jumlahRmCutiAm =
 senaraiCutiAm.reduce(
     (t,r) =>
-        t + Number(r.rm_klm_seluruh || 0),
+        t + Number(r.jumlah_cutiam || 0),
     0
 );
 
@@ -377,7 +377,7 @@ if (tbody) {
             <td>${r.jam_cutiam_bertugas ?? 0}</td>
             <td>
                 RM ${Number(
-                    r.rm_klm_seluruh || 0
+                    r.jumlah_cutiam || 0
                 ).toLocaleString("ms-MY",{
                     minimumFractionDigits:2,
                     maximumFractionDigits:2
