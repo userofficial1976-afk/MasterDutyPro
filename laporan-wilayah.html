@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anggaran RK02 — Master Duty Pro</title>
+  <title>Laporan Wilayah — Master Duty Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -25,7 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
     paparMaklumatPengguna();
 
     kawalMenuMengikutPeranan();
-
+    
+    isiDropdown();
+  
 });
 
 
@@ -103,7 +105,51 @@ function logKeluar() {
         "login.html";
 
 }
-``
+
+    function isiDropdown() {
+
+    // UNIT
+    document.getElementById("filterUnit").innerHTML = `
+        <option value="">Semua Unit</option>
+        <option>Terengganu</option>
+        <option>Setiu</option>
+        <option>Jerangau</option>
+        <option>Kerteh</option>
+    `;
+
+    // POS
+    document.getElementById("filterPos").innerHTML = `
+        <option value="">Semua Pos</option>
+        <option>F105-01(ST)Pej. Felda Wilayah Terengganu</option>
+        <option>FGVPM Setiu 01</option>
+        <option>FGVPM Setiu 02</option>
+    `;
+
+    // BULAN
+    document.getElementById("filterBulan").innerHTML = `
+        <option value="1">Januari</option>
+        <option value="2">Februari</option>
+        <option value="3">Mac</option>
+        <option value="4">April</option>
+        <option value="5">Mei</option>
+        <option value="6">Jun</option>
+        <option value="7">Julai</option>
+        <option value="8">Ogos</option>
+        <option value="9" selected>September</option>
+        <option value="10">Oktober</option>
+        <option value="11">November</option>
+        <option value="12">Disember</option>
+    `;
+
+    // TAHUN
+    document.getElementById("filterTahun").innerHTML = `
+        <option>2024</option>
+        <option>2025</option>
+        <option selected>2026</option>
+        <option>2027</option>
+    `;
+
+}
     
     
     tailwind.config = {
@@ -313,22 +359,34 @@ class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-me
 
                     <div>
                         <label>Unit</label>
-                        <select id="filterUnit"></select>
+                        <select
+id="filterUnit"
+class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2">
+</select>
                     </div>
 
                     <div>
                         <label>Pos</label>
-                        <select id="filterPos"></select>
+                        <select
+id="filterPos"
+class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2">
+</select>
                     </div>
 
                     <div>
                         <label>Bulan</label>
-                        <select id="filterBulan"></select>
+                        <select
+id="filterBulan"
+class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2">
+</select>
                     </div>
 
                     <div>
                         <label>Tahun</label>
-                        <select id="filterTahun"></select>
+                        <select
+id="filterTahun"
+class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2">
+</select>
                     </div>
 
                     <div>
