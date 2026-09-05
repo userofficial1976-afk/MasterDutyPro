@@ -123,21 +123,20 @@ function bukaKlmCutiAm(){
 
     document
     .getElementById(
-        "detailKlmCutiAm"
+        "modalKlmCutiAm"
     )
     .classList.remove("hidden");
 
 }
 
+
 function tutupKlmCutiAm(){
 
     document
     .getElementById(
-        "detailKlmCutiAm"
+        "modalKlmCutiAm"
     )
-    .classList.add("hidden");
-
-}
+  
     
 
 
@@ -780,49 +779,7 @@ class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py
 </div>
 
 
-<div id="detailKlmCutiAm"
-     class="glass glass-card rounded-2xl p-5 hidden">
-
-    <div class="flex items-center justify-between mb-4">
-
-        <h3 class="text-lg font-bold text-white">
-            Senarai KLM Cuti Am
-        </h3>
-
-        <button onclick="tutupKlmCutiAm()"
-                class="bg-red-600 px-3 py-2 rounded-lg text-white">
-            Tutup
-        </button>
-
-    </div>
-
-    <div class="overflow-x-auto">
-
-        <table class="report-table text-sm">
-
-            <thead>
-
-                <tr>
-                    <th>NO SKB</th>
-                    <th>NAMA ANGGOTA</th>
-                    <th>BASIC GAJI</th>
-                    <th>HARI</th>
-                    <th>JAM</th>
-                    <th>JUMLAH KLM (RM)</th>
-                </tr>
-
-            </thead>
-
-            <tbody id="senaraiKlmCutiAm">
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-      
+    
       
             <!-- RUMUSAN UNIT -->
 
@@ -974,6 +931,49 @@ class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py
     </main>
 </div>
 
+<div id="modalKlmCutiAm"
+     class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-6">
+
+    <div class="glass rounded-2xl w-full max-w-7xl max-h-[90vh] overflow-auto p-6">
+
+        <div class="flex justify-between items-center mb-4">
+
+            <h3 class="text-xl font-bold text-white">
+                Senarai KLM Cuti Am
+            </h3>
+
+            <button onclick="tutupKlmCutiAm()"
+                    class="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg">
+                Tutup
+            </button>
+
+        </div>
+
+        <table class="report-table text-sm">
+
+            <thead>
+                <tr>
+                    <th>NO SKB</th>
+                    <th>NAMA ANGGOTA</th>
+                    <th>BASIC GAJI</th>
+                    <th>HARI</th>
+                    <th>JAM</th>
+                    <th>JUMLAH KLM (RM)</th>
+                </tr>
+            </thead>
+
+            <tbody id="senaraiKlmCutiAm">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+  
 </body>
 </html>
 
