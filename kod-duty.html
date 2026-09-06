@@ -274,15 +274,49 @@
       document.getElementById("userJawatan").textContent = currentUser.jawatan || "-";
     }
 
-    function kawalMenuMengikutPeranan() {
-      if (!currentUser || currentUser.isAdmin) return;
+function kawalMenuMengikutPeranan() {
 
-      // Sembunyi menu admin
-      ["menuDashboard", "menuAnggota", "menuLaporan", "menuMingguan", "menuTetapan"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = "none";
-      });
+  if (!currentUser) return;
+
+  const role = String(
+    currentUser.role ||
+    currentUser.jawatan ||
+    ""
+  )
+  .trim()
+  .toLowerCase()
+  .replace(/_/g, " ")
+  .replace(/\s+/g, " ");
+
+  console.log("KOD DUTY ROLE:", role);
+  console.log("KOD DUTY USER:", currentUser);
+
+  // ADMIN
+  if (
+    currentUser.isAdmin === true ||
+    role === "admin" ||
+    role === "administrator"
+  ) {
+    return;
+  }
+
+  // BUKAN ADMIN → sembunyikan menu admin
+  [
+    "menuDashboard",
+    "menuAnggota",
+    "menuLaporan",
+    "menuMingguan",
+    "menuTetapan"
+  ].forEach(id => {
+
+    const el = document.getElementById(id);
+
+    if (el) {
+      el.style.display = "none";
     }
+
+  });
+}
 
     function logKeluar() {
       localStorage.removeItem("mdp_user");
