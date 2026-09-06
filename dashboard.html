@@ -244,7 +244,7 @@
             
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               <div class="status-card bg-orange-500/15 border border-orange-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('OFFDAY')">
-                <p class="text-xs text-orange-300 font-medium">OFF / GOFF</p>
+                <p class="text-xs text-orange-300 font-medium">OFF / GR</p>
                 <p class="text-2xl font-bold text-orange-400 mt-1" id="jumlahOffday">-</p>
               </div>
               <div class="status-card bg-emerald-500/15 border border-emerald-500/30 rounded-xl p-4 text-center" onclick="paparSenarai('CT')">
@@ -485,7 +485,7 @@
         kod_waktu_kerja: row.kod_waktu_kerja || row.kod_duty || ""
       }));
 
-      const OFF = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "OFF" || x.kod_waktu_kerja === "GOFF").length;
+      const OFF = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "OFF" || x.kod_waktu_kerja === "GR").length;
       const CT  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CT").length;
       const MC  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "MC").length;
       const KUR = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "KUR").length;
@@ -530,7 +530,7 @@
 
       switch (kategori) {
         case "OFFDAY":
-          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "OFF" || x.kod_waktu_kerja === "GOFF");
+          senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "OFF" || x.kod_waktu_kerja === "GR");
           break;
         case "CT":
           senarai = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CT");
