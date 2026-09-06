@@ -2606,7 +2606,6 @@ async function muatAnggota(){
                 no_skb,
                 no_anggota,
                 nama,
-                poskhidmat,
                 unit,
                 status
             `)
@@ -2633,7 +2632,7 @@ async function muatAnggota(){
 
                     ...anggota,
 
-                    // Normalisasi untuk kod lama
+                    // Nama standard yang digunakan JS
                     noskb:
                         anggota.no_skb,
 
@@ -2666,7 +2665,6 @@ async function muatAnggota(){
     }
 
 }
-
 
 /* =========================================================
    TARIKH
