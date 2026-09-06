@@ -75,7 +75,7 @@ document.addEventListener(
         kawalMenuMengikutPeranan();
 
         isiDropdown();
-
+        await isiDropdown();
         await janaLaporan();
 
         const btn =
@@ -210,79 +210,195 @@ function logKeluar(){
 
 
 /* =====================================================
-   DROPDOWN
+   DROPDOWN — AMBIL UNIT & POS DARIPADA DATA_ANGGOTA
 ===================================================== */
 
-function isiDropdown(){
+async function isiDropdown(){
 
-    document.getElementById(
-        "filterUnit"
-    ).innerHTML = `
+    const filterUnit =
+        document.getElementById("filterUnit");
 
-        <option value="">
-            Semua Unit
-        </option>
+    const filterPos =
+        document.getElementById("filterPos");
 
-        <option>
-            Terengganu
-        </option>
+    const filterBulan =
+        document.getElementById("filterBulan");
 
-        <option>
-            Setiu
-        </option>
-
-        <option>
-            Jerangau
-        </option>
-
-        <option>
-            Kerteh
-        </option>
-
-    `;
+    const filterTahun =
+        document.getElementById("filterTahun");
 
 
-    document.getElementById(
-        "filterPos"
-    ).innerHTML = `
+    /* =====================================================
+       UNIT & POS DARIPADA Data_Anggota
+    ===================================================== */
 
-        <option value="">
-            Semua Pos
-        </option>
-
-        <option>
-            F105-01(ST)Pej. Felda Wilayah Terengganu
-        </option>
-
-        <option>
-            FGVPM Setiu 01
-        </option>
-
-        <option>
-            FGVPM Setiu 02
-        </option>
-
-    `;
+    const { data, error } =
+        await supabaseClient
+            .from("Data_Anggota")
+            .select("unit, pos")
+            .order("unit", { ascending: true })
+            .order("pos", { ascending: true });
 
 
-    document.getElementById(
-        "filterBulan"
-    ).innerHTML =
-        SENARAI_BULAN.map(
-            bulan =>
-                `<option value="${bulan}">
-                    ${bulan}
-                </option>`
-        ).join("");
+    if(error){
+
+        console.error(
+            "RALAT LOAD UNIT/POS:",
+            error
+        );
+
+        filterUnit.innerHTML = `
+            <option value="">
+                Semua Unit
+            </option>
+        `;
+
+        filterPos.innerHTML = `
+            <option value="">
+                Semua Pos
+            </option>
+        `;
+
+    }else{
+
+        /* =====================================================
+           SENARAI UNIT UNIK
+        ===================================================== */
+
+        const senaraiUnit =
+            [...new Set(
+                (data || [])
+                    .map(row =>
+                        String(
+                            row.unit || ""
+                        ).trim()
+                    )
+                    .filter(Boolean)
+            )]
+            .sort(
+                (a,b) =>
+                    a.localeCompare(
+                        b,
+                        "ms"
+                    )
+            );
 
 
-    document.getElementById(
-        "filterTahun"
-    ).innerHTML = `
+        /* =====================================================
+           SENARAI POS UNIK
+        ===================================================== */
+
+        const senaraiPos =
+            [...new Set(
+                (data || [])
+                    .map(row =>
+                        String(
+                            row.pos || ""
+                        ).trim()
+                    )
+                    .filter(Boolean)
+            )]
+            .sort(
+                (a,b) =>
+                    a.localeCompare(
+                        b,
+                        "ms"
+                    )
+            );
+
+
+        /* =====================================================
+           DROPDOWN UNIT
+        ===================================================== */
+
+        filterUnit.innerHTML = `
+            <option value="">
+                Semua Unit
+            </option>
+
+            ${
+                senaraiUnit
+                    .map(unit => `
+                        <option value="${escapeHtml(unit)}">
+                            ${escapeHtml(unit)}
+                        </option>
+                    `)
+                    .join("")
+            }
+        `;
+
+
+        /* =====================================================
+           DROPDOWN POS
+        ===================================================== */
+
+        filterPos.innerHTML = `
+            <option value="">
+                Semua Pos
+            </option>
+
+            ${
+                senaraiPos
+                    .map(pos => `
+                        <option value="${escapeHtml(pos)}">
+                            ${escapeHtml(pos)}
+                        </option>
+                    `)
+                    .join("")
+            }
+        `;
+
+
+        console.log(
+            "JUMLAH UNIT:",
+            senaraiUnit.length
+        );
+
+        console.log(
+            "SENARAI UNIT:",
+            senaraiUnit
+        );
+
+        console.log(
+            "JUMLAH POS:",
+            senaraiPos.length
+        );
+
+        console.log(
+            "SENARAI POS:",
+            senaraiPos
+        );
+
+    }
+
+
+    /* =====================================================
+       BULAN
+    ===================================================== */
+
+    filterBulan.innerHTML =
+        SENARAI_BULAN
+            .map(
+                bulan =>
+                    `<option value="${bulan}">
+                        ${bulan}
+                    </option>`
+            )
+            .join("");
+
+
+    /* =====================================================
+       TAHUN
+    ===================================================== */
+
+    filterTahun.innerHTML = `
 
         <option>2024</option>
+
         <option>2025</option>
+
         <option selected>2026</option>
+
         <option>2027</option>
 
     `;
