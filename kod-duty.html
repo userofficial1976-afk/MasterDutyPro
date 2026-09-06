@@ -289,27 +289,55 @@ function kawalMenuMengikutPeranan() {
   .replace(/\s+/g, " ");
 
   console.log("KOD DUTY ROLE:", role);
-  console.log("KOD DUTY USER:", currentUser);
 
-  // ADMIN
-  if (
+  // =====================================================
+  // KLM MINGGUAN
+  // HANYA ADMIN & KETUA UNIT
+  // =====================================================
+
+  const menuMingguan =
+    document.getElementById("menuMingguan");
+
+  if (menuMingguan) {
+
+    const bolehKLM =
+      currentUser.isAdmin === true ||
+      role === "admin" ||
+      role === "administrator" ||
+      role === "ketua unit";
+
+    menuMingguan.style.display =
+      bolehKLM ? "" : "none";
+  }
+
+
+  // =====================================================
+  // MENU ADMIN
+  // =====================================================
+
+  const isAdmin =
     currentUser.isAdmin === true ||
     role === "admin" ||
-    role === "administrator"
-  ) {
+    role === "administrator";
+
+  if (isAdmin) {
     return;
   }
 
-  // BUKAN ADMIN → sembunyikan menu admin
+
+  // =====================================================
+  // SEMBUNYIKAN MENU ADMIN UNTUK BUKAN ADMIN
+  // =====================================================
+
   [
     "menuDashboard",
     "menuAnggota",
     "menuLaporan",
-    "menuMingguan",
     "menuTetapan"
   ].forEach(id => {
 
-    const el = document.getElementById(id);
+    const el =
+      document.getElementById(id);
 
     if (el) {
       el.style.display = "none";
