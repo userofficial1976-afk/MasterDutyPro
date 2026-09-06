@@ -445,19 +445,22 @@
         return;
       }
 
-      const rows = data || [];
+const rows = data || [];
 
-      const jumlahJamKerja = rows.reduce((t, r) => t + Number(r.jam_kerja || 0), 0);
-      const jumlahJamKlm = rows.reduce((t, r) => t + Number(r.jam_klm || 0), 0);
+const jumlahJamKerja = rows.reduce(
+  (t, r) => t + Number(r.jam_kerja || 0),
+  0
+);
 
-      // Cuba guna rm_klm_seluruh, fallback kepada jumlah medan RM lain
-      const jumlahRmKlm = rows.reduce((t, r) => {
-        let nilai = Number(r.rm_klm_seluruh || 0);
-        if (!nilai) {
-          nilai = Number(r.rm_klm_hari_biasa || 0) + Number(r.rm_klm_tampungan || 0);
-        }
-        return t + nilai;
-      }, 0);
+const jumlahJamKlm = rows.reduce(
+  (t, r) => t + Number(r.jam_klm || 0),
+  0
+);
+
+const jumlahRmKlm = rows.reduce(
+  (t, r) => t + Number(r.rm_klm_seluruh || 0),
+  0
+);
 
       document.getElementById("jumlahJamKerja").textContent = jumlahJamKerja;
       document.getElementById("jumlahJamKlm").textContent = jumlahJamKlm;
