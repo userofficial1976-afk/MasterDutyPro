@@ -1181,21 +1181,25 @@ function paparMaklumatPengguna(){
 
 function kawalMenuMengikutPeranan(){
 
-    const role =
-        rolePengguna();
+    const role = rolePengguna();
 
+    console.log("ROLE PENGGUNA:", role);
 
+    // =====================================================
+    // ADMIN
+    // =====================================================
     if(role === "admin"){
-
         return;
     }
 
 
+    // =====================================================
+    // SEMBUNYIKAN MENU ADMIN
+    // =====================================================
     [
         "menuDashboard",
         "menuAnggota",
         "menuLaporan",
-         "menuMingguan",
         "menuTetapan"
     ].forEach(id => {
 
@@ -1203,17 +1207,32 @@ function kawalMenuMengikutPeranan(){
             document.getElementById(id);
 
         if(el){
-
-            el.style.display =
-                "none";
-
+            el.style.display = "none";
         }
 
     });
 
+
+    // =====================================================
+    // KLM MINGGUAN
+    // ADMIN + KETUA UNIT SAHAJA
+    // =====================================================
+
+    const menuMingguan =
+        document.getElementById("menuMingguan");
+
+    if(menuMingguan){
+
+        if(role === "ketua unit"){
+            menuMingguan.style.display = "";
+        }
+        else{
+            menuMingguan.style.display = "none";
+        }
+
+    }
+
 }
-
-
 /* =====================================================
    LOGOUT
 ===================================================== */
