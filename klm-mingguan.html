@@ -1889,10 +1889,11 @@ button:disabled{
 
 <nav class="mobile-bottom">
 
-    <a
-        href="dashboard.html"
-        class="mobile-nav-item"
-    >
+<a
+    href="dashboard.html"
+    id="mobileMenuDashboard"
+    class="mobile-nav-item"
+>
         <span class="mobile-nav-icon">⌂</span>
         <span>Dashboard</span>
     </a>
@@ -2055,7 +2056,10 @@ function kawalMenuRole(){
 
     const menuLaporan =
         document.getElementById("menuLaporan");
-
+const mobileMenuDashboard =
+    document.getElementById(
+        "mobileMenuDashboard"
+    );
 
     /*
        ADMIN
@@ -2076,6 +2080,9 @@ function kawalMenuRole(){
             menuLaporan.style.display = "";
         }
 
+        if(mobileMenuDashboard){
+    mobileMenuDashboard.style.display = "";
+}
         return;
     }
 
@@ -2087,6 +2094,10 @@ function kawalMenuRole(){
 
     if(currentRole === "ketua unit"){
 
+       if(mobileMenuDashboard){
+    mobileMenuDashboard.style.display = "none";
+}
+        
         if(menuDashboard){
             menuDashboard.style.display = "none";
         }
