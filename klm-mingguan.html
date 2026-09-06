@@ -2580,43 +2580,96 @@ async function muatUnit(){
 
 /* =========================================================
    LOAD ANGGOTA
-   ========================================================= */
+========================================================= */
 
 async function muatAnggota(){
 
-    try {
+    try{
 
-        const { data, error } = await supabase
-            .from("Data_Anggota")
-            .select(`
-                no_skb,
-                noanggota,
-                nama,
-                poskhidmat,
-                unit,
-                status
-            `)
-            .order("nama", { ascending: true });
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("Data_Anggota")
+                .select(`
+                    no_skb,
+                    noanggota,
+                    nama,
+                    poskhidmat,
+                    unit,
+                    status
+                `)
+                .order(
+                    "nama",
+                    {
+                        ascending:true
+                    }
+                );
+
 
         if(error){
-            console.error("RALAT DATA ANGGOTA:", error);
+
+            console.error(
+                "RALAT DATA ANGGOTA:",
+                error
+            );
+
             throw error;
         }
 
-        semuaAnggota = (data || []).map(a => ({
-            ...a,
-            noskb: a.no_skb
-        }));
 
-        console.log("DATA ANGGOTA:", semuaAnggota);
+        /*
+           SIMPAN DATA
 
-    } catch(error) {
+           Database:
+           no_skb
 
-        console.error("GAGAL MUAT DATA ANGGOTA:", error);
+           JS:
+           noskb
+
+           Supaya kod lama masih boleh
+           menggunakan item.noskb
+        */
+
+        semuaAnggota =
+            (data || []).map(
+                anggota => ({
+
+                    ...anggota,
+
+                    noskb:
+                        anggota.no_skb
+
+                })
+            );
+
+
+        console.log(
+            "DATA ANGGOTA:",
+            semuaAnggota
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "GAGAL MUAT DATA ANGGOTA:",
+            error
+        );
+
 
         semuaAnggota = [];
 
+
+        toast(
+            "Ralat Data Anggota",
+            error.message ||
+            "Tidak dapat memuatkan data anggota."
+        );
+
     }
+
 }
 
 
