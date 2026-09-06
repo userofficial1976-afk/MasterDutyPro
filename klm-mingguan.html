@@ -1,0 +1,4567 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KLM Mingguan — Master Duty Pro</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* =========================================================
+   KLM MINGGUAN
+   MASTER DUTY PRO
+   ========================================================= */
+
+:root{
+    --bg:#071418;
+    --bg2:#0b1d22;
+    --panel:#10262c;
+    --panel2:#132d34;
+    --border:rgba(255,255,255,.08);
+    --text:#e8f0f2;
+    --muted:#8da4aa;
+    --teal:#14b8a6;
+    --teal2:#0f766e;
+    --orange:#f59e0b;
+    --green:#22c55e;
+    --red:#ef4444;
+    --blue:#38bdf8;
+    --shadow:0 15px 40px rgba(0,0,0,.25);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+}
+
+body{
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(20,184,166,.10),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #061114 0%,
+            #091b20 50%,
+            #071418 100%
+        );
+
+    color:var(--text);
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+
+    width:290px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #0a1d22 0%,
+            #071519 100%
+        );
+
+    border-right:1px solid var(--border);
+
+    z-index:100;
+
+    display:flex;
+    flex-direction:column;
+}
+
+.logo-area{
+    height:82px;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 22px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.logo-box{
+    width:44px;
+    height:44px;
+
+    border-radius:13px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #14b8a6,
+            #0f766e
+        );
+
+    box-shadow:
+        0 8px 25px rgba(20,184,166,.22);
+
+    margin-right:12px;
+
+    font-size:21px;
+}
+
+.logo-title{
+    font-size:16px;
+    font-weight:800;
+    letter-spacing:.3px;
+}
+
+.logo-subtitle{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:2px;
+}
+
+.sidebar-menu{
+    padding:18px 13px;
+    overflow-y:auto;
+    flex:1;
+}
+
+.menu-label{
+    color:#60787e;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+
+    padding:12px 13px 7px;
+}
+
+.menu-item{
+    width:100%;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:11px 13px;
+
+    margin-bottom:4px;
+
+    border-radius:10px;
+
+    color:#9db0b5;
+
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:600;
+
+    transition:.18s ease;
+}
+
+.menu-item:hover{
+    background:rgba(255,255,255,.05);
+    color:#fff;
+}
+
+.menu-item.active{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(20,184,166,.20),
+            rgba(15,118,110,.12)
+        );
+
+    color:#55e6d5;
+
+    box-shadow:
+        inset 3px 0 0 var(--teal);
+}
+
+.menu-icon{
+    width:25px;
+    text-align:center;
+    font-size:17px;
+}
+
+.sidebar-user{
+    padding:14px;
+
+    border-top:1px solid var(--border);
+}
+
+.user-box{
+    padding:13px;
+
+    background:rgba(255,255,255,.035);
+
+    border:1px solid var(--border);
+
+    border-radius:13px;
+}
+
+.user-name{
+    font-size:12px;
+    font-weight:700;
+}
+
+.user-role{
+    color:var(--teal);
+    font-size:10px;
+    font-weight:700;
+    margin-top:3px;
+}
+
+.user-unit{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:2px;
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.main{
+    margin-left:290px;
+    min-height:100vh;
+}
+
+.topbar{
+    height:82px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    background:
+        rgba(7,20,24,.78);
+
+    border-bottom:1px solid var(--border);
+
+    backdrop-filter:blur(18px);
+
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+.topbar-title{
+    font-size:17px;
+    font-weight:800;
+}
+
+.topbar-subtitle{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.topbar-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.role-pill{
+    padding:8px 12px;
+
+    border-radius:999px;
+
+    background:rgba(20,184,166,.10);
+
+    border:1px solid rgba(20,184,166,.25);
+
+    color:#53dfd0;
+
+    font-size:11px;
+    font-weight:800;
+}
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.content{
+    padding:28px 30px 50px;
+}
+
+.hero{
+    position:relative;
+    overflow:hidden;
+
+    padding:27px;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(16,56,61,.96),
+            rgba(11,37,43,.98)
+        );
+
+    border:1px solid rgba(20,184,166,.16);
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:20px;
+}
+
+.hero::after{
+    content:"";
+
+    position:absolute;
+
+    width:300px;
+    height:300px;
+
+    right:-100px;
+    top:-130px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(20,184,166,.18),
+            transparent 65%
+        );
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+}
+
+.hero-title{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:-.5px;
+}
+
+.hero-description{
+    color:#9fb4b8;
+    font-size:12px;
+    margin-top:7px;
+    max-width:800px;
+}
+
+/* =========================================================
+   FILTER
+   ========================================================= */
+
+.filter-card{
+    display:grid;
+
+    grid-template-columns:
+        150px
+        150px
+        minmax(220px,1fr)
+        auto;
+
+    gap:12px;
+
+    padding:17px;
+
+    background:var(--panel);
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    margin-bottom:18px;
+}
+
+.filter-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.filter-label{
+    color:#779197;
+    font-size:10px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+}
+
+select{
+    width:100%;
+
+    height:42px;
+
+    padding:0 12px;
+
+    border-radius:9px;
+
+    border:1px solid rgba(255,255,255,.10);
+
+    background:#0b2026;
+
+    color:#eaf3f5;
+
+    outline:none;
+
+    font-size:12px;
+}
+
+select:focus{
+    border-color:rgba(20,184,166,.55);
+
+    box-shadow:
+        0 0 0 3px rgba(20,184,166,.08);
+}
+
+select:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+.filter-actions{
+    display:flex;
+    align-items:flex-end;
+    gap:8px;
+}
+
+.btn{
+    height:42px;
+
+    padding:0 15px;
+
+    border-radius:9px;
+
+    border:1px solid rgba(255,255,255,.09);
+
+    font-size:11px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.18s ease;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #14b8a6,
+            #0f766e
+        );
+
+    border-color:rgba(20,184,166,.3);
+}
+
+.btn-secondary{
+    color:#b8c9cd;
+
+    background:#10282e;
+}
+
+.btn-detail{
+    height:31px;
+
+    padding:0 11px;
+
+    border-radius:7px;
+
+    color:#5eead4;
+
+    background:rgba(20,184,166,.08);
+
+    border:1px solid rgba(20,184,166,.18);
+
+    font-size:10px;
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.btn-detail:hover{
+    background:rgba(20,184,166,.16);
+}
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.tabs{
+    display:flex;
+    gap:5px;
+
+    padding:6px;
+
+    background:#0a1c21;
+
+    border:1px solid var(--border);
+
+    border-radius:13px;
+
+    margin-bottom:18px;
+
+    overflow-x:auto;
+}
+
+.tab{
+    flex:1;
+
+    min-width:130px;
+
+    height:40px;
+
+    border:0;
+
+    border-radius:8px;
+
+    background:transparent;
+
+    color:#7f969c;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    white-space:nowrap;
+
+    transition:.18s ease;
+}
+
+.tab:hover{
+    color:#d5e2e5;
+    background:rgba(255,255,255,.035);
+}
+
+.tab.active{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(20,184,166,.20),
+            rgba(15,118,110,.13)
+        );
+
+    color:#57e1d2;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(20,184,166,.16);
+}
+
+/* =========================================================
+   SUMMARY CARDS
+   ========================================================= */
+
+.summary-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    gap:12px;
+
+    margin-bottom:18px;
+}
+
+.summary-card{
+    padding:16px;
+
+    border-radius:14px;
+
+    background:var(--panel);
+
+    border:1px solid var(--border);
+}
+
+.summary-label{
+    color:#789096;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    text-transform:uppercase;
+
+    letter-spacing:.7px;
+}
+
+.summary-value{
+    font-size:20px;
+
+    font-weight:900;
+
+    margin-top:6px;
+}
+
+.summary-value.rm{
+    color:#5eead4;
+}
+
+.summary-value.klm{
+    color:#fbbf24;
+}
+
+.summary-small{
+    color:#61787e;
+
+    font-size:9px;
+
+    margin-top:3px;
+}
+
+/* =========================================================
+   TABLE CARD
+   ========================================================= */
+
+.table-card{
+    background:var(--panel);
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.14);
+
+    margin-bottom:20px;
+}
+
+.table-header{
+    padding:17px 18px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border-bottom:1px solid var(--border);
+}
+
+.table-title{
+    font-size:13px;
+
+    font-weight:900;
+}
+
+.table-subtitle{
+    color:#6f858b;
+
+    font-size:10px;
+
+    margin-top:3px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:1350px;
+}
+
+thead th{
+    background:#0b2026;
+
+    color:#789196;
+
+    font-size:9px;
+
+    font-weight:900;
+
+    text-transform:uppercase;
+
+    letter-spacing:.35px;
+
+    padding:11px 8px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    white-space:nowrap;
+
+    text-align:right;
+}
+
+thead th:first-child,
+thead th:nth-child(2){
+    text-align:left;
+}
+
+tbody td{
+    padding:10px 8px;
+
+    border-bottom:1px solid rgba(255,255,255,.045);
+
+    color:#c9d7da;
+
+    font-size:10px;
+
+    text-align:right;
+
+    white-space:nowrap;
+}
+
+tbody td:first-child{
+    text-align:center;
+    color:#6f858b;
+}
+
+tbody td:nth-child(2){
+    text-align:left;
+}
+
+tbody tr:hover{
+    background:rgba(255,255,255,.025);
+}
+
+.name-main{
+    color:#e2ebed;
+    font-weight:700;
+}
+
+.name-sub{
+    color:#61787e;
+    font-size:9px;
+    margin-top:2px;
+}
+
+.number-klm{
+    color:#fbbf24;
+    font-weight:700;
+}
+
+.number-rm{
+    color:#72e6d8;
+    font-weight:700;
+}
+
+.number-total{
+    color:#fff;
+    font-weight:900;
+}
+
+.total-row td{
+    background:#0b2026;
+
+    color:#fff;
+
+    font-weight:900;
+
+    border-top:1px solid rgba(20,184,166,.18);
+}
+
+/* =========================================================
+   UNIT SUMMARY
+   ========================================================= */
+
+.unit-card{
+    background:#0d2329;
+
+    border:1px solid rgba(255,255,255,.07);
+
+    border-radius:14px;
+
+    margin-bottom:10px;
+
+    overflow:hidden;
+}
+
+.unit-row{
+    display:grid;
+
+    grid-template-columns:
+        minmax(180px,1.2fr)
+        repeat(5,minmax(100px,1fr))
+        90px;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:14px 15px;
+}
+
+.unit-row:hover{
+    background:rgba(255,255,255,.018);
+}
+
+.unit-name{
+    font-size:12px;
+
+    font-weight:900;
+
+    color:#dce8ea;
+}
+
+.unit-meta{
+    color:#637a80;
+
+    font-size:9px;
+
+    margin-top:3px;
+}
+
+.unit-stat-label{
+    color:#637a80;
+
+    font-size:8px;
+
+    text-transform:uppercase;
+
+    font-weight:800;
+}
+
+.unit-stat-value{
+    margin-top:2px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    color:#d4e0e2;
+}
+
+.unit-stat-value.rm{
+    color:#5eead4;
+}
+
+.unit-stat-value.klm{
+    color:#fbbf24;
+}
+
+.overall-unit{
+    margin-top:15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(20,184,166,.10),
+            rgba(16,38,44,.95)
+        );
+
+    border:1px solid rgba(20,184,166,.18);
+
+    border-radius:14px;
+
+    overflow:hidden;
+}
+
+/* =========================================================
+   POS GROUP
+   ========================================================= */
+
+.pos-group{
+    margin:0 16px 16px;
+
+    border:1px solid rgba(255,255,255,.07);
+
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.pos-header{
+    padding:11px 14px;
+
+    background:#0b2026;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.pos-title{
+    font-size:11px;
+
+    font-weight:900;
+
+    color:#d9e5e7;
+}
+
+.pos-count{
+    font-size:9px;
+
+    color:#71878d;
+}
+
+/* =========================================================
+   DETAIL PANEL
+   ========================================================= */
+
+.detail-panel{
+    display:none;
+
+    margin-top:18px;
+
+    background:#091b20;
+
+    border:1px solid rgba(20,184,166,.15);
+
+    border-radius:16px;
+
+    overflow:hidden;
+}
+
+.detail-panel.show{
+    display:block;
+}
+
+.detail-header{
+    padding:17px 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    border-bottom:1px solid var(--border);
+}
+
+.detail-title{
+    font-size:13px;
+
+    font-weight:900;
+}
+
+.detail-close{
+    height:32px;
+
+    padding:0 11px;
+
+    border-radius:7px;
+
+    background:#10282e;
+
+    color:#91a7ac;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    font-size:10px;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+/* =========================================================
+   EMPTY / LOADING
+   ========================================================= */
+
+.state-box{
+    padding:55px 20px;
+
+    text-align:center;
+
+    color:#71878d;
+}
+
+.state-icon{
+    font-size:28px;
+
+    margin-bottom:9px;
+}
+
+.state-title{
+    color:#b8c9cc;
+
+    font-size:12px;
+
+    font-weight:800;
+}
+
+.state-text{
+    margin-top:4px;
+
+    font-size:10px;
+
+    color:#62787d;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast{
+    position:fixed;
+
+    right:22px;
+    bottom:22px;
+
+    min-width:280px;
+
+    max-width:420px;
+
+    padding:13px 15px;
+
+    background:#10282e;
+
+    border:1px solid rgba(20,184,166,.20);
+
+    border-radius:11px;
+
+    box-shadow:var(--shadow);
+
+    z-index:9999;
+
+    display:none;
+}
+
+.toast.show{
+    display:block;
+    animation:toastIn .2s ease;
+}
+
+@keyframes toastIn{
+    from{
+        transform:translateY(8px);
+        opacity:0;
+    }
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+.toast-title{
+    font-size:11px;
+    font-weight:900;
+}
+
+.toast-text{
+    color:#7f969b;
+    font-size:10px;
+    margin-top:3px;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+.mobile-header{
+    display:none;
+}
+
+@media(max-width:1100px){
+
+    .sidebar{
+        width:240px;
+    }
+
+    .main{
+        margin-left:240px;
+    }
+
+    .filter-card{
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .filter-actions{
+        align-items:center;
+    }
+
+    .summary-grid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .unit-row{
+        grid-template-columns:
+            1.5fr
+            repeat(3,1fr)
+            80px;
+    }
+
+    .unit-row .hide-tablet{
+        display:none;
+    }
+}
+
+@media(max-width:760px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        margin-left:0;
+        padding-bottom:68px;
+    }
+
+    .topbar{
+        height:68px;
+        padding:0 16px;
+    }
+
+    .topbar-title{
+        font-size:14px;
+    }
+
+    .topbar-subtitle{
+        font-size:9px;
+    }
+
+    .role-pill{
+        padding:7px 9px;
+        font-size:9px;
+    }
+
+    .content{
+        padding:16px 12px 30px;
+    }
+
+    .hero{
+        padding:20px;
+        border-radius:15px;
+    }
+
+    .hero-title{
+        font-size:20px;
+    }
+
+    .hero-description{
+        font-size:10px;
+    }
+
+    .filter-card{
+        grid-template-columns:1fr 1fr;
+        padding:13px;
+    }
+
+    .filter-group:nth-child(3){
+        grid-column:1 / -1;
+    }
+
+    .filter-actions{
+        grid-column:1 / -1;
+    }
+
+    .filter-actions .btn{
+        flex:1;
+    }
+
+    .tabs{
+        margin-bottom:13px;
+    }
+
+    .tab{
+        min-width:110px;
+        flex:none;
+    }
+
+    .summary-grid{
+        grid-template-columns:
+            1fr 1fr;
+
+        gap:8px;
+    }
+
+    .summary-card{
+        padding:12px;
+    }
+
+    .summary-value{
+        font-size:16px;
+    }
+
+    .table-card{
+        border-radius:12px;
+    }
+
+    .table-header{
+        padding:14px;
+    }
+
+    .unit-row{
+        grid-template-columns:
+            1fr 1fr;
+
+        gap:12px;
+
+        padding:14px;
+    }
+
+    .unit-row > div:first-child{
+        grid-column:1 / -1;
+    }
+
+    .unit-row .hide-mobile{
+        display:none;
+    }
+
+    .unit-row .detail-cell{
+        grid-column:1 / -1;
+        text-align:right;
+    }
+
+    .mobile-bottom{
+        display:flex !important;
+    }
+}
+
+.mobile-bottom{
+    display:none;
+
+    position:fixed;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:62px;
+
+    background:
+        rgba(7,20,24,.96);
+
+    border-top:1px solid var(--border);
+
+    z-index:200;
+
+    align-items:center;
+    justify-content:space-around;
+
+    backdrop-filter:blur(16px);
+}
+
+.mobile-nav-item{
+    text-decoration:none;
+
+    color:#70878c;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:3px;
+
+    font-size:8px;
+
+    font-weight:700;
+}
+
+.mobile-nav-item.active{
+    color:#4ee0d0;
+}
+
+.mobile-nav-icon{
+    font-size:17px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     SIDEBAR
+     ========================================================= -->
+
+<aside class="sidebar">
+
+    <div class="logo-area">
+
+        <div class="logo-box">
+            📋
+        </div>
+
+        <div>
+            <div class="logo-title">
+                MASTER DUTY PRO
+            </div>
+
+            <div class="logo-subtitle">
+                FPB Duty Management System
+            </div>
+        </div>
+
+    </div>
+
+    <nav class="sidebar-menu">
+
+        <div class="menu-label">
+            UTAMA
+        </div>
+
+        <a href="dashboard.html" class="menu-item">
+            <span class="menu-icon">⌂</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="senarai-anggota.html" class="menu-item">
+            <span class="menu-icon">👥</span>
+            <span>Senarai Anggota</span>
+        </a>
+
+        <a href="jadual-duty.html" class="menu-item">
+            <span class="menu-icon">📅</span>
+            <span>Jadual Duty</span>
+        </a>
+
+        <div class="menu-label">
+            PENGURUSAN
+        </div>
+
+        <a href="kod-duty.html" class="menu-item">
+            <span class="menu-icon">⏱</span>
+            <span>Kod Duty</span>
+        </a>
+
+        <a href="kod-tempat-kerja.html" class="menu-item">
+            <span class="menu-icon">📍</span>
+            <span>Kod Tempat Kerja</span>
+        </a>
+
+        <a href="rk02-entry.html" class="menu-item">
+            <span class="menu-icon">🧾</span>
+            <span>RK02 &amp; PNL Entry</span>
+        </a>
+
+        <div class="menu-label">
+            LAPORAN
+        </div>
+
+        <a href="klm-mingguan.html" class="menu-item active">
+            <span class="menu-icon">📊</span>
+            <span>KLM Mingguan</span>
+        </a>
+
+        <a href="laporan-penuh-pengurusan.html" class="menu-item">
+            <span class="menu-icon">📑</span>
+            <span>Laporan Pengurusan</span>
+        </a>
+
+        <a href="anggaran-rk01.html" class="menu-item">
+            <span class="menu-icon">💰</span>
+            <span>Anggaran RK01</span>
+        </a>
+
+        <a href="anggaran-rk02.html" class="menu-item">
+            <span class="menu-icon">📈</span>
+            <span>Anggaran RK02</span>
+        </a>
+
+        <div class="menu-label">
+            SISTEM
+        </div>
+
+        <a href="tetapan.html" class="menu-item">
+            <span class="menu-icon">⚙</span>
+            <span>Tetapan</span>
+        </a>
+
+        <a href="#" id="btnLogout" class="menu-item">
+            <span class="menu-icon">↪</span>
+            <span>Log Keluar</span>
+        </a>
+
+    </nav>
+
+    <div class="sidebar-user">
+
+        <div class="user-box">
+
+            <div class="user-name" id="sidebarUserName">
+                —
+            </div>
+
+            <div class="user-role" id="sidebarUserRole">
+                —
+            </div>
+
+            <div class="user-unit" id="sidebarUserUnit">
+                —
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main class="main">
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+        <div>
+
+            <div class="topbar-title">
+                KLM Mingguan
+            </div>
+
+            <div class="topbar-subtitle">
+                Ringkasan KLM &amp; RM mengikut minggu
+            </div>
+
+        </div>
+
+        <div class="topbar-right">
+
+            <div class="role-pill" id="topRole">
+                —
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+
+    <section class="content">
+
+        <!-- HERO -->
+
+        <div class="hero">
+
+            <div class="hero-content">
+
+                <div class="hero-title">
+                    KLM MINGGUAN
+                </div>
+
+                <div class="hero-description">
+                    Analisis KLM dan RM berdasarkan jadual duty.
+                    Data dibahagikan kepada empat minggu dalam bulan
+                    dan jumlah keseluruhan.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="filter-card">
+
+            <div class="filter-group">
+
+                <label class="filter-label">
+                    Bulan
+                </label>
+
+                <select id="filterBulan"></select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label class="filter-label">
+                    Tahun
+                </label>
+
+                <select id="filterTahun"></select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label class="filter-label">
+                    Unit
+                </label>
+
+                <select id="filterUnit">
+                    <option value="">
+                        MEMUATKAN UNIT...
+                    </option>
+                </select>
+
+            </div>
+
+
+            <div class="filter-actions">
+
+                <button
+                    class="btn btn-primary"
+                    id="btnPapar"
+                >
+                    🔎 PAPAR
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    id="btnRefresh"
+                >
+                    🔄 REFRESH
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABS -->
+
+        <div class="tabs">
+
+            <button
+                class="tab active"
+                data-week="1"
+            >
+                MINGGU 1
+            </button>
+
+            <button
+                class="tab"
+                data-week="2"
+            >
+                MINGGU 2
+            </button>
+
+            <button
+                class="tab"
+                data-week="3"
+            >
+                MINGGU 3
+            </button>
+
+            <button
+                class="tab"
+                data-week="4"
+            >
+                MINGGU 4
+            </button>
+
+            <button
+                class="tab"
+                data-week="all"
+            >
+                JUMLAH KESELURUHAN
+            </button>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div
+            class="summary-grid"
+            id="summaryGrid"
+        >
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    KLM Hari Biasa
+                </div>
+
+                <div
+                    class="summary-value klm"
+                    id="sumKlmBiasa"
+                >
+                    0.00
+                </div>
+
+                <div class="summary-small">
+                    Jam
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    KLM Hari OFF
+                </div>
+
+                <div
+                    class="summary-value klm"
+                    id="sumKlmOff"
+                >
+                    0.00
+                </div>
+
+                <div class="summary-small">
+                    Hari
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    KLM Cuti AM
+                </div>
+
+                <div
+                    class="summary-value klm"
+                    id="sumKlmCuti"
+                >
+                    0.00
+                </div>
+
+                <div class="summary-small">
+                    Hari
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    JUMLAH RM KLM
+                </div>
+
+                <div
+                    class="summary-value rm"
+                    id="sumRm"
+                >
+                    RM 0.00
+                </div>
+
+                <div class="summary-small">
+                    rm_klm_seluruh
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAIN RESULT -->
+
+        <div id="resultArea">
+
+            <div class="state-box">
+
+                <div class="state-icon">
+                    📊
+                </div>
+
+                <div class="state-title">
+                    Sila pilih bulan dan tahun
+                </div>
+
+                <div class="state-text">
+                    Tekan PAPAR untuk memuatkan data KLM mingguan.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DETAIL -->
+
+        <div
+            class="detail-panel"
+            id="detailPanel"
+        >
+
+            <div class="detail-header">
+
+                <div>
+
+                    <div
+                        class="detail-title"
+                        id="detailTitle"
+                    >
+                        Detail Anggota
+                    </div>
+
+                    <div
+                        class="table-subtitle"
+                        id="detailSubtitle"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+                <button
+                    class="detail-close"
+                    id="btnCloseDetail"
+                >
+                    ✕ TUTUP DETAIL
+                </button>
+
+            </div>
+
+            <div id="detailContent"></div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     MOBILE BOTTOM NAV
+     ========================================================= -->
+
+<nav class="mobile-bottom">
+
+    <a
+        href="dashboard.html"
+        class="mobile-nav-item"
+    >
+        <span class="mobile-nav-icon">⌂</span>
+        <span>Dashboard</span>
+    </a>
+
+    <a
+        href="jadual-duty.html"
+        class="mobile-nav-item"
+    >
+        <span class="mobile-nav-icon">📅</span>
+        <span>Duty</span>
+    </a>
+
+    <a
+        href="klm-mingguan.html"
+        class="mobile-nav-item active"
+    >
+        <span class="mobile-nav-icon">📊</span>
+        <span>KLM</span>
+    </a>
+
+    <a
+        href="tetapan.html"
+        class="mobile-nav-item"
+    >
+        <span class="mobile-nav-icon">⚙</span>
+        <span>Tetapan</span>
+    </a>
+
+</nav>
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div
+    class="toast"
+    id="toast"
+>
+
+    <div
+        class="toast-title"
+        id="toastTitle"
+    >
+        Makluman
+    </div>
+
+    <div
+        class="toast-text"
+        id="toastText"
+    >
+        —
+    </div>
+
+</div>
+
+
+<script>
+/* =========================================================
+   MASTER DUTY PRO
+   KLM MINGGUAN
+   ========================================================= */
+
+
+/* =========================================================
+   SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL =
+    "https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+let currentUser = null;
+
+let currentRole = "";
+
+let currentUnit = "";
+
+let currentWeek = "1";
+
+let semuaDuty = [];
+
+let semuaAnggota = [];
+
+let unitList = [];
+
+
+/* =========================================================
+   BULAN
+   ========================================================= */
+
+const SENARAI_BULAN = [
+    "Januari",
+    "Februari",
+    "Mac",
+    "April",
+    "Mei",
+    "Jun",
+    "Julai",
+    "Ogos",
+    "September",
+    "Oktober",
+    "November",
+    "Disember"
+];
+
+
+/* =========================================================
+   HELPER
+   ========================================================= */
+
+function normaliseRole(role){
+
+    return String(role || "")
+        .trim()
+        .toLowerCase()
+        .replace(/_/g," ")
+        .replace(/\s+/g," ");
+}
+
+
+function normaliseUnit(unit){
+
+    return String(unit || "")
+        .trim()
+        .toUpperCase();
+}
+
+
+function num(value){
+
+    const n = Number(value);
+
+    return Number.isFinite(n)
+        ? n
+        : 0;
+}
+
+
+function money(value){
+
+    return "RM " +
+        num(value).toLocaleString(
+            "ms-MY",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+}
+
+
+function decimal(value){
+
+    return num(value).toLocaleString(
+        "ms-MY",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+}
+
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+function toast(title,text){
+
+    const el =
+        document.getElementById("toast");
+
+    document.getElementById(
+        "toastTitle"
+    ).textContent = title;
+
+    document.getElementById(
+        "toastText"
+    ).textContent = text;
+
+    el.classList.add("show");
+
+    setTimeout(() => {
+
+        el.classList.remove("show");
+
+    },3500);
+}
+
+
+/* =========================================================
+   BACA USER
+   ========================================================= */
+
+function bacaPengguna(){
+
+    try{
+
+        const raw =
+            localStorage.getItem("mdp_user");
+
+        if(!raw){
+
+            window.location.href =
+                "login.html";
+
+            return null;
+        }
+
+        const user =
+            JSON.parse(raw);
+
+        return user;
+
+    }catch(error){
+
+        console.error(
+            "RALAT BACA USER:",
+            error
+        );
+
+        localStorage.removeItem(
+            "mdp_user"
+        );
+
+        window.location.href =
+            "login.html";
+
+        return null;
+    }
+}
+
+
+/* =========================================================
+   ROLE
+   ========================================================= */
+
+function semakAkses(){
+
+    currentUser =
+        bacaPengguna();
+
+    if(!currentUser){
+        return false;
+    }
+
+    console.log(
+        "KLM MINGGUAN USER:",
+        currentUser
+    );
+
+
+    /*
+       ROLE BOLEH DATANG SEBAGAI:
+
+       role
+       jawatan
+       ketua_unit
+       ketua unit
+       isAdmin
+    */
+
+    let roleRaw =
+        currentUser.role ||
+        currentUser.jawatan ||
+        "";
+
+    currentRole =
+        normaliseRole(roleRaw);
+
+
+    if(
+        currentUser.isAdmin === true ||
+        currentRole === "admin" ||
+        currentRole === "administrator"
+    ){
+
+        currentRole = "admin";
+
+    }
+
+
+    console.log(
+        "ROLE NORMALISE:",
+        currentRole
+    );
+
+
+    /*
+       HANYA ADMIN + KETUA UNIT
+    */
+
+    const dibenarkan =
+        currentRole === "admin" ||
+        currentRole === "ketua unit";
+
+
+    if(!dibenarkan){
+
+        alert(
+            "Akses ditolak. Halaman KLM Mingguan hanya untuk Admin dan Ketua Unit."
+        );
+
+        window.location.href =
+            "jadual-duty.html";
+
+        return false;
+    }
+
+
+    currentUnit =
+        currentUser.unit ||
+        currentUser.namaUnit ||
+        currentUser.unitName ||
+        "";
+
+
+    currentUnit =
+        normaliseUnit(currentUnit);
+
+
+    document.getElementById(
+        "sidebarUserName"
+    ).textContent =
+        currentUser.name ||
+        currentUser.nama ||
+        "Pengguna";
+
+
+    document.getElementById(
+        "sidebarUserRole"
+    ).textContent =
+        currentRole.toUpperCase();
+
+
+    document.getElementById(
+        "sidebarUserUnit"
+    ).textContent =
+        currentUnit ||
+        "SEMUA UNIT";
+
+
+    document.getElementById(
+        "topRole"
+    ).textContent =
+        currentRole === "admin"
+            ? "ADMIN"
+            : "KETUA UNIT";
+
+
+    return true;
+}
+
+
+/* =========================================================
+   INIT FILTER BULAN
+   ========================================================= */
+
+function binaFilterBulan(){
+
+    const select =
+        document.getElementById(
+            "filterBulan"
+        );
+
+    select.innerHTML = "";
+
+    SENARAI_BULAN.forEach(
+        (bulan,index) => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                index + 1;
+
+            option.textContent =
+                bulan;
+
+            select.appendChild(
+                option
+            );
+        }
+    );
+
+    const sekarang =
+        new Date();
+
+    select.value =
+        sekarang.getMonth() + 1;
+}
+
+
+/* =========================================================
+   INIT FILTER TAHUN
+   ========================================================= */
+
+function binaFilterTahun(){
+
+    const select =
+        document.getElementById(
+            "filterTahun"
+        );
+
+    select.innerHTML = "";
+
+    const tahunSemasa =
+        new Date().getFullYear();
+
+
+    for(
+        let tahun =
+            tahunSemasa - 2;
+
+        tahun <=
+            tahunSemasa + 2;
+
+        tahun++
+    ){
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            tahun;
+
+        option.textContent =
+            tahun;
+
+        select.appendChild(
+            option
+        );
+    }
+
+
+    select.value =
+        tahunSemasa;
+}
+
+
+/* =========================================================
+   LOAD UNIT
+   ========================================================= */
+
+async function muatUnit(){
+
+    const select =
+        document.getElementById(
+            "filterUnit"
+        );
+
+
+    /*
+       KETUA UNIT
+       HANYA UNIT SENDIRI
+    */
+
+    if(
+        currentRole ===
+        "ketua unit"
+    ){
+
+        select.innerHTML = "";
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            currentUnit;
+
+        option.textContent =
+            currentUnit ||
+            "UNIT SENDIRI";
+
+        select.appendChild(
+            option
+        );
+
+        select.value =
+            currentUnit;
+
+        select.disabled = true;
+
+        return;
+    }
+
+
+    /*
+       ADMIN
+    */
+
+    select.disabled = false;
+
+    select.innerHTML =
+        `<option value="">SEMUA UNIT</option>`;
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("Data_Anggota")
+                .select("unit")
+                .not(
+                    "unit",
+                    "is",
+                    null
+                );
+
+
+        if(error){
+            throw error;
+        }
+
+
+        const setUnit =
+            new Set();
+
+
+        (data || []).forEach(
+            row => {
+
+                const unit =
+                    normaliseUnit(
+                        row.unit
+                    );
+
+                if(unit){
+                    setUnit.add(unit);
+                }
+            }
+        );
+
+
+        unitList =
+            [...setUnit].sort();
+
+
+        unitList.forEach(
+            unit => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    unit;
+
+                option.textContent =
+                    unit;
+
+                select.appendChild(
+                    option
+                );
+            }
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "RALAT LOAD UNIT:",
+            error
+        );
+
+        toast(
+            "Ralat",
+            "Tidak dapat memuatkan senarai unit."
+        );
+    }
+}
+
+
+/* =========================================================
+   LOAD ANGGOTA
+   ========================================================= */
+
+async function muatAnggota(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("Data_Anggota")
+                .select(`
+                    noskb,
+                    noanggota,
+                    nama,
+                    poskhidmat,
+                    unit,
+                    status
+                `);
+
+
+        if(error){
+            throw error;
+        }
+
+
+        semuaAnggota =
+            data || [];
+
+
+        console.log(
+            "DATA ANGGOTA:",
+            semuaAnggota
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "RALAT LOAD ANGGOTA:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   TARIKH
+   ========================================================= */
+
+function parseTarikh(value){
+
+    if(!value){
+        return null;
+    }
+
+
+    const str =
+        String(value).trim();
+
+
+    /*
+       FORMAT ISO:
+
+       YYYY-MM-DD
+    */
+
+    let match =
+        str.match(
+            /^(\d{4})-(\d{1,2})-(\d{1,2})/
+        );
+
+
+    if(match){
+
+        return {
+            year:Number(match[1]),
+            month:Number(match[2]),
+            day:Number(match[3])
+        };
+    }
+
+
+    /*
+       FORMAT DD/MM/YYYY
+    */
+
+    match =
+        str.match(
+            /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+        );
+
+
+    if(match){
+
+        return {
+            year:Number(match[3]),
+            month:Number(match[2]),
+            day:Number(match[1])
+        };
+    }
+
+
+    /*
+       FORMAT DD-MM-YYYY
+    */
+
+    match =
+        str.match(
+            /^(\d{1,2})-(\d{1,2})-(\d{4})/
+        );
+
+
+    if(match){
+
+        return {
+            year:Number(match[3]),
+            month:Number(match[2]),
+            day:Number(match[1])
+        };
+    }
+
+
+    return null;
+}
+
+
+/* =========================================================
+   TENTUKAN MINGGU
+   ========================================================= */
+
+function tentukanMinggu(day){
+
+    if(day >= 1 && day <= 7){
+        return 1;
+    }
+
+    if(day >= 8 && day <= 14){
+        return 2;
+    }
+
+    if(day >= 15 && day <= 21){
+        return 3;
+    }
+
+    if(day >= 22){
+        return 4;
+    }
+
+    return 0;
+}
+
+
+/* =========================================================
+   LOAD DUTY
+   ========================================================= */
+
+async function muatDuty(){
+
+    const bulan =
+        Number(
+            document.getElementById(
+                "filterBulan"
+            ).value
+        );
+
+    const tahun =
+        Number(
+            document.getElementById(
+                "filterTahun"
+            ).value
+        );
+
+
+    showLoading();
+
+
+    try{
+
+        /*
+           Ambil berdasarkan tahun.
+
+           Bulan dan minggu akan ditapis
+           di client berdasarkan tarikh.
+        */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("jadual_duty")
+                .select(`
+                    id,
+                    tarikh,
+                    bulan,
+                    tahun,
+                    no_skb,
+                    nama_anggota,
+                    no_anggota,
+                    unit,
+                    pos,
+                    nama_pos_asal,
+                    jam_klm,
+                    jumlah_offday,
+                    jam_offday_bertugas,
+                    jumlah_cutiam,
+                    jam_cutiam_bertugas,
+                    rm_jam_offday,
+                    rm_hari_offday,
+                    rm_jam_cutiam,
+                    rm_hari_cutiam,
+                    rm_klm_hari_biasa,
+                    rm_klm_seluruh
+                `)
+                .eq(
+                    "tahun",
+                    String(tahun)
+                );
+
+
+        if(error){
+            throw error;
+        }
+
+
+        let rows =
+            data || [];
+
+
+        /*
+           TAPIS BULAN
+        */
+
+        rows =
+            rows.filter(row => {
+
+                const date =
+                    parseTarikh(
+                        row.tarikh
+                    );
+
+
+                if(date){
+
+                    return (
+                        date.year === tahun &&
+                        date.month === bulan
+                    );
+                }
+
+
+                /*
+                   fallback jika tarikh tidak
+                   boleh parse.
+
+                   Cuba guna bulan.
+                */
+
+                const bulanDb =
+                    String(
+                        row.bulan || ""
+                    ).trim();
+
+
+                return (
+                    bulanDb ===
+                    String(bulan)
+                    ||
+                    bulanDb.toLowerCase() ===
+                    SENARAI_BULAN[
+                        bulan - 1
+                    ].toLowerCase()
+                );
+            });
+
+
+        /*
+           FILTER UNIT
+        */
+
+        const unit =
+            normaliseUnit(
+                document.getElementById(
+                    "filterUnit"
+                ).value
+            );
+
+
+        if(unit){
+
+            rows =
+                rows.filter(
+                    row =>
+                        normaliseUnit(
+                            row.unit
+                        ) === unit
+                );
+        }
+
+
+        /*
+           SIMPAN
+        */
+
+        semuaDuty =
+            rows;
+
+
+        console.log(
+            "DATA KLM MINGGUAN:",
+            semuaDuty
+        );
+
+
+        paparData();
+
+
+        toast(
+            "Data dikemaskini",
+            `${semuaDuty.length} rekod jadual duty dimuatkan.`
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "RALAT LOAD DUTY:",
+            error
+        );
+
+
+        semuaDuty = [];
+
+
+        showError(
+            "Tidak dapat memuatkan data jadual duty."
+        );
+
+
+        toast(
+            "Ralat Supabase",
+            error.message ||
+            "Gagal mendapatkan data."
+        );
+    }
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+function showLoading(){
+
+    document.getElementById(
+        "resultArea"
+    ).innerHTML = `
+
+        <div class="state-box">
+
+            <div class="state-icon">
+                ⏳
+            </div>
+
+            <div class="state-title">
+                Memuatkan data...
+            </div>
+
+            <div class="state-text">
+                Sila tunggu sebentar.
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+function showError(message){
+
+    document.getElementById(
+        "resultArea"
+    ).innerHTML = `
+
+        <div class="state-box">
+
+            <div class="state-icon">
+                ⚠️
+            </div>
+
+            <div class="state-title">
+                Ralat
+            </div>
+
+            <div class="state-text">
+                ${escapeHtml(message)}
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================================
+   WEEK FILTER
+   ========================================================= */
+
+function rowsUntukMinggu(
+    rows,
+    week
+){
+
+    if(week === "all"){
+
+        return rows;
+    }
+
+
+    const minggu =
+        Number(week);
+
+
+    return rows.filter(row => {
+
+        const date =
+            parseTarikh(
+                row.tarikh
+            );
+
+
+        if(!date){
+            return false;
+        }
+
+
+        return (
+            tentukanMinggu(
+                date.day
+            ) === minggu
+        );
+    });
+}
+
+
+/* =========================================================
+   AGGREGATE MEMBER
+   ========================================================= */
+
+function buatKeyAnggota(row){
+
+    if(row.no_skb !== null &&
+       row.no_skb !== undefined){
+
+        return "skb_" +
+            String(row.no_skb);
+    }
+
+
+    if(row.no_anggota){
+
+        return "anggota_" +
+            String(row.no_anggota);
+    }
+
+
+    return "nama_" +
+        String(
+            row.nama_anggota ||
+            "UNKNOWN"
+        );
+}
+
+
+function agregatAnggota(rows){
+
+    const map =
+        new Map();
+
+
+    rows.forEach(row => {
+
+        const key =
+            buatKeyAnggota(row);
+
+
+        if(!map.has(key)){
+
+            map.set(
+                key,
+                {
+                    key:key,
+
+                    no_skb:
+                        row.no_skb,
+
+                    no_anggota:
+                        row.no_anggota,
+
+                    nama:
+                        row.nama_anggota ||
+                        "—",
+
+                    unit:
+                        normaliseUnit(
+                            row.unit
+                        ),
+
+                    pos:
+                        row.pos ||
+                        row.nama_pos_asal ||
+                        "TANPA POS",
+
+                    klmHariBiasa:0,
+                    rmHariBiasa:0,
+
+                    klmHariOff:0,
+                    rmHariOff:0,
+
+                    klmJamOff:0,
+                    rmJamOff:0,
+
+                    klmHariCutiAm:0,
+                    rmHariCutiAm:0,
+
+                    klmJamCutiAm:0,
+                    rmJamCutiAm:0,
+
+                    jumlah:0
+                }
+            );
+        }
+
+
+        const item =
+            map.get(key);
+
+
+        /*
+           KLM HARI BIASA
+           = jam_klm
+        */
+
+        item.klmHariBiasa +=
+            num(
+                row.jam_klm
+            );
+
+
+        /*
+           RM HARI BIASA
+           = rm_klm_hari_biasa
+        */
+
+        item.rmHariBiasa +=
+            num(
+                row.rm_klm_hari_biasa
+            );
+
+
+        /*
+           HARI OFF
+        */
+
+        item.klmHariOff +=
+            num(
+                row.jumlah_offday
+            );
+
+        item.rmHariOff +=
+            num(
+                row.rm_hari_offday
+            );
+
+
+        /*
+           JAM OFF
+        */
+
+        item.klmJamOff +=
+            num(
+                row.jam_offday_bertugas
+            );
+
+        item.rmJamOff +=
+            num(
+                row.rm_jam_offday
+            );
+
+
+        /*
+           HARI CUTI AM
+        */
+
+        item.klmHariCutiAm +=
+            num(
+                row.jumlah_cutiam
+            );
+
+        item.rmHariCutiAm +=
+            num(
+                row.rm_hari_cutiam
+            );
+
+
+        /*
+           JAM CUTI AM
+        */
+
+        item.klmJamCutiAm +=
+            num(
+                row.jam_cutiam_bertugas
+            );
+
+        item.rmJamCutiAm +=
+            num(
+                row.rm_jam_cutiam
+            );
+
+
+        /*
+           JUMLAH RM
+
+           PENTING:
+           GUNA rm_klm_seluruh SAHAJA
+        */
+
+        item.jumlah +=
+            num(
+                row.rm_klm_seluruh
+            );
+
+    });
+
+
+    return [...map.values()];
+}
+
+
+/* =========================================================
+   AGGREGATE UNIT
+   ========================================================= */
+
+function agregatUnit(rows){
+
+    const map =
+        new Map();
+
+
+    rows.forEach(row => {
+
+        const unit =
+            normaliseUnit(
+                row.unit
+            ) ||
+            "TANPA UNIT";
+
+
+        if(!map.has(unit)){
+
+            map.set(
+                unit,
+                {
+                    unit:unit,
+
+                    anggota:new Set(),
+
+                    klmHariBiasa:0,
+                    rmHariBiasa:0,
+
+                    klmHariOff:0,
+                    rmHariOff:0,
+
+                    klmJamOff:0,
+                    rmJamOff:0,
+
+                    klmHariCutiAm:0,
+                    rmHariCutiAm:0,
+
+                    klmJamCutiAm:0,
+                    rmJamCutiAm:0,
+
+                    jumlah:0
+                }
+            );
+        }
+
+
+        const item =
+            map.get(unit);
+
+
+        item.anggota.add(
+            buatKeyAnggota(row)
+        );
+
+
+        item.klmHariBiasa +=
+            num(row.jam_klm);
+
+        item.rmHariBiasa +=
+            num(row.rm_klm_hari_biasa);
+
+
+        item.klmHariOff +=
+            num(row.jumlah_offday);
+
+        item.rmHariOff +=
+            num(row.rm_hari_offday);
+
+
+        item.klmJamOff +=
+            num(row.jam_offday_bertugas);
+
+        item.rmJamOff +=
+            num(row.rm_jam_offday);
+
+
+        item.klmHariCutiAm +=
+            num(row.jumlah_cutiam);
+
+        item.rmHariCutiAm +=
+            num(row.rm_hari_cutiam);
+
+
+        item.klmJamCutiAm +=
+            num(row.jam_cutiam_bertugas);
+
+        item.rmJamCutiAm +=
+            num(row.rm_jam_cutiam);
+
+
+        item.jumlah +=
+            num(row.rm_klm_seluruh);
+
+    });
+
+
+    return [...map.values()]
+        .map(item => {
+
+            item.bilAnggota =
+                item.anggota.size;
+
+            delete item.anggota;
+
+            return item;
+        })
+        .sort(
+            (a,b) =>
+                a.unit.localeCompare(
+                    b.unit
+                )
+        );
+}
+
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+function totalRows(rows){
+
+    return rows.reduce(
+        (total,row) => {
+
+            total.klmHariBiasa +=
+                num(row.jam_klm);
+
+            total.rmHariBiasa +=
+                num(
+                    row.rm_klm_hari_biasa
+                );
+
+            total.klmHariOff +=
+                num(
+                    row.jumlah_offday
+                );
+
+            total.rmHariOff +=
+                num(
+                    row.rm_hari_offday
+                );
+
+            total.klmJamOff +=
+                num(
+                    row.jam_offday_bertugas
+                );
+
+            total.rmJamOff +=
+                num(
+                    row.rm_jam_offday
+                );
+
+            total.klmHariCutiAm +=
+                num(
+                    row.jumlah_cutiam
+                );
+
+            total.rmHariCutiAm +=
+                num(
+                    row.rm_hari_cutiam
+                );
+
+            total.klmJamCutiAm +=
+                num(
+                    row.jam_cutiam_bertugas
+                );
+
+            total.rmJamCutiAm +=
+                num(
+                    row.rm_jam_cutiam
+                );
+
+            total.jumlah +=
+                num(
+                    row.rm_klm_seluruh
+                );
+
+            return total;
+
+        },
+        {
+            klmHariBiasa:0,
+            rmHariBiasa:0,
+
+            klmHariOff:0,
+            rmHariOff:0,
+
+            klmJamOff:0,
+            rmJamOff:0,
+
+            klmHariCutiAm:0,
+            rmHariCutiAm:0,
+
+            klmJamCutiAm:0,
+            rmJamCutiAm:0,
+
+            jumlah:0
+        }
+    );
+}
+
+
+/* =========================================================
+   PAPAR DATA
+   ========================================================= */
+
+function paparData(){
+
+    const rows =
+        rowsUntukMinggu(
+            semuaDuty,
+            currentWeek
+        );
+
+
+    kemaskiniSummary(
+        rows
+    );
+
+
+    /*
+       ADMIN:
+
+       papar unit sahaja.
+    */
+
+    if(
+        currentRole === "admin"
+    ){
+
+        paparAdmin(
+            rows
+        );
+
+        return;
+    }
+
+
+    /*
+       KETUA UNIT:
+
+       papar POS + ANGGOTA.
+    */
+
+    paparKetuaUnit(
+        rows
+    );
+}
+
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+function kemaskiniSummary(rows){
+
+    const total =
+        totalRows(rows);
+
+
+    document.getElementById(
+        "sumKlmBiasa"
+    ).textContent =
+        decimal(
+            total.klmHariBiasa
+        );
+
+
+    document.getElementById(
+        "sumKlmOff"
+    ).textContent =
+        decimal(
+            total.klmHariOff
+        );
+
+
+    document.getElementById(
+        "sumKlmCuti"
+    ).textContent =
+        decimal(
+            total.klmHariCutiAm
+        );
+
+
+    document.getElementById(
+        "sumRm"
+    ).textContent =
+        money(
+            total.jumlah
+        );
+}
+
+
+/* =========================================================
+   HEADER WEEK
+   ========================================================= */
+
+function teksMinggu(){
+
+    const bulan =
+        Number(
+            document.getElementById(
+                "filterBulan"
+            ).value
+        );
+
+    const tahun =
+        Number(
+            document.getElementById(
+                "filterTahun"
+            ).value
+        );
+
+
+    if(currentWeek === "all"){
+
+        return `
+            ${SENARAI_BULAN[bulan - 1]}
+            ${tahun}
+            — Keseluruhan Bulan
+        `;
+    }
+
+
+    let mula = 1;
+    let akhir = 7;
+
+
+    if(currentWeek === "2"){
+        mula = 8;
+        akhir = 14;
+    }
+
+    if(currentWeek === "3"){
+        mula = 15;
+        akhir = 21;
+    }
+
+    if(currentWeek === "4"){
+
+        mula = 22;
+
+        akhir =
+            new Date(
+                tahun,
+                bulan,
+                0
+            ).getDate();
+    }
+
+
+    return `
+        ${SENARAI_BULAN[bulan - 1]}
+        ${tahun}
+        — ${mula} hingga ${akhir}
+    `;
+}
+
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+function paparAdmin(rows){
+
+    const units =
+        agregatUnit(rows);
+
+
+    if(!units.length){
+
+        document.getElementById(
+            "resultArea"
+        ).innerHTML = `
+
+            <div class="state-box">
+
+                <div class="state-icon">
+                    📭
+                </div>
+
+                <div class="state-title">
+                    Tiada rekod
+                </div>
+
+                <div class="state-text">
+                    Tiada rekod KLM untuk
+                    ${escapeHtml(teksMinggu())}.
+                </div>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const total =
+        totalRows(rows);
+
+
+    let html = `
+
+        <div class="table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <div class="table-title">
+                        Ringkasan KLM Mengikut Unit
+                    </div>
+
+                    <div class="table-subtitle">
+                        ${escapeHtml(teksMinggu())}
+                    </div>
+
+                </div>
+
+                <div class="table-subtitle">
+                    ${units.length} unit
+                </div>
+
+            </div>
+
+            <div>
+    `;
+
+
+    units.forEach(unit => {
+
+        html += `
+
+            <div class="unit-card">
+
+                <div class="unit-row">
+
+                    <div>
+
+                        <div class="unit-name">
+                            ${escapeHtml(unit.unit)}
+                        </div>
+
+                        <div class="unit-meta">
+                            ${unit.bilAnggota} anggota
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="unit-stat-label">
+                            KLM Biasa
+                        </div>
+
+                        <div class="unit-stat-value klm">
+                            ${decimal(unit.klmHariBiasa)}
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="unit-stat-label">
+                            KLM OFF
+                        </div>
+
+                        <div class="unit-stat-value klm">
+                            ${decimal(unit.klmHariOff)}
+                        </div>
+
+                    </div>
+
+
+                    <div class="hide-tablet">
+
+                        <div class="unit-stat-label">
+                            KLM Cuti
+                        </div>
+
+                        <div class="unit-stat-value klm">
+                            ${decimal(unit.klmHariCutiAm)}
+                        </div>
+
+                    </div>
+
+
+                    <div class="hide-tablet">
+
+                        <div class="unit-stat-label">
+                            RM Biasa
+                        </div>
+
+                        <div class="unit-stat-value rm">
+                            ${money(unit.rmHariBiasa)}
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="unit-stat-label">
+                            JUMLAH RM
+                        </div>
+
+                        <div class="unit-stat-value rm">
+                            ${money(unit.jumlah)}
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-cell">
+
+                        <button
+                            class="btn-detail"
+                            data-detail-unit="${escapeHtml(unit.unit)}"
+                        >
+                            DETAIL
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+    });
+
+
+    html += `
+
+            </div>
+
+        </div>
+
+
+        <div class="overall-unit">
+
+            <div class="unit-row">
+
+                <div>
+
+                    <div class="unit-name">
+                        JUMLAH KESELURUHAN SEMUA UNIT
+                    </div>
+
+                    <div class="unit-meta">
+                        ${units.length} unit
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="unit-stat-label">
+                        KLM BIASA
+                    </div>
+
+                    <div class="unit-stat-value klm">
+                        ${decimal(total.klmHariBiasa)}
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="unit-stat-label">
+                        KLM OFF
+                    </div>
+
+                    <div class="unit-stat-value klm">
+                        ${decimal(total.klmHariOff)}
+                    </div>
+
+                </div>
+
+
+                <div class="hide-tablet">
+
+                    <div class="unit-stat-label">
+                        KLM CUTI
+                    </div>
+
+                    <div class="unit-stat-value klm">
+                        ${decimal(total.klmHariCutiAm)}
+                    </div>
+
+                </div>
+
+
+                <div class="hide-tablet">
+
+                    <div class="unit-stat-label">
+                        RM BIASA
+                    </div>
+
+                    <div class="unit-stat-value rm">
+                        ${money(total.rmHariBiasa)}
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="unit-stat-label">
+                        JUMLAH RM
+                    </div>
+
+                    <div class="unit-stat-value rm">
+                        ${money(total.jumlah)}
+                    </div>
+
+                </div>
+
+
+                <div></div>
+
+            </div>
+
+        </div>
+    `;
+
+
+    document.getElementById(
+        "resultArea"
+    ).innerHTML = html;
+
+
+    /*
+       EVENT DETAIL
+    */
+
+    document
+        .querySelectorAll(
+            "[data-detail-unit]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const unit =
+                        button.getAttribute(
+                            "data-detail-unit"
+                        );
+
+                    paparDetailAdmin(
+                        unit,
+                        rows
+                    );
+                }
+            );
+
+        });
+}
+
+
+/* =========================================================
+   ADMIN DETAIL
+   ========================================================= */
+
+function paparDetailAdmin(
+    unit,
+    rows
+){
+
+    const unitRows =
+        rows.filter(
+            row =>
+                normaliseUnit(
+                    row.unit
+                ) ===
+                normaliseUnit(unit)
+        );
+
+
+    const anggota =
+        agregatAnggota(
+            unitRows
+        );
+
+
+    paparDetailAnggota(
+        anggota,
+        unit,
+        `Admin • ${unit} • ${teksMinggu()}`
+    );
+}
+
+
+/* =========================================================
+   KETUA UNIT
+   ========================================================= */
+
+function paparKetuaUnit(rows){
+
+    if(!rows.length){
+
+        document.getElementById(
+            "resultArea"
+        ).innerHTML = `
+
+            <div class="state-box">
+
+                <div class="state-icon">
+                    📭
+                </div>
+
+                <div class="state-title">
+                    Tiada rekod
+                </div>
+
+                <div class="state-text">
+                    Tiada rekod KLM untuk
+                    ${escapeHtml(teksMinggu())}.
+                </div>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const anggota =
+        agregatAnggota(rows);
+
+
+    /*
+       GROUP BY POS
+    */
+
+    const posMap =
+        new Map();
+
+
+    anggota.forEach(item => {
+
+        const pos =
+            item.pos ||
+            "TANPA POS";
+
+
+        if(!posMap.has(pos)){
+
+            posMap.set(
+                pos,
+                []
+            );
+        }
+
+
+        posMap
+            .get(pos)
+            .push(item);
+
+    });
+
+
+    const posList =
+        [...posMap.entries()]
+            .sort(
+                (a,b) =>
+                    a[0].localeCompare(
+                        b[0]
+                    )
+            );
+
+
+    let html = `
+
+        <div class="table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <div class="table-title">
+                        ${escapeHtml(currentUnit)}
+                    </div>
+
+                    <div class="table-subtitle">
+                        Mengikut POS • ${escapeHtml(teksMinggu())}
+                    </div>
+
+                </div>
+
+                <div class="table-subtitle">
+                    ${anggota.length} anggota
+                </div>
+
+            </div>
+
+    `;
+
+
+    posList.forEach(
+        ([pos,items]) => {
+
+            items.sort(
+                (a,b) =>
+                    String(a.nama)
+                        .localeCompare(
+                            String(b.nama)
+                        )
+            );
+
+
+            html += `
+
+                <div class="pos-group">
+
+                    <div class="pos-header">
+
+                        <div class="pos-title">
+                            📍 ${escapeHtml(pos)}
+                        </div>
+
+                        <div class="pos-count">
+                            ${items.length} anggota
+                        </div>
+
+                    </div>
+
+                    ${binaTableAnggota(items)}
+
+                </div>
+            `;
+        }
+    );
+
+
+    html += `
+
+        </div>
+    `;
+
+
+    document.getElementById(
+        "resultArea"
+    ).innerHTML = html;
+}
+
+
+/* =========================================================
+   DETAIL ANGGOTA
+   ========================================================= */
+
+function paparDetailAnggota(
+    anggota,
+    unit,
+    subtitle
+){
+
+    const panel =
+        document.getElementById(
+            "detailPanel"
+        );
+
+
+    document.getElementById(
+        "detailTitle"
+    ).textContent =
+        "DETAIL ANGGOTA — " +
+        unit;
+
+
+    document.getElementById(
+        "detailSubtitle"
+    ).textContent =
+        subtitle;
+
+
+    /*
+       GROUP POS
+    */
+
+    const posMap =
+        new Map();
+
+
+    anggota.forEach(item => {
+
+        const pos =
+            item.pos ||
+            "TANPA POS";
+
+
+        if(!posMap.has(pos)){
+
+            posMap.set(
+                pos,
+                []
+            );
+        }
+
+
+        posMap
+            .get(pos)
+            .push(item);
+
+    });
+
+
+    let html = "";
+
+
+    [...posMap.entries()]
+        .sort(
+            (a,b) =>
+                a[0].localeCompare(
+                    b[0]
+                )
+        )
+        .forEach(
+            ([pos,items]) => {
+
+                items.sort(
+                    (a,b) =>
+                        String(a.nama)
+                            .localeCompare(
+                                String(b.nama)
+                            )
+                );
+
+
+                html += `
+
+                    <div class="pos-group">
+
+                        <div class="pos-header">
+
+                            <div class="pos-title">
+                                📍 ${escapeHtml(pos)}
+                            </div>
+
+                            <div class="pos-count">
+                                ${items.length} anggota
+                            </div>
+
+                        </div>
+
+                        ${binaTableAnggota(items)}
+
+                    </div>
+
+                `;
+            }
+        );
+
+
+    document.getElementById(
+        "detailContent"
+    ).innerHTML =
+        html ||
+        `
+            <div class="state-box">
+                <div class="state-icon">
+                    📭
+                </div>
+                <div class="state-title">
+                    Tiada data anggota
+                </div>
+            </div>
+        `;
+
+
+    panel.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            panel.scrollIntoView({
+                behavior:"smooth",
+                block:"start"
+            });
+
+        },
+        80
+    );
+}
+
+
+/* =========================================================
+   TABLE ANGGOTA
+   ========================================================= */
+
+function binaTableAnggota(
+    items
+){
+
+    let html = `
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th style="text-align:center">
+                            Bil
+                        </th>
+
+                        <th>
+                            Nama
+                        </th>
+
+                        <th>
+                            KLM Hari Biasa
+                        </th>
+
+                        <th>
+                            RM Hari Biasa
+                        </th>
+
+                        <th>
+                            KLM Hari OFF
+                        </th>
+
+                        <th>
+                            RM Hari OFF
+                        </th>
+
+                        <th>
+                            KLM Jam OFF
+                        </th>
+
+                        <th>
+                            RM Jam OFF
+                        </th>
+
+                        <th>
+                            KLM Hari Cuti AM
+                        </th>
+
+                        <th>
+                            RM Hari Cuti AM
+                        </th>
+
+                        <th>
+                            KLM Jam Cuti AM
+                        </th>
+
+                        <th>
+                            RM Jam Cuti AM
+                        </th>
+
+                        <th>
+                            JUMLAH
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+    `;
+
+
+    items.forEach(
+        (item,index) => {
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+
+                        <div class="name-main">
+                            ${escapeHtml(item.nama)}
+                        </div>
+
+                        <div class="name-sub">
+                            SKB:
+                            ${escapeHtml(item.no_skb ?? "—")}
+                            ${item.no_anggota
+                                ? " • " +
+                                  escapeHtml(item.no_anggota)
+                                : ""}
+                        </div>
+
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmHariBiasa)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmHariBiasa)}
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmHariOff)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmHariOff)}
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmJamOff)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmJamOff)}
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmHariCutiAm)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmHariCutiAm)}
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmJamCutiAm)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmJamCutiAm)}
+                    </td>
+
+
+                    <td class="number-total">
+                        ${money(item.jumlah)}
+                    </td>
+
+                </tr>
+            `;
+        }
+    );
+
+
+    const total =
+        items.reduce(
+            (t,item) => {
+
+                t.klmHariBiasa +=
+                    item.klmHariBiasa;
+
+                t.rmHariBiasa +=
+                    item.rmHariBiasa;
+
+                t.klmHariOff +=
+                    item.klmHariOff;
+
+                t.rmHariOff +=
+                    item.rmHariOff;
+
+                t.klmJamOff +=
+                    item.klmJamOff;
+
+                t.rmJamOff +=
+                    item.rmJamOff;
+
+                t.klmHariCutiAm +=
+                    item.klmHariCutiAm;
+
+                t.rmHariCutiAm +=
+                    item.rmHariCutiAm;
+
+                t.klmJamCutiAm +=
+                    item.klmJamCutiAm;
+
+                t.rmJamCutiAm +=
+                    item.rmJamCutiAm;
+
+                t.jumlah +=
+                    item.jumlah;
+
+                return t;
+
+            },
+            {
+                klmHariBiasa:0,
+                rmHariBiasa:0,
+
+                klmHariOff:0,
+                rmHariOff:0,
+
+                klmJamOff:0,
+                rmJamOff:0,
+
+                klmHariCutiAm:0,
+                rmHariCutiAm:0,
+
+                klmJamCutiAm:0,
+                rmJamCutiAm:0,
+
+                jumlah:0
+            }
+        );
+
+
+    html += `
+
+                </tbody>
+
+                <tfoot>
+
+                    <tr class="total-row">
+
+                        <td colspan="2">
+                            JUMLAH
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmHariBiasa)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmHariBiasa)}
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmHariOff)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmHariOff)}
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmJamOff)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmJamOff)}
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmHariCutiAm)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmHariCutiAm)}
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmJamCutiAm)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmJamCutiAm)}
+                        </td>
+
+                        <td>
+                            ${money(total.jumlah)}
+                        </td>
+
+                    </tr>
+
+                </tfoot>
+
+            </table>
+
+        </div>
+    `;
+
+
+    return html;
+}
+
+
+/* =========================================================
+   EVENT TABS
+   ========================================================= */
+
+function pasangTab(){
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(tab => {
+
+            tab.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(".tab")
+                        .forEach(
+                            t =>
+                                t.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    tab.classList.add(
+                        "active"
+                    );
+
+
+                    currentWeek =
+                        tab.dataset.week;
+
+
+                    /*
+                       Tutup detail lama
+                    */
+
+                    tutupDetail();
+
+
+                    paparData();
+
+                }
+            );
+
+        });
+}
+
+
+/* =========================================================
+   DETAIL CLOSE
+   ========================================================= */
+
+function tutupDetail(){
+
+    document
+        .getElementById(
+            "detailPanel"
+        )
+        .classList.remove(
+            "show"
+        );
+}
+
+
+function pasangEvent(){
+
+    document
+        .getElementById(
+            "btnPapar"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                await muatDuty();
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "btnRefresh"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                await muatDuty();
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "btnCloseDetail"
+        )
+        .addEventListener(
+            "click",
+            tutupDetail
+        );
+
+
+    document
+        .getElementById(
+            "filterBulan"
+        )
+        .addEventListener(
+            "change",
+            () => {
+
+                if(semuaDuty.length){
+
+                    muatDuty();
+
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "filterTahun"
+        )
+        .addEventListener(
+            "change",
+            () => {
+
+                if(semuaDuty.length){
+
+                    muatDuty();
+
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "filterUnit"
+        )
+        .addEventListener(
+            "change",
+            () => {
+
+                if(
+                    currentRole ===
+                    "admin"
+                ){
+
+                    if(semuaDuty.length){
+
+                        muatDuty();
+
+                    }
+
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "btnLogout"
+        )
+        .addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                localStorage.removeItem(
+                    "mdp_user"
+                );
+
+                window.location.href =
+                    "login.html";
+            }
+        );
+
+}
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+async function init(){
+
+    console.log(
+        "================================"
+    );
+
+    console.log(
+        "KLM MINGGUAN START"
+    );
+
+    console.log(
+        "================================"
+    );
+
+
+    /*
+       ACCESS
+    */
+
+    if(!semakAkses()){
+        return;
+    }
+
+
+    /*
+       FILTER
+    */
+
+    binaFilterBulan();
+
+    binaFilterTahun();
+
+
+    /*
+       EVENTS
+    */
+
+    pasangTab();
+
+    pasangEvent();
+
+
+    /*
+       DATA
+    */
+
+    await Promise.all([
+        muatUnit(),
+        muatAnggota()
+    ]);
+
+
+    /*
+       PAPAR AUTOMATIK
+    */
+
+    await muatDuty();
+
+
+    console.log(
+        "KLM MINGGUAN READY"
+    );
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    init
+);
+</script>
+
+</body>
+</html>
