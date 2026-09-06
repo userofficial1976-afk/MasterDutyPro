@@ -2600,24 +2600,22 @@ async function muatAnggota(){
         const {
             data,
             error
-        } =
-            await supabaseClient
-                .from("Data_Anggota")
-                .select(`
-                    no_skb,
-                    noanggota,
-                    nama,
-                    poskhidmat,
-                    unit,
-                    status
-                `)
-                .order(
-                    "nama",
-                    {
-                        ascending:true
-                    }
-                );
-
+        } = await supabaseClient
+            .from("Data_Anggota")
+            .select(`
+                no_skb,
+                no_anggota,
+                nama,
+                poskhidmat,
+                unit,
+                status
+            `)
+            .order(
+                "nama",
+                {
+                    ascending: true
+                }
+            );
 
         if(error){
 
@@ -2629,38 +2627,26 @@ async function muatAnggota(){
             throw error;
         }
 
-
-        /*
-           SIMPAN DATA
-
-           Database:
-           no_skb
-
-           JS:
-           noskb
-
-           Supaya kod lama masih boleh
-           menggunakan item.noskb
-        */
-
         semuaAnggota =
             (data || []).map(
                 anggota => ({
 
                     ...anggota,
 
+                    // Normalisasi untuk kod lama
                     noskb:
-                        anggota.no_skb
+                        anggota.no_skb,
+
+                    noanggota:
+                        anggota.no_anggota
 
                 })
             );
-
 
         console.log(
             "DATA ANGGOTA:",
             semuaAnggota
         );
-
 
     }catch(error){
 
@@ -2669,9 +2655,7 @@ async function muatAnggota(){
             error
         );
 
-
         semuaAnggota = [];
-
 
         toast(
             "Ralat Data Anggota",
