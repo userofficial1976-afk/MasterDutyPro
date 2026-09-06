@@ -2584,49 +2584,39 @@ async function muatUnit(){
 
 async function muatAnggota(){
 
-    try{
+    try {
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("Data_Anggota")
-                .select(`
-                    noskb,
-                    noanggota,
-                    nama,
-                    poskhidmat,
-                    unit,
-                    status
-                `);
-
+        const { data, error } = await supabase
+            .from("Data_Anggota")
+            .select(`
+                no_skb,
+                noanggota,
+                nama,
+                poskhidmat,
+                unit,
+                status
+            `)
+            .order("nama", { ascending: true });
 
         if(error){
+            console.error("RALAT DATA ANGGOTA:", error);
             throw error;
         }
 
+        semuaAnggota = (data || []).map(a => ({
+            ...a,
+            noskb: a.no_skb
+        }));
 
-        semuaAnggota =
-            data || [];
+        console.log("DATA ANGGOTA:", semuaAnggota);
 
+    } catch(error) {
 
-        console.log(
-            "DATA ANGGOTA:",
-            semuaAnggota
-        );
+        console.error("GAGAL MUAT DATA ANGGOTA:", error);
 
+        semuaAnggota = [];
 
-catch (error) {
-    console.error("================================");
-    console.error("RALAT LOAD ANGGOTA");
-    console.error("ERROR:", error);
-    console.error("MESSAGE:", error?.message);
-    console.error("DETAIL:", error?.details);
-    console.error("HINT:", error?.hint);
-    console.error("CODE:", error?.code);
-    console.error("================================");
-}
+    }
 }
 
 
