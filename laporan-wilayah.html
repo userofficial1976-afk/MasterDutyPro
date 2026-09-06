@@ -289,7 +289,220 @@ function isiDropdown(){
 
 }
 
+function paparSenaraiTampungan(rows){
 
+    const tbody =
+        document.getElementById(
+            "senaraiKlmTampungan"
+        );
+
+    if(!tbody) return;
+
+
+    /*
+     * Hanya rekod yang mempunyai
+     * tampungan.
+     */
+
+const data =
+    rows.filter(
+        row =>
+            String(
+                row.pos_tampungan ||
+                ""
+            ).trim() !== ""
+            &&
+            num(
+                row.jam_tampungan
+            ) > 0
+    );
+
+
+    /*
+     * Gabungkan mengikut:
+     *
+     * POS TAMPUNGAN
+     * SKB
+     *
+     * supaya jumlah bulanan
+     * tidak pecah mengikut duty.
+     */
+
+    const map =
+        new Map();
+
+
+    data.forEach(row => {
+
+        const posTampungan =
+            String(
+                row.pos_tampungan ||
+                ""
+            ).trim();
+
+        const skb =
+            String(
+                row.no_skb ||
+                ""
+            ).trim();
+
+        const key =
+            posTampungan +
+            "|" +
+            skb;
+
+
+        if(!map.has(key)){
+
+            map.set(
+                key,
+                {
+
+                    posTampungan,
+
+                    skb,
+
+                    nama:
+                        row.nama_anggota ||
+                        "-",
+
+                    pos:
+                        row.pos ||
+                        row.nama_pos_asal ||
+                        "-",
+
+                    basic:
+                        num(
+                            row.Data_Anggota
+                            ?.gaji_pokok
+                        ),
+
+                    jam:0,
+
+                    rm:0
+
+                }
+            );
+
+        }
+
+
+        const item =
+            map.get(key);
+
+
+        item.jam +=
+            num(
+                row.jam_tampungan
+            );
+
+
+        item.rm +=
+            num(
+                row.rm_klm_tampungan
+            );
+
+    });
+
+
+    const senarai =
+        [...map.values()]
+            .sort(
+                (a,b) => {
+
+                    const p =
+                        a.posTampungan.localeCompare(
+                            b.posTampungan
+                        );
+
+                    if(p !== 0)
+                        return p;
+
+                    return String(
+                        a.nama
+                    ).localeCompare(
+                        String(b.nama)
+                    );
+
+                }
+            );
+
+
+    tbody.innerHTML =
+        senarai.map(
+            item => `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(
+                            item.posTampungan
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            item.skb
+                        )}
+                    </td>
+
+                    <td class="nama">
+                        ${escapeHtml(
+                            item.nama
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            item.pos
+                        )}
+                    </td>
+
+                    <td>
+                        ${money(
+                            item.basic
+                        )}
+                    </td>
+
+                    <td>
+                        ${decimal(
+                            item.jam
+                        )}
+                    </td>
+
+                    <td>
+                        ${money(
+                            item.rm
+                        )}
+                    </td>
+
+                </tr>
+
+            `
+        ).join("");
+
+
+    if(!senarai.length){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="text-center py-6 text-slate-400"
+                >
+                    Tiada rekod tampungan
+                    bagi bulan yang dipilih.
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
 /* =====================================================
    UTIL
 ===================================================== */
@@ -451,6 +664,10 @@ async function muatSemuaDuty(){
                     no_anggota,
                     unit,
                     nama_pos_asal,
+
+                    pos_tampungan,
+                    jam_tampungan,
+                    rm_klm_tampungan,
 
                     hari_offday_bertugas,
                     jam_offday_bertugas,
@@ -876,7 +1093,30 @@ function kiraKlm(rows){
 
 }
 
+function kiraTampungan(rows){
 
+    return rows.reduce(
+        (total, row) => {
+
+            total.jam +=
+                num(row.jam_tampungan);
+
+            total.rm +=
+                num(row.rm_klm_tampungan);
+
+            return total;
+
+        },
+        {
+            jam: 0,
+            rm: 0
+        }
+    );
+
+}
+
+
+    
 /* =====================================================
    JANA LAPORAN
 ===================================================== */
@@ -916,6 +1156,9 @@ async function janaLaporan(){
             semuaDuty
         );
 
+        paparSenaraiTampungan(
+    semuaDuty
+);
 
         paparRumusanUnit(
             semuaDuty
@@ -1113,7 +1356,8 @@ function paparKadKLM(rows){
             rows
         );
 
-
+    const tampungan =
+        kiraTampungan(rows);
     /*
      * CUTI AM
      */
@@ -1238,6 +1482,38 @@ function paparKadKLM(rows){
 
     }
 
+    const elJamTampungan =
+        document.getElementById(
+            "valueKlmTampungan"
+        );
+
+    const elRmTampungan =
+        document.getElementById(
+            "valueRmTampungan"
+        );
+
+    if(elJamTampungan){
+
+        elJamTampungan.textContent =
+            decimal(
+                tampungan.jam
+            ) +
+            " Jam";
+
+    }
+
+    if(elRmTampungan){
+
+        elRmTampungan.textContent =
+            money(
+                tampungan.rm
+            );
+
+    }
+
+}
+
+    
 }
 
 
@@ -1677,7 +1953,48 @@ function paparTop10(rows){
 
 }
 
+function bukaKlmTampungan(){
 
+    document
+        .getElementById(
+            "modalKlmTampungan"
+        )
+        ?.classList.remove(
+            "hidden"
+        );
+
+}
+
+
+function tutupKlmTampungan(){
+
+    document
+        .getElementById(
+            "modalKlmTampungan"
+        )
+        ?.classList.add(
+            "hidden"
+        );
+
+}
+
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target.closest(
+                "#cardKlmTampungan"
+            )
+        ){
+
+            bukaKlmTampungan();
+
+        }
+
+    }
+);
 /* =====================================================
    CUTI AM
 ===================================================== */
@@ -2702,25 +3019,27 @@ Jana Laporan
 
 
 <div
-    class="glass glass-card rounded-2xl p-4"
+    id="cardKlmTampungan"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer"
 >
 
-<p
-    class="text-teal-400 text-sm font-semibold"
->
-    Jumlah RM KLM
-</p>
+    <p class="text-teal-400 text-sm font-semibold">
+        KLM Tampungan
+    </p>
 
-<h3
-    id="valueRmKeseluruhan"
-    class="text-2xl font-bold text-white mt-2"
->
-    RM 0.00
-</h3>
+    <h3
+        id="valueKlmTampungan"
+        class="text-2xl font-bold text-white mt-2"
+    >
+        0.00 Jam
+    </h3>
 
-<p class="text-slate-400 text-xs mt-1">
-    Berdasarkan rm_klm_seluruh
-</p>
+    <p
+        id="valueRmTampungan"
+        class="text-teal-400"
+    >
+        RM 0.00
+    </p>
 
 </div>
 
@@ -3036,7 +3355,97 @@ Jana Laporan
 </div>
 
 </div>
+<div
+    id="modalKlmTampungan"
+    class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-6"
+>
 
+    <div
+        class="glass rounded-2xl w-full max-w-7xl max-h-[90vh] overflow-auto p-6"
+    >
+
+        <div
+            class="flex justify-between items-center mb-4"
+        >
+
+            <div>
+
+                <h3
+                    class="text-xl font-bold text-white"
+                >
+                    KLM Tampungan
+                </h3>
+
+                <p
+                    class="text-sm text-teal-400 mt-1"
+                >
+                    Rumusan tampungan mengikut bulan
+                </p>
+
+            </div>
+
+            <button
+                onclick="tutupKlmTampungan()"
+                class="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg"
+            >
+                Tutup
+            </button>
+
+        </div>
+
+
+        <div class="overflow-x-auto">
+
+            <table class="report-table text-sm">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            POS TAMPUNGAN
+                        </th>
+
+                        <th>
+                            SKB
+                        </th>
+
+                        <th>
+                            NAMA ANGGOTA
+                        </th>
+
+                        <th>
+                            POS
+                        </th>
+
+                        <th>
+                            BASIC GAJI
+                        </th>
+
+                        <th>
+                            JUMLAH JAM TAMPUNG / BLN
+                        </th>
+
+                        <th>
+                            JUMLAH KLM (RM)
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="senaraiKlmTampungan"
+                >
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>
