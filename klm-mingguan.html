@@ -2775,7 +2775,7 @@ function tentukanMinggu(day){
 
 
 /* =========================================================
-   LOAD DUTY
+   LOAD DUTY — VERSI BETUL
    ========================================================= */
 
 async function muatDuty(){
@@ -2794,75 +2794,134 @@ async function muatDuty(){
             ).value
         );
 
+    const unit =
+        normaliseUnit(
+            document.getElementById(
+                "filterUnit"
+            ).value
+        );
 
     showLoading();
-
 
     try{
 
         /*
-           Ambil berdasarkan tahun.
-
-           Bulan dan minggu akan ditapis
-           di client berdasarkan tarikh.
+        =====================================================
+        AMBIL SEMUA REKOD
+        BUKAN BERGANTUNG KEPADA HAD 1000 ROW
+        =====================================================
         */
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("jadual_duty")
-                .select(`
-                    id,
-                    tarikh,
-                    bulan,
-                    tahun,
-                    no_skb,
-                    nama_anggota,
-                    no_anggota,
-                    unit,
-                    pos,
-                    nama_pos_asal,
-                    jam_klm,
-                    jumlah_offday,
-                    jam_offday_bertugas,
-                    jumlah_cutiam,
-                    jam_cutiam_bertugas,
-                    rm_jam_offday,
-                    rm_hari_offday,
-                    rm_jam_cutiam,
-                    rm_hari_cutiam,
-                    rm_klm_hari_biasa,
-                    rm_klm_seluruh
-                `)
-                .eq(
-                    "tahun",
-                    String(tahun)
+        const PAGE_SIZE = 1000;
+
+        let semuaData = [];
+        let from = 0;
+
+        while(true){
+
+            const to =
+                from + PAGE_SIZE - 1;
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("jadual_duty")
+                    .select(`
+                        id,
+                        tarikh,
+                        bulan,
+                        tahun,
+                        no_skb,
+                        nama_anggota,
+                        no_anggota,
+                        unit,
+                        pos,
+                        nama_pos_asal,
+                        hari,
+                        jam_klm,
+
+                        jumlah_offday,
+                        jam_offday_bertugas,
+
+                        jumlah_cutiam,
+                        jam_cutiam_bertugas,
+
+                        rm_jam_offday,
+                        rm_hari_offday,
+
+                        rm_jam_cutiam,
+                        rm_hari_cutiam,
+
+                        rm_klm_hari_biasa,
+                        rm_klm_seluruh
+                    `)
+                    .eq(
+                        "tahun",
+                        String(tahun)
+                    )
+                    .range(
+                        from,
+                        to
+                    );
+
+            if(error){
+                throw error;
+            }
+
+            const batch =
+                data || [];
+
+            semuaData =
+                semuaData.concat(
+                    batch
                 );
 
+            console.log(
+                `LOAD KLM: ${from} - ${to} = ${batch.length} rekod`
+            );
 
-        if(error){
-            throw error;
+            /*
+            Jika kurang daripada PAGE_SIZE,
+            bermakna semua rekod sudah diambil.
+            */
+
+            if(
+                batch.length <
+                PAGE_SIZE
+            ){
+                break;
+            }
+
+            from += PAGE_SIZE;
+
         }
 
 
-        let rows =
-            data || [];
+        console.log(
+            "JUMLAH REKOD DARI SUPABASE:",
+            semuaData.length
+        );
 
 
-        /*
+        /* =================================================
            TAPIS BULAN
-        */
+           ================================================= */
 
-        rows =
-            rows.filter(row => {
+        let rows =
+            semuaData.filter(row => {
 
                 const date =
                     parseTarikh(
                         row.tarikh
                     );
 
+                /*
+                ---------------------------------------------
+                JIKA TARIKH BOLEH DIBACA
+                ---------------------------------------------
+                */
 
                 if(date){
 
@@ -2874,41 +2933,38 @@ async function muatDuty(){
 
 
                 /*
-                   fallback jika tarikh tidak
-                   boleh parse.
-
-                   Cuba guna bulan.
+                ---------------------------------------------
+                FALLBACK BULAN
+                ---------------------------------------------
                 */
 
                 const bulanDb =
                     String(
                         row.bulan || ""
-                    ).trim();
+                    )
+                    .trim();
 
 
                 return (
                     bulanDb ===
                     String(bulan)
+
                     ||
+
                     bulanDb.toLowerCase() ===
                     SENARAI_BULAN[
                         bulan - 1
                     ].toLowerCase()
                 );
+
             });
 
 
         /*
-           FILTER UNIT
+        =====================================================
+        FILTER UNIT
+        =====================================================
         */
-
-        const unit =
-            normaliseUnit(
-                document.getElementById(
-                    "filterUnit"
-                ).value
-            );
-
 
         if(unit){
 
@@ -2923,7 +2979,9 @@ async function muatDuty(){
 
 
         /*
-           SIMPAN
+        =====================================================
+        SIMPAN
+        =====================================================
         */
 
         semuaDuty =
@@ -2931,10 +2989,43 @@ async function muatDuty(){
 
 
         console.log(
-            "DATA KLM MINGGUAN:",
-            semuaDuty
+            "===================================="
         );
 
+        console.log(
+            "KLM MINGGUAN — DATA AKHIR"
+        );
+
+        console.log(
+            "BULAN:",
+            SENARAI_BULAN[bulan - 1]
+        );
+
+        console.log(
+            "TAHUN:",
+            tahun
+        );
+
+        console.log(
+            "UNIT:",
+            unit || "SEMUA UNIT"
+        );
+
+        console.log(
+            "JUMLAH REKOD:",
+            semuaDuty.length
+        );
+
+        console.log(
+            "===================================="
+        );
+
+
+        /*
+        =====================================================
+        PAPAR
+        =====================================================
+        */
 
         paparData();
 
@@ -2952,7 +3043,6 @@ async function muatDuty(){
             error
         );
 
-
         semuaDuty = [];
 
 
@@ -2968,7 +3058,6 @@ async function muatDuty(){
         );
     }
 }
-
 
 /* =========================================================
    LOADING
@@ -3032,13 +3121,19 @@ function showError(message){
 
 
 /* =========================================================
-   WEEK FILTER
+   WEEK FILTER — VERSI BETUL
    ========================================================= */
 
 function rowsUntukMinggu(
     rows,
     week
 ){
+
+    /*
+    =====================================================
+    JUMLAH KESELURUHAN
+    =====================================================
+    */
 
     if(week === "all"){
 
@@ -3058,19 +3153,65 @@ function rowsUntukMinggu(
             );
 
 
-        if(!date){
-            return false;
+        /*
+        =================================================
+        JIKA TARIKH BOLEH DIPARSE
+        =================================================
+        */
+
+        if(date){
+
+            return (
+                tentukanMinggu(
+                    date.day
+                ) === minggu
+            );
         }
 
 
-        return (
-            tentukanMinggu(
-                date.day
-            ) === minggu
-        );
+        /*
+        =================================================
+        FALLBACK
+        =================================================
+
+        Kalau tarikh tak boleh dibaca,
+        jangan buang rekod secara senyap.
+
+        Buat sementara waktu kita cuba ambil
+        hari daripada field "hari" jika ada.
+        =================================================
+        */
+
+        const hari =
+            Number(
+                String(
+                    row.hari || ""
+                ).trim()
+            );
+
+
+        if(
+            Number.isFinite(hari) &&
+            hari > 0
+        ){
+
+            return (
+                tentukanMinggu(
+                    hari
+                ) === minggu
+            );
+        }
+
+
+        /*
+        Tiada maklumat hari yang sah.
+        Rekod tidak boleh ditentukan minggunya.
+        */
+
+        return false;
+
     });
 }
-
 
 /* =========================================================
    AGGREGATE MEMBER
