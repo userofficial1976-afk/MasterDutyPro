@@ -443,17 +443,43 @@
 async function statistikDutyHariIni() {
   const hariIni = new Date().toISOString().split("T")[0];
 
-  const { data, error } = await supabaseClient
-    .from("jadual_duty")
-    .select("jam_kerja, jam_klm, rm_klm_seluruh")
-    .eq("tarikh", hariIni);
+  const PAGE_SIZE = 1000;
+  let rows = [];
+  let from = 0;
 
-  if (error) {
-    console.error("RALAT STATISTIK DUTY:", error);
-    return;
+  // =====================================================
+  // PAGINATION — BACA 1000+ REKOD
+  // =====================================================
+  while (true) {
+    const to = from + PAGE_SIZE - 1;
+
+    const { data, error } = await supabaseClient
+      .from("jadual_duty")
+      .select("jam_kerja, jam_klm, rm_klm_seluruh")
+      .eq("tarikh", hariIni)
+      .order("id", { ascending: true })
+      .range(from, to);
+
+    if (error) {
+      console.error("RALAT STATISTIK DUTY:", error);
+      return;
+    }
+
+    const batch = data || [];
+
+    rows = rows.concat(batch);
+
+    console.log(
+      `STATISTIK DUTY: ${from}-${to} | DAPAT ${batch.length} | JUMLAH ${rows.length}`
+    );
+
+    // Jika kurang daripada 1000, bermaksud semua rekod sudah dibaca
+    if (batch.length < PAGE_SIZE) {
+      break;
+    }
+
+    from += PAGE_SIZE;
   }
-
-  const rows = data || [];
 
   // Jumlah Jam Kerja
   const jumlahJamKerja = rows.reduce(
@@ -484,52 +510,113 @@ async function statistikDutyHariIni() {
   document.getElementById("jumlahRmKlm").textContent =
     "RM " + jumlahRmKlm.toFixed(2);
 }
-    // =====================================================
-    // STATUS TIDAK BERTUGAS HARI INI
-    // =====================================================
-    async function statusTidakBertugasHariIni() {
-      const hariIni = new Date().toISOString().split("T")[0];
 
-      const { data, error } = await supabaseClient
-        .from("jadual_duty")
-        .select("nama_anggota, kod_waktu_kerja, kod_duty")
-        .eq("tarikh", hariIni);
 
-      if (error) {
-        console.error(error);
-        return;
-      }
+// =====================================================
+// STATUS TIDAK BERTUGAS HARI INI
+// =====================================================
+async function statusTidakBertugasHariIni() {
+  const hariIni = new Date().toISOString().split("T")[0];
 
-      dataDutyHariIni = (data || []).map(row => ({
-        ...row,
-        kod_waktu_kerja: row.kod_waktu_kerja || row.kod_duty || ""
-      }));
+  const PAGE_SIZE = 1000;
+  let semuaData = [];
+  let from = 0;
 
-      const OFF = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "OFF" || x.kod_waktu_kerja === "GR").length;
-      const CT  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CT").length;
-      const MC  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "MC").length;
-      const KUR = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "KUR").length;
-      const CA  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CA").length;
-      const CG  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CG").length;
-      const CE  = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CE").length;
-      const CTR = dataDutyHariIni.filter(x => x.kod_waktu_kerja === "CTR").length;
+  // =====================================================
+  // PAGINATION — BACA 1000+ REKOD
+  // =====================================================
+  while (true) {
+    const to = from + PAGE_SIZE - 1;
 
-      document.getElementById("jumlahOffday").textContent = OFF;
-      document.getElementById("jumlahCT").textContent = CT;
-      document.getElementById("jumlahMC").textContent = MC;
-      document.getElementById("jumlahKUR").textContent = KUR;
-      document.getElementById("jumlahCA").textContent = CA;
-      document.getElementById("jumlahCG").textContent = CG;
-      document.getElementById("jumlahCE").textContent = CE;
-      document.getElementById("jumlahCTR").textContent = CTR;
+    const { data, error } = await supabaseClient
+      .from("jadual_duty")
+      .select("nama_anggota, kod_waktu_kerja, kod_duty")
+      .eq("tarikh", hariIni)
+      .order("id", { ascending: true })
+      .range(from, to);
 
-      const jumlahTidakBertugas = OFF + CT + MC + KUR + CA + CG + CE + CTR;
-      document.getElementById("jumlahTidakBertugas").textContent = jumlahTidakBertugas;
-
-      // Bertugas = total rekod hari ini tolak yang tidak bertugas
-      const jumlahBertugas = Math.max(0, dataDutyHariIni.length - jumlahTidakBertugas);
-      document.getElementById("jumlahDutyHariIni").textContent = jumlahBertugas;
+    if (error) {
+      console.error("RALAT STATUS TIDAK BERTUGAS:", error);
+      return;
     }
+
+    const batch = data || [];
+
+    semuaData = semuaData.concat(batch);
+
+    console.log(
+      `STATUS DUTY: ${from}-${to} | DAPAT ${batch.length} | JUMLAH ${semuaData.length}`
+    );
+
+    // Jika kurang daripada 1000, bermaksud semua rekod sudah dibaca
+    if (batch.length < PAGE_SIZE) {
+      break;
+    }
+
+    from += PAGE_SIZE;
+  }
+
+  dataDutyHariIni = semuaData.map(row => ({
+    ...row,
+    kod_waktu_kerja: row.kod_waktu_kerja || row.kod_duty || ""
+  }));
+
+  const OFF = dataDutyHariIni.filter(
+    x => x.kod_waktu_kerja === "OFF" || x.kod_waktu_kerja === "GR"
+  ).length;
+
+  const CT = dataDutyHariIni.filter(
+    x => x.kod_waktu_kerja === "CT"
+  ).length;
+
+  const MC = dataDutyHariIni.filter(
+    x => x.kod_waktu_kerja === "MC"
+  ).length;
+
+  const KUR = dataDutyHariIni.filter(
+    x => x.kod_waktu_kerja === "KUR"
+  ).length;
+
+  const CA = dataDutyHariIni.filter(
+    x => x.kod_waktu_kerja === "CA"
+  ).length;
+
+  const CG = dataDutyHariIni.filter(
+    x => x.kod_waktu_kerja === "CG"
+  ).length;
+
+  const CE = dataDutyHariIni.filter(
+    x => x.kod_waktu_kerja === "CE"
+  ).length;
+
+  const CTR = dataDutyHariIni.filter(
+    x => x.kod_waktu_kerja === "CTR"
+  ).length;
+
+  document.getElementById("jumlahOffday").textContent = OFF;
+  document.getElementById("jumlahCT").textContent = CT;
+  document.getElementById("jumlahMC").textContent = MC;
+  document.getElementById("jumlahKUR").textContent = KUR;
+  document.getElementById("jumlahCA").textContent = CA;
+  document.getElementById("jumlahCG").textContent = CG;
+  document.getElementById("jumlahCE").textContent = CE;
+  document.getElementById("jumlahCTR").textContent = CTR;
+
+  const jumlahTidakBertugas =
+    OFF + CT + MC + KUR + CA + CG + CE + CTR;
+
+  document.getElementById("jumlahTidakBertugas").textContent =
+    jumlahTidakBertugas;
+
+  // Bertugas = total rekod hari ini tolak yang tidak bertugas
+  const jumlahBertugas = Math.max(
+    0,
+    dataDutyHariIni.length - jumlahTidakBertugas
+  );
+
+  document.getElementById("jumlahDutyHariIni").textContent =
+    jumlahBertugas;
+}
 
     // =====================================================
     // POPUP SENARAI NAMA
