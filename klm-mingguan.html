@@ -2034,7 +2034,77 @@ function normaliseUnit(unit){
         .toUpperCase();
 }
 
+/* =========================================================
+   KAWAL MENU MENGIKUT ROLE
+   ADMIN:
+   - Dashboard
+   - Pengurusan Anggota
+   - Laporan Wilayah
 
+   KETUA UNIT:
+   - SEMUA MENU ADMIN DISEMBUNYIKAN
+========================================================= */
+
+function kawalMenuRole(){
+
+    const menuDashboard =
+        document.getElementById("menuDashboard");
+
+    const menuAnggota =
+        document.getElementById("menuAnggota");
+
+    const menuLaporan =
+        document.getElementById("menuLaporan");
+
+
+    /*
+       ADMIN
+       Semua menu admin dipaparkan
+    */
+
+    if(currentRole === "admin"){
+
+        if(menuDashboard){
+            menuDashboard.style.display = "";
+        }
+
+        if(menuAnggota){
+            menuAnggota.style.display = "";
+        }
+
+        if(menuLaporan){
+            menuLaporan.style.display = "";
+        }
+
+        return;
+    }
+
+
+    /*
+       KETUA UNIT
+       Sembunyikan menu ADMIN
+    */
+
+    if(currentRole === "ketua unit"){
+
+        if(menuDashboard){
+            menuDashboard.style.display = "none";
+        }
+
+        if(menuAnggota){
+            menuAnggota.style.display = "none";
+        }
+
+        if(menuLaporan){
+            menuLaporan.style.display = "none";
+        }
+    }
+
+}
+
+
+
+    
 function num(value){
 
     const n = Number(value);
@@ -2260,15 +2330,22 @@ function semakAkses(){
         "SEMUA UNIT";
 
 
-    document.getElementById(
-        "topRole"
-    ).textContent =
-        currentRole === "admin"
-            ? "ADMIN"
-            : "KETUA UNIT";
+document.getElementById(
+    "topRole"
+).textContent =
+    currentRole === "admin"
+        ? "ADMIN"
+        : "KETUA UNIT";
 
 
-    return true;
+/*
+   KAWAL MENU MENGIKUT ROLE
+*/
+
+kawalMenuRole();
+
+
+return true;
 }
 
 
