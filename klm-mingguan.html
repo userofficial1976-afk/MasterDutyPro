@@ -1381,193 +1381,144 @@ button:disabled{
      SIDEBAR
      ========================================================= -->
 
+
+<!-- Sidebar -->
 <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto">
+  <div class="p-6">
 
-    <div class="p-6">
+    <!-- Logo -->
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center">
+        <i class="fas fa-shield-halved text-white text-xl"></i>
+      </div>
 
-        <!-- LOGO -->
-        <div class="flex items-center gap-3 mb-8">
-
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center">
-                <i class="fas fa-shield-halved text-white text-xl"></i>
-            </div>
-
-            <div>
-                <h1 class="font-bold text-white text-lg">
-                    Master Duty Pro
-                </h1>
-
-                <p class="text-xs text-teal-450">
-                    Wilayah Terengganu
-                </p>
-            </div>
-
-        </div>
-
-
-        <!-- USER -->
-        <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
-
-            <p
-                id="sidebarUserName"
-                class="text-sm font-semibold text-white truncate"
-            >
-                —
-            </p>
-
-            <p
-                id="sidebarUserRole"
-                class="text-xs text-teal-400 mt-1"
-            >
-                —
-            </p>
-
-            <p
-                id="sidebarUserUnit"
-                class="text-xs text-slate-500 mt-1 truncate"
-            >
-                —
-            </p>
-
-        </div>
-
-
-        <!-- MENU -->
-        <nav class="space-y-1">
-
-            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">
-                Menu Utama
-            </p>
-
-
-            <a
-                href="dashboard.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-chart-line w-5"></i>
-                <span>Dashboard</span>
-            </a>
-
-
-            <a
-                href="senarai-anggota.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-users w-5"></i>
-                <span>Senarai Anggota</span>
-            </a>
-
-
-            <a
-                href="jadual-duty.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-calendar-days w-5"></i>
-                <span>Jadual Duty</span>
-            </a>
-
-
-            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-6 mb-3">
-                Pengurusan
-            </p>
-
-
-            <a
-                href="kod-duty.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-code w-5"></i>
-                <span>Kod Duty</span>
-            </a>
-
-
-            <a
-                href="kod-tempat-kerja.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-location-dot w-5"></i>
-                <span>Kod Tempat Kerja</span>
-            </a>
-
-
-            <a
-                href="rk02-entry.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-file-invoice w-5"></i>
-                <span>RK02 &amp; PNL Entry</span>
-            </a>
-
-
-            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-6 mb-3">
-                Laporan
-            </p>
-
-
-            <a
-                href="klm-mingguan.html"
-                class="sidebar-link active flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-chart-column w-5"></i>
-                <span>KLM Mingguan</span>
-            </a>
-
-
-            <a
-                href="laporan-penuh-pengurusan.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-file-lines w-5"></i>
-                <span>Laporan Pengurusan</span>
-            </a>
-
-
-            <a
-                href="anggaran-rk01.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-coins w-5"></i>
-                <span>Anggaran RK01</span>
-            </a>
-
-
-            <a
-                href="anggaran-rk02.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-chart-pie w-5"></i>
-                <span>Anggaran RK02</span>
-            </a>
-
-
-            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-6 mb-3">
-                Sistem
-            </p>
-
-
-            <a
-                href="tetapan.html"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-gear w-5"></i>
-                <span>Tetapan</span>
-            </a>
-
-
-            <a
-                href="#"
-                id="btnLogout"
-                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
-            >
-                <i class="fas fa-right-from-bracket w-5"></i>
-                <span>Log Keluar</span>
-            </a>
-
-        </nav>
-
+      <div>
+        <h1 class="font-bold text-white text-lg">
+          Master Duty Pro
+        </h1>
+        <p class="text-xs text-teal-450">
+          Wilayah Terengganu
+        </p>
+      </div>
     </div>
 
+    <!-- User Info -->
+    <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
+      <p id="sidebarUserName"
+         class="text-sm font-semibold text-white truncate">
+        -
+      </p>
+
+      <p id="sidebarUserRole"
+         class="text-xs text-teal-400 mt-1">
+        -
+      </p>
+
+      <p id="sidebarUserUnit"
+         class="text-xs text-slate-500 mt-1 truncate">
+        -
+      </p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="space-y-1">
+
+      <!-- MENU UTAMA -->
+      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">
+        Menu Utama
+      </p>
+
+      <a href="dashboard.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-chart-pie w-5"></i>
+        Dashboard
+      </a>
+
+      <a href="senarai-anggota.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-users w-5"></i>
+        Pengurusan Anggota
+      </a>
+
+      <a href="kod-duty.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-code w-5"></i>
+        Kod Waktu Kerja
+      </a>
+
+      <a href="kod-tempat-kerja.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-map-marker-alt w-5"></i>
+        Kod Tempat Kerja
+      </a>
+
+      <a href="jadual-duty.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-calendar-check w-5"></i>
+        Pengisian Jadual Tugas
+      </a>
+
+      <!-- KLM -->
+      <a href="klm-mingguan.html"
+         class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium">
+        <i class="fas fa-coins w-5"></i>
+        KLM Mingguan
+      </a>
+
+
+      <!-- LAPORAN -->
+      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">
+        Laporan
+      </p>
+
+      <a href="laporan-wilayah.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-file-alt w-5"></i>
+        Laporan Wilayah
+      </a>
+
+      <a href="anggaran-rk02.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-chart-bar w-5"></i>
+        Anggaran RK02
+      </a>
+
+      <a href="anggaran-rk01.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-chart-line w-5"></i>
+        Anggaran RK01
+      </a>
+
+      <a href="laporan-penuh-pengurusan.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-file-invoice-dollar w-5"></i>
+        Laporan Penuh Pengurusan
+      </a>
+
+
+      <!-- SISTEM -->
+      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">
+        Sistem
+      </p>
+
+      <a href="tetapan.html"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+        <i class="fas fa-cog w-5"></i>
+        Tetapan
+      </a>
+
+      <a href="#"
+         id="btnLogout"
+         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
+        <i class="fas fa-sign-out-alt w-5"></i>
+        Log Keluar
+      </a>
+
+    </nav>
+  </div>
 </aside>
+
+
 
 
 <!-- =========================================================
