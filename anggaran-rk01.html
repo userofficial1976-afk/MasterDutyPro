@@ -1183,19 +1183,20 @@ function kawalMenuMengikutPeranan(){
 
     const role = rolePengguna();
 
-    console.log("ROLE PENGGUNA:", role);
+    console.log("ROLE PENGGUNA RK01:", role);
 
-    // =====================================================
-    // ADMIN
-    // =====================================================
+    /* =====================================================
+       ADMIN
+       ===================================================== */
     if(role === "admin"){
         return;
     }
 
 
-    // =====================================================
-    // SEMBUNYIKAN MENU ADMIN
-    // =====================================================
+    /* =====================================================
+       SEMBUNYIKAN MENU ADMIN
+       ===================================================== */
+
     [
         "menuDashboard",
         "menuAnggota",
@@ -1213,21 +1214,29 @@ function kawalMenuMengikutPeranan(){
     });
 
 
-    // =====================================================
-    // KLM MINGGUAN
-    // ADMIN + KETUA UNIT SAHAJA
-    // =====================================================
+    /* =====================================================
+       KLM MINGGUAN
+       
+       ADMIN      → Nampak
+       KETUA UNIT → Nampak
+       KETUA POS  → Sembunyi
+       LAIN       → Sembunyi
+       ===================================================== */
 
     const menuMingguan =
         document.getElementById("menuMingguan");
 
     if(menuMingguan){
 
-        if(role === "ketua unit"){
+        if(role === "ketua_unit"){
+
             menuMingguan.style.display = "";
+
         }
         else{
+
             menuMingguan.style.display = "none";
+
         }
 
     }
