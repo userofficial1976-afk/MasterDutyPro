@@ -282,14 +282,51 @@
       document.getElementById("userJawatan").textContent = currentUser.jawatan || "-";
     }
 
-    function kawalMenuMengikutPeranan() {
-      if (!currentUser || currentUser.isAdmin) return;
+function kawalMenuMengikutPeranan() {
+    if (!currentUser) return;
 
-      ["menuDashboard", "menuAnggota", "menuLaporan", "menuMingguan", "menuTetapan"].forEach(id => {
+    const role = String(
+        currentUser.role ||
+        currentUser.jawatan ||
+        ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\s+/g, " ");
+
+    // ADMIN → semua menu kekal
+    if (
+        currentUser.isAdmin === true ||
+        role === "admin" ||
+        role === "administrator"
+    ) {
+        return;
+    }
+
+    // Sembunyikan menu admin untuk bukan admin
+    [
+        "menuDashboard",
+        "menuAnggota",
+        "menuLaporan",
+        "menuTetapan"
+    ].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = "none";
-      });
+    });
+
+    // KLM MINGGUAN:
+    // Ketua Unit = nampak
+    // Ketua Pos  = sembunyi
+    // Role lain  = sembunyi
+    const menuMingguan =
+        document.getElementById("menuMingguan");
+
+    if (menuMingguan) {
+        menuMingguan.style.display =
+            role === "ketua unit" ? "" : "none";
     }
+}
 
     function logKeluar() {
       localStorage.removeItem("mdp_user");
