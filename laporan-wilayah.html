@@ -581,7 +581,7 @@ const data =
                     </td>
 
                     <td>
-                        ${decimal(
+                        ${num(
                             item.jam
                         )}
                     </td>
@@ -1427,18 +1427,16 @@ function paparRingkasan(rows){
         jumlahAnggota;
 
 
-    document.getElementById(
-        "cardJumlahDuty"
-    ).textContent =
-        jumlahDuty.toLocaleString(
-            "ms-MY"
-        );
+document.getElementById(
+    "cardJumlahDuty"
+).textContent =
+    num(jumlahDuty);
 
 
     document.getElementById(
         "cardJumlahJamKerja"
     ).textContent =
-        decimal(
+        num(
             jumlahJamKerja
         );
 
@@ -1446,7 +1444,7 @@ function paparRingkasan(rows){
     document.getElementById(
         "cardJumlahJamKLM"
     ).textContent =
-        decimal(
+        num(
             jumlahJamKLM
         );
 
@@ -1583,7 +1581,7 @@ if(elJamCuti){
     if(cardBiasa){
 
         cardBiasa.textContent =
-            decimal(
+            num(
                 klm.jamBiasa
             ) +
             " Jam";
@@ -1750,7 +1748,7 @@ function paparRumusanUnit(rows){
                     </td>
 
                     <td>
-                        ${decimal(item.klm)}
+                        ${num(item.klm)}
                     </td>
 
                     <td>
@@ -1894,7 +1892,7 @@ function paparRumusanPos(rows){
                     </td>
 
                     <td>
-                        ${decimal(item.klm)}
+                        ${num(item.klm)}
                     </td>
 
                     <td>
@@ -2040,7 +2038,7 @@ function paparTop10(rows){
                     </td>
 
                     <td>
-                        ${decimal(
+                        ${num(
                             item.klm
                         )}
                     </td>
