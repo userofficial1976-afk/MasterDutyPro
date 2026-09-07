@@ -3679,7 +3679,7 @@ function kemaskiniSummary(rows){
     document.getElementById(
         "sumKlmBiasa"
     ).textContent =
-        decimal(
+        num(
             total.klmHariBiasa
         );
 
@@ -3687,17 +3687,13 @@ function kemaskiniSummary(rows){
     document.getElementById(
         "sumKlmOff"
     ).textContent =
-        decimal(
+        num(
             total.klmHariOff
         );
 
 
-    document.getElementById(
-        "sumKlmCuti"
-    ).textContent =
-        decimal(
-            total.klmHariCutiAm
-        );
+document.getElementById("sumKlmCuti").textContent =
+    `${num(total.klmHariCutiAm)} Hari / ${num(total.klmJamCutiAm)} Jam`;
 
 
     document.getElementById(
@@ -3899,7 +3895,7 @@ function paparAdmin(rows){
     </div>
 
     <div class="unit-stat-value klm">
-        ${num(unit.klmHariCutiAm)} Hari / ${num(unit.klmJamCutiAm)} Jam
+         ${num(total.klmHariCutiAm)} Hari / ${num(total.klmJamCutiAm)} Jam
     </div>
 
 </div>
@@ -3980,7 +3976,7 @@ function paparAdmin(rows){
                     </div>
 
                     <div class="unit-stat-value klm">
-                        ${decimal(total.klmHariBiasa)}
+                        ${num(total.klmHariBiasa)}
                     </div>
 
                 </div>
@@ -3993,7 +3989,7 @@ function paparAdmin(rows){
                     </div>
 
                     <div class="unit-stat-value klm">
-                        ${decimal(total.klmHariOff)}
+                        ${num(total.klmHariOff)}
                     </div>
 
                 </div>
@@ -4002,7 +3998,7 @@ function paparAdmin(rows){
                 <div class="hide-tablet">
 
                     <div class="unit-stat-label">
-                        KLM CUTI
+                        KLM CUTI AM
                     </div>
 
                     <div class="unit-stat-value klm">
@@ -4518,7 +4514,7 @@ function binaTableAnggota(
 
 
                     <td class="number-klm">
-                        ${decimal(item.klmHariBiasa)}
+                        ${num(item.klmHariBiasa)}
                     </td>
 
                     <td class="number-rm">
@@ -4527,7 +4523,7 @@ function binaTableAnggota(
 
 
                     <td class="number-klm">
-                        ${decimal(item.klmHariOff)}
+                        ${num(item.klmHariOff)}
                     </td>
 
                     <td class="number-rm">
@@ -4554,7 +4550,7 @@ function binaTableAnggota(
 
 
                     <td class="number-klm">
-                        ${decimal(item.klmJamCutiAm)}
+                        ${num(item.klmJamCutiAm)}
                     </td>
 
                     <td class="number-rm">
@@ -4646,7 +4642,7 @@ function binaTableAnggota(
                         </td>
 
                         <td>
-                            ${decimal(total.klmHariBiasa)}
+                            ${num(total.klmHariBiasa)}
                         </td>
 
                         <td>
@@ -4654,7 +4650,7 @@ function binaTableAnggota(
                         </td>
 
                         <td>
-                            ${decimal(total.klmHariOff)}
+                            ${num(total.klmHariOff)}
                         </td>
 
                         <td>
@@ -4662,7 +4658,7 @@ function binaTableAnggota(
                         </td>
 
                         <td>
-                            ${decimal(total.klmJamOff)}
+                            ${num(total.klmJamOff)}
                         </td>
 
                         <td>
@@ -4670,7 +4666,7 @@ function binaTableAnggota(
                         </td>
 
                         <td>
-                            ${decimal(total.klmHariCutiAm)}
+                            ${num(total.klmHariCutiAm)}
                         </td>
 
                         <td>
@@ -4678,7 +4674,7 @@ function binaTableAnggota(
                         </td>
 
                         <td>
-                            ${decimal(total.klmJamCutiAm)}
+                            ${num(total.klmJamCutiAm)}
                         </td>
 
                         <td>
