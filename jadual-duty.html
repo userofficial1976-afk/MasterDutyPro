@@ -342,8 +342,8 @@
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
           <div>
-            <label>Nama Ketua Unit</label>
-            <select id="filterKetuaUnit" onchange="paparDuty()"><option value="">-- Semua Ketua Unit --</option></select>
+            <label>Nama Pos</label>
+            <select id="filterKetuaUnit" onchange="paparDuty()"><option value="">-- Semua Pos --</option></select>
           </div>
           <div>
             <label>Bulan / Tahun</label>
@@ -1065,17 +1065,158 @@ rm_klm_tambahan:
     }
   }
 
-  function isiSenaraiFilterKetuaUnit() {
+function isiSenaraiFilterKetuaUnit() {
+
     const select = document.getElementById("filterKetuaUnit");
-    if (!select) return;
-    select.innerHTML = `<option value="">Semua Ketua Unit</option>`;
-    const list = [...new Set(semuaAnggota.map(a => a.ketua_unit).filter(Boolean))].sort();
-    list.forEach(n => {
-      const opt = document.createElement("option");
-      opt.value = n; opt.textContent = n;
-      select.appendChild(opt);
-    });
-  }
+    if (!select || !currentUser) return;
+
+    // =====================================================
+    // NORMALISE ROLE
+    // =====================================================
+    const role = String(
+        currentUser.role ||
+        currentUser.jawatan ||
+        ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\s+/g, " ");
+
+    // =====================================================
+    // SENARAI SEMUA POS
+    // =====================================================
+    const semuaPos = [
+        ...new Set(
+            semuaAnggota
+                .map(a => a.pos)
+                .filter(Boolean)
+        )
+    ].sort();
+
+
+    // =====================================================
+    // 1. ADMIN
+    // BOLEH PILIH SEMUA POS
+    // =====================================================
+    if (
+        currentUser.isAdmin === true ||
+        role === "admin" ||
+        role === "administrator"
+    ) {
+
+        select.disabled = false;
+
+        select.innerHTML =
+            `<option value="">-- Semua Pos --</option>`;
+
+        semuaPos.forEach(pos => {
+
+            const opt = document.createElement("option");
+
+            opt.value = pos;
+            opt.textContent = pos;
+
+            select.appendChild(opt);
+
+        });
+
+        return;
+    }
+
+
+    // =====================================================
+    // 2. KETUA UNIT
+    // BOLEH PILIH POS DI BAWAH UNIT SENDIRI
+    // =====================================================
+    if (role === "ketua unit") {
+
+        const userUnit = normalisasi(currentUser.unit);
+
+        const posBawahUnit = [
+            ...new Set(
+                semuaAnggota
+                    .filter(a =>
+                        normalisasi(a.unit) === userUnit
+                    )
+                    .map(a => a.pos)
+                    .filter(Boolean)
+            )
+        ].sort();
+
+        select.disabled = false;
+
+        select.innerHTML =
+            `<option value="">-- Semua Pos --</option>`;
+
+        posBawahUnit.forEach(pos => {
+
+            const opt = document.createElement("option");
+
+            opt.value = pos;
+            opt.textContent = pos;
+
+            select.appendChild(opt);
+
+        });
+
+        return;
+    }
+
+
+    // =====================================================
+    // 3. KETUA POS
+    // LOCK POS SENDIRI SAHAJA
+    // =====================================================
+    if (role === "ketua pos") {
+
+        const userPos = currentUser.pos || "";
+
+        select.innerHTML = "";
+
+        if (userPos) {
+
+            const opt = document.createElement("option");
+
+            opt.value = userPos;
+            opt.textContent = userPos;
+
+            select.appendChild(opt);
+
+            select.value = userPos;
+        }
+
+        select.disabled = true;
+
+        return;
+    }
+
+
+    // =====================================================
+    // 4. ROLE LAIN
+    // LOCK POS SENDIRI JIKA ADA
+    // =====================================================
+    const userPos = currentUser.pos || "";
+
+    if (userPos) {
+
+        select.innerHTML = `
+            <option value="${userPos}">
+                ${userPos}
+            </option>
+        `;
+
+        select.value = userPos;
+        select.disabled = true;
+
+    } else {
+
+        select.innerHTML =
+            `<option value="">-- Tiada Pos --</option>`;
+
+        select.disabled = true;
+    }
+}
 
   async function paparDuty() {
     const tbody = document.getElementById("senaraiDuty");
@@ -1101,9 +1242,11 @@ rm_klm_tambahan:
       }
     }
 
-    const filterKetuaUnit = getValue("filterKetuaUnit");
-    if (filterKetuaUnit) query = query.eq("ketua_unit", filterKetuaUnit);
+   const filterPos = getValue("filterKetuaUnit");
 
+if (filterPos) {
+    query = query.eq("pos", filterPos);
+}
     const { data, error } = await query;
     if (error) { paparPopup(error.message, "error"); return; }
 
