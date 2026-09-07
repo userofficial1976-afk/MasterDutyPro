@@ -1493,9 +1493,9 @@ function paparKadKLM(rows){
 if(elJamCuti){
 
     elJamCuti.textContent =
-        decimal(klm.hariCuti) +
+        num(klm.hariCuti) +
         " Hari / " +
-        decimal(klm.jamCuti) +
+        num(klm.jamCuti) +
         " Jam";
 
 }
@@ -1545,7 +1545,7 @@ if(elJamCuti){
     if(cardOff){
 
         cardOff.textContent =
-            decimal(
+            num(
                 klm.jamOff
             ) +
             " Jam";
@@ -1613,7 +1613,7 @@ if(elJamCuti){
     if(elJamTampungan){
 
         elJamTampungan.textContent =
-            decimal(
+            num(
                 tampungan.jam
             ) +
             " Jam";
@@ -2184,13 +2184,13 @@ function paparSenaraiCutiAm(rows){
                         </td>
 
                         <td>
-                            ${decimal(
-                                row.jumlah_cutiam
+                            ${num(
+                                row.hari_cutiam_bertugas
                             )}
                         </td>
 
                         <td>
-                            ${decimal(
+                            ${num(
                                 row.jam_cutiam_bertugas
                             )}
                         </td>
@@ -2993,7 +2993,7 @@ Jana Laporan
     id="cardJumlahJamKerja"
     class="text-4xl font-bold text-teal-400 mt-2"
 >
-    0.00
+   0
 </div>
 
 </div>
@@ -3013,7 +3013,7 @@ Jana Laporan
     id="cardJumlahJamKLM"
     class="text-4xl font-bold text-teal-400 mt-2"
 >
-    0.00
+    0
 </div>
 
 </div>
@@ -3067,7 +3067,7 @@ Jana Laporan
     id="valueKlmBiasa"
     class="text-2xl font-bold text-white mt-2"
 >
-    0.00 Jam
+    0 Jam
 </h3>
 
 <p
@@ -3095,7 +3095,7 @@ Jana Laporan
     id="valueKlmOffday"
     class="text-2xl font-bold text-white mt-2"
 >
-    0.00 Jam
+    0 Jam
 </h3>
 
 <p
@@ -3123,7 +3123,7 @@ Jana Laporan
     id="jamKlmCutiAm"
     class="text-2xl font-bold text-white mt-2"
 >
-    0.00 Jam
+    0 Jam
 </h3>
 
 <p
@@ -3149,7 +3149,7 @@ Jana Laporan
         id="valueKlmTampungan"
         class="text-2xl font-bold text-white mt-2"
     >
-        0.00 Jam
+        0 Jam
     </h3>
 
     <p
