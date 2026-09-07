@@ -661,8 +661,8 @@ function kawalMenuMengikutPeranan() {
   async function muatAnggota() {
     const { data, error } = await supabaseClient
       .from("Data_Anggota")
-      .select("no_skb, nama, no_anggota, unit, pos, kawasan, ketua_unit, ketua_pos, gaji_pokok, rm_pehariklmbiasa, rm_perharioffday, rm_perjamoffday, rm_perharicutiam, rm_perjamcutiam, status")
-      .order("nama");
+      .select("no_skb, nama, no_anggota, pangkat, unit, pos, kawasan, ketua_unit, ketua_pos, gaji_pokok, rm_pehariklmbiasa, rm_perharioffday, rm_perjamoffday, rm_perharicutiam, rm_perjamcutiam, status")
+;
     if (error) { console.error(error); return; }
     semuaAnggota = data || [];
     document.getElementById("filterUnit").addEventListener("change", isiPosIkutUnit);
@@ -806,6 +806,7 @@ filtered.forEach((cuti, idx) => {
         const anggota = semuaAnggota.find(a => String(a.no_skb) === key) || {};
         map[key] = {
           no_skb: row.no_skb,
+          pangkat: anggota.pangkat || "",
           no_anggota: row.no_anggota || anggota.no_anggota || "",
           nama: row.nama_anggota || anggota.nama || "",
           gaji: num(String(anggota.gaji_pokok || "0").replace(/,/g, "")),
@@ -869,7 +870,34 @@ d.rmCuti8p += num(row.rm_jam_cutiam);
       d.jumlahRM = d.rmBiasa + d.rmOff4 + d.rmOff48 + d.rmOff8 + d.rmCuti8 + d.rmCuti8p;
       return d;
     });
-    senarai.sort((a, b) => String(a.no_skb).localeCompare(String(b.no_skb), undefined, { numeric: true }));
+    const rankOrder = {
+  "SARJAN": 1,
+  "KOPERAL": 2,
+  "LANS KOPERAL": 3,
+  "KONSTABEL": 4,
+  "PELATIH POLIS BANTUAN": 5
+};
+
+senarai.sort((a, b) => {
+
+  const pa =
+    rankOrder[String(a.pangkat || "").toUpperCase()] || 999;
+
+  const pb =
+    rankOrder[String(b.pangkat || "").toUpperCase()] || 999;
+
+  if (pa !== pb) {
+    return pa - pb;
+  }
+
+  return String(a.nama || "").localeCompare(
+    String(b.nama || ""),
+    "ms",
+    { sensitivity: "base" }
+  );
+
+});
+
 
     const tbody = document.getElementById("rk02Body");
     if (!senarai.length) {
