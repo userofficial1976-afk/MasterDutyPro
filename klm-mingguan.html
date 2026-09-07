@@ -2142,7 +2142,13 @@ function money(value){
 
 function decimal(value){
 
-    return num(value).toLocaleString(
+    const n = num(value);
+
+    if(n === 0){
+        return "0";
+    }
+
+    return n.toLocaleString(
         "ms-MY",
         {
             minimumFractionDigits:2,
