@@ -1809,27 +1809,28 @@ function paparRumusanPos(rows){
 
         if(!map.has(pos)){
 
-map.set(
+map.set(pos, {
     pos,
-    {
-        pos,
-        anggota:new Set(),
+    anggota: new Set(),
 
-        jamBiasa:0,
-        rmBiasa:0,
+    jamBiasa: 0,
+    rmBiasa: 0,
 
-        hariOff:0,
-        rmHariOff:0,
+    hariOff: 0,
+    rmHariOff: 0,
 
-        jamOff:0,
-        rmJamOff:0,
+    jamOff: 0,
+    rmJamOff: 0,
 
-        jamCuti:0,
-        rmJamCuti:0,
+    hariCuti: 0,
+    rmHariCuti: 0,
 
-        jumlahRM:0
-    }
-);
+    jamCuti: 0,
+    rmJamCuti: 0,
+
+    jumlahRM: 0
+});
+
             
 }
         
@@ -1854,19 +1855,18 @@ map.set(
 
 
 item.jamBiasa += num(row.jam_klm);
-
 item.rmBiasa += num(row.rm_klm_hari_biasa);
 
 item.hariOff += num(row.jumlah_offday);
-
 item.rmHariOff += num(row.rm_hari_offday);
 
 item.jamOff += num(row.jam_offday_bertugas);
-
 item.rmJamOff += num(row.rm_jam_offday);
 
-item.jamCuti += num(row.jam_cutiam_bertugas);
+item.hariCuti += num(row.hari_cutiam_bertugas);
+item.rmHariCuti += num(row.rm_hari_cutiam);
 
+item.jamCuti += num(row.jam_cutiam_bertugas);
 item.rmJamCuti += num(row.rm_jam_cutiam);
 
 item.jumlahRM += num(row.rm_klm_seluruh);
@@ -1889,51 +1889,33 @@ item.jumlahRM += num(row.rm_klm_seluruh);
         data.map(
             item => `
 
-                <tr>
+    <tr>
 
-    <td class="nama">
-        ${escapeHtml(item.pos)}
-    </td>
+    <td class="nama">${escapeHtml(item.pos)}</td>
 
-    <td>
-        ${item.anggota.size}
-    </td>
+    <td>${item.anggota.size}</td>
 
-    <td>
-        ${num(item.jamBiasa)}
-    </td>
+    <td>${num(item.jamBiasa)}</td>
 
-    <td>
-        ${money(item.rmBiasa)}
-    </td>
+    <td>${money(item.rmBiasa)}</td>
 
-    <td>
-        ${num(item.hariOff)}
-    </td>
+    <td>${num(item.hariOff)}</td>
 
-    <td>
-        ${money(item.rmHariOff)}
-    </td>
+    <td>${money(item.rmHariOff)}</td>
 
-    <td>
-        ${num(item.jamOff)}
-    </td>
+    <td>${num(item.jamOff)}</td>
 
-    <td>
-        ${money(item.rmJamOff)}
-    </td>
+    <td>${money(item.rmJamOff)}</td>
 
-    <td>
-        ${num(item.jamCuti)}
-    </td>
+    <td>${num(item.hariCuti)}</td>
 
-    <td>
-        ${money(item.rmJamCuti)}
-    </td>
+    <td>${money(item.rmHariCuti)}</td>
 
-    <td>
-        ${money(item.jumlahRM)}
-    </td>
+    <td>${num(item.jamCuti)}</td>
+
+    <td>${money(item.rmJamCuti)}</td>
+
+    <td>${money(item.jumlahRM)}</td>
 
 </tr>
 
@@ -1945,7 +1927,7 @@ item.jumlahRM += num(row.rm_klm_seluruh);
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="11">
+                <td colspan="13">
                     Tiada data
                 </td>
             </tr>
@@ -3225,25 +3207,19 @@ Jana Laporan
 
 <tr>
 
-<th>
-    Unit
-</th>
-
-<th>
-    Anggota
-</th>
-
-<th>
-    Duty
-</th>
-
-<th>
-    KLM
-</th>
-
-<th>
-    RM
-</th>
+<th>Unit</th>
+<th>Bil Anggota</th>
+<th>Jam KLM Hari Biasa</th>
+<th>RM KLM Hari Biasa</th>
+<th>Hari Offday</th>
+<th>RM Hari Offday</th>
+<th>Jam Offday</th>
+<th>RM Jam Offday</th>
+<th>Hari Cuti Am</th>
+<th>RM Hari Cuti Am</th>
+<th>Jam Cuti Am</th>
+<th>RM Jam Cuti Am</th>
+<th>Jumlah RM</th>
 
 </tr>
 
@@ -3303,6 +3279,8 @@ Jana Laporan
 <th>RM Hari Offday</th>
 <th>Jam Offday</th>
 <th>RM Jam Offday</th>
+<th>Hari Cuti Am</th>
+<th>RM Hari Cuti Am</th>
 <th>Jam Cuti Am</th>
 <th>RM Jam Cuti Am</th>
 <th>Jumlah RM</th>
