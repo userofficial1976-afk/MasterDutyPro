@@ -1490,15 +1490,17 @@ function paparKadKLM(rows){
         );
 
 
-    if(elJamCuti){
+if(elJamCuti){
 
-        elJamCuti.textContent =
-            decimal(
-                klm.jamCuti
-            ) +
-            " Jam";
+    elJamCuti.textContent =
+        decimal(klm.hariCuti) +
+        " Hari / " +
+        decimal(klm.jamCuti) +
+        " Jam";
 
-    }
+}
+
+
 
 
     if(elRmCuti){
