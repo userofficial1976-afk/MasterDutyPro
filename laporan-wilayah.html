@@ -1735,25 +1735,27 @@ function paparRumusanUnit(rows){
 
                 <tr>
 
-                    <td>
-                        ${escapeHtml(item.unit)}
-                    </td>
+<td>${escapeHtml(item.pos)}</td>
 
-                    <td>
-                        ${item.anggota.size}
-                    </td>
+<td>${item.anggota.size}</td>
 
-                    <td>
-                        ${item.duty.toLocaleString("ms-MY")}
-                    </td>
+<td>${num(item.jamBiasa)}</td>
 
-                    <td>
-                        ${num(item.klm)}
-                    </td>
+<td>${money(item.rmBiasa)}</td>
 
-                    <td>
-                        ${money(item.rm)}
-                    </td>
+<td>${num(item.hariOff)}</td>
+
+<td>${money(item.rmHariOff)}</td>
+
+<td>${num(item.jamOff)}</td>
+
+<td>${money(item.rmJamOff)}</td>
+
+<td>${num(item.jamCuti)}</td>
+
+<td>${money(item.rmJamCuti)}</td>
+
+<td>${money(item.jumlahRM)}</td>
 
                 </tr>
 
@@ -1807,22 +1809,27 @@ function paparRumusanPos(rows){
 
         if(!map.has(pos)){
 
-            map.set(
-                pos,
-                {
+map.set(
+    pos,
+    {
+        pos,
+        anggota:new Set(),
 
-                    pos,
+        jamBiasa:0,
+        rmBiasa:0,
 
-                    anggota:
-                        new Set(),
+        hariOff:0,
+        rmHariOff:0,
 
-                    duty:0,
+        jamOff:0,
+        rmJamOff:0,
 
-                    klm:0,
+        jamCuti:0,
+        rmJamCuti:0,
 
-                    rm:0
-
-                }
+        jumlahRM:0
+    }
+);
             );
 
         }
@@ -1846,19 +1853,24 @@ function paparRumusanPos(rows){
         }
 
 
-        item.duty += 1;
+item.jamBiasa += num(row.jam_klm);
 
+item.rmBiasa += num(row.rm_klm_hari_biasa);
 
-        item.klm +=
-            num(
-                row.jam_klm
-            );
+item.hariOff += num(row.jumlah_offday);
 
+item.rmHariOff += num(row.rm_hari_offday);
 
-        item.rm +=
-            num(
-                row.rm_klm_seluruh
-            );
+item.jamOff += num(row.jam_offday_bertugas);
+
+item.rmJamOff += num(row.rm_jam_offday);
+
+item.jamCuti += num(row.jam_cutiam_bertugas);
+
+item.rmJamCuti += num(row.rm_jam_cutiam);
+
+item.jumlahRM += num(row.rm_klm_seluruh);
+``
 
     });
 
@@ -3259,25 +3271,17 @@ Jana Laporan
 
 <tr>
 
-<th>
-    Pos
-</th>
-
-<th>
-    Anggota
-</th>
-
-<th>
-    Duty
-</th>
-
-<th>
-    KLM
-</th>
-
-<th>
-    RM
-</th>
+<th>Pos</th>
+<th>Bil Anggota</th>
+<th>Jam KLM Hari Biasa</th>
+<th>RM KLM Hari Biasa</th>
+<th>Hari Offday</th>
+<th>RM Hari Offday</th>
+<th>Jam Offday</th>
+<th>RM Jam Offday</th>
+<th>Jam Cuti Am</th>
+<th>RM Jam Cuti Am</th>
+<th>Jumlah RM</th>
 
 </tr>
 
