@@ -779,7 +779,7 @@ tbody tr:hover{
    NUMBER
 ========================================================= */
 
-.number-klm{
+.num-center{
     color:#fbbf24;
     font-weight:700;
 }
@@ -1369,6 +1369,12 @@ button:disabled{
     }
 }
 
+/* CENTER NILAI num() SAHAJA */
+.num-center {
+    text-align: center !important;
+}
+
+    
 </style>
 
 
@@ -3865,7 +3871,7 @@ function paparAdmin(rows){
 <div>
 
     <div class="unit-stat-label">
-        KLM Biasa
+        KLM Hari Biasa
     </div>
 
     <div class="unit-stat-value klm">
@@ -3878,7 +3884,7 @@ function paparAdmin(rows){
 <div>
 
     <div class="unit-stat-label">
-        KLM OFF
+        KLM HARI OFFDAY
     </div>
 
     <div class="unit-stat-value klm">
@@ -3891,7 +3897,7 @@ function paparAdmin(rows){
 <div>
 
     <div class="unit-stat-label">
-        KLM CUTI AM
+        KLM HARI CUTI AM
     </div>
 
     <div class="unit-stat-value klm">
@@ -3901,17 +3907,7 @@ function paparAdmin(rows){
 </div>
                     
 
-                    <div class="hide-tablet">
 
-                        <div class="unit-stat-label">
-                            RM Biasa
-                        </div>
-
-                        <div class="unit-stat-value rm">
-                            ${money(unit.rmHariBiasa)}
-                        </div>
-
-                    </div>
 
 
                     <div>
@@ -4513,16 +4509,14 @@ function binaTableAnggota(
                     </td>
 
 
-                    <td class="number-klm">
-                        ${num(item.klmHariBiasa)}
-                    </td>
+<td class="num-center">${num(item.klmHariBiasa)}</td>
 
                     <td class="number-rm">
                         ${money(item.rmHariBiasa)}
                     </td>
 
 
-                    <td class="number-klm">
+                    <td class="num-center">
                         ${num(item.klmHariOff)}
                     </td>
 
@@ -4531,7 +4525,7 @@ function binaTableAnggota(
                     </td>
 
 
-                    <td class="number-klm">
+                    <td class="num-center">
                         ${num(item.klmJamOff)}
                     </td>
 
@@ -4540,7 +4534,7 @@ function binaTableAnggota(
                     </td>
 
 
-                    <td class="number-klm">
+                    <td class="num-center">
                         ${num(item.klmHariCutiAm)}
                     </td>
 
@@ -4549,7 +4543,7 @@ function binaTableAnggota(
                     </td>
 
 
-                    <td class="number-klm">
+                    <td class="num-center">
                         ${num(item.klmJamCutiAm)}
                     </td>
 
