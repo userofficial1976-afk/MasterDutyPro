@@ -1831,7 +1831,7 @@ map.set(
     }
 );
             
-
+}
         
 
 
@@ -1891,27 +1891,51 @@ item.jumlahRM += num(row.rm_klm_seluruh);
 
                 <tr>
 
-                    <td class="nama">
-                        ${escapeHtml(item.pos)}
-                    </td>
+    <td class="nama">
+        ${escapeHtml(item.pos)}
+    </td>
 
-                    <td>
-                        ${item.anggota.size}
-                    </td>
+    <td>
+        ${item.anggota.size}
+    </td>
 
-                    <td>
-                        ${item.duty.toLocaleString("ms-MY")}
-                    </td>
+    <td>
+        ${num(item.jamBiasa)}
+    </td>
 
-                    <td>
-                        ${num(item.klm)}
-                    </td>
+    <td>
+        ${money(item.rmBiasa)}
+    </td>
 
-                    <td>
-                        ${money(item.rm)}
-                    </td>
+    <td>
+        ${num(item.hariOff)}
+    </td>
 
-                </tr>
+    <td>
+        ${money(item.rmHariOff)}
+    </td>
+
+    <td>
+        ${num(item.jamOff)}
+    </td>
+
+    <td>
+        ${money(item.rmJamOff)}
+    </td>
+
+    <td>
+        ${num(item.jamCuti)}
+    </td>
+
+    <td>
+        ${money(item.rmJamCuti)}
+    </td>
+
+    <td>
+        ${money(item.jumlahRM)}
+    </td>
+
+</tr>
 
             `
         ).join("");
@@ -1921,7 +1945,7 @@ item.jumlahRM += num(row.rm_klm_seluruh);
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="5">
+                <td colspan="11">
                     Tiada data
                 </td>
             </tr>
