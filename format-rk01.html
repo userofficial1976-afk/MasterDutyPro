@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>FORMAT RK01</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+body{
+    background:#0b1220;
+    font-family:'Segoe UI',sans-serif;
+}
+
+.glass{
+    background:rgba(15,23,42,.7);
+    backdrop-filter:blur(16px);
+    border:1px solid rgba(45,212,191,.12);
+}
+
+.rk01-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.rk01-table th,
+.rk01-table td{
+    border:1px solid rgba(148,163,184,.3);
+    padding:2px;
+    text-align:center;
+    font-size:10px;
+}
+
+.rk01-table th{
+    background:rgba(20,184,166,.15);
+    color:#2dd4bf;
+}
+
+.page-title{
+    font-size:24px;
+    font-weight:700;
+}
+
+.page-sub{
+    color:#2dd4bf;
+    font-weight:600;
+}
+
+@media print{
+
+    @page{
+        size:A4 landscape;
+        margin:5mm;
+    }
+
+    .no-print,
+    aside,
+    header{
+        display:none !important;
+    }
+
+    body{
+        background:#fff !important;
+        color:#000 !important;
+    }
+
+    main{
+        margin-left:0 !important;
+    }
+
+    .glass{
+        background:#fff !important;
+        border:none !important;
+        box-shadow:none !important;
+    }
+
+    .rk01-table th,
+    .rk01-table td{
+        border:1px solid #000 !important;
+        color:#000 !important;
+        background:#fff !important;
+        font-size:7px !important;
+    }
+}
+
+</style>
+
+</head>
+
+<body class="text-slate-200">
+
+<div class="flex min-h-screen">
+
+<main class="flex-1">
+
+<header class="glass px-6 py-4 no-print">
+
+<div class="flex justify-between items-center">
+
+<div>
+
+<h2 class="text-xl font-bold">
+FORMAT RK01
+</h2>
+
+<p class="text-slate-400 text-sm">
+Borang RK01 Mingguan
+</p>
+
+</div>
+
+<button
+onclick="window.print()"
+class="bg-teal-600 hover:bg-teal-500 px-5 py-2 rounded-xl text-white"
+>
+<i class="fas fa-print mr-2"></i>
+Cetak PDF
+</button>
+
+</div>
+
+</header>
+
+<div class="p-6">
+
+<!-- FILTER -->
+
+<div class="glass p-5 rounded-2xl mb-5 no-print">
+
+<div class="grid md:grid-cols-6 gap-4">
+
+<div>
+
+<label class="block text-xs mb-2">
+UNIT
+</label>
+
+<select id="filterUnit"></select>
+
+</div>
+
+<div>
+
+<label class="block text-xs mb-2">
+POS
+</label>
+
+<select id="filterPos"></select>
+
+</div>
+
+<div>
+
+<label class="block text-xs mb-2">
+BULAN
+</label>
+
+<select id="filterBulan"></select>
+
+</div>
+
+<div>
+
+<label class="block text-xs mb-2">
+TAHUN
+</label>
+
+<select id="filterTahun"></select>
+
+</div>
+
+<div>
+
+<label class="block text-xs mb-2">
+MINGGU
+</label>
+
+<select id="filterMinggu">
+
+<option value="1">
+Minggu 1 (1-7)
+</option>
+
+<option value="2">
+Minggu 2 (8-14)
+</option>
+
+<option value="3">
+Minggu 3 (15-21)
+</option>
+
+<option value="4">
+Minggu 4 (22-28)
+</option>
+
+<option value="5">
+Minggu 5 (29-31)
+</option>
+
+</select>
+
+</div>
+
+<div class="flex items-end">
+
+<button
+id="btnJana"
+class="w-full bg-blue-600 hover:bg-blue-500 py-2.5 rounded-xl text-white font-semibold"
+>
+FORMAT RK01
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PRINT AREA -->
+
+<div
+id="printArea"
+class="glass rounded-2xl p-4"
+>
+
+<div class="text-center mb-4">
+
+<div class="page-title">
+FGV SECURITY SERVICES SDN BHD
+</div>
+
+<div class="font-bold">
+BORANG RK-01
+</div>
+
+<div class="page-sub">
+JADUAL TUGAS DAN REKOD KERJA LEBIH MASA ANGGOTA
+</div>
+
+</div>
+
+<div class="flex justify-between text-sm mb-4">
+
+<div>
+<b>POS :</b>
+<span id="infoPos">-</span>
+</div>
+
+<div>
+<b>KAWASAN :</b>
+<span id="infoKawasan">-</span>
+</div>
+
+<div>
+<b>BULAN :</b>
+<span id="infoBulan">-</span>
+</div>
+
+<div>
+<b>MINGGU :</b>
+<span id="infoMinggu">-</span>
+</div>
+
+</div>
+
+<div class="overflow-x-auto">
+
+<table
+id="rk01Table"
+class="rk01-table"
+>
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+let currentUser = null;
+
+let dataAnggota = [];
+
+let dataDuty = [];
+
+let anggotaLaporan = [];
+
+const SENARAI_BULAN = [
+    "Januari",
+    "Februari",
+    "Mac",
+    "April",
+    "Mei",
+    "Jun",
+    "Julai",
+    "Ogos",
+    "September",
+    "Oktober",
+    "November",
+    "Disember"
+];
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        currentUser =
+            bacaPengguna();
+
+        if(!currentUser){
+
+            location.href =
+                "login.html";
+
+            return;
+
+        }
+
+        paparUser();
+
+        binaDropdownBulan();
+
+        binaDropdownTahun();
+
+        await muatDataAnggota();
+
+        binaDropdownUnit();
+
+        binaDropdownPos();
+
+        document
+            .getElementById(
+                "filterUnit"
+            )
+            ?.addEventListener(
+                "change",
+                () => {
+                    binaDropdownPos();
+                }
+            );
+
+        document
+            .getElementById(
+                "btnJana"
+            )
+            ?.addEventListener(
+                "click",
+                janaFormatRK01
+            );
+
+    }
+);
+
+/* =====================================================
+   USER
+===================================================== */
+
+function bacaPengguna(){
+
+    try{
+
+        const raw =
+            localStorage.getItem(
+                "mdp_user"
+            );
+
+        return raw
+            ? JSON.parse(raw)
+            : null;
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        return null;
+
+    }
+
+}
+
+function paparUser(){
+
+    const nama =
+        document.getElementById(
+            "userName"
+        );
+
+    const jawatan =
+        document.getElementById(
+            "userJawatan"
+        );
+
+    if(nama){
+
+        nama.textContent =
+            currentUser?.name ||
+            currentUser?.nama ||
+            "-";
+
+    }
+
+    if(jawatan){
+
+        jawatan.textContent =
+            currentUser?.jawatan ||
+            "-";
+
+    }
+
+}
+
+/* =====================================================
+   BULAN
+===================================================== */
+
+function binaDropdownBulan(){
+
+    const el =
+        document.getElementById(
+            "filterBulan"
+        );
+
+    if(!el) return;
+
+    el.innerHTML =
+        SENARAI_BULAN.map(
+            bulan => `
+                <option value="${bulan}">
+                    ${bulan}
+                </option>
+            `
+        ).join("");
+
+    el.value =
+        SENARAI_BULAN[
+            new Date().getMonth()
+        ];
+
+}
+
+/* =====================================================
+   TAHUN
+===================================================== */
+
+function binaDropdownTahun(){
+
+    const el =
+        document.getElementById(
+            "filterTahun"
+        );
+
+    if(!el) return;
+
+    const tahunSemasa =
+        new Date().getFullYear();
+
+    let html = "";
+
+    for(
+        let tahun = tahunSemasa - 2;
+        tahun <= tahunSemasa + 2;
+        tahun++
+    ){
+
+        html += `
+            <option value="${tahun}">
+                ${tahun}
+            </option>
+        `;
+
+    }
+
+    el.innerHTML = html;
+
+    el.value =
+        tahunSemasa;
+
+}
+
+/* =====================================================
+   DATA ANGGOTA
+===================================================== */
+
+async function muatDataAnggota(){
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("Data_Anggota")
+
+        .select(`
+            no_skb,
+            no_anggota,
+            nama,
+            pangkat,
+            unit,
+            pos,
+            kawasan,
+            ketua_unit,
+            ketua_pos,
+            status
+        `)
+
+        .order(
+            "nama",
+            {
+                ascending:true
+            }
+        );
+
+    if(error){
+
+        console.error(
+            "RALAT DATA ANGGOTA:",
+            error
+        );
+
+        return;
+    }
+
+    dataAnggota =
+        data || [];
+
+}
+
+/* =====================================================
+   UNIT
+===================================================== */
+
+function binaDropdownUnit(){
+
+    const el =
+        document.getElementById(
+            "filterUnit"
+        );
+
+    if(!el) return;
+
+    const senaraiUnit =
+        [
+            ...new Set(
+
+                dataAnggota
+                .map(
+                    a =>
+                    String(
+                        a.unit || ""
+                    ).trim()
+                )
+                .filter(Boolean)
+
+            )
+        ]
+        .sort();
+
+    el.innerHTML =
+
+        `<option value="">
+            Semua Unit
+        </option>`
+
+        +
+
+        senaraiUnit.map(
+            unit => `
+                <option value="${unit}">
+                    ${unit}
+                </option>
+            `
+        ).join("");
+
+}
+
+/* =====================================================
+   POS
+===================================================== */
+
+function binaDropdownPos(){
+
+    const unit =
+        document
+        .getElementById(
+            "filterUnit"
+        )
+        .value;
+
+    const el =
+        document
+        .getElementById(
+            "filterPos"
+        );
+
+    if(!el) return;
+
+    let data =
+        [...dataAnggota];
+
+    if(unit){
+
+        data =
+            data.filter(
+                a =>
+                String(
+                    a.unit || ""
+                ).trim()
+                ===
+                unit
+            );
+
+    }
+
+    const senaraiPos =
+        [
+            ...new Set(
+                data
+                .map(
+                    a =>
+                    String(
+                        a.pos || ""
+                    ).trim()
+                )
+                .filter(Boolean)
+            )
+        ]
+        .sort();
+
+    el.innerHTML =
+
+        `<option value="">
+            Semua Pos
+        </option>`
+
+        +
+
+        senaraiPos.map(
+            pos => `
+                <option value="${pos}">
+                    ${pos}
+                </option>
+            `
+        ).join("");
+
+}
+
+/* =====================================================
+   MUAT DATA DUTY
+===================================================== */
+
+async function muatDataDuty(){
+
+    const bulan =
+        document
+        .getElementById(
+            "filterBulan"
+        )
+        .value;
+
+    const tahun =
+        document
+        .getElementById(
+            "filterTahun"
+        )
+        .value;
+
+    const unit =
+        document
+        .getElementById(
+            "filterUnit"
+        )
+        .value;
+
+    const pos =
+        document
+        .getElementById(
+            "filterPos"
+        )
+        .value;
+
+    let query =
+        supabaseClient
+
+        .from("jadual_duty")
+
+        .select("*")
+
+        .eq(
+            "bulan",
+            bulan
+        )
+
+        .eq(
+            "tahun",
+            String(tahun)
+        );
+
+    if(unit){
+
+        query =
+            query.eq(
+                "unit",
+                unit
+            );
+
+    }
+
+    if(pos){
+
+        query =
+            query.eq(
+                "pos",
+                pos
+            );
+
+    }
+
+    const {
+        data,
+        error
+    } = await query;
+
+    if(error){
+
+        console.error(
+            "RALAT DUTY:",
+            error
+        );
+
+        dataDuty = [];
+
+        return [];
+    }
+
+    dataDuty =
+        data || [];
+
+    return dataDuty;
+
+}
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function nombor(v){
+
+    return Number(v || 0);
+
+}
+
+function escapeHtml(text){
+
+    return String(text || "")
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;");
+
+}
+
+function nomborBulan(
+    namaBulan
+){
+
+    return (
+        SENARAI_BULAN.indexOf(
+            namaBulan
+        ) + 1
+    );
+
+}
+
+</script>
+
+
+<script>
+
+/* =====================================================
+   SUSUNAN PANGKAT
+===================================================== */
+
+function rankPangkat(p){
+
+    p = String(p || "")
+        .trim()
+        .toUpperCase();
+
+    if(p === "SARJAN" || p === "SJN"){
+        return 1;
+    }
+
+    if(p === "KOPERAL" || p === "KPL"){
+        return 2;
+    }
+
+    if(
+        p === "LANS KOPERAL" ||
+        p === "L/KPL"
+    ){
+        return 3;
+    }
+
+    if(
+        p === "KONSTABEL" ||
+        p === "KONST"
+    ){
+        return 4;
+    }
+
+    if(
+        p === "PELATIH POLIS BANTUAN" ||
+        p === "PPB"
+    ){
+        return 5;
+    }
+
+    return 99;
+
+}
+
+/* =====================================================
+   TARIKH BULAN
+===================================================== */
+
+function binaTarikhBulanan(
+    tahun,
+    bulan
+){
+
+    const hariNama = [
+        "Ahad",
+        "Isnin",
+        "Selasa",
+        "Rabu",
+        "Khamis",
+        "Jumaat",
+        "Sabtu"
+    ];
+
+    const hasil = [];
+
+    const jumlahHari =
+        new Date(
+            tahun,
+            bulan,
+            0
+        ).getDate();
+
+    for(
+        let i = 1;
+        i <= jumlahHari;
+        i++
+    ){
+
+        const d =
+            new Date(
+                tahun,
+                bulan - 1,
+                i
+            );
+
+        hasil.push({
+
+            hari:
+                hariNama[
+                    d.getDay()
+                ],
+
+            tarikh:
+                String(i)
+                    .padStart(
+                        2,
+                        "0"
+                    ) +
+                "/" +
+                String(bulan)
+                    .padStart(
+                        2,
+                        "0"
+                    ) +
+                "/" +
+                tahun,
+
+            iso:
+                tahun +
+                "-" +
+                String(bulan)
+                    .padStart(
+                        2,
+                        "0"
+                    ) +
+                "-" +
+                String(i)
+                    .padStart(
+                        2,
+                        "0"
+                    )
+
+        });
+
+    }
+
+    return hasil;
+
+}
+
+/* =====================================================
+   TAPIS MINGGU
+===================================================== */
+
+function tapisTarikhIkutMinggu(
+    senarai,
+    minggu
+){
+
+    minggu =
+        Number(minggu);
+
+    if(minggu === 1){
+        return senarai.slice(0,7);
+    }
+
+    if(minggu === 2){
+        return senarai.slice(7,14);
+    }
+
+    if(minggu === 3){
+        return senarai.slice(14,21);
+    }
+
+    if(minggu === 4){
+        return senarai.slice(21,28);
+    }
+
+    return senarai.slice(28);
+
+}
+
+/* =====================================================
+   NORMALISE TARIKH
+===================================================== */
+
+function normalTarikh(v){
+
+    if(!v){
+        return "";
+    }
+
+    const s =
+        String(v).trim();
+
+    if(
+        /^\d{4}-\d{2}-\d{2}$/
+        .test(s)
+    ){
+        return s;
+    }
+
+    const p =
+        s.split("/");
+
+    if(
+        p.length === 3
+    ){
+
+        return (
+            p[2] +
+            "-" +
+            p[1].padStart(2,"0") +
+            "-" +
+            p[0].padStart(2,"0")
+        );
+
+    }
+
+    return s;
+
+}
+
+/* =====================================================
+   ANGGOTA LAPORAN
+===================================================== */
+
+function binaAnggotaLaporan(){
+
+    const unit =
+        document
+        .getElementById(
+            "filterUnit"
+        )
+        .value;
+
+    const pos =
+        document
+        .getElementById(
+            "filterPos"
+        )
+        .value;
+
+    let data =
+        [...dataAnggota];
+
+    if(unit){
+
+        data =
+            data.filter(
+                a =>
+                String(a.unit || "")
+                === unit
+            );
+
+    }
+
+    if(pos){
+
+        data =
+            data.filter(
+                a =>
+                String(a.pos || "")
+                === pos
+            );
+
+    }
+
+    data.sort(
+        (a,b)=>{
+
+            const r1 =
+                rankPangkat(
+                    a.pangkat
+                );
+
+            const r2 =
+                rankPangkat(
+                    b.pangkat
+                );
+
+            if(r1 !== r2){
+                return r1 - r2;
+            }
+
+            return String(
+                a.no_anggota || ""
+            ).localeCompare(
+                String(
+                    b.no_anggota || ""
+                ),
+                "ms",
+                {
+                    numeric:true
+                }
+            );
+
+        }
+    );
+
+    return data;
+
+}
+
+/* =====================================================
+   REKOD DUTY
+===================================================== */
+
+function cariRekodDuty(
+    noSkb,
+    iso
+){
+
+    return dataDuty.find(
+        r =>
+
+            String(
+                r.no_skb
+            ) === String(
+                noSkb
+            )
+
+            &&
+
+            normalTarikh(
+                r.tarikh
+            ) === iso
+
+    );
+
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+function kemaskiniMaklumat(){
+
+    document
+        .getElementById(
+            "infoPos"
+        )
+        .textContent =
+
+        document
+            .getElementById(
+                "filterPos"
+            ).value
+
+        ||
+
+        "SEMUA POS";
+
+
+    document
+        .getElementById(
+            "infoKawasan"
+        )
+        .textContent =
+
+        dataDuty?.[0]?.kawasan
+
+        ||
+
+        "-";
+
+
+    document
+        .getElementById(
+            "infoBulan"
+        )
+        .textContent =
+
+        document
+            .getElementById(
+                "filterBulan"
+            ).value
+
+        + " " +
+
+        document
+            .getElementById(
+                "filterTahun"
+            ).value;
+
+
+    document
+        .getElementById(
+            "infoMinggu"
+        )
+        .textContent =
+
+        "MINGGU " +
+
+        document
+            .getElementById(
+                "filterMinggu"
+            ).value;
+
+}
+
+/* =====================================================
+   FORMAT RK01
+===================================================== */
+
+async function janaFormatRK01(){
+
+    await muatDataDuty();
+
+    anggotaLaporan =
+        binaAnggotaLaporan();
+
+    kemaskiniMaklumat();
+
+    renderRK01();
+
+}
+
+/* =====================================================
+   RENDER RK01
+===================================================== */
+
+function renderRK01(){
+
+    const table =
+        document.getElementById(
+            "rk01Table"
+        );
+
+    if(!table){
+        return;
+    }
+
+    const bulan =
+        nomborBulan(
+            document
+                .getElementById(
+                    "filterBulan"
+                )
+                .value
+        );
+
+    const tahun =
+        Number(
+            document
+                .getElementById(
+                    "filterTahun"
+                )
+                .value
+        );
+
+    const minggu =
+        document
+            .getElementById(
+                "filterMinggu"
+            )
+            .value;
+
+    let tarikhBulanan =
+        binaTarikhBulanan(
+            tahun,
+            bulan
+        );
+
+    tarikhBulanan =
+        tapisTarikhIkutMinggu(
+            tarikhBulanan,
+            minggu
+        );
+
+    let html = `
+    <thead>
+
+        <tr>
+
+            <th rowspan="2">
+                TARIKH
+            </th>
+    `;
+
+    anggotaLaporan.forEach(
+        a => {
+
+            html += `
+                <th colspan="4">
+
+                    ${escapeHtml(
+                        a.no_anggota
+                    )}
+
+                    <br>
+
+                    ${escapeHtml(
+                        a.nama
+                    )}
+
+                </th>
+            `;
+
+        }
+    );
+
+    html += `
+        </tr>
+
+        <tr>
+    `;
+
+    anggotaLaporan.forEach(
+        () => {
+
+            html += `
+                <th>WK/TK</th>
+                <th>KLM</th>
+                <th>OFF</th>
+                <th>PH</th>
+            `;
+
+        }
+    );
+
+    html += `
+        </tr>
+
+    </thead>
+
+    <tbody>
+    `;
+
+    tarikhBulanan.forEach(
+        t => {
+
+            html += `
+                <tr>
+
+                    <td>
+
+                        ${t.tarikh}
+
+                        <br>
+
+                        ${t.hari}
+
+                    </td>
+            `;
+
+            anggotaLaporan.forEach(
+                anggota => {
+
+                    const d =
+                        cariRekodDuty(
+                            anggota.no_skb,
+                            t.iso
+                        );
+
+                    const wkTk = d
+                        ? `
+                            ${d.kod_duty || ""}
+                            <br>
+                            ${d.kod_tempat_kerja || ""}
+                          `
+                        : "";
+
+                    html += `
+
+                        <td>${wkTk}</td>
+
+                        <td>
+                            ${d?.jam_klm || ""}
+                        </td>
+
+                        <td>
+                            ${d?.jam_offday_bertugas || ""}
+                        </td>
+
+                        <td>
+                            ${d?.jam_cutiam_bertugas || ""}
+                        </td>
+
+                    `;
+
+                }
+            );
+
+            html += `
+                </tr>
+            `;
+
+        }
+    );
+
+    html += `
+    </tbody>
+    `;
+
+    table.innerHTML =
+        html;
+
+}
+
+/* =====================================================
+   AUTO LOAD
+===================================================== */
+
+setTimeout(
+    () => {
+
+        if(
+            document.getElementById(
+                "btnJana"
+            )
+        ){
+
+            janaFormatRK01();
+
+        }
+
+    },
+    800
+);
+
+</script>
+
+</body>
+</html>
+
+  
+  
