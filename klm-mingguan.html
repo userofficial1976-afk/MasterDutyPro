@@ -3370,7 +3370,7 @@ function agregatAnggota(rows){
 
         item.klmHariCutiAm +=
             num(
-                row.jumlah_cutiam
+                row.hari_cutiam_bertugas
             );
 
         item.rmHariCutiAm +=
@@ -3903,18 +3903,7 @@ function paparAdmin(rows){
     </div>
 
 </div>
-                    <div class="hide-tablet">
-
-                        <div class="unit-stat-label">
-                            KLM Cuti
-                        </div>
-
-                        <div class="unit-stat-value klm">
-                            ${num(unit.klmHariCutiAm)}
-                        </div>
-
-                    </div>
-
+                    
 
                     <div class="hide-tablet">
 
@@ -4017,7 +4006,7 @@ function paparAdmin(rows){
                     </div>
 
                     <div class="unit-stat-value klm">
-                        ${decimal(total.klmHariCutiAm)}
+                        ${num(total.klmHariCutiAm)}
                     </div>
 
                 </div>
@@ -4547,7 +4536,7 @@ function binaTableAnggota(
 
 
                     <td class="number-klm">
-                        ${decimal(item.klmJamOff)}
+                        ${num(item.klmJamOff)}
                     </td>
 
                     <td class="number-rm">
@@ -4556,7 +4545,7 @@ function binaTableAnggota(
 
 
                     <td class="number-klm">
-                        ${decimal(item.klmHariCutiAm)}
+                        ${num(item.klmHariCutiAm)}
                     </td>
 
                     <td class="number-rm">
