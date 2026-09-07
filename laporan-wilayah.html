@@ -2024,17 +2024,18 @@ function paparTop10(rows){
     });
 
 
-    const data =
-        [...map.values()]
-            .sort(
-                (a,b) =>
-                    b.klm -
-                    a.klm
-            )
-            .slice(
-                0,
-                10
-            );
+const data =
+    [...map.values()]
+        .sort((a, b) => {
+
+            if (b.rm !== a.rm) {
+                return b.rm - a.rm;
+            }
+
+            return b.klm - a.klm;
+
+        })
+        .slice(0, 10);
 
 
     tbody.innerHTML =
@@ -3327,7 +3328,7 @@ Jana Laporan
 <h3
     class="text-lg font-bold text-white mb-4"
 >
-    Top 10 Anggota KLM Tertinggi
+    Top 10 Anggota (RM) KLM Tertinggi
 </h3>
 
 
