@@ -1663,23 +1663,27 @@ function paparRumusanUnit(rows){
 
         if(!map.has(unit)){
 
-            map.set(
-                unit,
-                {
+map.set(unit, {
+    unit,
+    anggota: new Set(),
 
-                    unit,
+    jamBiasa: 0,
+    rmBiasa: 0,
 
-                    anggota:
-                        new Set(),
+    hariOff: 0,
+    rmHariOff: 0,
 
-                    duty:0,
+    jamOff: 0,
+    rmJamOff: 0,
 
-                    klm:0,
+    hariCuti: 0,
+    rmHariCuti: 0,
 
-                    rm:0
+    jamCuti: 0,
+    rmJamCuti: 0,
 
-                }
-            );
+    jumlahRM: 0
+});
 
         }
 
@@ -1702,19 +1706,22 @@ function paparRumusanUnit(rows){
         }
 
 
-        item.duty += 1;
+item.jamBiasa += num(row.jam_klm);
+item.rmBiasa += num(row.rm_klm_hari_biasa);
 
+item.hariOff += num(row.jumlah_offday);
+item.rmHariOff += num(row.rm_hari_offday);
 
-        item.klm +=
-            num(
-                row.jam_klm
-            );
+item.jamOff += num(row.jam_offday_bertugas);
+item.rmJamOff += num(row.rm_jam_offday);
 
+item.hariCuti += num(row.hari_cutiam_bertugas);
+item.rmHariCuti += num(row.rm_hari_cutiam);
 
-        item.rm +=
-            num(
-                row.rm_klm_seluruh
-            );
+item.jamCuti += num(row.jam_cutiam_bertugas);
+item.rmJamCuti += num(row.rm_jam_cutiam);
+
+item.jumlahRM += num(row.rm_klm_seluruh);
 
     });
 
@@ -1733,31 +1740,30 @@ function paparRumusanUnit(rows){
         data.map(
             item => `
 
-                <tr>
+<tr>
 
-<td>${escapeHtml(item.pos)}</td>
+<td>${escapeHtml(item.unit)}</td>
 
 <td>${item.anggota.size}</td>
 
 <td>${num(item.jamBiasa)}</td>
-
 <td>${money(item.rmBiasa)}</td>
 
 <td>${num(item.hariOff)}</td>
-
 <td>${money(item.rmHariOff)}</td>
 
 <td>${num(item.jamOff)}</td>
-
 <td>${money(item.rmJamOff)}</td>
 
-<td>${num(item.jamCuti)}</td>
+<td>${num(item.hariCuti)}</td>
+<td>${money(item.rmHariCuti)}</td>
 
+<td>${num(item.jamCuti)}</td>
 <td>${money(item.rmJamCuti)}</td>
 
 <td>${money(item.jumlahRM)}</td>
 
-                </tr>
+</tr>
 
             `
         ).join("");
@@ -1767,7 +1773,7 @@ function paparRumusanUnit(rows){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="5">
+                <td colspan="13">
                     Tiada data
                 </td>
             </tr>
