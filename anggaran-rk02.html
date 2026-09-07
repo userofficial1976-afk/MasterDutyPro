@@ -753,22 +753,30 @@ if (dataDuty.length > 0) {
       if (el) el.textContent = "-";
     }
     try {
-      const namaBulan = SENARAI_BULAN_UPPER[bulanNo];
-      const { data, error } = await supabaseClient
-        .from("cuti_awam")
-        .select("tarikh, nama_cuti, bulan, tahun, status")
-        .eq("tahun", Number(tahun))
-        .eq("status", "AKTIF")
-        .order("tarikh", { ascending: true });
+const { data, error } = await supabaseClient
+  .from("cuti_awam")
+  .select("*")
+  .eq("tahun", Number(tahun))
+  .eq("bulan", SENARAI_BULAN_UPPER[bulanNo])
+  .eq("status", "AKTIF")
+  .order("tarikh", { ascending: true });
+
+console.log(
+  "BULAN:",
+  bulanNo,
+  SENARAI_BULAN_UPPER[bulanNo]
+);
+
+console.log("DATA CUTI AWAM:", data);
+
 
       if (error || !data) return;
 
-      const filtered = data.filter(c => {
-        const b = String(c.bulan || "").toUpperCase();
-        return b === namaBulan || b === SENARAI_BULAN[bulanNo].toUpperCase();
-      });
+const filtered = data || [];
 
-      filtered.slice(0, 5).forEach((cuti, idx) => {
+console.log("CUTI AWAM:", filtered);
+
+filtered.forEach((cuti, idx) => {
         const el = document.getElementById("cutiAwam" + (idx + 1));
         if (!el) return;
         let tarikhStr = "-";
