@@ -3493,7 +3493,7 @@ function agregatUnit(rows){
 
 
         item.klmHariCutiAm +=
-            num(row.jumlah_cutiam);
+            num(row.hari_cutiam_bertugas);
 
         item.rmHariCutiAm +=
             num(row.rm_hari_cutiam);
@@ -3570,7 +3570,7 @@ function totalRows(rows){
 
             total.klmHariCutiAm +=
                 num(
-                    row.jumlah_cutiam
+                    row.hari_cutiam_bertugas
                 );
 
             total.rmHariCutiAm +=
@@ -4006,7 +4006,7 @@ function paparAdmin(rows){
                     </div>
 
                     <div class="unit-stat-value klm">
-                        ${num(total.klmHariCutiAm)}
+                        ${num(total.klmHariCutiAm)} Hari / ${num(total.klmJamCutiAm)} Jam
                     </div>
 
                 </div>
