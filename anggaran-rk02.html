@@ -473,7 +473,7 @@ GAJI POKOK (RM)
             <tr class="font-bold">
               <td class="border border-slate-600 p-1.5"></td>
               <td colspan="2" class="border border-slate-600 p-1.5 text-center">JUMLAH KLM</td>
-              <td class="border border-slate-600 p-1.5 text-right" id="rRmKawalan">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamTotalAkhir">0</td>
               <td class="border border-slate-600 p-1.5 text-right text-teal-400" id="rRmTotal">0.00</td>
             </tr>
           </tbody>
@@ -997,7 +997,7 @@ const rmKawalanFinal =
 set("rRmKawalan", formatRM(Math.max(0, rmKawalanFinal)));
 set("rRmTotal", formatRM(rmTotal));
 set("rJamTotal", T.jamBiasa);
-
+set("rJamTotalAkhir", T.jamBiasa);
 
     // Tandatangan
     if (senarai.length) {
