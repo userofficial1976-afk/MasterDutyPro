@@ -483,10 +483,25 @@ currentUser.jawatan || "-";
 const jawatan =
 String(currentUser.jawatan || "")
 .toUpperCase();
+
+if(jawatan === "KETUA POS"){
+
+  document.getElementById("menu-klm").style.display = "none";
+
+  document.getElementById("mobile-menu-klm").style.display = "none";
+
+  document.getElementById("menu-tetapan").style.display = "none";
+
+}
+
 let dataDutyHariIni = [];
+
 function paparSenarai(kategori){
 
  let rekod=[];
+
+ // sambung kod...
+}
 
  if(kategori==="OFFGR"){
 
