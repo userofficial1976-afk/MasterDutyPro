@@ -12,6 +12,11 @@
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+<link rel="preconnect" href="https://fonts.googleapis.com="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700">    
+    
 <style>
 .status-card{
     cursor:pointer;
@@ -24,9 +29,20 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     box-shadow:0 8px 20px rgba(0,0,0,.25);
 }
 
+.stat-card{
+    transition:all .3s ease;
+}
+
+.stat-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(45,212,191,.3);
+}
+    
 body{
     background:#0b1220;
+    font-family:'Inter',sans-serif;
 }
+
 
 .glass{
     background:rgba(15,23,42,.75);
@@ -84,7 +100,7 @@ body{
 
 <div class="min-h-screen">
 
-<header class="glass sticky top-0 z-50">
+<header class="glass sticky top-0 z-30 border-b border-teal-500/10">
     <div class="px-6 py-4 flex justify-between items-center">
 
         <div>
@@ -96,7 +112,13 @@ body{
                 Ringkasan Operasi Semasa
             </p>
         </div>
+<div class="hidden sm:flex items-center gap-2 bg-teal-500/10 text-teal-400 px-4 py-2 rounded-full text-sm font-medium">
 
+    <span class="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></span>
+
+    System Online
+
+</div>
         <button
             onclick="logout()"
             class="bg-red-600 px-4 py-2 rounded-lg text-white text-sm">
@@ -110,7 +132,7 @@ body{
 
     <!-- HERO -->
 
-    <div class="rounded-3xl p-8 bg-gradient-to-r from-teal-700 to-teal-500">
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-8">
 
         <h2 class="text-3xl font-bold text-white">
             Selamat Datang,
@@ -135,39 +157,41 @@ body{
             </div>
 
         </div>
-
+<div class="absolute right-0 bottom-0 opacity-20">
+    <i class="fas fa-shield-halved text-9xl text-white"></i>
+</div>
     </div>
 
     <!-- STATISTIK -->
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 
-        <div class="glass rounded-2xl p-5">
+        <<div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Jumlah Anggota</div>
             <div id="jumlahAnggota" class="text-3xl font-bold mt-2">0</div>
         </div>
 
-        <div class="glass rounded-2xl p-5">
+        <<div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Bertugas Hari Ini</div>
             <div id="jumlahBertugas" class="text-3xl font-bold text-green-400 mt-2">0</div>
         </div>
 
-        <div class="glass rounded-2xl p-5">
+        <<div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Tidak Bertugas</div>
             <div id="jumlahTidakBertugas" class="text-3xl font-bold text-yellow-400 mt-2">0</div>
         </div>
 
-        <div class="glass rounded-2xl p-5">
+        <<div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Jam Kerja Hari Ini</div>
             <div id="jamKerja" class="text-3xl font-bold mt-2">0</div>
         </div>
 
-        <div class="glass rounded-2xl p-5">
+        <<div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Jam KLM Hari Ini</div>
             <div id="jamKlm" class="text-3xl font-bold text-orange-400 mt-2">0</div>
         </div>
 
-        <div class="glass rounded-2xl p-5">
+        <<div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">RM KLM Hari Ini</div>
             <div id="rmKlm" class="text-3xl font-bold text-teal-400 mt-2">RM 0.00</div>
         </div>
@@ -186,7 +210,7 @@ body{
 
 <!-- OFF/GR -->
 <div
-class="status-card bg-orange-500/10 p-4 rounded-xl text-center cursor-pointer"
+class="status-card bg-orange-500/15 border border-orange-500/30 p-4 rounded-xl text-center cursor-pointer"
 onclick="paparSenarai('OFFGR')">
     <div>OFF/GR</div>
     <div id="offgr" class="text-2xl font-bold">0</div>
@@ -194,7 +218,7 @@ onclick="paparSenarai('OFFGR')">
 
 <!-- CT -->
 <div
-class="status-card bg-green-500/10 p-4 rounded-xl text-center cursor-pointer"
+class="status-card bg-emerald-500/15 border border-emerald-500/30 p-4 rounded-xl text-center cursor-pointer"
 onclick="paparSenarai('CT')">
     <div>CT</div>
     <div id="ct" class="text-2xl font-bold">0</div>
@@ -202,7 +226,7 @@ onclick="paparSenarai('CT')">
 
 <!-- MC -->
 <div
-class="status-card bg-red-500/10 p-4 rounded-xl text-center cursor-pointer"
+class="status-card bg-red-500/15 border border-red-500/30 p-4 rounded-xl text-center cursor-pointer"
 onclick="paparSenarai('MC')">
     <div>MC</div>
     <div id="mc" class="text-2xl font-bold">0</div>
@@ -210,7 +234,7 @@ onclick="paparSenarai('MC')">
 
 <!-- KUR -->
 <div
-class="status-card bg-blue-500/10 p-4 rounded-xl text-center cursor-pointer"
+class="status-card bg-blue-500/15 border border-blue-500/30 p-4 rounded-xl text-center cursor-pointer"
 onclick="paparSenarai('KUR')">
     <div>KUR</div>
     <div id="kur" class="text-2xl font-bold">0</div>
@@ -218,7 +242,8 @@ onclick="paparSenarai('KUR')">
 
 <!-- CA -->
 <div
-class="status-card bg-yellow-500/10 p-4 rounded-xl text-center cursor-pointer"
+class="status-card bg-yellow-500/15 border border-yellow-500/30
+ p-4 rounded-xl text-center cursor-pointer"
 onclick="paparSenarai('CA')">
     <div>CA</div>
     <div id="ca" class="text-2xl font-bold">0</div>
@@ -226,7 +251,7 @@ onclick="paparSenarai('CA')">
 
 <!-- CG -->
 <div
-class="status-card bg-purple-500/10 p-4 rounded-xl text-center cursor-pointer"
+class="status-card bg-purple-500/15 border border-purple-500/30 rounded-xl text-center cursor-pointer"
 onclick="paparSenarai('CG')">
     <div>CG</div>
     <div id="cg" class="text-2xl font-bold">0</div>
@@ -234,7 +259,7 @@ onclick="paparSenarai('CG')">
 
 <!-- CE -->
 <div
-class="status-card bg-cyan-500/10 p-4 rounded-xl text-center cursor-pointer"
+class="status-card bg-cyan-500/15 border border-cyan-500/30 p-4 rounded-xl text-center cursor-pointer"
 onclick="paparSenarai('CE')">
     <div>CE</div>
     <div id="ce" class="text-2xl font-bold">0</div>
@@ -242,7 +267,7 @@ onclick="paparSenarai('CE')">
 
 <!-- CTR -->
 <div
-class="status-card bg-slate-500/10 p-4 rounded-xl text-center cursor-pointer"
+class="status-card bg-slate-500/15 border border-slate-500/30 p-4 rounded-xl text-center cursor-pointer"
 onclick="paparSenarai('CTR')">
     <div>CTR</div>
     <div id="ctr" class="text-2xl font-bold">0</div>
