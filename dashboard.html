@@ -27,6 +27,16 @@
     }
   </script>
   <style>
+@media (max-width:1023px){
+
+  body{
+    padding-bottom:75px;
+  }
+
+}
+
+
+    
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     body { background: #0b1220; }
     .glass {
@@ -694,5 +704,57 @@ async function statusTidakBertugasHariIni() {
       document.body.appendChild(popup);
     }
   </script>
+
+<div id="mobileNavGrid" class="grid h-16 grid-cols-7">
+
+  <a href="dashboard.html"
+     id="mobileDashboard"
+     class="flex flex-col items-center justify-center text-slate-300">
+    <i class="fas fa-chart-pie text-lg"></i>
+    <span class="text-[10px]">Dashboard</span>
+  </a>
+
+  <a href="jadual-duty.html"
+     class="flex flex-col items-center justify-center text-slate-300">
+    <i class="fas fa-calendar-check text-lg"></i>
+    <span class="text-[10px]">Duty</span>
+  </a>
+
+  <a href="kod-duty.html"
+     class="flex flex-col items-center justify-center text-slate-300">
+    <i class="fas fa-code text-lg"></i>
+    <span class="text-[10px]">WK</span>
+  </a>
+
+  <a href="kod-tempat-kerja.html"
+     class="flex flex-col items-center justify-center text-slate-300">
+    <i class="fas fa-map-marker-alt text-lg"></i>
+    <span class="text-[10px]">TK</span>
+  </a>
+
+  <a href="klm-mingguan.html"
+     class="flex flex-col items-center justify-center text-slate-300">
+    <i class="fas fa-file-alt text-lg"></i>
+    <span class="text-[10px]">Weekly</span>
+  </a>
+
+  <a href="anggaran-rk02.html"
+     class="flex flex-col items-center justify-center text-slate-300">
+    <i class="fas fa-chart-bar text-lg"></i>
+    <span class="text-[10px]">RK02</span>
+  </a>
+
+  <a href="#"
+     onclick="logKeluar()"
+     class="flex flex-col items-center justify"fas fa-sign-out-alt text-lg"></i>
+    <span class="text-[10px]">Logout</span>
+  </a>
+
+</div>
+
+
+
+
+  
 </body>
 </html>
