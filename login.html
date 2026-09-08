@@ -395,17 +395,27 @@ async function(e){
             userData
         );
 
-        if(isAdmin){
+if(isAdmin){
 
-            window.location.href =
-            "dashboard.html";
+    window.location.href =
+    "dashboard.html";
 
-        }else{
+}
+else if(
+    isKetuaUnit ||
+    isKetuaPos
+){
 
-            window.location.href =
-            "jadual-duty.html";
+    window.location.href =
+    "dashboardkpku.html";
 
-        }
+}
+else{
+
+    window.location.href =
+    "jadual-duty.html";
+
+}
 
     }
     catch(err){
