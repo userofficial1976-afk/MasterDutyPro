@@ -174,43 +174,59 @@ body{
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-            <div class="bg-orange-500/10 p-4 rounded-xl text-center">
-                <div>OFF/GR</div>
+<div
+class="bg-orange-500/10 p-4 rounded-xl text-center cursor-pointer"
+onclick="paparSenarai('OFFGR')">
+
                 <div id="offgr" class="text-2xl font-bold">0</div>
             </div>
 
-            <div class="bg-green-500/10 p-4 rounded-xl text-center">
-                <div>CT</div>
+<div
+class="bg-orange-500/10 p-4 rounded-xl text-center cursor-pointer"
+onclick="paparSenarai('CT')">
+
                 <div id="ct" class="text-2xl font-bold">0</div>
             </div>
 
-            <div class="bg-red-500/10 p-4 rounded-xl text-center">
-                <div>MC</div>
+<div
+class="bg-orange-500/10 p-4 rounded-xl text-center cursor-pointer"
+onclick="paparSenarai('MC')">
+
                 <div id="mc" class="text-2xl font-bold">0</div>
             </div>
 
-            <div class="bg-blue-500/10 p-4 rounded-xl text-center">
-                <div>KUR</div>
+<div
+class="bg-orange-500/10 p-4 rounded-xl text-center cursor-pointer"
+onclick="paparSenarai('KUR')">
+
                 <div id="kur" class="text-2xl font-bold">0</div>
             </div>
 
-            <div class="bg-yellow-500/10 p-4 rounded-xl text-center">
-                <div>CA</div>
+<div
+class="bg-orange-500/10 p-4 rounded-xl text-center cursor-pointer"
+onclick="paparSenarai('CA')">
+
                 <div id="ca" class="text-2xl font-bold">0</div>
             </div>
 
-            <div class="bg-purple-500/10 p-4 rounded-xl text-center">
-                <div>CG</div>
+<div
+class="bg-orange-500/10 p-4 rounded-xl text-center cursor-pointer"
+onclick="paparSenarai('OG')">
+
                 <div id="cg" class="text-2xl font-bold">0</div>
             </div>
 
-            <div class="bg-cyan-500/10 p-4 rounded-xl text-center">
-                <div>CE</div>
+<div
+class="bg-orange-500/10 p-4 rounded-xl text-center cursor-pointer"
+onclick="paparSenarai('CE')">
+
                 <div id="ce" class="text-2xl font-bold">0</div>
             </div>
 
-            <div class="bg-slate-500/10 p-4 rounded-xl text-center">
-                <div>CTR</div>
+<div
+class="bg-orange-500/10 p-4 rounded-xl text-center cursor-pointer"
+onclick="paparSenarai('CTR')">
+
                 <div id="ctr" class="text-2xl font-bold">0</div>
             </div>
 
@@ -248,9 +264,11 @@ body{
         <span>RK02</span>
     </a>
 
-    <a href="#" onclick="logout()" class="mobile-nav fa-sign-out-alt"></i>
-        <span>Logout</span>
-    </a>
+<a href="#"
+   onclick="logout()"
+   class="mobile-navgn-out-alt"></i>
+    <span>Logout</span>
+</a>
 
 </nav>
 
@@ -293,6 +311,92 @@ const jawatan =
 String(currentUser.jawatan || "")
 .toUpperCase();
 
+function paparSenarai(kategori){
+
+ let rekod=[];
+
+ if(kategori==="OFFGR"){
+   rekod=
+   dataDutyHariIni.filter(
+     x =>
+      x.kod_waktu_kerja==="OFF" ||
+      x.kod_waktu_kerja==="GR"
+   );
+ }else{
+   rekod=
+   dataDutyHariIni.filter(
+     x =>
+     x.kod_waktu_kerja===kategori
+   );
+ }
+
+ const senarai =
+ rekod.length
+ ?
+ rekod.map(
+ (r,i)=>
+ `<li>${i+1}. ${r.nama_anggota}</li>`
+ ).join("")
+ :
+ "<li>Tiada rekod</li>";
+
+ const popup =
+ document.createElement("div");
+
+ popup.innerHTML = `
+ <div
+ style="
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.7);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ z-index:9999;
+ "
+ onclick="this.remove()">
+
+   <div
+   onclick="event.stopPropagation()"
+   style="
+   width:500px;
+   max-width:95%;
+   background:#0f172a;
+   border-radius:16px;
+   padding:20px;
+   color:white;
+   ">
+
+    <h3 style="font-size:18px;font-weight:bold;margin-bottom:10px;">
+      Senarai Anggota
+    </h3>
+
+    <ol style="padding-left:20px;max-height:300px;overflow:auto;">
+      ${senarai}
+    </ol>
+
+    <button
+    onclick="this.closest('div[onclick]').remove()"
+    style="
+    margin-top:15px;
+    background:#dc2626;
+    padding:10px 15px;
+    border-radius:8px;
+    ">
+    Tutup
+    </button>
+
+   </div>
+
+ </div>
+ `;
+
+ document.body.appendChild(
+   popup
+ );
+}
+
+    
 function logout(){
   localStorage.removeItem("mdp_user");
   location.href="login.html";
@@ -320,9 +424,85 @@ function tapis(query){
 document.addEventListener(
 "DOMContentLoaded",
 async ()=>{
-   await kiraAnggota();
+
+  await kiraAnggota();
+  await statistikHariIni();
+  await statusHariIni();
+
+});
+
+async function statistikHariIni(){
+
+  const hariIni =
+  new Date()
+  .toISOString()
+  .split("T")[0];
+
+  let query =
+  supabaseClient
+  .from("jadual_duty")
+  .select(`
+    jam_kerja,
+    jam_klm,
+    rm_klm_seluruh,
+    unit,
+    pos
+  `)
+  .eq("tarikh",hariIni);
+
+  query = tapis(query);
+
+  const {
+    data,
+    error
+  } = await query;
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  const rows = data || [];
+
+  const jumlahJamKerja =
+  rows.reduce(
+    (t,r)=>
+      t + Number(r.jam_kerja || 0),
+    0
+  );
+
+  const jumlahJamKlm =
+  rows.reduce(
+    (t,r)=>
+      t + Number(r.jam_klm || 0),
+    0
+  );
+
+  const jumlahRmKlm =
+  rows.reduce(
+    (t,r)=>
+      t + Number(
+        r.rm_klm_seluruh || 0
+      ),
+    0
+  );
+
+  document.getElementById(
+    "jamKerja"
+  ).textContent =
+  jumlahJamKerja;
+
+  document.getElementById(
+    "jamKlm"
+  ).textContent =
+  jumlahJamKlm;
+
+  document.getElementById(
+    "rmKlm"
+  ).textContent =
+  "RM " +
+  jumlahRmKlm.toFixed(2);
 }
-);
 
 async function kiraAnggota(){
 
@@ -348,6 +528,121 @@ async function kiraAnggota(){
  ).textContent=count||0;
 }
 
+
+let dataDutyHariIni = [];
+
+async function statusHariIni(){
+
+  const hariIni =
+  new Date()
+  .toISOString()
+  .split("T")[0];
+
+  let query =
+  supabaseClient
+  .from("jadual_duty")
+  .select(`
+    nama_anggota,
+    kod_waktu_kerja,
+    kod_duty,
+    unit,
+    pos
+  `)
+  .eq("tarikh",hariIni);
+
+  query = tapis(query);
+
+  const {
+    data,
+    error
+  } = await query;
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  dataDutyHariIni = data || [];
+
+  const OFFGR =
+  dataDutyHariIni.filter(
+    x =>
+      x.kod_waktu_kerja === "OFF" ||
+      x.kod_waktu_kerja === "GR"
+  ).length;
+
+  const CT =
+  dataDutyHariIni.filter(
+    x =>
+      x.kod_waktu_kerja === "CT"
+  ).length;
+
+  const MC =
+  dataDutyHariIni.filter(
+    x =>
+      x.kod_waktu_kerja === "MC"
+  ).length;
+
+  const KUR =
+  dataDutyHariIni.filter(
+    x =>
+      x.kod_waktu_kerja === "KUR"
+  ).length;
+
+  const CA =
+  dataDutyHariIni.filter(
+    x =>
+      x.kod_waktu_kerja === "CA"
+  ).length;
+
+  const CG =
+  dataDutyHariIni.filter(
+    x =>
+      x.kod_waktu_kerja === "CG"
+  ).length;
+
+  const CE =
+  dataDutyHariIni.filter(
+    x =>
+      x.kod_waktu_kerja === "CE"
+  ).length;
+
+  const CTR =
+  dataDutyHariIni.filter(
+    x =>
+      x.kod_waktu_kerja === "CTR"
+  ).length;
+
+  document.getElementById("offgr").textContent = OFFGR;
+  document.getElementById("ct").textContent = CT;
+  document.getElementById("mc").textContent = MC;
+  document.getElementById("kur").textContent = KUR;
+  document.getElementById("ca").textContent = CA;
+  document.getElementById("cg").textContent = CG;
+  document.getElementById("ce").textContent = CE;
+  document.getElementById("ctr").textContent = CTR;
+
+  const jumlahTidakBertugas =
+    OFFGR + CT + MC + KUR +
+    CA + CG + CE + CTR;
+
+  document.getElementById(
+    "jumlahTidakBertugas"
+  ).textContent =
+  jumlahTidakBertugas;
+
+  const jumlahBertugas =
+  Math.max(
+    0,
+    dataDutyHariIni.length -
+    jumlahTidakBertugas
+  );
+
+  document.getElementById(
+    "jumlahBertugas"
+  ).textContent =
+  jumlahBertugas;
+}
 </script>
 
 </body>
