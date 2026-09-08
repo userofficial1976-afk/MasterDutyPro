@@ -967,7 +967,8 @@ senarai.sort((a, b) => {
     set("jCuti8", T.cuti8); set("jRmCuti8", formatRM(T.rmCuti8));
     set("jCuti8p", T.cuti8p); set("jRmCuti8p", formatRM(T.rmCuti8p));
     set("jJumlahRM", formatRM(T.jumlahRM));
-
+    console.log("jamTampung =", T.jamTampung);
+    console.log("rmTampung =", T.rmTampung);
     // Rumusan KLM
     // Kawalan = jam biasa yang BUKAN tampungan/eskot/tambahan
     const jamKawalan = Math.max(0, T.jamBiasa - T.jamTampung - T.jamEskot - T.jamTambahan);
