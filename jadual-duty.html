@@ -1498,17 +1498,22 @@ if (filterPos) {
 
 <nav class="mobile-bottom">
 
-<a href="#"
-   onclick="bukaDashboardMengikutRole(); return false;"
-   class="mobile-navpan>Dash</span>
-</a>
+    <!-- DASHBOARD -->
+    <a href="#"
+       onclick="bukaDashboardMengikutRole(); return false;"
+       class="mobile-nav-item">
+        <i class="fas fa-home"></i>
+        <span>Dash</span>
+    </a>
 
+    <!-- DUTY -->
     <a href="jadual-duty.html"
        class="mobile-nav-item active">
         <i class="fas fa-calendar-check"></i>
         <span>Duty</span>
     </a>
 
+    <!-- WEEKLY -->
     <a href="klm-mingguan.html"
        id="mobile-menu-klm"
        class="mobile-nav-item">
@@ -1516,23 +1521,27 @@ if (filterPos) {
         <span>Weekly</span>
     </a>
 
+    <!-- RK01 -->
     <a href="anggaran-rk01.html"
        class="mobile-nav-item">
         <i class="fas fa-chart-line"></i>
         <span>RK01</span>
     </a>
 
+    <!-- RK02 -->
     <a href="anggaran-rk02.html"
        class="mobile-nav-item">
         <i class="fas fa-chart-bar"></i>
         <span>RK02</span>
     </a>
 
-<a href="#"
-   onclick="logKeluar(); return false;"
-   ss="fas fa-sign-out-alt"></i>
-    <span>Logout</span>
-</a>
+    <!-- LOGOUT -->
+    <a href="#"
+       onclick="logKeluar(); return false;"
+       class="mobile-nav-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </a>
 
 </nav>
 
