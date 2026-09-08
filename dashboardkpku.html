@@ -35,7 +35,49 @@
 
 }
 
+.mobile-bottom{
+  display:none;
+}
 
+.mobile-nav-item{
+  text-decoration:none;
+}
+
+@media (max-width:1023px){
+
+  body{
+    padding-bottom:80px;
+  }
+
+  .mobile-bottom{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:70px;
+    background:#0f172a;
+    border-top:1px solid rgba(45,212,191,.2);
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:99999;
+    backdrop-filter:blur(12px);
+  }
+
+  .mobile-nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    color:#94a3b8;
+    font-size:11px;
+    gap:4px;
+  }
+
+  .mobile-nav-item.active{
+    color:#2dd4bf;
+  }
+}
     
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     body { background: #0b1220; }
@@ -320,9 +362,10 @@ onclick="paparSenarai('CTR')">
 
     </div>
 
+</main>
+
 </div>
-</div>
-</div>
+  
 <nav class="mobile-bottom">
 
     <a href="dashboardkpku.html" class="mobile-nav-item active">
