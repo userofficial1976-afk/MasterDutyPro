@@ -12,10 +12,10 @@
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<link rel="preconnect" href="https://fonts.googleapis.com="https://fonts.gstatic.com"
-crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700">    
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;>  
     
 <style>
 .status-card{
@@ -134,12 +134,12 @@ body{
 
     <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-8">
 
-        <h2 class="text-3xl font-bold text-white">
+        <h2 class="text-3xl md:text-4xl font-bold text-white">
             Selamat Datang,
             <span id="namaPengguna">Pengguna</span>
         </h2>
 
-        <div class="mt-3 text-sm text-teal-100">
+       <div class="mt-4 text-sm md:text-base text-teal-100 space-y-1">
 
             <div>
                 Jawatan :
@@ -166,32 +166,32 @@ body{
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 
-        <<div class="stat-card glass rounded-2xl p-5">
+        <div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Jumlah Anggota</div>
             <div id="jumlahAnggota" class="text-3xl font-bold mt-2">0</div>
         </div>
 
-        <<div class="stat-card glass rounded-2xl p-5">
+        <div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Bertugas Hari Ini</div>
             <div id="jumlahBertugas" class="text-3xl font-bold text-green-400 mt-2">0</div>
         </div>
 
-        <<div class="stat-card glass rounded-2xl p-5">
+        <div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Tidak Bertugas</div>
             <div id="jumlahTidakBertugas" class="text-3xl font-bold text-yellow-400 mt-2">0</div>
         </div>
 
-        <<div class="stat-card glass rounded-2xl p-5">
+        <div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Jam Kerja Hari Ini</div>
             <div id="jamKerja" class="text-3xl font-bold mt-2">0</div>
         </div>
 
-        <<div class="stat-card glass rounded-2xl p-5">
+        <div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">Jam KLM Hari Ini</div>
             <div id="jamKlm" class="text-3xl font-bold text-orange-400 mt-2">0</div>
         </div>
 
-        <<div class="stat-card glass rounded-2xl p-5">
+        <div class="stat-card glass rounded-2xl p-5">
             <div class="text-sm text-slate-400">RM KLM Hari Ini</div>
             <div id="rmKlm" class="text-3xl font-bold text-teal-400 mt-2">RM 0.00</div>
         </div>
@@ -405,6 +405,7 @@ function paparSenarai(kategori){
 
  popup.innerHTML = `
  <div
+   data-popup
    style="
      position:fixed;
      inset:0;
@@ -447,7 +448,7 @@ function paparSenarai(kategori){
       </ol>
 
       <button
-      onclick="this.closest('.popup-wrapper').remove()"
+     onclick="this.parentElement.parentElement.remove()"
       style="
       margin-top:15px;
       background:#dc2626;
@@ -671,40 +672,47 @@ console.log(
   ).length;
 
   const MC =
-  dataDutyHariIni.filter(
-    x =>
-      x.kod_waktu_kerja === "MC"
-  ).length;
+dataDutyHariIni.filter(
+  x =>
+  (x.kod_waktu_kerja || x.kod_duty)
+  === "MC"
+).length;
 
   const KUR =
-  dataDutyHariIni.filter(
-    x =>
-      x.kod_waktu_kerja === "KUR"
-  ).length;
+dataDutyHariIni.filter(
+  x =>
+  (x.kod_waktu_kerja || x.kod_duty)
+  === "KUR"
+).length;
 
-  const CA =
-  dataDutyHariIni.filter(
-    x =>
-      x.kod_waktu_kerja === "CA"
-  ).length;
+ const CA =
+dataDutyHariIni.filter(
+  x =>
+  (x.kod_waktu_kerja || x.kod_duty)
+  === "CA"
+).length;
 
   const CG =
-  dataDutyHariIni.filter(
-    x =>
-      x.kod_waktu_kerja === "CG"
-  ).length;
+dataDutyHariIni.filter(
+  x =>
+  (x.kod_waktu_kerja || x.kod_duty)
+  === "CG"
+).length;
 
-  const CE =
-  dataDutyHariIni.filter(
-    x =>
-      x.kod_waktu_kerja === "CE"
-  ).length;
+ const CE =
+dataDutyHariIni.filter(
+  x =>
+  (x.kod_waktu_kerja || x.kod_duty)
+  === "CE"
+).length;
 
-  const CTR =
-  dataDutyHariIni.filter(
-    x =>
-      x.kod_waktu_kerja === "CTR"
-  ).length;
+ const CTR =
+dataDutyHariIni.filter(
+  x =>
+  (x.kod_waktu_kerja || x.kod_duty)
+  === "CTR"
+).length;
+``
 
   document.getElementById("offgr").textContent = OFFGR;
   document.getElementById("ct").textContent = CT;
