@@ -157,9 +157,12 @@ main{
       <nav class="space-y-1">
         <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Utama</p>
         
-        <a href="dashboard.html" id="menuDashboard" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-          <i class="fas fa-chart-pie w-5"></i> Dashboard
-        </a>
+<a href="#"
+   id="menuDashboard"
+   onclick="bukaDashboardMengikutRole(); return false;"
+   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+
+
         <a href="#" id="menuAnggota" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
           <i class="fas fa-users w-5"></i> Pengurusan Anggota
         </a>
@@ -527,6 +530,33 @@ main{
     } catch { return null; }
   }
 
+function bukaDashboardMengikutRole(){
+
+  if (!currentUser){
+    location.href="login.html";
+    return;
+  }
+
+  const jawatan = (currentUser.jawatan || "").toUpperCase();
+
+  if(currentUser.isAdmin){
+    location.href="dashboard.html";
+  }
+  else if(
+    jawatan.includes("KETUA UNIT") ||
+    jawatan.includes("KETUA POS")
+  ){
+    location.href="dashboardkpku.html";
+  }
+  else{
+    location.href="dashboardkpku.html";
+  }
+
+}
+
+
+
+  
   function paparMaklumatPengguna() {
     if (!currentUser) return;
     document.getElementById("userName").textContent = currentUser.name || currentUser.noSkb || "-";
@@ -562,11 +592,10 @@ function kawalMenuMengikutPeranan() {
     // SEMBUNYI MENU ADMIN
     // ================================
     [
-        "menuDashboard",
-        "menuAnggota",
-        "menuLaporan",
-        "menuTetapan"
-    ].forEach(id => {
+    "menuAnggota",
+    "menuLaporan",
+    "menuTetapan"
+].forEach(id => {
 
         const el = document.getElementById(id);
 
@@ -1428,10 +1457,13 @@ if (filterPos) {
 
 <nav class="mobile-bottom">
 
-    <a href="dashboard.html" class="mobile-nav-item">
-        <i class="fas fa-chart-pie"></i>
-        <span>Dash</span>
-    </a>
+<a href="#"
+   onclickass="mobile-nav-item">
+
+    <i class="fas fa-chart-pie"></i>
+    <span>Dash</span>
+
+</a>
 
     <a href="jadual-duty.html" class="mobile-nav-item active">
         <i class="fas fa-calendar-check"></i>
