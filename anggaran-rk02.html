@@ -418,7 +418,7 @@ GAJI POKOK (RM)
               <td class="border border-slate-600 p-1.5" id="cutiAwam1">-</td>
               <td class="border border-slate-600 p-1.5 text-center">01</td>
               <td class="border border-slate-600 p-1.5">KLM Tugas Kawalan</td>
-              <td class="border border-slate-600 p-1.5 text-right" id="rJamKawalan">0</td>
+              <td class="border border-slate-600 p-1.5 text-right" id="rJamTotal">0</td>
               <td class="border border-slate-600 p-1.5 text-right" id="rRmKawalan">0.00</td>
             </tr>
             <tr>
@@ -996,7 +996,7 @@ const rmKawalanFinal =
 
 set("rRmKawalan", formatRM(Math.max(0, rmKawalanFinal)));
 set("rRmTotal", formatRM(rmTotal));
-
+set("rJamTotal", T.jamBiasa);
 
 
     // Tandatangan
