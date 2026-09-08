@@ -996,8 +996,8 @@ senarai.sort((a, b) => {
     set("rJamTambahan", T.jamTambahan); set("rRmTambahan", formatRM(T.rmTambahan));
 
     const jamTotal = jamKawalan + T.jamKursus + T.jamTampung + T.jamEskot + T.jamTambahan;
-    const rmTotal = rmKawalanFinal + T.rmKursus + T.rmTampung + T.rmEskot + T.rmTambahan;
-    set("rJamTotal", jamTotal);
+    const rmTotal = T.jumlahRM;
+
     set("rRmTotal", formatRM(rmTotal));
 
     // Tandatangan
