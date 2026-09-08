@@ -37,6 +37,11 @@
 
 .mobile-bottom{
   display:none;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:99999;
 }
 
 .mobile-nav-item{
@@ -55,13 +60,15 @@
     left:0;
     right:0;
     height:70px;
-    background:#0f172a;
+    background:red;
     border-top:1px solid rgba(45,212,191,.2);
     display:flex;
     justify-content:space-around;
     align-items:center;
     z-index:99999;
     backdrop-filter:blur(12px);
+        width:100%;
+    overflow:hidden;
   }
 
   .mobile-nav-item{
@@ -358,13 +365,15 @@ onclick="paparSenarai('CTR')">
     <div id="ctr" class="text-2xl font-bold">0</div>
 </div>
 
-        </div>
+        </div> <!-- grid status -->
 
-    </div>
+    </div> <!-- glass rounded-2xl -->
+
+</div> <!-- p-6 space-y-6 -->
 
 </main>
 
-</div>
+</div> <!-- flex min-h-screen -->
   
 <nav class="mobile-bottom">
 
@@ -517,7 +526,7 @@ function paparSenarai(kategori){
      style="
        width:500px;
        max-width:95%;
-       background:#0f172a;
+       background:#0f172;
        border-radius:16px;
        padding:20px;
        color:white;
