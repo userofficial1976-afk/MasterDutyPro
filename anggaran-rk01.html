@@ -21,6 +21,64 @@
 <style>
 
 /* =====================================================
+   MOBILE BOTTOM NAVIGATION
+===================================================== */
+
+.mobile-bottom {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .mobile-bottom {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 65px;
+        background: #ffffff;
+        border-top: 1px solid #ddd;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 9999;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+    }
+
+    .mobile-nav-item {
+        flex: 1;
+        height: 65px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        color: #777;
+        font-size: 11px;
+        gap: 4px;
+    }
+
+    .mobile-nav-item i {
+        font-size: 18px;
+    }
+
+    .mobile-nav-item.active {
+        color: #f97316;
+        font-weight: 600;
+    }
+
+    .mobile-nav-item:hover {
+        text-decoration: none;
+    }
+
+    body {
+        padding-bottom: 70px;
+    }
+}
+
+
+    
+/* =====================================================
    LOCK COLUMN RK01
 ===================================================== */
 
@@ -4099,5 +4157,56 @@ async function janaLaporanRK01(){
     
 </script>
 
+<nav class="mobile-bottom">
+
+    <!-- DASHBOARD -->
+    <a href="#"
+       onclick="bukaDashboardMengikutRole(); return false;"
+       class="mobile-nav-item">
+        <i class="fas fa-home"></i>
+        <span>Dash</span>
+    </a>
+
+    <!-- DUTY -->
+    <a href="jadual-duty.html"
+       class="mobile-nav-item">
+        <i class="fas fa-calendar-check"></i>
+        <span>Duty</span>
+    </a>
+
+    <!-- WEEKLY -->
+    <a href="klm-mingguan.html"
+       id="mobile-menu-klm"
+       class="mobile-nav-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Weekly</span>
+    </a>
+
+    <!-- RK01 -->
+    <a href="anggaran-rk01.html"
+       class="mobile-nav-item active">
+        <i class="fas fa-chart-line"></i>
+        <span>RK01</span>
+    </a>
+
+    <!-- RK02 -->
+    <a href="anggaran-rk02.html"
+       class="mobile-nav-item">
+        <i class="fas fa-chart-bar"></i>
+        <span>RK02</span>
+    </a>
+
+    <!-- LOGOUT -->
+    <a href="#"
+       onclick="logKeluar(); return false;"
+       class="mobile-nav-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </a>
+
+</nav>
+
+
+    
 </body>
 </html>
