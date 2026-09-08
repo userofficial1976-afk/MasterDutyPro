@@ -49,7 +49,14 @@
     }
     label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.4rem; font-weight: 600; }
   
-  .mobile-bottom{
+
+  
+  html,
+body{
+  overflow-x:hidden;
+}
+
+.mobile-bottom{
   display:none;
 }
 
@@ -71,16 +78,10 @@
 
     height:70px;
 
-    background:rgba(15,23,42,.92);
-    backdrop-filter:blur(20px);
-
-    border-top:1px solid rgba(45,212,191,.25);
-
-    box-shadow:0 -8px 25px rgba(0,0,0,.4);
+    background:#0f172a;
+    border-top:1px solid rgba(45,212,191,.2);
 
     z-index:99999;
-
-    width:100%;
   }
 
   .mobile-nav-item{
@@ -88,23 +89,17 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:4px;
 
-    color:#cbd5e1;
     text-decoration:none;
+    color:#94a3b8;
     font-size:11px;
+    gap:4px;
   }
 
   .mobile-nav-item.active{
     color:#2dd4bf;
   }
-
-  .mobile-nav-item i{
-    font-size:18px;
-  }
 }
-  
-  
   
   </style>
 </head>
@@ -181,7 +176,7 @@
   <!-- Main -->
   <main class="flex-1 lg:ml-72">
 <header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
-  <div class="flex items-center justify-between gap-4">
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
     <!-- TAJUK -->
     <div class="flex-1 min-w-0">
@@ -194,12 +189,12 @@
     </div>
 
     <!-- BUTANG + STATUS -->
-    <div class="flex items-center gap-3 shrink-0">
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
 
       <button
         type="button"
         onclick="simpanDuty()"
-        class="bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm whitespace-nowrap"
+        class="w-full sm:w-auto bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm whitespace-nowrap"
       >
         <i class="fas fa-save mr-2"></i>
         SIMPAN DUTY
@@ -1429,11 +1424,13 @@ if (filterPos) {
         <span>RK02</span>
     </a>
 
-    <a href="#"
-       onclick="logKeluar()"
-       class="mobile-navout-alt"></i>
-        <span>Logout</span>
-    </a>
+<a href="#"
+   onclickv-item">
+
+    <i class="fas fa-sign-out-alt"></i>
+    <span>Logout</span>
+
+</a>
 
 </nav>
 
