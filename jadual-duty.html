@@ -134,7 +134,16 @@ main{
   max-width:100%;
 }
 
+header.glass{
+  position:sticky;
+  top:0;
+  z-index:9999;
 
+  background:rgba(15,23,42,.92);
+  backdrop-filter:blur(20px);
+
+  -webkit-backdrop-filter:blur(20px);
+}
 
 
 
@@ -143,7 +152,7 @@ main{
 </head>
 <body class="font-sans text-slate-200">
 
-<div class="flex min-h-screen">
+<div class="flex">
   <!-- Sidebar -->
   <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto">
     <div class="p-6">
@@ -1474,7 +1483,8 @@ if (filterPos) {
 
 <a href="#"
    onclick="bukaDashboardMengikutRole(); return false;"
-   class="mobile   <span>Dash</span>
+   class"></i>
+    <span>Dash</span>
 
 </a>
 
