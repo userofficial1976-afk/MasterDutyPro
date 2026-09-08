@@ -18,6 +18,14 @@
       }
     }
   </script>
+
+header{
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+  
   <style>
     body { background: #0b1220; font-family: 'Segoe UI', system-ui, sans-serif; }
     .glass {
@@ -280,7 +288,7 @@ main{
           <span class="w-8 h-8 rounded-full bg-teal-550/20 text-teal-450 flex items-center justify-center text-sm font-bold">2</span>
           Maklumat Anggota
         </h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4"> ``
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4"> 
           <div class="md:col-span-2">
             <label>Nama Anggota</label>
             <select id="anggota"><option value="">-- Pilih Nama Anggota --</option></select>
@@ -1462,11 +1470,7 @@ if (filterPos) {
     await paparDuty();
   }
 
-header{
-    position:sticky;
-    top:0;
-    z-index:999;
-}
+
   
 </script>
 
