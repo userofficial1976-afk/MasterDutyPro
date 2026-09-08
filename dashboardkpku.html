@@ -7,6 +7,7 @@
 <title>Dashboard Ketua Unit / Ketua Pos</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -45,28 +46,20 @@ body{
         justify-content:space-around;
         align-items:center;
 
-        background:rgba(11,18,32,.96);
+        background:#0f172a;
 
         border-top:1px solid rgba(45,212,191,.15);
-
-        backdrop-filter:blur(10px);
     }
 
     .mobile-nav-item{
         display:flex;
         flex-direction:column;
-
         align-items:center;
         justify-content:center;
-
         gap:3px;
-
-        text-decoration:none;
-
         color:#94a3b8;
-
-        font-size:.65rem;
-        font-weight:700;
+        text-decoration:none;
+        font-size:11px;
     }
 
     .mobile-nav-item.active{
@@ -81,160 +74,144 @@ body{
 
 <div class="min-h-screen">
 
-    <!-- TOPBAR -->
+<header class="glass sticky top-0 z-50">
+    <div class="px-6 py-4 flex justify-between items-center">
 
-    <header class="glass sticky top-0 z-50 border-b border-teal-500/10">
+        <div>
+            <h1 class="text-xl font-bold text-white">
+                Dashboard Ketua Unit / Ketua Pos
+            </h1>
 
-        <div class="px-6 py-4 flex justify-between items-center">
+            <p class="text-sm text-slate-400">
+                Ringkasan Operasi Semasa
+            </p>
+        </div>
+
+        <button
+            onclick="logout()"
+            class="bg-red-600 px-4 py-2 rounded-lg text-white text-sm">
+            Logout
+        </button>
+
+    </div>
+</header>
+
+<div class="p-6 space-y-6">
+
+    <!-- HERO -->
+
+    <div class="rounded-3xl p-8 bg-gradient-to-r from-teal-700 to-teal-500">
+
+        <h2 class="text-3xl font-bold text-white">
+            Selamat Datang,
+            <span id="namaPengguna">Pengguna</span>
+        </h2>
+
+        <div class="mt-3 text-sm text-teal-100">
 
             <div>
-                <h1 class="text-xl font-bold text-white">
-                    Dashboard Ketua Unit / Ketua Pos
-                </h1>
-
-                <p class="text-sm text-slate-400">
-                    Ringkasan Operasi Semasa
-                </p>
+                Jawatan :
+                <span id="jawatanPengguna">-</span>
             </div>
 
-            <button
-                onclick="logout()"
-                class="px-4 py-2 bg-red-600 rounded-lg text-white text-sm">
-                Logout
-            </button>
+            <div>
+                Unit :
+                <span id="unitPengguna">-</span>
+            </div>
 
-        </div>
-
-    </header>
-
-    <!-- CONTENT -->
-
-    <div class="p-6 space-y-6">
-
-        <!-- HERO -->
-
-        <div class="rounded-3xl p-8 bg-gradient-to-r from-teal-700 to-teal-500">
-
-            <h2 class="text-3xl font-bold text-white">
-                Selamat Datang,
-                <span id="namaPengguna">Pengguna</span>
-            </h2>
-
-            <div class="mt-3 text-sm text-teal-100">
-
-                <div>
-                    Jawatan :
-                    <span id="jawatanPengguna">-</span>
-                </div>
-
-                <div>
-                    Unit :
-                    <span id="unitPengguna">-</span>
-                </div>
-
-                <div>
-                    Pos :
-                    <span id="posPengguna">-</span>
-                </div>
-
+            <div>
+                Pos :
+                <span id="posPengguna">-</span>
             </div>
 
         </div>
 
-        <!-- STATISTIK -->
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    <!-- STATISTIK -->
 
-            <div class="glass rounded-2xl p-5">
-                <div class="text-sm text-slate-400">Jumlah Anggota</div>
-                <div id="jumlahAnggota"
-                     class="text-3xl font-bold text-white mt-2">0</div>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 
-            <div class="glass rounded-2xl p-5">
-                <div class="text-sm text-slate-400">Bertugas Hari Ini</div>
-                <div id="jumlahBertugas"
-                     class="text-3xl font-bold text-green-400 mt-2">0</div>
-            </div>
-
-            <div class="glass rounded-2xl p-5">
-                <div class="text-sm text-slate-400">Tidak Bertugas</div>
-                <div id="jumlahTidakBertugas"
-                     class="text-3xl font-bold text-yellow-400 mt-2">0</div>
-            </div>
-
-            <div class="glass rounded-2xl p-5">
-                <div class="text-sm text-slate-400">Jam Kerja Hari Ini</div>
-                <div id="jamKerja"
-                     class="text-3xl font-bold text-white mt-2">0</div>
-            </div>
-
-            <div class="glass rounded-2xl p-5">
-                <div class="text-sm text-slate-400">Jam KLM Hari Ini</div>
-                <div id="jamKlm"
-                     class="text-3xl font-bold text-orange-400 mt-2">0</div>
-            </div>
-
-            <div class="glass rounded-2xl p-5">
-                <div class="text-sm text-slate-400">RM KLM Hari Ini</div>
-                <div id="rmKlm"
-                     class="text-3xl font-bold text-teal-400 mt-2">
-                    RM 0.00
-                </div>
-            </div>
-
+        <div class="glass rounded-2xl p-5">
+            <div class="text-sm text-slate-400">Jumlah Anggota</div>
+            <div id="jumlahAnggota" class="text-3xl font-bold mt-2">0</div>
         </div>
 
-        <!-- STATUS -->
+        <div class="glass rounded-2xl p-5">
+            <div class="text-sm text-slate-400">Bertugas Hari Ini</div>
+            <div id="jumlahBertugas" class="text-3xl font-bold text-green-400 mt-2">0</div>
+        </div>
 
-        <div class="glass rounded-2xl p-6">
+        <div class="glass rounded-2xl p-5">
+            <div class="text-sm text-slate-400">Tidak Bertugas</div>
+            <div id="jumlahTidakBertugas" class="text-3xl font-bold text-yellow-400 mt-2">0</div>
+        </div>
 
-            <h3 class="font-bold text-white text-lg mb-4">
-                Status Tidak Bertugas
-            </h3>
+        <div class="glass rounded-2xl p-5">
+            <div class="text-sm text-slate-400">Jam Kerja Hari Ini</div>
+            <div id="jamKerja" class="text-3xl font-bold mt-2">0</div>
+        </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="glass rounded-2xl p-5">
+            <div class="text-sm text-slate-400">Jam KLM Hari Ini</div>
+            <div id="jamKlm" class="text-3xl font-bold text-orange-400 mt-2">0</div>
+        </div>
 
-                <div class="bg-orange-500/10 p-4 rounded-xl text-center">
-                    <div>OFF/GR</div>
-                    <div id="offgr" class="text-2xl font-bold">0</div>
-                </div>
+        <div class="glass rounded-2xl p-5">
+            <div class="text-sm text-slate-400">RM KLM Hari Ini</div>
+            <div id="rmKlm" class="text-3xl font-bold text-teal-400 mt-2">RM 0.00</div>
+        </div>
 
-                <div class="bg-green-500/10 p-4 rounded-xl text-center">
-                    <div>CT</div>
-                    <div id="ct" class="text-2xl font-bold">0</div>
-                </div>
+    </div>
 
-                <div class="bg-red-500/10 p-4 rounded-xl text-center">
-                    <div>MC</div>
-                    <div id="mc" class="text-2xl font-bold">0</div>
-                </div>
+    <!-- STATUS -->
 
-                <div class="bg-blue-500/10 p-4 rounded-xl text-center">
-                    <div>KUR</div>
-                    <div id="kur" class="text-2xl font-bold">0</div>
-                </div>
+    <div class="glass rounded-2xl p-6">
 
-                <div class="bg-yellow-500/10 p-4 rounded-xl text-center">
-                    <div>CA</div>
-                    <div id="ca" class="text-2xl font-bold">0</div>
-                </div>
+        <h3 class="font-bold text-lg mb-4">
+            Status Tidak Bertugas
+        </h3>
 
-                <div class="bg-purple-500/10 p-4 rounded-xl text-center">
-                    <div>CG</div>
-                    <div id="cg" class="text-2xl font-bold">0</div>
-                </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-                <div class="bg-cyan-500/10 p-4 rounded-xl text-center">
-                    <div>CE</div>
-                    <div id="ce" class="text-2xl font-bold">0</div>
-                </div>
+            <div class="bg-orange-500/10 p-4 rounded-xl text-center">
+                <div>OFF/GR</div>
+                <div id="offgr" class="text-2xl font-bold">0</div>
+            </div>
 
-                <div class="bg-slate-500/10 p-4 rounded-xl text-center">
-                    <div>CTR</div>
-                    <div id="ctr" class="text-2xl font-bold">0</div>
-                </div>
+            <div class="bg-green-500/10 p-4 rounded-xl text-center">
+                <div>CT</div>
+                <div id="ct" class="text-2xl font-bold">0</div>
+            </div>
 
+            <div class="bg-red-500/10 p-4 rounded-xl text-center">
+                <div>MC</div>
+                <div id="mc" class="text-2xl font-bold">0</div>
+            </div>
+
+            <div class="bg-blue-500/10 p-4 rounded-xl text-center">
+                <div>KUR</div>
+                <div id="kur" class="text-2xl font-bold">0</div>
+            </div>
+
+            <div class="bg-yellow-500/10 p-4 rounded-xl text-center">
+                <div>CA</div>
+                <div id="ca" class="text-2xl font-bold">0</div>
+            </div>
+
+            <div class="bg-purple-500/10 p-4 rounded-xl text-center">
+                <div>CG</div>
+                <div id="cg" class="text-2xl font-bold">0</div>
+            </div>
+
+            <div class="bg-cyan-500/10 p-4 rounded-xl text-center">
+                <div>CE</div>
+                <div id="ce" class="text-2xl font-bold">0</div>
+            </div>
+
+            <div class="bg-slate-500/10 p-4 rounded-xl text-center">
+                <div>CTR</div>
+                <div id="ctr" class="text-2xl font-bold">0</div>
             </div>
 
         </div>
@@ -242,44 +219,36 @@ body{
     </div>
 
 </div>
-
-<!-- MOBILE NAV -->
+</div>
 
 <nav class="mobile-bottom">
 
-    <a href="dashboardkpku.html"
-       class="mobile-nav-item active">
+    <a href="dashboardkpku.html" class="mobile-nav-item active">
         <i class="fas fa-chart-pie"></i>
         <span>Dash</span>
     </a>
 
-    <a href="jadual-duty.html"
-       class="mobile-nav-item">
+    <a href="jadual-duty.html" class="mobile-nav-item">
         <i class="fas fa-calendar-check"></i>
         <span>Duty</span>
     </a>
 
-    <a href="klm-mingguan.html"
-       class="mobile-nav-item">
+    <a href="klm-mingguan.html" class="mobile-nav-item">
         <i class="fas fa-file-alt"></i>
         <span>Weekly</span>
     </a>
 
-    <a href="anggaran-rk01.html"
-       class="mobile-nav-item">
+    <a href="anggaran-rk01.html" class="mobile-nav-item">
         <i class="fas fa-chart-line"></i>
         <span>RK01</span>
     </a>
 
-    <a href="anggaran-rk02.html"
-       class="mobile-nav-item">
+    <a href="anggaran-rk02.html" class="mobile-nav-item">
         <i class="fas fa-chart-bar"></i>
         <span>RK02</span>
     </a>
 
-    #"
-       class="mobile-nav-item">
-        <i class="fas fa-sign-out-alt"></i>
+    <a href="#" onclick="logout()" class="mobile-nav fa-sign-out-alt"></i>
         <span>Logout</span>
     </a>
 
@@ -287,29 +256,96 @@ body{
 
 <script>
 
+const SUPABASE_URL =
+"https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+const SUPABASE_KEY =
+"YOUR_SUPABASE_ANON_KEY";
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 const currentUser =
-    JSON.parse(
-        localStorage.getItem("mdp_user") || "{}"
-    );
+JSON.parse(
+localStorage.getItem("mdp_user") || "{}"
+);
+
+if(!currentUser.name){
+  location.href="login.html";
+}
 
 document.getElementById("namaPengguna").textContent =
-    currentUser.name || "-";
+currentUser.name || "-";
 
 document.getElementById("jawatanPengguna").textContent =
-    currentUser.jawatan || "-";
+currentUser.jawatan || "-";
 
 document.getElementById("unitPengguna").textContent =
-    currentUser.unit || "-";
+currentUser.unit || "-";
 
 document.getElementById("posPengguna").textContent =
-    currentUser.pos || "-";
+currentUser.pos || "-";
+
+const jawatan =
+String(currentUser.jawatan || "")
+.toUpperCase();
 
 function logout(){
+  localStorage.removeItem("mdp_user");
+  location.href="login.html";
+}
 
-    localStorage.removeItem("mdp_user");
+function tapis(query){
 
-    window.location.href =
-        "login.html";
+  if(jawatan==="KETUA UNIT"){
+     query=query.eq(
+       "unit",
+       currentUser.unit
+     );
+  }
+
+  if(jawatan==="KETUA POS"){
+     query=query.eq(
+       "pos",
+       currentUser.pos
+     );
+  }
+
+  return query;
+}
+
+document.addEventListener(
+"DOMContentLoaded",
+async ()=>{
+   await kiraAnggota();
+}
+);
+
+async function kiraAnggota(){
+
+ let query=supabaseClient
+ .from("Data_Anggota")
+ .select("*",{
+   count:"exact",
+   head:true
+ })
+ .eq("status","Aktif");
+
+ query=tapis(query);
+
+ const {count,error}=await query;
+
+ if(error){
+   console.error(error);
+   return;
+ }
+
+ document.getElementById(
+   "jumlahAnggota"
+ ).textContent=count||0;
 }
 
 </script>
