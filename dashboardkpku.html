@@ -430,7 +430,8 @@ const currentUser =
 JSON.parse(
 localStorage.getItem("mdp_user") || "{}"
 );
-
+console.log(currentUser);
+console.log(currentUser.jawatan);
 if(!currentUser.name){
   location.href="login.html";
 }
@@ -440,12 +441,13 @@ String(
 ).toUpperCase();
 
 if(
-  jawatanLogin !== "KETUA UNIT" &&
-  jawatanLogin !== "KETUA POS"
+  !jawatanLogin.includes("KETUA UNIT") &&
+  !jawatanLogin.includes("KETUA POS")
 ){
   alert("Akses terhad kepada Ketua Unit dan Ketua Pos sahaja");
   location.href = "login.html";
 }
+
 
 document.getElementById("namaPengguna").textContent =
 currentUser.name || "-";
