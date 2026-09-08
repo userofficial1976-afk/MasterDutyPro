@@ -1024,6 +1024,8 @@ document.addEventListener(
 
         kawalMobileDashboard();
 
+        kawalMobileWeekly();
+
         try{
 
             await muatDataAnggota();
@@ -1366,6 +1368,42 @@ function kawalMobileDashboard(){
     }
 
 }
+
+/* =====================================================
+   MOBILE WEEKLY
+   ADMIN      → Nampak
+   KETUA UNIT → Nampak
+   KETUA POS  → Sembunyi
+===================================================== */
+
+function kawalMobileWeekly(){
+
+    const role = rolePengguna();
+
+    const menuWeekly =
+        document.getElementById("mobile-menu-klm");
+
+    if(!menuWeekly){
+        return;
+    }
+
+    if(role === "ketua_pos"){
+
+        menuWeekly.style.display = "none";
+
+    }
+    else{
+
+        menuWeekly.style.display = "";
+
+    }
+
+}
+
+
+
+
+    
     /* =====================================================
        SEMBUNYIKAN MENU ADMIN
        ===================================================== */
