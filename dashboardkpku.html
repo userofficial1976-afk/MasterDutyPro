@@ -398,11 +398,10 @@ String(
 
 if(
   jawatanLogin !== "KETUA UNIT" &&
-  jawatanLogin !== "KETUA POS" &&
-  currentUser.isAdmin !== true
+  jawatanLogin !== "KETUA POS"
 ){
-  location.href =
-    "jadual-duty.html";
+  alert("Akses terhad kepada Ketua Unit dan Ketua Pos sahaja");
+  location.href = "login.html";
 }
 
 document.getElementById("namaPengguna").textContent =
