@@ -425,6 +425,84 @@ button{
     line-height: 1.1;
 }
 
+/* =====================================================
+   MOBILE BOTTOM NAVIGATION
+   RK01
+===================================================== */
+
+.mobile-bottom {
+    display: none;
+}
+
+.mobile-nav-item {
+    text-decoration: none;
+}
+
+@media (max-width: 1023px) {
+
+    body {
+        padding-bottom: 80px;
+    }
+
+    .mobile-bottom {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 70px;
+
+        background: #0f172a;
+        border-top: 1px solid rgba(45, 212, 191, 0.2);
+
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        z-index: 99999;
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        overflow: hidden;
+    }
+
+    .mobile-nav-item {
+        flex: 1;
+        height: 70px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        color: #94a3b8;
+        font-size: 11px;
+        gap: 4px;
+
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-nav-item i {
+        font-size: 18px;
+    }
+
+    .mobile-nav-item span {
+        line-height: 1;
+    }
+
+    .mobile-nav-item.active {
+        color: #2dd4bf;
+    }
+
+    .mobile-nav-item:hover {
+        color: #2dd4bf;
+    }
+}
+
+
+    
     
 </style>
 </head>
@@ -944,6 +1022,7 @@ document.addEventListener(
 
         binaTahun();
 
+        kawalMobileDashboard();
 
         try{
 
@@ -1246,7 +1325,47 @@ function kawalMenuMengikutPeranan(){
         return;
     }
 
+/* =====================================================
+   MOBILE DASHBOARD
+   ADMIN      → dashboard.html
+   KETUA UNIT → dashboardkpku.html
+   KETUA POS  → dashboardkpku.html
+===================================================== */
 
+function kawalMobileDashboard(){
+
+    const role = rolePengguna();
+
+    const menuDashboard =
+        document.getElementById("mobile-menu-dashboard");
+
+    if(!menuDashboard){
+        return;
+    }
+
+    if(role === "admin"){
+
+        menuDashboard.href =
+            "dashboard.html";
+
+    }
+    else if(
+        role === "ketua_unit" ||
+        role === "ketua_pos"
+    ){
+
+        menuDashboard.href =
+            "dashboardkpku.html";
+
+    }
+    else{
+
+        menuDashboard.href =
+            "dashboard.html";
+
+    }
+
+}
     /* =====================================================
        SEMBUNYIKAN MENU ADMIN
        ===================================================== */
@@ -4157,24 +4276,22 @@ async function janaLaporanRK01(){
     
 </script>
 
+<!-- =====================================================
+     MOBILE BOTTOM NAVIGATION
+===================================================== -->
+
 <nav class="mobile-bottom">
 
-    <!-- DASHBOARD -->
-    <a href="#"
-       onclick="bukaDashboardMengikutRole(); return false;"
-       class="mobile-nav-item">
-        <i class="fas fa-home"></i>
-        <span>Dash</span>
-    </a>
+<a href="#" id="mobile-menu-dashboard" class="mobile-nav-item">
+    <i class="fas fa-chart-pie"></i>
+    <span>Dash</span>
+</a>
 
-    <!-- DUTY -->
-    <a href="jadual-duty.html"
-       class="mobile-nav-item">
+    <a href="jadual-duty.html" class="mobile-nav-item">
         <i class="fas fa-calendar-check"></i>
         <span>Duty</span>
     </a>
 
-    <!-- WEEKLY -->
     <a href="klm-mingguan.html"
        id="mobile-menu-klm"
        class="mobile-nav-item">
@@ -4182,30 +4299,26 @@ async function janaLaporanRK01(){
         <span>Weekly</span>
     </a>
 
-    <!-- RK01 -->
     <a href="anggaran-rk01.html"
        class="mobile-nav-item active">
         <i class="fas fa-chart-line"></i>
         <span>RK01</span>
     </a>
 
-    <!-- RK02 -->
     <a href="anggaran-rk02.html"
        class="mobile-nav-item">
         <i class="fas fa-chart-bar"></i>
         <span>RK02</span>
     </a>
 
-    <!-- LOGOUT -->
     <a href="#"
-       onclick="logKeluar(); return false;"
+       onclick="logout()"
        class="mobile-nav-item">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
     </a>
 
 </nav>
-
 
     
 </body>
