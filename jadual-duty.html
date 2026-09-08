@@ -118,7 +118,7 @@ body{
 
 main{
   width:100%;
-  overflow-x:hidden;
+  
 }
 
 .glass{
@@ -160,7 +160,10 @@ main{
 <a href="#"
    id="menuDashboard"
    onclick="bukaDashboardMengikutRole(); return false;"
-   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-a-chart-pie w-5"></i>
+   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
+
+    <i class="fas fa-chart-pie w-5"></i>
+
     Dashboard
 </a>
         <a href="#" id="menuAnggota" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
@@ -206,7 +209,7 @@ main{
   </aside>
 
   <!-- Main -->
-  <main class="flex-1 lg:ml-72">
+  <main class="flex-1 lg:ml-72 min-h-screen">
 <header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
   <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
@@ -1458,10 +1461,8 @@ if (filterPos) {
 <nav class="mobile-bottom">
 
 <a href="#"
-   onclick="s="mobile-nav-item">
-
-    <i class="fas fa-chart-pie"></i>
-    <span>Dash</span>
+   onclick="bukaDashboardMengikutRole(); return false;"
+   class="mobile   <span>Dash</span>
 
 </a>
 
@@ -1486,9 +1487,8 @@ if (filterPos) {
     </a>
 
 <a href="#"
-   onclickass="mobile-nav-item">
-
-    <i class="fas fa-sign-out-alt"></i>
+   onclick="logKeluar(); return false;"
+   ass="fas fa-sign-out-alt"></i>
     <span>Logout</span>
 
 </a>
