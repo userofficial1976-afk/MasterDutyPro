@@ -27,6 +27,9 @@
     }
   </script>
   <style>
+
+
+    
 @media (max-width:1023px){
 
   body{
@@ -57,6 +60,72 @@
     .menu-hidden { display: none !important; }
     .status-card { cursor: pointer; transition: all 0.2s ease; }
     .status-card:hover { transform: scale(1.03); }
+
+
+    .mobile-bottom{
+  display:none;
+}
+
+@media (max-width:1023px){
+
+  body{
+    padding-bottom:80px;
+  }
+
+  .mobile-bottom{
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:70px;
+
+    background:rgba(15,23,42,.92);
+    backdrop-filter:blur(20px);
+
+    border-top:1px solid rgba(45,212,191,.25);
+
+    box-shadow:0 -8px 25px rgba(0,0,0,.4);
+
+    z-index:99999;
+    width:100%;
+  }
+
+  .mobile-nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+
+    color:#cbd5e1;
+    text-decoration:none;
+    font-size:11px;
+
+    transition:all .2s ease;
+  }
+
+  .mobile-nav-item i{
+    font-size:18px;
+  }
+
+  .mobile-nav-item.active{
+    color:#2dd4bf;
+  }
+
+  .mobile-nav-item:hover{
+    color:#2dd4bf;
+    transform:translateY(-2px);
+  }
+}
+    
+
+
+    
   </style>
 </head>
 <body class="font-sans text-slate-200">
@@ -705,54 +774,43 @@ async function statusTidakBertugasHariIni() {
     }
   </script>
 
-<div id="mobileNavGrid" class="grid h-16 grid-cols-7">
 
-  <a href="dashboard.html"
-     id="mobileDashboard"
-     class="flex flex-col items-center justify-center text-slate-300">
-    <i class="fas fa-chart-pie text-lg"></i>
-    <span class="text-[10px]">Dashboard</span>
+
+<nav class="mobile-bottom">
+
+  <a href="dashboardkpku.html" class="mobile-nav-item active">
+    <i class="fas fa-chart-pie"></i>
+    <span>Dash</span>
   </a>
 
-  <a href="jadual-duty.html"
-     class="flex flex-col items-center justify-center text-slate-300">
-    <i class="fas fa-calendar-check text-lg"></i>
-    <span class="text-[10px]">Duty</span>
+  <a href="jadual-duty.html" class="mobile-nav-item">
+    <i class="fas fa-calendar-check"></i>
+    <span>Duty</span>
   </a>
 
-  <a href="kod-duty.html"
-     class="flex flex-col items-center justify-center text-slate-300">
-    <i class="fas fa-code text-lg"></i>
-    <span class="text-[10px]">WK</span>
+  <a href="klm-mingguan.html" class="mobile-nav-item">
+    <i class="fas fa-file-alt"></i>
+    <span>Weekly</span>
   </a>
 
-  <a href="kod-tempat-kerja.html"
-     class="flex flex-col items-center justify-center text-slate-300">
-    <i class="fas fa-map-marker-alt text-lg"></i>
-    <span class="text-[10px]">TK</span>
+  <a href="anggaran-rk01.html" class="mobile-nav-item">
+    <i class="fas fa-chart-line"></i>
+    <span>RK01</span>
   </a>
 
-  <a href="klm-mingguan.html"
-     class="flex flex-col items-center justify-center text-slate-300">
-    <i class="fas fa-file-alt text-lg"></i>
-    <span class="text-[10px]">Weekly</span>
-  </a>
-
-  <a href="anggaran-rk02.html"
-     class="flex flex-col items-center justify-center text-slate-300">
-    <i class="fas fa-chart-bar text-lg"></i>
-    <span class="text-[10px]">RK02</span>
+  <a href="anggaran-rk02.html" class="mobile-nav-item">
+    <i class="fas fa-chart-bar"></i>
+    <span>RK02</span>
   </a>
 
   <a href="#"
-     onclick="logKeluar()"
-     class="flex flex-col items-center justify"fas fa-sign-out-alt text-lg"></i>
-    <span class="text-[10px]">Logout</span>
+   onclick="logKeluar()"
+   class="mobile-nav-item">
+    <i class="fas fa-sign-out-alt"></i>
+    <span>Logout</span>
   </a>
 
-</div>
-
-
+</nav>
 
 
   
