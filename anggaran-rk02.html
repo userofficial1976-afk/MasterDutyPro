@@ -982,10 +982,20 @@ senarai.sort((a, b) => {
       : (T.rmOff4 + T.rmOff48 + T.rmOff8 + T.rmCuti8 + T.rmCuti8p + T.rmOffKhas)));
 
     // Ringkas & stabil:
-    const rmKawalanFinal = T.rmOff4 + T.rmOff48 + T.rmOff8 + T.rmCuti8 + T.rmCuti8p + T.rmOffKhas
-      + Math.max(0, T.rmBiasa - T.rmTampung - T.rmEskot - T.rmTambahan);
-    set("rJamKawalan", jamKawalan);
-    set("rRmKawalan", formatRM(rmKawalanFinal));
+const rmTotal = T.jumlahRM;
+
+const rmKawalanFinal =
+    rmTotal
+    - 0 // Pentadbiran
+    - 0 // CIT
+    - T.rmEskot
+    - T.rmTampung
+    - T.rmKursus
+    - 0 // Pejabat
+    - T.rmTambahan;
+
+set("rRmKawalan", formatRM(Math.max(0, rmKawalanFinal)));
+set("rRmTotal", formatRM(rmTotal));
 
     set("rJamPejabat", 0); set("rRmPejabat", "0.00");
     set("rJamLatihan", T.jamKursus); set("rRmLatihan", formatRM(T.rmKursus));
