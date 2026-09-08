@@ -13,6 +13,16 @@
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
+.status-card{
+    cursor:pointer;
+    transition:all .2s ease;
+}
+
+.status-card:hover{
+    transform:translateY(-3px);
+    background:rgba(45,212,191,.12);
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
 
 body{
     background:#0b1220;
@@ -274,7 +284,8 @@ onclick="paparSenarai('CTR')">
 
 <a href="#"
    onclick="logout()"
-   class="mobile-navgn-out-alt"></i>
+   class="mobile-nav-item">
+    <i class="fas fa-sign-out-alt"></i>
     <span>Logout</span>
 </a>
 
@@ -286,7 +297,7 @@ const SUPABASE_URL =
 "https://nlwrrrwkjpktrifxeymw.supabase.co";
 
 const SUPABASE_KEY =
-"YOUR_SUPABASE_ANON_KEY";
+"sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
 
 const supabaseClient =
 window.supabase.createClient(
@@ -301,6 +312,19 @@ localStorage.getItem("mdp_user") || "{}"
 
 if(!currentUser.name){
   location.href="login.html";
+}
+const jawatanLogin =
+String(
+  currentUser.jawatan || ""
+).toUpperCase();
+
+if(
+  jawatanLogin !== "KETUA UNIT" &&
+  jawatanLogin !== "KETUA POS" &&
+  currentUser.isAdmin !== true
+){
+  location.href =
+    "jadual-duty.html";
 }
 
 document.getElementById("namaPengguna").textContent =
@@ -324,75 +348,91 @@ function paparSenarai(kategori){
  let rekod=[];
 
  if(kategori==="OFFGR"){
-   rekod=
+
+   rekod =
    dataDutyHariIni.filter(
      x =>
-      x.kod_waktu_kerja==="OFF" ||
-      x.kod_waktu_kerja==="GR"
+       x.kod_waktu_kerja==="OFF" ||
+       x.kod_waktu_kerja==="GR"
    );
+
  }else{
-   rekod=
+
+   rekod =
    dataDutyHariIni.filter(
      x =>
-     x.kod_waktu_kerja===kategori
+       x.kod_waktu_kerja===kategori
    );
+
  }
 
  const senarai =
- rekod.length
- ?
- rekod.map(
- (r,i)=>
- `<li>${i+1}. ${r.nama_anggota}</li>`
- ).join("")
- :
- "<li>Tiada rekod</li>";
+   rekod.length
+   ? rekod.map(
+       (r,i)=>
+       `<li>${i+1}. ${r.nama_anggota || "-"}</li>`
+     ).join("")
+   : "<li>Tiada rekod</li>";
 
  const popup =
  document.createElement("div");
 
  popup.innerHTML = `
  <div
- style="
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.7);
- display:flex;
- align-items:center;
- justify-content:center;
- z-index:9999;
- "
- onclick="this.remove()">
+   style="
+     position:fixed;
+     inset:0;
+     background:rgba(0,0,0,.7);
+     display:flex;
+     align-items:center;
+     justify-content:center;
+     z-index:9999;
+   "
+   onclick="this.remove()">
 
    <div
-   onclick="event.stopPropagation()"
-   style="
-   width:500px;
-   max-width:95%;
-   background:#0f172a;
-   border-radius:16px;
-   padding:20px;
-   color:white;
-   ">
+     onclick="event.stopPropagation()"
+     style="
+       width:500px;
+       max-width:95%;
+       background:#0f172a;
+       border-radius:16px;
+       padding:20px;
+       color:white;
+     ">
 
-    <h3 style="font-size:18px;font-weight:bold;margin-bottom:10px;">
+      <h3
+      style="
+      font-size:18px;
+      font-weight:bold;
+      margin-bottom:10px;
+      color:#2dd4bf;
+      ">
       Senarai Anggota
-    </h3>
+      </h3>
 
-    <ol style="padding-left:20px;max-height:300px;overflow:auto;">
+      <ol
+      style="
+      padding-left:20px;
+      max-height:300px;
+      overflow:auto;
+      ">
       ${senarai}
-    </ol>
+      </ol>
 
-    <button
-    onclick="this.closest('div[onclick]').remove()"
-    style="
-    margin-top:15px;
-    background:#dc2626;
-    padding:10px 15px;
-    border-radius:8px;
-    ">
-    Tutup
-    </button>
+      <button
+      onclick="this.closest('.popup-wrapper').remove()"
+      style="
+      margin-top:15px;
+      background:#dc2626;
+      color:white;
+      border:none;
+      padding:10px 15px;
+      border-radius:8px;
+      cursor:pointer;
+      ">
+      Tutup
+      </button>
 
    </div>
 
@@ -404,7 +444,23 @@ function paparSenarai(kategori){
  );
 }
 
-    
+ if(
+ currentUser.jawatan &&
+ currentUser.jawatan.toUpperCase()
+ === "KETUA UNIT"
+){
+ document.title =
+ "Dashboard Ketua Unit";
+}
+
+if(
+ currentUser.jawatan &&
+ currentUser.jawatan.toUpperCase()
+ === "KETUA POS"
+){
+ document.title =
+ "Dashboard Ketua Pos";
+}   
 function logout(){
   localStorage.removeItem("mdp_user");
   location.href="login.html";
@@ -537,7 +593,6 @@ async function kiraAnggota(){
 }
 
 
-let dataDutyHariIni = [];
 
 async function statusHariIni(){
 
@@ -571,7 +626,12 @@ async function statusHariIni(){
   }
 
   dataDutyHariIni = data || [];
+let dataDutyHariIni = [];
 
+console.log(
+ "Jumlah Rekod Hari Ini:",
+ dataDutyHariIni.length
+);
   const OFFGR =
   dataDutyHariIni.filter(
     x =>
@@ -654,14 +714,6 @@ async function statusHariIni(){
 
 
 
-.status-card{
-    cursor:pointer;
-    transition:all .2s ease;
-}
-
-.status-card:hover{
-    transform:scale(1.03);
-}
 
     
 </script>
