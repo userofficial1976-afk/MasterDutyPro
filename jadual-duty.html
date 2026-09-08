@@ -257,14 +257,14 @@
         </div>
 
         <div>
-          <label>Pos Tampungan</label>
+          <label>Pos Tampungan (Pilih Pos jika ada KLM di Pos Tampungan)</label>
           <select id="posTampungan">
             <option value="">-- Pilih Pos Tampungan --</option>
           </select>
         </div>
 
         <div>
-          <label>Jam Tampungan</label>
+          <label>Masukkan Jam KLM Tampungan Sahaja</label>
           <input type="number" id="jamTampung" min="0" step="0.5" value="0">
         </div>
 
@@ -286,10 +286,10 @@
         </h3>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-5">
-            <h4 class="font-semibold text-amber-300 mb-4">OFFDAY BERTUGAS</h4>
+            <h4 class="font-semibold text-amber-300 mb-4">JIKA BERTUGAS HARI OFFDAY</h4>
             <label class="flex items-center gap-3 mb-4 cursor-pointer">
               <input type="checkbox" id="hariOffday" class="w-5 h-5 accent-teal-500">
-              <span>Hari Offday Bertugas</span>
+              <span>Sila Tanda Jika Berkaitan</span>
             </label>
             <div class="grid grid-cols-2 gap-3">
               <div><label>RM HARI</label><input type="text" id="rmHariOffday" readonly value="0.00"></div>
@@ -299,10 +299,10 @@
             </div>
           </div>
           <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5">
-            <h4 class="font-semibold text-red-300 mb-4">CUTI AM BERTUGAS</h4>
+            <h4 class="font-semibold text-red-300 mb-4">JIKA BERTUGAS HARI CUTI AM</h4>
             <label class="flex items-center gap-3 mb-4 cursor-pointer">
               <input type="checkbox" id="hariCutiam" class="w-5 h-5 accent-teal-500">
-              <span>Hari Cuti Am Bertugas</span>
+              <span>Sila Tanda Jika Berkaitan</span>
             </label>
             <div class="grid grid-cols-2 gap-3">
               <div><label>RM HARI</label><input type="text" id="rmHariCutiam" readonly value="0.00"></div>
@@ -318,17 +318,17 @@
       <div class="glass rounded-2xl p-6">
         <h3 class="text-lg font-semibold text-white mb-5 flex items-center gap-2">
           <span class="w-8 h-8 rounded-full bg-teal-550/20 text-teal-450 flex items-center justify-center text-sm font-bold">5</span>
-          KLM Kategori Khas
+          KLM Khas (Anggota Pengganti - Jika ada KLM)
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div><label>KLM LDB</label><input type="number" id="klmOffday" min="0" step="0.5" value="0"></div>
-          <div><label>KLM WAJIB</label><input type="number" id="klmWajib" min="0" step="0.5" value="0"></div>
-          <div><label>KLM MC</label><input type="number" id="klmMc" min="0" step="0.5" value="0"></div>
-          <div><label>KLM CUTI TAHUN</label><input type="number" id="klmCutiTahun" min="0" step="0.5" value="0"></div>
-          <div><label>KLM CUTI EHSAN</label><input type="number" id="klmCutiEhsan" min="0" step="0.5" value="0"></div>
-          <div><label>KLM KURSUS</label><input type="number" id="klmKursus" min="0" step="0.5" value="0"></div>
-          <div><label>KLM CUTI GANTI</label><input type="number" id="klmCutiGanti" min="0" step="0.5" value="0"></div>
-          <div><label>KLM KAWALAN TAMBAHAN</label><input type="number" id="klmKawalanTambahan" min="0" step="0.5" value="0"></div>
+          <div><label>KLM Latihan Dwi Bulanan</label><input type="number" id="klmOffday" min="0" step="0.5" value="0"></div>
+          <div><label>KLM Wajib</label><input type="number" id="klmWajib" min="0" step="0.5" value="0"></div>
+          <div><label>KLM Cuti Sakit</label><input type="number" id="klmMc" min="0" step="0.5" value="0"></div>
+          <div><label>KLM Cuti Tahun</label><input type="number" id="klmCutiTahun" min="0" step="0.5" value="0"></div>
+          <div><label>KLM Cuti Ehsan</label><input type="number" id="klmCutiEhsan" min="0" step="0.5" value="0"></div>
+          <div><label>KLM Kursus</label><input type="number" id="klmKursus" min="0" step="0.5" value="0"></div>
+          <div><label>KLM Cuti Ganti</label><input type="number" id="klmCutiGanti" min="0" step="0.5" value="0"></div>
+          <div><label>KLM Kawalan Tambahan</label><input type="number" id="klmKawalanTambahan" min="0" step="0.5" value="0"></div>
         </div>
       </div>
 
