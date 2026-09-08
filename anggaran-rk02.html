@@ -997,61 +997,7 @@ const rmKawalanFinal =
 set("rRmKawalan", formatRM(Math.max(0, rmKawalanFinal)));
 set("rRmTotal", formatRM(rmTotal));
 
-// ===============================
-// RUMUSAN KLM
-// ===============================
 
-set("rJamPejabat", 0);
-set("rRmPejabat", "0.00");
-
-set("rJamLatihan", T.jamKursus);
-set("rRmLatihan", formatRM(T.rmKursus));
-
-set("rJamTampung", T.jamTampung);
-set("rRmTampung", formatRM(T.rmTampung));
-
-set("rJamEskot", T.jamEskot);
-set("rRmEskot", formatRM(T.rmEskot));
-
-set("rJamCit", 0);
-set("rRmCit", "0.00");
-
-set("rJamPentadbiran", 0);
-set("rRmPentadbiran", "0.00");
-
-set("rJamTambahan", T.jamTambahan);
-set("rRmTambahan", formatRM(T.rmTambahan));
-
-const jamTotal =
-    T.jamBiasa +
-    T.off8 +
-    T.cuti8p +
-    T.jamKursus +
-    T.jamTampung +
-    T.jamEskot +
-    T.jamTambahan;
-
-
-
-const jamKawalan =
-    jamTotal
-    - T.jamKursus
-    - T.jamTampung
-    - T.jamEskot
-    - T.jamTambahan;
-
-const rmKawalanFinal =
-    rmTotal
-    - T.rmKursus
-    - T.rmTampung
-    - T.rmEskot
-    - T.rmTambahan;
-
-set("rJamKawalan", Math.max(0, jamKawalan));
-set("rRmKawalan", formatRM(Math.max(0, rmKawalanFinal)));
-
-set("rJamTotal", jamTotal);
-set("rRmTotal", formatRM(rmTotal));
 
     // Tandatangan
     if (senarai.length) {
