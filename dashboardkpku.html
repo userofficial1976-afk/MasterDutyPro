@@ -296,6 +296,7 @@ onclick="paparSenarai('CTR')">
 const SUPABASE_URL =
 "https://nlwrrrwkjpktrifxeymw.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
 
@@ -342,7 +343,7 @@ currentUser.pos || "-";
 const jawatan =
 String(currentUser.jawatan || "")
 .toUpperCase();
-
+let dataDutyHariIni = [];
 function paparSenarai(kategori){
 
  let rekod=[];
@@ -625,12 +626,11 @@ async function statusHariIni(){
     return;
   }
 
-  dataDutyHariIni = data || [];
-let dataDutyHariIni = [];
+dataDutyHariIni = data || [];
 
 console.log(
- "Jumlah Rekod Hari Ini:",
- dataDutyHariIni.length
+  "Jumlah Rekod Hari Ini:",
+  dataDutyHariIni.length
 );
   const OFFGR =
   dataDutyHariIni.filter(
@@ -642,7 +642,7 @@ console.log(
   const CT =
   dataDutyHariIni.filter(
     x =>
-      x.kod_waktu_kerja === "CT"
+      (x.kod_waktu_kerja || x.kod_duty) === "CT"
   ).length;
 
   const MC =
