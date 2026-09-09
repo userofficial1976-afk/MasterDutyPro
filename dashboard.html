@@ -584,7 +584,13 @@ async function statistikDutyHariIni() {
 
     const { data, error } = await supabaseClient
       .from("jadual_duty")
-      .select("jam_kerja, jam_klm, rm_klm_seluruh")
+      .select(`
+  jam_kerja,
+  jam_klm,
+  rm_klm_seluruh,
+  hari_cutiam_bertugas,
+  jam_cutiam_bertugas
+`)
       .eq("tarikh", hariIni)
       .order("id", { ascending: true })
       .range(from, to);
@@ -616,6 +622,15 @@ async function statistikDutyHariIni() {
     0
   );
 
+  const jumlahHariCutiAm = rows.reduce(
+  (t, r) => t + Number(r.hari_cutiam_bertugas || 0),
+  0
+);
+
+const jumlahJamCutiAm = rows.reduce(
+  (t, r) => t + Number(r.jam_cutiam_bertugas || 0),
+  0
+);
   // Jumlah Jam KLM
   const jumlahJamKlm = rows.reduce(
     (t, r) => t + Number(r.jam_klm || 0),
@@ -635,7 +650,9 @@ async function statistikDutyHariIni() {
 
   document.getElementById("jumlahJamKlm").textContent =
     jumlahJamKlm;
-
+document.getElementById("jumlahKlmCutiAm").innerHTML =
+  `${jumlahHariCutiAm} Hari<br>${jumlahJamCutiAm} Jam`;
+  
   document.getElementById("jumlahRmKlm").textContent =
     "RM " + jumlahRmKlm.toFixed(2);
 }
