@@ -158,6 +158,75 @@
 
       
     }
+
+/* =====================================================
+   MOBILE BOTTOM NAVIGATION
+===================================================== */
+
+.mobile-bottom {
+    display: none;
+}
+
+@media (max-width: 1023px) {
+
+    body {
+        padding-bottom: 80px;
+    }
+
+    .mobile-bottom {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        height: 70px;
+
+        background: rgba(15, 23, 42, 0.92);
+        backdrop-filter: blur(20px);
+
+        border-top: 1px solid rgba(45, 212, 191, 0.25);
+
+        box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.4);
+
+        z-index: 99999;
+        width: 100%;
+    }
+
+    .mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+
+        color: #cbd5e1;
+        text-decoration: none;
+        font-size: 11px;
+
+        transition: all 0.2s ease;
+    }
+
+    .mobile-nav-item i {
+        font-size: 18px;
+    }
+
+    .mobile-nav-item.active {
+        color: #2dd4bf;
+    }
+
+    .mobile-nav-item:hover {
+        color: #2dd4bf;
+        transform: translateY(-2px);
+    }
+}
+
+
+
+    
   </style>
 </head>
 <body class="text-slate-200">
@@ -524,8 +593,56 @@ GAJI POKOK (RM)
       </div>
     </div>
   </main>
+
+
+
+
+
+
+  
 </div>
 
+<!-- =====================================================
+     MOBILE BOTTOM NAVIGATION
+===================================================== -->
+
+<nav class="mobile-bottom no-print">
+
+    <a href="dashboard.html" class="mobile-nav-item">
+        <i class="fas fa-chart-pie"></i>
+        <span>Dash</span>
+    </a>
+
+    <a href="jadual-duty.html" class="mobile-nav-item">
+        <i class="fas fa-calendar-check"></i>
+        <span>Duty</span>
+    </a>
+
+    <a href="klm-mingguan.html" class="mobile-nav-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Weekly</span>
+    </a>
+
+    <a href="anggaran-rk01.html" class="mobile-nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>RK01</span>
+    </a>
+
+    <a href="anggaran-rk02.html" class="mobile-nav-item active">
+        <i class="fas fa-chart-bar"></i>
+        <span>RK02</span>
+    </a>
+
+    <a href="#"
+       onclick="logKeluar(); return false;"
+       class="mobile-nav-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </a>
+
+</nav>
+
+  
 <script>
   const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
   const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
