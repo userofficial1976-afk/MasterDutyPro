@@ -9,7 +9,7 @@
 <title>Laporan Wilayah — Master Duty Pro</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -2246,7 +2246,379 @@ function paparSenaraiCutiAm(rows){
 
 }
 
+<script>
 
+/* =====================================================
+   DOWNLOAD EXCEL — KLM CUTI AM
+===================================================== */
+
+function downloadExcelCutiAm(){
+
+    const rows =
+        semuaDuty.filter(
+            row =>
+                num(row.jumlah_cutiam) > 0
+                ||
+                num(row.hari_cutiam_bertugas) > 0
+                ||
+                num(row.jam_cutiam_bertugas) > 0
+        );
+
+
+    if(!rows.length){
+
+        alert(
+            "Tiada rekod KLM Cuti Am untuk dimuat turun."
+        );
+
+        return;
+
+    }
+
+
+    const data =
+        rows.map(row => {
+
+            const rmHari =
+                num(
+                    row.rm_hari_cutiam
+                );
+
+            const rmJam =
+                num(
+                    row.rm_jam_cutiam
+                );
+
+            return {
+
+                "NO SKB":
+                    row.no_skb || "",
+
+                "NAMA ANGGOTA":
+                    row.nama_anggota ||
+                    row.nama ||
+                    "",
+
+                "UNIT":
+                    row.unit ||
+                    "",
+
+                "POS":
+                    row.pos ||
+                    row.nama_pos_asal ||
+                    "",
+
+                "BASIC GAJI":
+                    num(
+                        row.Data_Anggota
+                        ?.gaji_pokok
+                    ),
+
+                "HARI":
+                    num(
+                        row.hari_cutiam_bertugas
+                    ),
+
+                "JAM":
+                    num(
+                        row.jam_cutiam_bertugas
+                    ),
+
+                "RM HARI CUTI AM":
+                    rmHari,
+
+                "RM JAM CUTI AM":
+                    rmJam,
+
+                "JUMLAH KLM (RM)":
+                    rmHari + rmJam
+
+            };
+
+        });
+
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(
+            data
+        );
+
+
+    const workbook =
+        XLSX.utils.book_new();
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "KLM Cuti Am"
+    );
+
+
+    /* Lebar kolum */
+
+    worksheet["!cols"] = [
+
+        { wch: 15 },
+        { wch: 35 },
+        { wch: 22 },
+        { wch: 25 },
+        { wch: 15 },
+        { wch: 10 },
+        { wch: 10 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 }
+
+    ];
+
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        )?.value ||
+        "Bulan";
+
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        )?.value ||
+        "Tahun";
+
+
+    XLSX.writeFile(
+        workbook,
+        `KLM_Cuti_Am_${bulan}_${tahun}.xlsx`
+    );
+
+}
+
+
+/* =====================================================
+   DOWNLOAD EXCEL — KLM TAMPUNGAN
+===================================================== */
+
+function downloadExcelTampungan(){
+
+    const rows =
+        semuaDuty.filter(
+            row =>
+                String(
+                    row.pos_tampungan ||
+                    ""
+                ).trim() !== ""
+                &&
+                num(
+                    row.jam_tampungan
+                ) > 0
+        );
+
+
+    if(!rows.length){
+
+        alert(
+            "Tiada rekod KLM Tampungan untuk dimuat turun."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Gabungkan mengikut:
+     *
+     * POS TAMPUNGAN + NO SKB
+     *
+     * sama seperti popup.
+     */
+
+    const map =
+        new Map();
+
+
+    rows.forEach(row => {
+
+        const posTampungan =
+            String(
+                row.pos_tampungan ||
+                ""
+            ).trim();
+
+        const skb =
+            String(
+                row.no_skb ||
+                ""
+            ).trim();
+
+
+        const key =
+            posTampungan +
+            "|" +
+            skb;
+
+
+        if(!map.has(key)){
+
+            map.set(
+                key,
+                {
+
+                    posTampungan,
+
+                    skb,
+
+                    nama:
+                        row.nama_anggota ||
+                        "-",
+
+                    pos:
+                        row.pos ||
+                        row.nama_pos_asal ||
+                        "-",
+
+                    basic:
+                        num(
+                            row.Data_Anggota
+                            ?.gaji_pokok
+                        ),
+
+                    jam: 0,
+
+                    rm: 0
+
+                }
+            );
+
+        }
+
+
+        const item =
+            map.get(key);
+
+
+        item.jam +=
+            num(
+                row.jam_tampungan
+            );
+
+
+        item.rm +=
+            num(
+                row.rm_klm_tampungan
+            );
+
+    });
+
+
+    const data =
+        [...map.values()]
+            .sort(
+                (a,b) => {
+
+                    const p =
+                        a.posTampungan.localeCompare(
+                            b.posTampungan,
+                            "ms"
+                        );
+
+                    if(p !== 0){
+
+                        return p;
+
+                    }
+
+
+                    return String(
+                        a.nama
+                    ).localeCompare(
+                        String(b.nama),
+                        "ms"
+                    );
+
+                }
+            )
+            .map(item => ({
+
+                "POS TAMPUNGAN":
+                    item.posTampungan,
+
+                "SKB":
+                    item.skb,
+
+                "NAMA ANGGOTA":
+                    item.nama,
+
+                "POS":
+                    item.pos,
+
+                "BASIC GAJI":
+                    item.basic,
+
+                "JUMLAH JAM TAMPUNG / BLN":
+                    item.jam,
+
+                "JUMLAH KLM (RM)":
+                    item.rm
+
+            }));
+
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(
+            data
+        );
+
+
+    const workbook =
+        XLSX.utils.book_new();
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "KLM Tampungan"
+    );
+
+
+    /* Lebar kolum */
+
+    worksheet["!cols"] = [
+
+        { wch: 25 },
+        { wch: 15 },
+        { wch: 35 },
+        { wch: 25 },
+        { wch: 15 },
+        { wch: 25 },
+        { wch: 20 }
+
+    ];
+
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        )?.value ||
+        "Bulan";
+
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        )?.value ||
+        "Tahun";
+
+
+    XLSX.writeFile(
+        workbook,
+        `KLM_Tampungan_${bulan}_${tahun}.xlsx`
+    );
+
+}
+
+</script>
 /* =====================================================
    MODAL CUTI AM
 ===================================================== */
@@ -3418,12 +3790,24 @@ Jana Laporan
 </h3>
 
 
-<button
-    onclick="tutupKlmCutiAm()"
-    class="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg"
->
-    Tutup
-</button>
+<div class="flex items-center gap-2">
+
+    <button
+        onclick="downloadExcelCutiAm()"
+        class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg font-semibold"
+    >
+        <i class="fas fa-file-excel mr-2"></i>
+        Download Excel
+    </button>
+
+    <button
+        onclick="tutupKlmCutiAm()"
+        class="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg"
+    >
+        Tutup
+    </button>
+
+</div>
 
 
 </div>
@@ -3511,12 +3895,24 @@ Jana Laporan
 
             </div>
 
-            <button
-                onclick="tutupKlmTampungan()"
-                class="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg"
-            >
-                Tutup
-            </button>
+<div class="flex items-center gap-2">
+
+    <button
+        onclick="downloadExcelTampungan()"
+        class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg font-semibold"
+    >
+        <i class="fas fa-file-excel mr-2"></i>
+        Download Excel
+    </button>
+
+    <button
+        onclick="tutupKlmTampungan()"
+        class="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg"
+    >
+        Tutup
+    </button>
+
+</div>
 
         </div>
 
