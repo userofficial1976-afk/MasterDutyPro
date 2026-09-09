@@ -125,8 +125,20 @@
     
 @media(max-width:640px){
 
-  .stat-card p.text-3xl{font-size:1.5rem;
+  .stat-card{
+    padding:14px;
   }
+
+  .stat-card p.text-3xl{
+    font-size:1.35rem;
+  }
+
+  .stat-card p.text-sm,
+  .stat-card p.text-xs{
+    font-size:.70rem;
+  }
+
+}
 
 }
     
@@ -285,7 +297,7 @@
     Ringkasan Operasi Hari Ini
   </h3>
 
-  <div class="grid grid-cols-3 xl:grid-cols-6 gap-4">
+  <div class="grid grid-cols-2 xl:grid-cols-6 gap-4">
           <div class="stat-card glass rounded-2xl p-5">
             <div class="flex items-center justify-between mb-4">
               <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450">
