@@ -27,11 +27,38 @@ body{
 }
 
 .glass{
-    background:rgba(15,23,42,.75);
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(45,212,191,.15);
+    background:rgba(15,23,42,.55);
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+
+    border:1px solid rgba(45,212,191,.25);
+
+    box-shadow:
+    0 0 25px rgba(45,212,191,.15),
+    0 0 80px rgba(45,212,191,.08);
 }
 
+body::before{
+content:"";
+position:fixed;
+inset:0;
+
+background:
+radial-gradient(
+circle at 20% 20%,
+rgba(45,212,191,.15),
+transparent 35%
+),
+radial-gradient(
+circle at 80% 80%,
+rgba(59,130,246,.15),
+transparent 35%
+);
+
+pointer-events:none;
+}
+
+    
 </style>
 
 </head>
@@ -62,17 +89,60 @@ background-position:center;
 <img
 src="logomdp.png"
 alt="Master Duty Pro"
-class="w-44 h-44 mx-auto object-contain mb-6"
+class="w-44 h-44 mx-auto object-contain mb-6 drop-shadow-[0_0_35px_rgba(45,212,191,0.8)] animate-pulse"
 >
 
-<h1 class="text-5xl font-bold text-white">
+<h1
+class="
+text-6xl
+font-extrabold
+bg-gradient-to-r
+from-cyan-300
+via-teal-400
+to-blue-500
+bg-clip-text
+text-transparent
+"
+>
 MASTER DUTY PRO
 </h1>
 
 <p class="text-teal-300 text-lg mt-3">
 Polis Bantuan FGV Wilayah Terengganu
 </p>
+<div class="flex justify-center mt-5">
 
+<div
+class="
+flex
+items-center
+gap-2
+px-4
+py-2
+rounded-full
+bg-emerald-500/15
+border
+border-emerald-400/30
+"
+>
+
+<div
+class="
+w-2.5
+h-2.5
+bg-emerald-400
+rounded-full
+animate-pulse
+"
+></div>
+
+<span class="text-emerald-300 text-sm">
+SYSTEM ONLINE
+</span>
+
+</div>
+
+</div>
 </div>
 
 <div class="space-y-5 text-slate-200 text-lg">
@@ -116,7 +186,24 @@ Sistem Pengurusan Penugasan dan Pemantauan Anggota Polis Bantuan FGV.
 </div>
 
 </div>
+<div class="mt-8 grid grid-cols-3 gap-4">
 
+<div class="text-center bg-white/5 rounded-xl p-4">
+<div class="text-cyan-300 text-2xl font-bold">24/7</div>
+<div class="text-xs text-slate-400">Pemantauan</div>
+</div>
+
+<div class="text-center bg-white/5 rounded-xl p-4">
+<div class="text-cyan-300 text-2xl font-bold">100%</div>
+<div class="text-xs text-slate-400">Online</div>
+</div>
+
+<div class="text-center bg-white/5 rounded-xl p-4">
+<div class="text-cyan-300 text-2xl font-bold">MDP</div>
+<div class="text-xs text-slate-400">System</div>
+</div>
+
+</div>
 <!-- LOGIN -->
 <div class="w-full lg:w-1/2 flex items-center justify-center p-6">
 
