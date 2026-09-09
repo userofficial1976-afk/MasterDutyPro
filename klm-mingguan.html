@@ -3654,12 +3654,10 @@ function kemaskiniSummary(rows){
         );
 
 
-    document.getElementById(
-        "sumKlmOff"
-    ).textContent =
-        num(
-            total.klmHariOff
-        );
+  document.getElementById(
+    "sumKlmOff"
+).textContent =
+    `${num(total.klmHariOff)} Hari / ${num(total.klmJamOff)} Jam`;
 
 
 document.getElementById("sumKlmCuti").textContent =
@@ -3865,7 +3863,7 @@ function paparAdmin(rows){
     </div>
 
     <div class="unit-stat-value klm">
-         ${num(total.klmHariCutiAm)} Hari / ${num(total.klmJamCutiAm)} Jam
+         ${num(unit.klmHariCutiAm)} Hari / ${num(unit.klmJamCutiAm)} Jam
     </div>
 
 </div>
