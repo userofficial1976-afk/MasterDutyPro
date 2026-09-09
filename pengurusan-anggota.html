@@ -1,0 +1,4037 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pengurusan Anggota — Master Duty Pro</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                teal: {
+                    450: '#2dd4bf',
+                    550: '#14b8a6',
+                    650: '#0d9488',
+                    750: '#0f766e'
+                }
+            },
+            fontFamily: {
+                sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif']
+            }
+        }
+    }
+}
+</script>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* =====================================================
+   BASE
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #0b1220;
+    color: #e2e8f0;
+    font-family: Inter, "Segoe UI", system-ui, sans-serif;
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+/* =====================================================
+   GLASS
+===================================================== */
+
+.glass {
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(45, 212, 191, 0.12);
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar-link {
+    color: #94a3b8;
+}
+
+.sidebar-link.active {
+    background: linear-gradient(
+        90deg,
+        rgba(20, 184, 166, 0.20),
+        transparent
+    );
+    border-left: 3px solid #14b8a6;
+    color: #2dd4bf;
+}
+
+.sidebar-link:hover {
+    color: #2dd4bf;
+    background: rgba(255,255,255,.04);
+}
+
+.menu-hidden {
+    display: none !important;
+}
+
+/* =====================================================
+   STAT CARD
+===================================================== */
+
+.stat-card {
+    transition: all .25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(45,212,191,.30);
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: 14px;
+}
+
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: rgba(255,255,255,.04);
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(45,212,191,.35);
+    border-radius: 20px;
+}
+
+.anggota-table {
+    width: max-content;
+    min-width: 2200px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.anggota-table th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+
+    background: #111c2f;
+    color: #94a3b8;
+
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+
+    padding: 13px 12px;
+    border-bottom: 1px solid rgba(45,212,191,.16);
+    white-space: nowrap;
+}
+
+.anggota-table td {
+    padding: 12px;
+    font-size: 12px;
+    color: #cbd5e1;
+    border-bottom: 1px solid rgba(148,163,184,.08);
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.anggota-table tbody tr {
+    transition: background .18s ease;
+}
+
+.anggota-table tbody tr:hover {
+    background: rgba(45,212,191,.045);
+}
+
+.anggota-table th:first-child,
+.anggota-table td:first-child {
+    text-align: center;
+}
+
+.num-cell {
+    text-align: center !important;
+}
+
+.money-cell {
+    text-align: right !important;
+    font-variant-numeric: tabular-nums;
+}
+
+.nama-cell {
+    min-width: 240px;
+    font-weight: 600;
+    color: #f8fafc !important;
+}
+
+.status-cell {
+    text-align: center !important;
+}
+
+/* =====================================================
+   SEARCH / FILTER
+===================================================== */
+
+.form-input,
+.form-select {
+    width: 100%;
+    background: rgba(15,23,42,.75);
+    border: 1px solid rgba(148,163,184,.16);
+    color: #e2e8f0;
+    border-radius: 11px;
+    padding: 10px 12px;
+    outline: none;
+    transition: all .2s ease;
+}
+
+.form-input::placeholder {
+    color: #64748b;
+}
+
+.form-input:focus,
+.form-select:focus {
+    border-color: rgba(45,212,191,.55);
+    box-shadow: 0 0 0 3px rgba(20,184,166,.08);
+}
+
+.form-select option {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.btn-primary {
+    background: #0d9488;
+    color: white;
+    border: 1px solid rgba(45,212,191,.25);
+    transition: all .2s ease;
+}
+
+.btn-primary:hover {
+    background: #14b8a6;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,.06);
+    color: #cbd5e1;
+    border: 1px solid rgba(148,163,184,.14);
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,.10);
+}
+
+.btn-danger {
+    background: rgba(220,38,38,.12);
+    color: #f87171;
+    border: 1px solid rgba(248,113,113,.16);
+}
+
+.btn-danger:hover {
+    background: rgba(220,38,38,.20);
+}
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    padding: 5px 9px;
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.badge-active {
+    background: rgba(16,185,129,.12);
+    color: #34d399;
+    border: 1px solid rgba(16,185,129,.20);
+}
+
+.badge-inactive {
+    background: rgba(100,116,139,.12);
+    color: #94a3b8;
+    border: 1px solid rgba(100,116,139,.20);
+}
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0,0,0,.68);
+    backdrop-filter: blur(7px);
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 1050px;
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    background: #0f172a;
+    border: 1px solid rgba(45,212,191,.18);
+    border-radius: 22px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.55),
+        0 0 40px rgba(20,184,166,.05);
+}
+
+.modal-box::-webkit-scrollbar {
+    width: 7px;
+}
+
+.modal-box::-webkit-scrollbar-thumb {
+    background: rgba(45,212,191,.30);
+    border-radius: 20px;
+}
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(15,23,42,.72);
+    backdrop-filter: blur(3px);
+
+    z-index: 10;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 100000;
+
+    min-width: 280px;
+    max-width: 420px;
+
+    padding: 14px 17px;
+
+    background: #0f172a;
+    border: 1px solid rgba(45,212,191,.20);
+    border-radius: 14px;
+
+    box-shadow: 0 20px 50px rgba(0,0,0,.40);
+
+    animation: toastIn .25s ease;
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+.page-btn {
+    min-width: 34px;
+    height: 34px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(148,163,184,.12);
+
+    color: #94a3b8;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition: all .2s ease;
+}
+
+.page-btn:hover {
+    background: rgba(45,212,191,.10);
+    color: #2dd4bf;
+}
+
+.page-btn.active {
+    background: #0d9488;
+    border-color: #14b8a6;
+    color: white;
+}
+
+.page-btn:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   MOBILE NAV
+===================================================== */
+
+.mobile-bottom {
+    display: none;
+}
+
+@media (max-width: 1023px) {
+
+    body {
+        padding-bottom: 80px;
+    }
+
+    .mobile-bottom {
+        display: flex;
+
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        height: 70px;
+
+        align-items: center;
+        justify-content: space-around;
+
+        background: rgba(15,23,42,.94);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        border-top: 1px solid rgba(45,212,191,.25);
+
+        box-shadow: 0 -8px 25px rgba(0,0,0,.4);
+
+        z-index: 99999;
+    }
+
+    .mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: 4px;
+
+        color: #cbd5e1;
+        text-decoration: none;
+
+        font-size: 10px;
+    }
+
+    .mobile-nav-item i {
+        font-size: 18px;
+    }
+
+    .mobile-nav-item.active {
+        color: #2dd4bf;
+    }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 640px) {
+
+    .content-area {
+        padding: 14px !important;
+    }
+
+    .hero-box {
+        padding: 22px !important;
+    }
+
+    .hero-box h1 {
+        font-size: 1.55rem;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    .filter-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .modal-backdrop {
+        padding: 10px;
+    }
+
+    .modal-box {
+        max-height: 94vh;
+        border-radius: 17px;
+    }
+
+    .toast {
+        left: 14px;
+        right: 14px;
+        bottom: 88px;
+        min-width: auto;
+    }
+}
+
+/* =====================================================
+   HIDE
+===================================================== */
+
+.hidden-force {
+    display: none !important;
+}
+
+</style>
+</head>
+
+<body class="font-sans text-slate-200">
+
+<div class="flex min-h-screen">
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside
+    class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto"
+>
+
+    <div class="p-6 h-full flex flex-col">
+
+        <!-- BRAND -->
+        <div class="flex items-center gap-3 mb-8">
+
+            <div class="w-12 h-12 flex items-center justify-center">
+                <img
+                    src="logomdp.png"
+                    alt="Master Duty Pro"
+                    class="w-12 h-12 object-contain"
+                >
+            </div>
+
+            <div>
+                <h1 class="font-bold text-white text-lg leading-tight">
+                    Master Duty Pro
+                </h1>
+
+                <p class="text-xs text-teal-450">
+                    Wilayah Terengganu
+                </p>
+            </div>
+
+        </div>
+
+        <!-- USER INFO -->
+
+        <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
+
+            <p
+                id="sidebarUserName"
+                class="text-sm font-semibold text-white truncate"
+            >
+                -
+            </p>
+
+            <p
+                id="sidebarUserJawatan"
+                class="text-xs text-teal-400 mt-1"
+            >
+                -
+            </p>
+
+        </div>
+
+        <!-- NAVIGATION -->
+
+        <nav class="space-y-1 flex-1">
+
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">
+                Menu Utama
+            </p>
+
+            <a
+                href="dashboard.html"
+                id="menu-dashboard"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-chart-pie w-5"></i>
+                Dashboard
+            </a>
+
+            <a
+                href="pengurusan-anggota.html"
+                id="menu-anggota"
+                class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-users w-5"></i>
+                Pengurusan Anggota
+            </a>
+
+            <a
+                href="kod-duty.html"
+                id="menu-kod-duty"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-code w-5"></i>
+                Kod Waktu Kerja
+            </a>
+
+            <a
+                href="kod-tempat-kerja.html"
+                id="menu-kod-tempat"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-map-marker-alt w-5"></i>
+                Kod Tempat Kerja
+            </a>
+
+            <a
+                href="jadual-duty.html"
+                id="menu-jadual"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-calendar-check w-5"></i>
+                Pengisian Jadual Tugas
+            </a>
+
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">
+                Laporan
+            </p>
+
+            <a
+                href="laporan-wilayah.html"
+                id="menu-laporan-wilayah"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-file-alt w-5"></i>
+                Laporan Wilayah
+            </a>
+
+            <a
+                href="klm-mingguan.html"
+                id="menu-klm"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-users w-5"></i>
+                KLM Mingguan
+            </a>
+
+            <a
+                href="anggaran-rk02.html"
+                id="menu-rk02"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-chart-bar w-5"></i>
+                Anggaran RK02
+            </a>
+
+            <a
+                href="anggaran-rk01.html"
+                id="menu-rk01"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-chart-line w-5"></i>
+                Anggaran RK01
+            </a>
+
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">
+                Sistem
+            </p>
+
+            <a
+                href="#"
+                id="menu-tetapan"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-cog w-5"></i>
+                Tetapan
+            </a>
+
+            <a
+                href="#"
+                onclick="logKeluar(); return false;"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4"
+            >
+                <i class="fas fa-sign-out-alt w-5"></i>
+                Log Keluar
+            </a>
+
+        </nav>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="flex-1 lg:ml-72">
+
+<!-- =====================================================
+     TOPBAR
+===================================================== -->
+
+<header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
+
+    <div class="flex items-center justify-between">
+
+        <div>
+
+            <h2 class="text-xl font-bold text-white">
+                Pengurusan Anggota
+            </h2>
+
+            <p class="text-sm text-slate-400">
+                Pengurusan data anggota •
+                <span id="currentDate">-</span>
+            </p>
+
+        </div>
+
+        <div class="flex items-center gap-4">
+
+            <div
+                class="hidden sm:flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium"
+            >
+                <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
+                System Online
+            </div>
+
+            <div class="text-right hidden sm:block">
+
+                <p
+                    class="text-sm font-medium text-white"
+                    id="userName"
+                >
+                    -
+                </p>
+
+                <p
+                    class="text-xs text-slate-400"
+                    id="userJawatan"
+                >
+                    -
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<div class="content-area p-6 space-y-6">
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<div class="hero-box relative overflow-hidden rounded-3xl bg-gradient-to-r from-teal-750 via-teal-650 to-teal-550 p-8">
+
+    <div class="relative z-10">
+
+        <div class="flex items-center gap-3 mb-3">
+
+            <div class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center">
+                <i class="fas fa-users text-white text-lg"></i>
+            </div>
+
+            <span class="text-xs font-semibold text-teal-100 uppercase tracking-wider">
+                Data Anggota
+            </span>
+
+        </div>
+
+        <h1 class="text-3xl font-bold text-white mb-2">
+            Pengurusan Anggota
+        </h1>
+
+        <p class="text-teal-100/90 max-w-3xl">
+            Urus, kemas kini dan pantau maklumat anggota secara berpusat
+            bagi operasi Wilayah Terengganu.
+        </p>
+
+    </div>
+
+    <div class="absolute right-4 bottom-2 opacity-20">
+
+        <img
+            src="logomdp.png"
+            alt="Logo"
+            class="w-48 h-48 object-contain"
+        >
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     STATISTIK
+===================================================== -->
+
+<div class="glass rounded-2xl p-5">
+
+    <h3 class="text-lg font-semibold text-white mb-5">
+        Ringkasan Anggota
+    </h3>
+
+    <div class="grid grid-cols-2 xl:grid-cols-5 gap-4">
+
+        <!-- TOTAL -->
+
+        <div class="stat-card rounded-2xl p-5 bg-teal-500/15 border border-teal-500/30">
+
+            <div class="w-11 h-11 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-400 mb-4">
+                <i class="fas fa-users"></i>
+            </div>
+
+            <p class="text-sm text-slate-300">
+                Jumlah Anggota
+            </p>
+
+            <p
+                id="statJumlah"
+                class="text-3xl font-bold text-teal-400 mt-1"
+            >
+                -
+            </p>
+
+        </div>
+
+
+        <!-- AKTIF -->
+
+        <div class="stat-card rounded-2xl p-5 bg-emerald-500/15 border border-emerald-500/30">
+
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
+                <i class="fas fa-user-check"></i>
+            </div>
+
+            <p class="text-sm text-slate-300">
+                Anggota Aktif
+            </p>
+
+            <p
+                id="statAktif"
+                class="text-3xl font-bold text-emerald-400 mt-1"
+            >
+                -
+            </p>
+
+        </div>
+
+
+        <!-- TIDAK AKTIF -->
+
+        <div class="stat-card rounded-2xl p-5 bg-slate-500/15 border border-slate-500/30">
+
+            <div class="w-11 h-11 rounded-xl bg-slate-500/20 flex items-center justify-center text-slate-300 mb-4">
+                <i class="fas fa-user-slash"></i>
+            </div>
+
+            <p class="text-sm text-slate-300">
+                Tidak Aktif
+            </p>
+
+            <p
+                id="statTidakAktif"
+                class="text-3xl font-bold text-slate-300 mt-1"
+            >
+                -
+            </p>
+
+        </div>
+
+
+        <!-- UNIT -->
+
+        <div class="stat-card rounded-2xl p-5 bg-amber-500/15 border border-amber-500/30">
+
+            <div class="w-11 h-11 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 mb-4">
+                <i class="fas fa-building"></i>
+            </div>
+
+            <p class="text-sm text-slate-300">
+                Jumlah Unit
+            </p>
+
+            <p
+                id="statUnit"
+                class="text-3xl font-bold text-amber-400 mt-1"
+            >
+                -
+            </p>
+
+        </div>
+
+
+        <!-- POS -->
+
+        <div class="stat-card rounded-2xl p-5 bg-orange-500/15 border border-orange-500/30">
+
+            <div class="w-11 h-11 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 mb-4">
+                <i class="fas fa-location-dot"></i>
+            </div>
+
+            <p class="text-sm text-slate-300">
+                Pos Khidmat
+            </p>
+
+            <p
+                id="statPos"
+                class="text-3xl font-bold text-orange-400 mt-1"
+            >
+                -
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div class="glass rounded-2xl p-6">
+
+    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 mb-5">
+
+        <div>
+
+            <h3 class="text-lg font-semibold text-white">
+                Senarai Anggota
+            </h3>
+
+            <p class="text-sm text-slate-400 mt-1">
+                Cari dan tapis maklumat anggota
+            </p>
+
+        </div>
+
+        <button
+            onclick="bukaModalTambah()"
+            class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2"
+        >
+            <i class="fas fa-plus"></i>
+            Tambah Anggota
+        </button>
+
+    </div>
+
+
+    <div class="filter-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3">
+
+        <!-- SEARCH -->
+
+        <div class="xl:col-span-2 relative">
+
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"></i>
+
+            <input
+                id="searchInput"
+                type="text"
+                class="form-input pl-10"
+                placeholder="Cari No. SKB / Nama / No. Anggota..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <!-- UNIT -->
+
+        <select
+            id="filterUnit"
+            class="form-select"
+        >
+            <option value="">Semua Unit</option>
+        </select>
+
+
+        <!-- POS -->
+
+        <select
+            id="filterPos"
+            class="form-select"
+        >
+            <option value="">Semua Pos Khidmat</option>
+        </select>
+
+
+        <!-- STATUS -->
+
+        <select
+            id="filterStatus"
+            class="form-select"
+        >
+            <option value="">Semua Status</option>
+            <option value="Aktif">Aktif</option>
+            <option value="Tidak Aktif">Tidak Aktif</option>
+        </select>
+
+    </div>
+
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4">
+
+        <p
+            id="filterInfo"
+            class="text-xs text-slate-500"
+        >
+            -
+        </p>
+
+        <button
+            onclick="resetFilter()"
+            class="btn-secondary px-4 py-2 rounded-lg text-xs font-semibold"
+        >
+            <i class="fas fa-rotate-left mr-1"></i>
+            Reset Filter
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
+<div class="glass rounded-2xl overflow-hidden">
+
+    <div class="relative">
+
+        <div
+            id="tableLoading"
+            class="loading-overlay hidden-force"
+        >
+
+            <div class="text-center">
+
+                <div class="mb-3">
+                    <i class="fas fa-spinner fa-spin text-teal-400 text-2xl"></i>
+                </div>
+
+                <p class="text-sm text-slate-400">
+                    Memuatkan data anggota...
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="anggota-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="width:55px;">
+                            Bil
+                        </th>
+
+                        <th>
+                            Wilayah
+                        </th>
+
+                        <th>
+                            Kawasan
+                        </th>
+
+                        <th>
+                            No. Anggota
+                        </th>
+
+                        <th>
+                            No. SKB
+                        </th>
+
+                        <th>
+                            Nama
+                        </th>
+
+                        <th>
+                            Pangkat
+                        </th>
+
+                        <th>
+                            Unit
+                        </th>
+
+                        <th>
+                            Pos Khidmat
+                        </th>
+
+                        <th>
+                            Jawatan
+                        </th>
+
+                        <th>
+                            Ketua Pos
+                        </th>
+
+                        <th>
+                            Ketua Unit
+                        </th>
+
+                        <th>
+                            Gaji Pokok
+                        </th>
+
+                        <th>
+                            Gaji + Elaun
+                            <br>
+                            <span class="text-[9px] normal-case tracking-normal">
+                                Pengiraan Gaji
+                            </span>
+                        </th>
+
+                        <th>
+                            RM KLM
+                            <br>
+                            Hari Biasa
+                        </th>
+
+                        <th>
+                            RM KLM
+                            <br>
+                            Hari Offday
+                        </th>
+
+                        <th>
+                            RM KLM
+                            <br>
+                            Jam Offday
+                        </th>
+
+                        <th>
+                            RM KLM
+                            <br>
+                            Hari Cuti Am
+                        </th>
+
+                        <th>
+                            RM KLM
+                            <br>
+                            Jam Cuti Am
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Tindakan
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="anggotaTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="21"
+                            class="text-center py-12 text-slate-500"
+                        >
+                            <i class="fas fa-spinner fa-spin mr-2"></i>
+                            Memuatkan data...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE FOOTER -->
+
+    <div class="px-5 py-4 border-t border-white/10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+        <p
+            id="tableSummary"
+            class="text-xs text-slate-500"
+        >
+            -
+        </p>
+
+        <div
+            id="pagination"
+            class="flex items-center gap-1 flex-wrap"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<div class="text-center text-slate-500 text-sm py-6">
+
+    Master Duty Pro — Wilayah Terengganu
+    <br>
+    © 2026 • Operational Duty Management System
+
+</div>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL TAMBAH / EDIT
+===================================================== -->
+
+<div
+    id="anggotaModal"
+    class="modal-backdrop hidden-force"
+>
+
+    <div class="modal-box">
+
+        <!-- MODAL HEADER -->
+
+        <div class="px-6 py-5 border-b border-white/10 flex items-center justify-between sticky top-0 bg-[#0f172a]/95 backdrop-blur-md z-10">
+
+            <div>
+
+                <h3
+                    id="modalTitle"
+                    class="text-lg font-bold text-white"
+                >
+                    Tambah Anggota
+                </h3>
+
+                <p
+                    id="modalSubtitle"
+                    class="text-xs text-slate-500 mt-1"
+                >
+                    Masukkan maklumat anggota
+                </p>
+
+            </div>
+
+            <button
+                onclick="tutupModal()"
+                class="w-9 h-9 rounded-lg bg-white/5 hover:bg-red-500/10 text-slate-400 hover:text-red-400 transition"
+            >
+                <i class="fas fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form
+            id="anggotaForm"
+            onsubmit="simpanAnggota(event)"
+            class="p-6 space-y-7"
+        >
+
+            <input
+                type="hidden"
+                id="formMode"
+                value="tambah"
+            >
+
+            <!-- DATA ASAS -->
+
+            <section>
+
+                <div class="flex items-center gap-2 mb-4">
+
+                    <div class="w-8 h-8 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center">
+                        <i class="fas fa-user"></i>
+                    </div>
+
+                    <div>
+
+                        <h4 class="text-sm font-semibold text-white">
+                            Maklumat Anggota
+                        </h4>
+
+                        <p class="text-xs text-slate-500">
+                            Maklumat asas anggota
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+
+                    <!-- NO SKB -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            No. SKB <span class="text-red-400">*</span>
+                        </label>
+
+                        <input
+                            id="f_noskb"
+                            class="form-input"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- WILAYAH -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Wilayah
+                        </label>
+
+                        <input
+                            id="f_wilayah"
+                            class="form-input"
+                            value="Terengganu"
+                        >
+
+                    </div>
+
+
+                    <!-- KAWASAN -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Kawasan
+                        </label>
+
+                        <input
+                            id="f_kawasan"
+                            class="form-input"
+                            placeholder="Contoh: F105-Chalok"
+                        >
+
+                    </div>
+
+
+                    <!-- NO ANGGOTA -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            No. Anggota
+                        </label>
+
+                        <input
+                            id="f_noanggota"
+                            class="form-input"
+                            placeholder="Contoh: L/Kpl 11655"
+                        >
+
+                    </div>
+
+
+                    <!-- NAMA -->
+
+                    <div class="md:col-span-2">
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Nama <span class="text-red-400">*</span>
+                        </label>
+
+                        <input
+                            id="f_nama"
+                            class="form-input"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PANGKAT -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Pangkat
+                        </label>
+
+                        <input
+                            id="f_pangkat"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- UNIT -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Unit
+                        </label>
+
+                        <input
+                            id="f_unit"
+                            class="form-input"
+                            placeholder="Contoh: F102-Jerangau"
+                        >
+
+                    </div>
+
+
+                    <!-- POS KHIDMAT -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Pos Khidmat
+                        </label>
+
+                        <input
+                            id="f_poskhidmat"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- JAWATAN -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Jawatan
+                        </label>
+
+                        <input
+                            id="f_jawatan"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- KETUA POS -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Ketua Pos
+                        </label>
+
+                        <input
+                            id="f_ketua_pos"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- KETUA UNIT -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Ketua Unit
+                        </label>
+
+                        <input
+                            id="f_ketua_unit"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Status
+                        </label>
+
+                        <select
+                            id="f_status"
+                            class="form-select"
+                        >
+                            <option value="Aktif">Aktif</option>
+                            <option value="Tidak Aktif">Tidak Aktif</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- KEWANGAN -->
+
+            <section>
+
+                <div class="flex items-center gap-2 mb-4">
+
+                    <div class="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+
+                    <div>
+
+                        <h4 class="text-sm font-semibold text-white">
+                            Maklumat Gaji & Kadar KLM
+                        </h4>
+
+                        <p class="text-xs text-slate-500">
+                            Nilai digunakan untuk pengiraan RK/KLM
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+
+                    <!-- GAJI POKOK -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Gaji Pokok
+                        </label>
+
+                        <input
+                            id="f_gaji_pokok"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            class="form-input text-right"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+
+                    <!-- GAJI + ELAUN -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            Gaji + Elaun (Pengiraan Gaji)
+                        </label>
+
+                        <input
+                            id="f_gaji_elaun"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            class="form-input text-right"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+
+                    <!-- RM KLM HARI BIASA -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            RM KLM Hari Biasa
+                        </label>
+
+                        <input
+                            id="f_rm_pehariklmbiasa"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            class="form-input text-right"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+
+                    <!-- RM OFF HARI -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            RM KLM Hari Offday
+                        </label>
+
+                        <input
+                            id="f_rm_perharioffday"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            class="form-input text-right"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+
+                    <!-- RM OFF JAM -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            RM KLM Jam Offday
+                        </label>
+
+                        <input
+                            id="f_rm_perjamoffday"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            class="form-input text-right"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+
+                    <!-- RM CUTI HARI -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            RM KLM Hari Cuti Am
+                        </label>
+
+                        <input
+                            id="f_rm_perharicutiam"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            class="form-input text-right"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+
+                    <!-- RM CUTI JAM -->
+
+                    <div>
+
+                        <label class="block text-xs text-slate-400 mb-2">
+                            RM KLM Jam Cuti Am
+                        </label>
+
+                        <input
+                            id="f_rm_perjamcutiam"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            class="form-input text-right"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- MODAL FOOTER -->
+
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-3 border-t border-white/10">
+
+                <button
+                    type="button"
+                    onclick="tutupModal()"
+                    class="btn-secondary px-5 py-2.5 rounded-xl text-sm font-semibold"
+                >
+                    Batal
+                </button>
+
+                <button
+                    id="btnSimpan"
+                    type="submit"
+                    class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold"
+                >
+                    <i class="fas fa-save mr-1"></i>
+                    Simpan Anggota
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MOBILE NAV
+===================================================== -->
+
+<nav class="mobile-bottom">
+
+    <a
+        href="dashboard.html"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-chart-pie"></i>
+        <span>Dash</span>
+    </a>
+
+    <a
+        href="pengurusan-anggota.html"
+        class="mobile-nav-item active"
+    >
+        <i class="fas fa-users"></i>
+        <span>Anggota</span>
+    </a>
+
+    <a
+        href="jadual-duty.html"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-calendar-check"></i>
+        <span>Duty</span>
+    </a>
+
+    <a
+        href="klm-mingguan.html"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-file-alt"></i>
+        <span>Weekly</span>
+    </a>
+
+    <a
+        href="anggaran-rk02.html"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-chart-bar"></i>
+        <span>RK02</span>
+    </a>
+
+    <a
+        href="#"
+        onclick="logKeluar(); return false;"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </a>
+
+</nav>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+let currentUser = null;
+
+let semuaAnggota = [];
+
+let dataDitapis = [];
+
+let currentPage = 1;
+
+const PAGE_SIZE = 20;
+
+let editingNoSkb = null;
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        currentUser = bacaPengguna();
+
+        if (!currentUser) {
+
+            window.location.href = "login.html";
+
+            return;
+        }
+
+
+        /* ADMIN SAHAJA */
+
+        if (!currentUser.isAdmin) {
+
+            alert(
+                "Akses Pengurusan Anggota hanya dibenarkan kepada Admin."
+            );
+
+            window.location.href = "jadual-duty.html";
+
+            return;
+        }
+
+
+        paparMaklumatPengguna();
+
+        kawalMenuMengikutPeranan();
+
+        paparTarikh();
+
+        pasangEventFilter();
+
+        await muatDataAnggota();
+
+    }
+);
+
+
+/* =====================================================
+   USER
+===================================================== */
+
+function bacaPengguna() {
+
+    try {
+
+        const data =
+            localStorage.getItem("mdp_user");
+
+        return data
+            ? JSON.parse(data)
+            : null;
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+
+function paparMaklumatPengguna() {
+
+    if (!currentUser) return;
+
+    const name =
+        currentUser.name ||
+        currentUser.noSkb ||
+        "-";
+
+    const jawatan =
+        currentUser.jawatan ||
+        "-";
+
+    document.getElementById(
+        "userName"
+    ).textContent = name;
+
+    document.getElementById(
+        "userJawatan"
+    ).textContent = jawatan;
+
+    document.getElementById(
+        "sidebarUserName"
+    ).textContent = name;
+
+    document.getElementById(
+        "sidebarUserJawatan"
+    ).textContent = jawatan;
+
+}
+
+
+function kawalMenuMengikutPeranan() {
+
+    if (
+        !currentUser ||
+        currentUser.isAdmin
+    ) {
+
+        return;
+    }
+
+    [
+        "menu-dashboard",
+        "menu-anggota",
+        "menu-laporan-wilayah",
+        "menu-tetapan"
+    ].forEach(id => {
+
+        const el =
+            document.getElementById(id);
+
+        if (el) {
+
+            el.classList.add(
+                "menu-hidden"
+            );
+
+        }
+
+    });
+
+}
+
+
+function logKeluar() {
+
+    localStorage.removeItem(
+        "mdp_user"
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+function paparTarikh() {
+
+    const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    };
+
+    document.getElementById(
+        "currentDate"
+    ).textContent =
+        new Date().toLocaleDateString(
+            "ms-MY",
+            options
+        );
+
+}
+
+
+/* =====================================================
+   MUAT DATA ANGGOTA
+===================================================== */
+
+async function muatDataAnggota() {
+
+    setTableLoading(true);
+
+    try {
+
+        const PAGE_SIZE_DB = 1000;
+
+        let rows = [];
+
+        let from = 0;
+
+
+        while (true) {
+
+            const to =
+                from + PAGE_SIZE_DB - 1;
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from("Data_Anggota")
+                .select(`
+                    noskb,
+                    wilayah,
+                    kawasan,
+                    pangkat,
+                    noanggota,
+                    nama,
+                    poskhidmat,
+                    unit,
+                    jawatan,
+                    ketua_pos,
+                    ketua_unit,
+                    status,
+                    gaji_pokok,
+                    gaji_elaun,
+                    rm_pehariklmbiasa,
+                    rm_perharioffday,
+                    rm_perjamoffday,
+                    rm_perharicutiam,
+                    rm_perjamcutiam
+                `)
+                .order(
+                    "nama",
+                    {
+                        ascending: true
+                    }
+                )
+                .range(
+                    from,
+                    to
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "RALAT MUAT ANGGOTA:",
+                    error
+                );
+
+                throw error;
+
+            }
+
+
+            const batch =
+                data || [];
+
+
+            rows =
+                rows.concat(batch);
+
+
+            if (
+                batch.length <
+                PAGE_SIZE_DB
+            ) {
+
+                break;
+
+            }
+
+
+            from +=
+                PAGE_SIZE_DB;
+
+        }
+
+
+        semuaAnggota = rows;
+
+
+        isiFilterDropdown();
+
+        kemasKiniStatistik();
+
+        applyFilter();
+
+    } catch (error) {
+
+        console.error(error);
+
+        paparToast(
+            "Gagal memuatkan data anggota: " +
+            (error.message || error),
+            "error"
+        );
+
+        renderTable([]);
+
+    } finally {
+
+        setTableLoading(false);
+
+    }
+
+}
+
+
+/* =====================================================
+   FILTER DROPDOWN
+===================================================== */
+
+function isiFilterDropdown() {
+
+    const unitSet =
+        new Set();
+
+    const posSet =
+        new Set();
+
+
+    semuaAnggota.forEach(a => {
+
+        if (a.unit) {
+
+            unitSet.add(
+                String(a.unit).trim()
+            );
+
+        }
+
+        if (a.poskhidmat) {
+
+            posSet.add(
+                String(a.poskhidmat).trim()
+            );
+
+        }
+
+    });
+
+
+    const unitSelect =
+        document.getElementById(
+            "filterUnit"
+        );
+
+    const posSelect =
+        document.getElementById(
+            "filterPos"
+        );
+
+
+    unitSelect.innerHTML =
+        `<option value="">Semua Unit</option>`;
+
+
+    posSelect.innerHTML =
+        `<option value="">Semua Pos Khidmat</option>`;
+
+
+    [...unitSet]
+        .sort(
+            (a,b) =>
+                a.localeCompare(
+                    b,
+                    "ms"
+                )
+        )
+        .forEach(unit => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                unit;
+
+            option.textContent =
+                unit;
+
+            unitSelect.appendChild(
+                option
+            );
+
+        });
+
+
+    [...posSet]
+        .sort(
+            (a,b) =>
+                a.localeCompare(
+                    b,
+                    "ms"
+                )
+        )
+        .forEach(pos => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                pos;
+
+            option.textContent =
+                pos;
+
+            posSelect.appendChild(
+                option
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   EVENT FILTER
+===================================================== */
+
+function pasangEventFilter() {
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        );
+
+    const unit =
+        document.getElementById(
+            "filterUnit"
+        );
+
+    const pos =
+        document.getElementById(
+            "filterPos"
+        );
+
+    const status =
+        document.getElementById(
+            "filterStatus"
+        );
+
+
+    let timer;
+
+
+    search.addEventListener(
+        "input",
+        function () {
+
+            clearTimeout(timer);
+
+            timer =
+                setTimeout(
+                    applyFilter,
+                    180
+                );
+
+        }
+    );
+
+
+    unit.addEventListener(
+        "change",
+        applyFilter
+    );
+
+    pos.addEventListener(
+        "change",
+        applyFilter
+    );
+
+    status.addEventListener(
+        "change",
+        applyFilter
+    );
+
+}
+
+
+function applyFilter() {
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        ).value
+        .trim()
+        .toLowerCase();
+
+
+    const unit =
+        document.getElementById(
+            "filterUnit"
+        ).value;
+
+
+    const pos =
+        document.getElementById(
+            "filterPos"
+        ).value;
+
+
+    const status =
+        document.getElementById(
+            "filterStatus"
+        ).value;
+
+
+    dataDitapis =
+        semuaAnggota.filter(a => {
+
+            const teks = [
+
+                a.noskb,
+                a.nama,
+                a.noanggota,
+                a.pangkat,
+                a.unit,
+                a.poskhidmat,
+                a.jawatan,
+                a.ketua_pos,
+                a.ketua_unit,
+                a.kawasan
+
+            ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+
+
+            const matchSearch =
+                !search ||
+                teks.includes(search);
+
+
+            const matchUnit =
+                !unit ||
+                String(a.unit || "")
+                    .trim() === unit;
+
+
+            const matchPos =
+                !pos ||
+                String(a.poskhidmat || "")
+                    .trim() === pos;
+
+
+            const matchStatus =
+                !status ||
+                String(a.status || "")
+                    .trim() === status;
+
+
+            return (
+                matchSearch &&
+                matchUnit &&
+                matchPos &&
+                matchStatus
+            );
+
+        });
+
+
+    currentPage = 1;
+
+    renderTable(
+        dataDitapis
+    );
+
+}
+
+
+/* =====================================================
+   RESET FILTER
+===================================================== */
+
+function resetFilter() {
+
+    document.getElementById(
+        "searchInput"
+    ).value = "";
+
+    document.getElementById(
+        "filterUnit"
+    ).value = "";
+
+    document.getElementById(
+        "filterPos"
+    ).value = "";
+
+    document.getElementById(
+        "filterStatus"
+    ).value = "";
+
+
+    applyFilter();
+
+}
+
+
+/* =====================================================
+   STATISTIK
+===================================================== */
+
+function kemasKiniStatistik() {
+
+    const total =
+        semuaAnggota.length;
+
+
+    const aktif =
+        semuaAnggota.filter(
+            a =>
+                String(
+                    a.status || ""
+                )
+                .trim()
+                .toLowerCase()
+                === "aktif"
+        ).length;
+
+
+    const tidakAktif =
+        total - aktif;
+
+
+    const unit =
+        new Set(
+            semuaAnggota
+                .map(a =>
+                    String(
+                        a.unit || ""
+                    ).trim()
+                )
+                .filter(Boolean)
+        ).size;
+
+
+    const pos =
+        new Set(
+            semuaAnggota
+                .map(a =>
+                    String(
+                        a.poskhidmat || ""
+                    ).trim()
+                )
+                .filter(Boolean)
+        ).size;
+
+
+    document.getElementById(
+        "statJumlah"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "statAktif"
+    ).textContent =
+        aktif;
+
+
+    document.getElementById(
+        "statTidakAktif"
+    ).textContent =
+        tidakAktif;
+
+
+    document.getElementById(
+        "statUnit"
+    ).textContent =
+        unit;
+
+
+    document.getElementById(
+        "statPos"
+    ).textContent =
+        pos;
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+function renderTable(data) {
+
+    const tbody =
+        document.getElementById(
+            "anggotaTableBody"
+        );
+
+
+    const total =
+        data.length;
+
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                total / PAGE_SIZE
+            )
+        );
+
+
+    if (
+        currentPage >
+        totalPages
+    ) {
+
+        currentPage =
+            totalPages;
+
+    }
+
+
+    const start =
+        (currentPage - 1) *
+        PAGE_SIZE;
+
+
+    const end =
+        start + PAGE_SIZE;
+
+
+    const pageRows =
+        data.slice(
+            start,
+            end
+        );
+
+
+    if (!pageRows.length) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="21"
+                    class="text-center py-14"
+                >
+
+                    <div class="text-slate-500">
+
+                        <i class="fas fa-users-slash text-3xl mb-3"></i>
+
+                        <p class="text-sm">
+                            Tiada rekod anggota dijumpai.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    } else {
+
+        tbody.innerHTML =
+            pageRows
+                .map(
+                    (a, index) =>
+                        binaBarisAnggota(
+                            a,
+                            start + index + 1
+                        )
+                )
+                .join("");
+
+    }
+
+
+    updatePagination(
+        total
+    );
+
+
+    const from =
+        total === 0
+            ? 0
+            : start + 1;
+
+
+    const to =
+        Math.min(
+            end,
+            total
+        );
+
+
+    document.getElementById(
+        "tableSummary"
+    ).textContent =
+        `Paparan ${from}–${to} daripada ${total} rekod`;
+
+
+    document.getElementById(
+        "filterInfo"
+    ).textContent =
+        `${total} rekod ditemui daripada ${semuaAnggota.length} anggota`;
+
+}
+
+
+/* =====================================================
+   BINA ROW
+===================================================== */
+
+function binaBarisAnggota(
+    a,
+    bil
+) {
+
+    const status =
+        String(
+            a.status || ""
+        ).trim();
+
+
+    const statusLower =
+        status.toLowerCase();
+
+
+    const badge =
+        statusLower === "aktif"
+            ? `
+                <span class="badge badge-active">
+                    <i class="fas fa-circle text-[6px]"></i>
+                    Aktif
+                </span>
+              `
+            : `
+                <span class="badge badge-inactive">
+                    <i class="fas fa-circle text-[6px]"></i>
+                    ${escapeHtml(status || "Tidak Aktif")}
+                </span>
+              `;
+
+
+    return `
+
+        <tr>
+
+            <!-- BIL -->
+
+            <td class="num-cell">
+                ${bil}
+            </td>
+
+
+            <!-- WILAYAH -->
+
+            <td>
+                ${escapeHtml(a.wilayah)}
+            </td>
+
+
+            <!-- KAWASAN -->
+
+            <td>
+                ${escapeHtml(a.kawasan)}
+            </td>
+
+
+            <!-- NO ANGGOTA -->
+
+            <td>
+                ${escapeHtml(a.noanggota)}
+            </td>
+
+
+            <!-- NO SKB -->
+
+            <td class="font-semibold text-teal-300">
+                ${escapeHtml(a.noskb)}
+            </td>
+
+
+            <!-- NAMA -->
+
+            <td class="nama-cell">
+                ${escapeHtml(a.nama)}
+            </td>
+
+
+            <!-- PANGKAT -->
+
+            <td>
+                ${escapeHtml(a.pangkat)}
+            </td>
+
+
+            <!-- UNIT -->
+
+            <td>
+                ${escapeHtml(a.unit)}
+            </td>
+
+
+            <!-- POS -->
+
+            <td>
+                ${escapeHtml(a.poskhidmat)}
+            </td>
+
+
+            <!-- JAWATAN -->
+
+            <td>
+                ${escapeHtml(a.jawatan)}
+            </td>
+
+
+            <!-- KETUA POS -->
+
+            <td>
+                ${escapeHtml(a.ketua_pos)}
+            </td>
+
+
+            <!-- KETUA UNIT -->
+
+            <td>
+                ${escapeHtml(a.ketua_unit)}
+            </td>
+
+
+            <!-- GAJI POKOK -->
+
+            <td class="money-cell">
+                ${formatRM(a.gaji_pokok)}
+            </td>
+
+
+            <!-- GAJI + ELAUN -->
+
+            <td class="money-cell">
+                ${formatRM(a.gaji_elaun)}
+            </td>
+
+
+            <!-- RM KLM HARI BIASA -->
+
+            <td class="money-cell">
+                ${formatRM(a.rm_pehariklmbiasa)}
+            </td>
+
+
+            <!-- RM OFF HARI -->
+
+            <td class="money-cell">
+                ${formatRM(a.rm_perharioffday)}
+            </td>
+
+
+            <!-- RM OFF JAM -->
+
+            <td class="money-cell">
+                ${formatRM(a.rm_perjamoffday)}
+            </td>
+
+
+            <!-- RM CUTI HARI -->
+
+            <td class="money-cell">
+                ${formatRM(a.rm_perharicutiam)}
+            </td>
+
+
+            <!-- RM CUTI JAM -->
+
+            <td class="money-cell">
+                ${formatRM(a.rm_perjamcutiam)}
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td class="status-cell">
+                ${badge}
+            </td>
+
+
+            <!-- TINDAKAN -->
+
+            <td>
+
+                <div class="flex items-center justify-center gap-2">
+
+                    <button
+                        onclick="bukaModalEdit('${escapeAttr(a.noskb)}')"
+                        title="Edit anggota"
+                        class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 hover:bg-teal-500/20 transition"
+                    >
+                        <i class="fas fa-pen text-xs"></i>
+                    </button>
+
+
+                    <button
+                        onclick="toggleStatus('${escapeAttr(a.noskb)}')"
+                        title="Tukar status"
+                        class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition"
+                    >
+                        <i class="fas fa-power-off text-xs"></i>
+                    </button>
+
+
+                    <button
+                        onclick="padamAnggota('${escapeAttr(a.noskb)}')"
+                        title="Padam anggota"
+                        class="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"
+                    >
+                        <i class="fas fa-trash text-xs"></i>
+                    </button>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+function updatePagination(total) {
+
+    const container =
+        document.getElementById(
+            "pagination"
+        );
+
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                total / PAGE_SIZE
+            )
+        );
+
+
+    container.innerHTML = "";
+
+
+    const prev =
+        document.createElement(
+            "button"
+        );
+
+    prev.className =
+        "page-btn";
+
+    prev.innerHTML =
+        '<i class="fas fa-chevron-left"></i>';
+
+    prev.disabled =
+        currentPage <= 1;
+
+    prev.onclick =
+        function () {
+
+            if (
+                currentPage > 1
+            ) {
+
+                currentPage--;
+
+                renderTable(
+                    dataDitapis
+                );
+
+            }
+
+        };
+
+
+    container.appendChild(
+        prev
+    );
+
+
+    let startPage =
+        Math.max(
+            1,
+            currentPage - 2
+        );
+
+    let endPage =
+        Math.min(
+            totalPages,
+            currentPage + 2
+        );
+
+
+    if (
+        currentPage <= 3
+    ) {
+
+        endPage =
+            Math.min(
+                totalPages,
+                5
+            );
+
+    }
+
+
+    if (
+        currentPage >=
+        totalPages - 2
+    ) {
+
+        startPage =
+            Math.max(
+                1,
+                totalPages - 4
+            );
+
+    }
+
+
+    for (
+        let page = startPage;
+        page <= endPage;
+        page++
+    ) {
+
+        const btn =
+            document.createElement(
+                "button"
+            );
+
+        btn.className =
+            "page-btn" +
+            (
+                page === currentPage
+                    ? " active"
+                    : ""
+            );
+
+        btn.textContent =
+            page;
+
+        btn.onclick =
+            function () {
+
+                currentPage =
+                    page;
+
+                renderTable(
+                    dataDitapis
+                );
+
+            };
+
+
+        container.appendChild(
+            btn
+        );
+
+    }
+
+
+    const next =
+        document.createElement(
+            "button"
+        );
+
+    next.className =
+        "page-btn";
+
+    next.innerHTML =
+        '<i class="fas fa-chevron-right"></i>';
+
+    next.disabled =
+        currentPage >=
+        totalPages;
+
+    next.onclick =
+        function () {
+
+            if (
+                currentPage <
+                totalPages
+            ) {
+
+                currentPage++;
+
+                renderTable(
+                    dataDitapis
+                );
+
+            }
+
+        };
+
+
+    container.appendChild(
+        next
+    );
+
+}
+
+
+/* =====================================================
+   MODAL TAMBAH
+===================================================== */
+
+function bukaModalTambah() {
+
+    editingNoSkb = null;
+
+
+    document.getElementById(
+        "formMode"
+    ).value =
+        "tambah";
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Tambah Anggota";
+
+
+    document.getElementById(
+        "modalSubtitle"
+    ).textContent =
+        "Masukkan maklumat anggota baru";
+
+
+    document.getElementById(
+        "anggotaForm"
+    ).reset();
+
+
+    document.getElementById(
+        "f_wilayah"
+    ).value =
+        "Terengganu";
+
+
+    document.getElementById(
+        "f_status"
+    ).value =
+        "Aktif";
+
+
+    document.getElementById(
+        "anggotaModal"
+    ).classList.remove(
+        "hidden-force"
+    );
+
+}
+
+
+function tutupModal() {
+
+    document.getElementById(
+        "anggotaModal"
+    ).classList.add(
+        "hidden-force"
+    );
+
+    editingNoSkb = null;
+
+}
+
+
+/* =====================================================
+   MODAL EDIT
+===================================================== */
+
+function bukaModalEdit(noskb) {
+
+    const anggota =
+        semuaAnggota.find(
+            a =>
+                String(a.noskb) ===
+                String(noskb)
+        );
+
+
+    if (!anggota) {
+
+        paparToast(
+            "Rekod anggota tidak dijumpai.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    editingNoSkb =
+        anggota.noskb;
+
+
+    document.getElementById(
+        "formMode"
+    ).value =
+        "edit";
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Edit Anggota";
+
+
+    document.getElementById(
+        "modalSubtitle"
+    ).textContent =
+        `Kemaskini maklumat ${anggota.nama || ""}`;
+
+
+    setValue(
+        "f_noskb",
+        anggota.noskb
+    );
+
+    setValue(
+        "f_wilayah",
+        anggota.wilayah
+    );
+
+    setValue(
+        "f_kawasan",
+        anggota.kawasan
+    );
+
+    setValue(
+        "f_noanggota",
+        anggota.noanggota
+    );
+
+    setValue(
+        "f_nama",
+        anggota.nama
+    );
+
+    setValue(
+        "f_pangkat",
+        anggota.pangkat
+    );
+
+    setValue(
+        "f_unit",
+        anggota.unit
+    );
+
+    setValue(
+        "f_poskhidmat",
+        anggota.poskhidmat
+    );
+
+    setValue(
+        "f_jawatan",
+        anggota.jawatan
+    );
+
+    setValue(
+        "f_ketua_pos",
+        anggota.ketua_pos
+    );
+
+    setValue(
+        "f_ketua_unit",
+        anggota.ketua_unit
+    );
+
+    setValue(
+        "f_status",
+        anggota.status || "Aktif"
+    );
+
+
+    setValue(
+        "f_gaji_pokok",
+        anggota.gaji_pokok
+    );
+
+    setValue(
+        "f_gaji_elaun",
+        anggota.gaji_elaun
+    );
+
+    setValue(
+        "f_rm_pehariklmbiasa",
+        anggota.rm_pehariklmbiasa
+    );
+
+    setValue(
+        "f_rm_perharioffday",
+        anggota.rm_perharioffday
+    );
+
+    setValue(
+        "f_rm_perjamoffday",
+        anggota.rm_perjamoffday
+    );
+
+    setValue(
+        "f_rm_perharicutiam",
+        anggota.rm_perharicutiam
+    );
+
+    setValue(
+        "f_rm_perjamcutiam",
+        anggota.rm_perjamcutiam
+    );
+
+
+    document.getElementById(
+        "anggotaModal"
+    ).classList.remove(
+        "hidden-force"
+    );
+
+}
+
+
+/* =====================================================
+   SIMPAN ANGGOTA
+===================================================== */
+
+async function simpanAnggota(event) {
+
+    event.preventDefault();
+
+
+    const mode =
+        document.getElementById(
+            "formMode"
+        ).value;
+
+
+    const noskb =
+        valueOf(
+            "f_noskb"
+        );
+
+
+    const nama =
+        valueOf(
+            "f_nama"
+        );
+
+
+    if (!noskb) {
+
+        paparToast(
+            "No. SKB wajib diisi.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!nama) {
+
+        paparToast(
+            "Nama anggota wajib diisi.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const payload = {
+
+        noskb:
+            noskb,
+
+        wilayah:
+            valueOf("f_wilayah"),
+
+        kawasan:
+            valueOf("f_kawasan"),
+
+        noanggota:
+            valueOf("f_noanggota"),
+
+        nama:
+            nama,
+
+        pangkat:
+            valueOf("f_pangkat"),
+
+        unit:
+            valueOf("f_unit"),
+
+        poskhidmat:
+            valueOf("f_poskhidmat"),
+
+        jawatan:
+            valueOf("f_jawatan"),
+
+        ketua_pos:
+            valueOf("f_ketua_pos"),
+
+        ketua_unit:
+            valueOf("f_ketua_unit"),
+
+        status:
+            valueOf("f_status") ||
+            "Aktif",
+
+        gaji_pokok:
+            numberOrNull(
+                "f_gaji_pokok"
+            ),
+
+        gaji_elaun:
+            numberOrNull(
+                "f_gaji_elaun"
+            ),
+
+        rm_pehariklmbiasa:
+            numberOrNull(
+                "f_rm_pehariklmbiasa"
+            ),
+
+        rm_perharioffday:
+            numberOrNull(
+                "f_rm_perharioffday"
+            ),
+
+        rm_perjamoffday:
+            numberOrNull(
+                "f_rm_perjamoffday"
+            ),
+
+        rm_perharicutiam:
+            numberOrNull(
+                "f_rm_perharicutiam"
+            ),
+
+        rm_perjamcutiam:
+            numberOrNull(
+                "f_rm_perjamcutiam"
+            )
+
+    };
+
+
+    const btn =
+        document.getElementById(
+            "btnSimpan"
+        );
+
+
+    const original =
+        btn.innerHTML;
+
+
+    btn.disabled = true;
+
+    btn.innerHTML =
+        '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
+
+
+    try {
+
+        if (mode === "edit") {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("Data_Anggota")
+                .update(payload)
+                .eq(
+                    "noskb",
+                    editingNoSkb
+                );
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            paparToast(
+                "Maklumat anggota berjaya dikemaskini.",
+                "success"
+            );
+
+        } else {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("Data_Anggota")
+                .insert([
+                    payload
+                ]);
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            paparToast(
+                "Anggota baru berjaya ditambah.",
+                "success"
+            );
+
+        }
+
+
+        tutupModal();
+
+        await muatDataAnggota();
+
+    } catch (error) {
+
+        console.error(
+            "RALAT SIMPAN:",
+            error
+        );
+
+
+        paparToast(
+            "Gagal menyimpan: " +
+            (error.message || error),
+            "error"
+        );
+
+    } finally {
+
+        btn.disabled =
+            false;
+
+        btn.innerHTML =
+            original;
+
+    }
+
+}
+
+
+/* =====================================================
+   TOGGLE STATUS
+===================================================== */
+
+async function toggleStatus(noskb) {
+
+    const anggota =
+        semuaAnggota.find(
+            a =>
+                String(a.noskb) ===
+                String(noskb)
+        );
+
+
+    if (!anggota) return;
+
+
+    const statusSemasa =
+        String(
+            anggota.status || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const statusBaru =
+        statusSemasa === "aktif"
+            ? "Tidak Aktif"
+            : "Aktif";
+
+
+    const confirmText =
+        statusBaru === "Aktif"
+            ? "Aktifkan semula anggota ini?"
+            : "Tukar anggota ini kepada Tidak Aktif?";
+
+
+    if (!confirm(confirmText)) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const {
+            error
+        } = await supabaseClient
+            .from("Data_Anggota")
+            .update({
+                status:
+                    statusBaru
+            })
+            .eq(
+                "noskb",
+                noskb
+            );
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        paparToast(
+            `Status anggota ditukar kepada ${statusBaru}.`,
+            "success"
+        );
+
+
+        await muatDataAnggota();
+
+    } catch (error) {
+
+        console.error(error);
+
+        paparToast(
+            "Gagal menukar status: " +
+            (error.message || error),
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   PADAM ANGGOTA
+===================================================== */
+
+async function padamAnggota(noskb) {
+
+    const anggota =
+        semuaAnggota.find(
+            a =>
+                String(a.noskb) ===
+                String(noskb)
+        );
+
+
+    if (!anggota) return;
+
+
+    const nama =
+        anggota.nama ||
+        noskb;
+
+
+    const confirmText =
+        `PADAM ANGGOTA?\n\n` +
+        `No. SKB: ${noskb}\n` +
+        `Nama: ${nama}\n\n` +
+        `Tindakan ini tidak boleh dibuat asal semula. Teruskan?`;
+
+
+    if (
+        !confirm(
+            confirmText
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const {
+            error
+        } = await supabaseClient
+            .from("Data_Anggota")
+            .delete()
+            .eq(
+                "noskb",
+                noskb
+            );
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        paparToast(
+            "Anggota berjaya dipadam.",
+            "success"
+        );
+
+
+        await muatDataAnggota();
+
+    } catch (error) {
+
+        console.error(
+            "RALAT PADAM:",
+            error
+        );
+
+
+        paparToast(
+            "Gagal memadam anggota: " +
+            (error.message || error),
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function valueOf(id) {
+
+    const el =
+        document.getElementById(id);
+
+    return el
+        ? el.value.trim()
+        : "";
+
+}
+
+
+function setValue(
+    id,
+    value
+) {
+
+    const el =
+        document.getElementById(id);
+
+    if (el) {
+
+        el.value =
+            value ??
+            "";
+
+    }
+
+}
+
+
+function numberOrNull(id) {
+
+    const value =
+        valueOf(id);
+
+
+    if (
+        value === "" ||
+        value === null ||
+        value === undefined
+    ) {
+
+        return null;
+
+    }
+
+
+    const num =
+        Number(value);
+
+
+    return Number.isFinite(num)
+        ? num
+        : null;
+
+}
+
+
+function formatRM(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+
+        return "—";
+
+    }
+
+
+    const number =
+        Number(value);
+
+
+    if (
+        !Number.isFinite(number)
+    ) {
+
+        return "—";
+
+    }
+
+
+    return "RM " +
+        number.toLocaleString(
+            "ms-MY",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function escapeAttr(value) {
+
+    return escapeHtml(value);
+
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+function setTableLoading(show) {
+
+    const loading =
+        document.getElementById(
+            "tableLoading"
+        );
+
+
+    if (!loading) return;
+
+
+    if (show) {
+
+        loading.classList.remove(
+            "hidden-force"
+        );
+
+    } else {
+
+        loading.classList.add(
+            "hidden-force"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function paparToast(
+    message,
+    type = "success"
+) {
+
+    const old =
+        document.querySelector(
+            ".toast"
+        );
+
+
+    if (old) {
+
+        old.remove();
+
+    }
+
+
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+
+    let icon =
+        "fa-circle-check";
+
+    let iconClass =
+        "text-emerald-400";
+
+
+    if (type === "error") {
+
+        icon =
+            "fa-circle-xmark";
+
+        iconClass =
+            "text-red-400";
+
+    }
+
+
+    toast.className =
+        "toast";
+
+
+    toast.innerHTML = `
+
+        <div class="flex items-start gap-3">
+
+            <i class="fas ${icon} ${iconClass} mt-0.5"></i>
+
+            <div>
+
+                <p class="text-sm text-slate-200">
+                    ${escapeHtml(message)}
+                </p>
+
+            </div>
+
+            <button
+                onclick="this.closest('.toast').remove()"
+                class="ml-auto text-slate-500 hover:text-white"
+            >
+                <i class="fas fa-xmark"></i>
+            </button>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        toast
+    );
+
+
+    setTimeout(
+        () => {
+
+            if (
+                toast.parentElement
+            ) {
+
+                toast.remove();
+
+            }
+
+        },
+        4500
+    );
+
+}
+
+
+/* =====================================================
+   MODAL CLICK OUTSIDE
+===================================================== */
+
+document.getElementById(
+    "anggotaModal"
+).addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target ===
+            this
+        ) {
+
+            tutupModal();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ESC CLOSE MODAL
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            const modal =
+                document.getElementById(
+                    "anggotaModal"
+                );
+
+
+            if (
+                !modal.classList.contains(
+                    "hidden-force"
+                )
+            ) {
+
+                tutupModal();
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
+
