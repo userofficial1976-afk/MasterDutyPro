@@ -36,6 +36,10 @@ tailwind.config = {
 }
 </script>
 
+
+
+
+    
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -647,6 +651,44 @@ main {
         min-width: 2200px;
     }
 }
+
+/* =====================================================
+   TOPBAR FIXED
+===================================================== */
+
+header {
+    height: 82px;
+}
+
+/* Header desktop bermula selepas sidebar */
+@media (min-width: 1024px) {
+
+    header {
+        left: 18rem;
+    }
+
+    main > .content-area {
+        margin-top: 82px;
+    }
+
+}
+
+/* Mobile */
+@media (max-width: 1023px) {
+
+    header {
+        left: 0;
+        right: 0;
+        height: 70px;
+    }
+
+    main > .content-area {
+        margin-top: 70px;
+    }
+
+}
+
+
     
 </style>
 </head>
@@ -840,7 +882,7 @@ main {
      TOPBAR
 ===================================================== -->
 
-<header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
+<header class="glass fixed top-0 left-0 right-0 lg:left-72 z-30 border-b border-teal-550/10 px-6 py-4">
 
     <div class="flex items-center justify-between">
 
