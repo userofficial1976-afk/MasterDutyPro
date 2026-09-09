@@ -554,7 +554,7 @@ select {
 }
 
 /* =====================================================
-   FIX TABLE - IKUT SCREEN, TABLE SAHAJA BOLEH SCROLL
+   TABLE - RESPONSIVE HORIZONTAL SCROLL
 ===================================================== */
 
 html,
@@ -564,42 +564,74 @@ body {
     overflow-x: hidden;
 }
 
+body {
+    min-width: 0;
+}
+
+main {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+.content-area {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* =====================================================
+   TABLE WRAPPER
+===================================================== */
+
 .table-wrapper {
     width: 100%;
     max-width: 100%;
     min-width: 0;
+
     overflow-x: auto;
     overflow-y: hidden;
+
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
 }
 
-/* Table boleh lebih lebar daripada screen */
+/* =====================================================
+   TABLE
+===================================================== */
+
 .anggota-table {
     width: max-content;
-    min-width: 100%;
-    border-collapse: collapse;
+    min-width: 2200px;
+
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-/* Kekalkan column supaya tidak hancur */
 .anggota-table th,
 .anggota-table td {
     white-space: nowrap;
 }
 
-/* Scrollbar bawah table */
+/* =====================================================
+   TABLE SCROLLBAR
+===================================================== */
+
 .table-wrapper::-webkit-scrollbar {
     height: 8px;
 }
 
-.table-wrapper::-webkit-scrollbar-thumb {
-    background: #94a3b8;
-    border-radius: 10px;
-}
-
 .table-wrapper::-webkit-scrollbar-track {
-    background: #e2e8f0;
+    background: rgba(255,255,255,.04);
 }
 
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(45,212,191,.35);
+    border-radius: 20px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(45,212,191,.55);
+}
 
 /* =====================================================
    MOBILE
@@ -607,18 +639,18 @@ body {
 
 @media (max-width: 768px) {
 
+    .content-area {
+        min-width: 0;
+        max-width: 100%;
+    }
+
     .table-wrapper {
         width: 100%;
         max-width: 100%;
-        overflow-x: auto;
     }
 
     .anggota-table {
-        min-width: 1500px;
-    }
-
-    body {
-        overflow-x: hidden;
+        min-width: 2200px;
     }
 }
     
@@ -1152,7 +1184,7 @@ body {
      TABLE
 ===================================================== -->
 
-<div class="glass rounded-2xl overflow-hidden">
+<div class="glass rounded-2xl">
 
     <div class="relative">
 
