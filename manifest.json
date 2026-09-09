@@ -1,0 +1,20 @@
+{
+  "name": "Master Duty Pro",
+  "short_name": "MDP",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0F3B",
+  "theme_color": "#0B0F3B",
+  "icons": [
+    {
+      "src": "logomdp.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logomdp.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
