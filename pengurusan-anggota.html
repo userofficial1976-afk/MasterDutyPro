@@ -2039,6 +2039,9 @@ function paparTarikh() {
 /* =====================================================
    MUAT DATA ANGGOTA
 ===================================================== */
+/* =====================================================
+   MUAT DATA ANGGOTA
+===================================================== */
 
 async function muatDataAnggota() {
 
@@ -2065,13 +2068,13 @@ async function muatDataAnggota() {
             } = await supabaseClient
                 .from("Data_Anggota")
                 .select(`
-                    noskb,
+                    no_skb,
                     wilayah,
                     kawasan,
                     pangkat,
-                    noanggota,
+                    no_anggota,
                     nama,
-                    poskhidmat,
+                    pos,
                     unit,
                     jawatan,
                     ketua_pos,
@@ -2102,6 +2105,21 @@ async function muatDataAnggota() {
                 console.error(
                     "RALAT MUAT ANGGOTA:",
                     error
+                );
+
+                console.error(
+                    "MESSAGE:",
+                    error.message
+                );
+
+                console.error(
+                    "DETAIL:",
+                    error.details
+                );
+
+                console.error(
+                    "HINT:",
+                    error.hint
                 );
 
                 throw error;
@@ -2136,15 +2154,31 @@ async function muatDataAnggota() {
         semuaAnggota = rows;
 
 
+        console.log(
+            "JUMLAH ANGGOTA:",
+            semuaAnggota.length
+        );
+
+        console.log(
+            "DATA ANGGOTA:",
+            semuaAnggota
+        );
+
+
         isiFilterDropdown();
 
         kemasKiniStatistik();
 
         applyFilter();
 
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "RALAT MUAT DATA ANGGOTA:",
+            error
+        );
+
 
         paparToast(
             "Gagal memuatkan data anggota: " +
@@ -2152,7 +2186,13 @@ async function muatDataAnggota() {
             "error"
         );
 
+
+        semuaAnggota = [];
+
+        dataDitapis = [];
+
         renderTable([]);
+
 
     } finally {
 
@@ -2161,8 +2201,6 @@ async function muatDataAnggota() {
     }
 
 }
-
-
 /* =====================================================
    FILTER DROPDOWN
 ===================================================== */
@@ -2186,10 +2224,10 @@ function isiFilterDropdown() {
 
         }
 
-        if (a.poskhidmat) {
+        if (a.pos) {
 
             posSet.add(
-                String(a.poskhidmat).trim()
+                String(a.pos).trim()
             );
 
         }
@@ -2218,7 +2256,7 @@ function isiFilterDropdown() {
 
     [...unitSet]
         .sort(
-            (a,b) =>
+            (a, b) =>
                 a.localeCompare(
                     b,
                     "ms"
@@ -2246,7 +2284,7 @@ function isiFilterDropdown() {
 
     [...posSet]
         .sort(
-            (a,b) =>
+            (a, b) =>
                 a.localeCompare(
                     b,
                     "ms"
@@ -2272,7 +2310,6 @@ function isiFilterDropdown() {
         });
 
 }
-
 
 /* =====================================================
    EVENT FILTER
@@ -2338,6 +2375,10 @@ function pasangEventFilter() {
 }
 
 
+/* =====================================================
+   APPLY FILTER
+===================================================== */
+
 function applyFilter() {
 
     const search =
@@ -2371,12 +2412,12 @@ function applyFilter() {
 
             const teks = [
 
-                a.noskb,
+                a.no_skb,
                 a.nama,
-                a.noanggota,
+                a.no_anggota,
                 a.pangkat,
                 a.unit,
-                a.poskhidmat,
+                a.pos,
                 a.jawatan,
                 a.ketua_pos,
                 a.ketua_unit,
@@ -2401,7 +2442,7 @@ function applyFilter() {
 
             const matchPos =
                 !pos ||
-                String(a.poskhidmat || "")
+                String(a.pos || "")
                     .trim() === pos;
 
 
@@ -2423,12 +2464,12 @@ function applyFilter() {
 
     currentPage = 1;
 
+
     renderTable(
         dataDitapis
     );
 
 }
-
 
 /* =====================================================
    RESET FILTER
@@ -2496,16 +2537,16 @@ function kemasKiniStatistik() {
         ).size;
 
 
-    const pos =
-        new Set(
-            semuaAnggota
-                .map(a =>
-                    String(
-                        a.poskhidmat || ""
-                    ).trim()
-                )
-                .filter(Boolean)
-        ).size;
+const pos =
+    new Set(
+        semuaAnggota
+            .map(a =>
+                String(
+                    a.pos || ""
+                ).trim()
+            )
+            .filter(Boolean)
+    ).size;
 
 
     document.getElementById(
@@ -2671,6 +2712,10 @@ function renderTable(data) {
    BINA ROW
 ===================================================== */
 
+/* =====================================================
+   BINA ROW
+===================================================== */
+
 function binaBarisAnggota(
     a,
     bil
@@ -2697,7 +2742,9 @@ function binaBarisAnggota(
             : `
                 <span class="badge badge-inactive">
                     <i class="fas fa-circle text-[6px]"></i>
-                    ${escapeHtml(status || "Tidak Aktif")}
+                    ${escapeHtml(
+                        status || "Tidak Aktif"
+                    )}
                 </span>
               `;
 
@@ -2730,14 +2777,14 @@ function binaBarisAnggota(
             <!-- NO ANGGOTA -->
 
             <td>
-                ${escapeHtml(a.noanggota)}
+                ${escapeHtml(a.no_anggota)}
             </td>
 
 
             <!-- NO SKB -->
 
             <td class="font-semibold text-teal-300">
-                ${escapeHtml(a.noskb)}
+                ${escapeHtml(a.no_skb)}
             </td>
 
 
@@ -2765,7 +2812,7 @@ function binaBarisAnggota(
             <!-- POS -->
 
             <td>
-                ${escapeHtml(a.poskhidmat)}
+                ${escapeHtml(a.pos)}
             </td>
 
 
@@ -2853,7 +2900,7 @@ function binaBarisAnggota(
                 <div class="flex items-center justify-center gap-2">
 
                     <button
-                        onclick="bukaModalEdit('${escapeAttr(a.noskb)}')"
+                        onclick="bukaModalEdit('${escapeAttr(a.no_skb)}')"
                         title="Edit anggota"
                         class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 hover:bg-teal-500/20 transition"
                     >
@@ -2862,7 +2909,7 @@ function binaBarisAnggota(
 
 
                     <button
-                        onclick="toggleStatus('${escapeAttr(a.noskb)}')"
+                        onclick="toggleStatus('${escapeAttr(a.no_skb)}')"
                         title="Tukar status"
                         class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition"
                     >
@@ -2871,7 +2918,7 @@ function binaBarisAnggota(
 
 
                     <button
-                        onclick="padamAnggota('${escapeAttr(a.noskb)}')"
+                        onclick="padamAnggota('${escapeAttr(a.no_skb)}')"
                         title="Padam anggota"
                         class="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"
                     >
@@ -2887,7 +2934,6 @@ function binaBarisAnggota(
     `;
 
 }
-
 
 /* =====================================================
    PAGINATION
@@ -3143,13 +3189,13 @@ function tutupModal() {
    MODAL EDIT
 ===================================================== */
 
-function bukaModalEdit(noskb) {
+function bukaModalEdit(noSkb) {
 
     const anggota =
         semuaAnggota.find(
             a =>
-                String(a.noskb) ===
-                String(noskb)
+                String(a.no_skb) ===
+                String(noSkb)
         );
 
 
@@ -3166,7 +3212,7 @@ function bukaModalEdit(noskb) {
 
 
     editingNoSkb =
-        anggota.noskb;
+        anggota.no_skb;
 
 
     document.getElementById(
@@ -3189,7 +3235,7 @@ function bukaModalEdit(noskb) {
 
     setValue(
         "f_noskb",
-        anggota.noskb
+        anggota.no_skb
     );
 
     setValue(
@@ -3204,7 +3250,7 @@ function bukaModalEdit(noskb) {
 
     setValue(
         "f_noanggota",
-        anggota.noanggota
+        anggota.no_anggota
     );
 
     setValue(
@@ -3224,7 +3270,7 @@ function bukaModalEdit(noskb) {
 
     setValue(
         "f_poskhidmat",
-        anggota.poskhidmat
+        anggota.pos
     );
 
     setValue(
@@ -3292,7 +3338,6 @@ function bukaModalEdit(noskb) {
 
 }
 
-
 /* =====================================================
    SIMPAN ANGGOTA
 ===================================================== */
@@ -3344,81 +3389,81 @@ async function simpanAnggota(event) {
     }
 
 
-    const payload = {
+const payload = {
 
-        noskb:
-            noskb,
+    no_skb:
+        noskb,
 
-        wilayah:
-            valueOf("f_wilayah"),
+    wilayah:
+        valueOf("f_wilayah"),
 
-        kawasan:
-            valueOf("f_kawasan"),
+    kawasan:
+        valueOf("f_kawasan"),
 
-        noanggota:
-            valueOf("f_noanggota"),
+    no_anggota:
+        valueOf("f_noanggota"),
 
-        nama:
-            nama,
+    nama:
+        nama,
 
-        pangkat:
-            valueOf("f_pangkat"),
+    pangkat:
+        valueOf("f_pangkat"),
 
-        unit:
-            valueOf("f_unit"),
+    pos:
+        valueOf("f_poskhidmat"),
 
-        poskhidmat:
-            valueOf("f_poskhidmat"),
+    unit:
+        valueOf("f_unit"),
 
-        jawatan:
-            valueOf("f_jawatan"),
+    jawatan:
+        valueOf("f_jawatan"),
 
-        ketua_pos:
-            valueOf("f_ketua_pos"),
+    ketua_pos:
+        valueOf("f_ketua_pos"),
 
-        ketua_unit:
-            valueOf("f_ketua_unit"),
+    ketua_unit:
+        valueOf("f_ketua_unit"),
 
-        status:
-            valueOf("f_status") ||
-            "Aktif",
+    status:
+        valueOf("f_status") ||
+        "Aktif",
 
-        gaji_pokok:
-            numberOrNull(
-                "f_gaji_pokok"
-            ),
+    gaji_pokok:
+        numberOrNull(
+            "f_gaji_pokok"
+        ),
 
-        gaji_elaun:
-            numberOrNull(
-                "f_gaji_elaun"
-            ),
+    gaji_elaun:
+        numberOrNull(
+            "f_gaji_elaun"
+        ),
 
-        rm_pehariklmbiasa:
-            numberOrNull(
-                "f_rm_pehariklmbiasa"
-            ),
+    rm_pehariklmbiasa:
+        numberOrNull(
+            "f_rm_pehariklmbiasa"
+        ),
 
-        rm_perharioffday:
-            numberOrNull(
-                "f_rm_perharioffday"
-            ),
+    rm_perharioffday:
+        numberOrNull(
+            "f_rm_perharioffday"
+        ),
 
-        rm_perjamoffday:
-            numberOrNull(
-                "f_rm_perjamoffday"
-            ),
+    rm_perjamoffday:
+        numberOrNull(
+            "f_rm_perjamoffday"
+        ),
 
-        rm_perharicutiam:
-            numberOrNull(
-                "f_rm_perharicutiam"
-            ),
+    rm_perharicutiam:
+        numberOrNull(
+            "f_rm_perharicutiam"
+        ),
 
-        rm_perjamcutiam:
-            numberOrNull(
-                "f_rm_perjamcutiam"
-            )
+    rm_perjamcutiam:
+        numberOrNull(
+            "f_rm_perjamcutiam"
+        )
 
-    };
+};
 
 
     const btn =
@@ -3448,7 +3493,7 @@ async function simpanAnggota(event) {
                 .update(payload)
                 .eq(
                     "noskb",
-                    editingNoSkb
+                    editingno_skb
                 );
 
 
@@ -3530,7 +3575,7 @@ async function toggleStatus(noskb) {
     const anggota =
         semuaAnggota.find(
             a =>
-                String(a.noskb) ===
+                String(a.no_skb) ===
                 String(noskb)
         );
 
@@ -3576,7 +3621,7 @@ async function toggleStatus(noskb) {
                     statusBaru
             })
             .eq(
-                "noskb",
+                "no_skb",
                 noskb
             );
 
@@ -3620,7 +3665,7 @@ async function padamAnggota(noskb) {
     const anggota =
         semuaAnggota.find(
             a =>
-                String(a.noskb) ===
+                String(a.no_skb) ===
                 String(noskb)
         );
 
@@ -3659,7 +3704,7 @@ async function padamAnggota(noskb) {
             .from("Data_Anggota")
             .delete()
             .eq(
-                "noskb",
+                "no_skb",
                 noskb
             );
 
