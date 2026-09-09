@@ -553,6 +553,75 @@ select {
     display: none !important;
 }
 
+/* =====================================================
+   FIX TABLE - IKUT SCREEN, TABLE SAHAJA BOLEH SCROLL
+===================================================== */
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Table boleh lebih lebar daripada screen */
+.anggota-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+}
+
+/* Kekalkan column supaya tidak hancur */
+.anggota-table th,
+.anggota-table td {
+    white-space: nowrap;
+}
+
+/* Scrollbar bawah table */
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #e2e8f0;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .anggota-table {
+        min-width: 1500px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+}
+    
 </style>
 </head>
 
