@@ -19,7 +19,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+@keyframes floatLogo{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+    100%{transform:translateY(0);}
+}
 
+.logo-float{
+    animation:floatLogo 4s ease-in-out infinite;
+}
 body{
     min-height:100vh;
     font-family:'Segoe UI',sans-serif;
@@ -178,14 +186,6 @@ MASTER DUTY PRO
 <p class="text-slate-300 text-sm">
 Sistem Pengurusan Penugasan dan Pemantauan Anggota Polis Bantuan FGV.
 </p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
 <div class="mt-8 grid grid-cols-3 gap-4">
 
 <div class="text-center bg-white/5 rounded-xl p-4">
@@ -204,6 +204,14 @@ Sistem Pengurusan Penugasan dan Pemantauan Anggota Polis Bantuan FGV.
 </div>
 
 </div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 <!-- LOGIN -->
 <div class="w-full lg:w-1/2 flex items-center justify-center p-6">
 
