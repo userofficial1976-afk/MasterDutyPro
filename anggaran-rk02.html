@@ -112,7 +112,7 @@
 }
 
 @media screen and (max-width: 1023px) {
-    #systemStatus {
+    .system-online {
         display: none !important;
     }
 }
@@ -534,10 +534,10 @@
           <button onclick="window.print()" class="bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">
             <i class="fas fa-print mr-2"></i> Cetak / PDF
           </button>
-          <div class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
-            <span id="systemStatus" class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
-            System Online
-          </div>
+<div class="system-online flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
+    <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
+    System Online
+</div>
         </div>
       </div>
     </header>
