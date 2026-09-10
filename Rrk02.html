@@ -309,6 +309,101 @@ const bulanMap = {
     Disember: 12
 };
 
+function kemasKiniTarikhMinggu() {
+
+    const bulan = document.getElementById("bulan")?.value;
+    const tahun = parseInt(
+        document.getElementById("tahun")?.value
+    );
+
+    const minggu = document.getElementById("minggu")?.value;
+
+    if (!bulan || !tahun || !minggu) return;
+
+    const bulanNo = bulanMap[bulan];
+
+    if (!bulanNo) return;
+
+    let mulaHari;
+    let akhirHari;
+
+    switch (minggu) {
+        case "MINGGU 1":
+            mulaHari = 1;
+            akhirHari = 7;
+            break;
+
+        case "MINGGU 2":
+            mulaHari = 8;
+            akhirHari = 14;
+            break;
+
+        case "MINGGU 3":
+            mulaHari = 15;
+            akhirHari = 21;
+            break;
+
+        case "MINGGU 4":
+            mulaHari = 22;
+            akhirHari = 28;
+            break;
+
+        case "MINGGU 5":
+            mulaHari = 29;
+            akhirHari =
+                new Date(tahun, bulanNo, 0).getDate();
+            break;
+
+        default:
+            return;
+    }
+
+    // Paparan DARI
+    const dari = document.getElementById("rkDari");
+    if (dari) {
+        dari.textContent =
+            String(mulaHari).padStart(2, "0") +
+            "/" +
+            String(bulanNo).padStart(2, "0") +
+            "/" +
+            tahun;
+    }
+
+    // Paparan HINGGA
+    const hingga = document.getElementById("rkHingga");
+    if (hingga) {
+        hingga.textContent =
+            String(akhirHari).padStart(2, "0") +
+            "/" +
+            String(bulanNo).padStart(2, "0") +
+            "/" +
+            tahun;
+    }
+
+    // Paparan tarikh dalam table
+    for (let i = 1; i <= 7; i++) {
+
+        const cell = document.getElementById("date" + i);
+
+        if (!cell) continue;
+
+        const hari = mulaHari + (i - 1);
+
+        if (hari <= akhirHari) {
+
+            cell.textContent =
+                String(hari).padStart(2, "0");
+
+            cell.style.display = "flex";
+
+        } else {
+
+            cell.textContent = "";
+            cell.style.display = "none";
+        }
+    }
+}
+
 const rkBulanNama = {
     1: "JANUARI",
     2: "FEBRUARI",
