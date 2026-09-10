@@ -66,115 +66,144 @@
     }
 }
 
+
 /* =====================================================
-   PRINT / PDF — JANGAN TERKESAN
+   PRINT / PDF
 ===================================================== */
 
 @media print {
+
+    /* HEADER FIXED TIDAK GANGGU PDF */
     .page-content {
         padding-top: 0 !important;
     }
-}
-   
-      #printArea{
-  zoom:0.80;
-}
 
-.rk02-table{
-  table-layout:fixed;
-}
+    #printArea {
+        zoom: 0.80;
+    }
 
-.report-title{
-  margin-bottom:14px !important;
-  line-height:1.15;
-}
-      
-      
-      
-      
-      
-      @page {
+    .rk02-table {
+        table-layout: fixed;
+    }
+
+    .report-title {
+        margin-bottom: 14px !important;
+        line-height: 1.15;
+    }
+
+    @page {
         size: A4 landscape;
         margin: 6mm;
-      }
-      aside, .no-print, header { display: none !important; }
-      main { margin: 0 !important; padding: 0 !important; }
-      body {
+    }
+
+    aside,
+    .no-print,
+    header {
+        display: none !important;
+    }
+
+    main {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body {
         background: #fff !important;
         color: #000 !important;
         font-family: Arial, Helvetica, sans-serif !important;
         font-size: 9pt;
-      }
-      .glass {
+    }
+
+    .glass {
         background: #fff !important;
         border: none !important;
         box-shadow: none !important;
         backdrop-filter: none !important;
         padding: 0 !important;
         border-radius: 0 !important;
-      }
-      .print-area { color: #000 !important; }
-      .report-title, .report-title * { color: #000 !important; }
-      .rk02-table th, .rk02-table td {
+    }
+
+    .print-area {
+        color: #000 !important;
+    }
+
+    .report-title,
+    .report-title * {
+        color: #000 !important;
+    }
+
+    .rk02-table th,
+    .rk02-table td {
         border: 1px solid #000 !important;
         padding: 2px 3px !important;
         font-size: 7.5pt !important;
         color: #000 !important;
         background: #fff !important;
-      }
-      .rk02-table th {
+    }
+
+    .rk02-table th {
         background: #e8e8e8 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         font-weight: bold;
-      }
-      .rk02-table tfoot td {
+    }
+
+    .rk02-table tfoot td {
         font-weight: bold;
         background: #f3f3f3 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
-      }
-      .info-table td {
+    }
+
+    .info-table td {
         border: 1px solid #000 !important;
         color: #000 !important;
         background: #fff !important;
         padding: 2px 5px !important;
         font-size: 9pt !important;
-      }
-      .bottom-table td, .bottom-table th {
+    }
+
+    .bottom-table td,
+    .bottom-table th {
         border: 1px solid #000 !important;
         color: #000 !important;
         background: #fff !important;
         padding: 2px 4px !important;
         font-size: 7.5pt !important;
-      }
-      .bottom-table th {
+    }
+
+    .bottom-table th {
         background: #e8e8e8 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
-      }
-      .sign-box {
+    }
+
+    .sign-box {
         border: 1px solid #000 !important;
         color: #000 !important;
         background: #fff !important;
         min-height: 80px;
-      }
-      .sign-box * { color: #000 !important; }
-      .text-teal-400, .text-teal-450, .text-white,
-      .text-slate-300, .text-slate-400, .text-slate-500 {
-        color: #000 !important;
-      }
-
-      .sign-box hr,
-      .sign-box div{
-      border:none !important;
-      background:none !important;
-      }
-
-
-
-      
     }
+
+    .sign-box * {
+        color: #000 !important;
+    }
+
+    .text-teal-400,
+    .text-teal-450,
+    .text-white,
+    .text-slate-300,
+    .text-slate-400,
+    .text-slate-500 {
+        color: #000 !important;
+    }
+
+    .sign-box hr,
+    .sign-box div {
+        border: none !important;
+        background: none !important;
+    }
+}
 
 /* =====================================================
    MOBILE BOTTOM NAVIGATION
