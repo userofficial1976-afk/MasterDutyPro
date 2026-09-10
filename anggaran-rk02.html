@@ -66,7 +66,43 @@
     }
 }
 
+/* =====================================================
+   MOBILE — TABLE SAHAJA BOLEH SCROLL
+===================================================== */
 
+@media screen and (max-width: 1023px) {
+
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    main {
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .page-content {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    #printArea {
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #printArea .rk02-table {
+        width: max-content;
+        min-width: 100%;
+    }
+
+}
 /* =====================================================
    PRINT / PDF
 ===================================================== */
