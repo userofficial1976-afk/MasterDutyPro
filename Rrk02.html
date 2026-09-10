@@ -175,12 +175,12 @@ async function muatkanSenaraiPos() {
 
   try {
 
-    const db = window.supabaseClient;
+const db = supabaseClient;
 
-    if (!db) {
-      console.error("SUPABASE CLIENT TIDAK DIJUMPAI");
-      return;
-    }
+if (!db) {
+  console.error("SUPABASE CLIENT TIDAK DIJUMPAI");
+  return;
+}
 
     const { data, error } = await db
       .from("Data_Anggota")
