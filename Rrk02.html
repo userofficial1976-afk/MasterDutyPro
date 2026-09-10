@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Borang RK-01</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#e5e7eb}
@@ -88,12 +90,13 @@ body{font-family:Arial,Helvetica,sans-serif}
     </div>
 
     <!-- POS -->
-    <div class="field-group pos-field">
-      <label for="posPilihan">Pos</label>
-      <select id="posPilihan">
-        <option value="SEMUA">Semua</option>
-      </select>
-    </div>
+<div class="field-group pos-field">
+  <label for="posPilihan">Pos</label>
+
+  <select id="posPilihan">
+    <option value="SEMUA">Semua</option>
+  </select>
+</div>
 
     <!-- MINGGU -->
     <div class="field-group">
@@ -134,7 +137,93 @@ body{font-family:Arial,Helvetica,sans-serif}
   </main>
 </div>
 
+
 <script>
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
+
+const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
+const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+</script>
+
+
+
+  
+<script>
+
+/* =====================================================
+   LOAD SENARAI POS
+===================================================== */
+
+async function muatkanSenaraiPos() {
+
+  const selectPos = document.getElementById("posPilihan");
+
+  if (!selectPos) return;
+
+  // Reset
+  selectPos.innerHTML = `
+    <option value="SEMUA">Semua</option>
+  `;
+
+  try {
+
+    const db = window.supabaseClient;
+
+    if (!db) {
+      console.error("SUPABASE CLIENT TIDAK DIJUMPAI");
+      return;
+    }
+
+    const { data, error } = await db
+      .from("Data_Anggota")
+      .select("pos")
+      .eq("status", "Aktif")
+      .not("pos", "is", null)
+      .order("pos", { ascending: true });
+
+    if (error) {
+      console.error("GAGAL LOAD SENARAI POS:", error);
+      return;
+    }
+
+    // Buang kosong + duplicate
+    const senaraiPos = [
+      ...new Set(
+        (data || [])
+          .map(row => String(row.pos || "").trim())
+          .filter(pos => pos !== "")
+      )
+    ];
+
+    senaraiPos.forEach(pos => {
+
+      const option = document.createElement("option");
+
+      option.value = pos;
+      option.textContent = pos;
+
+      selectPos.appendChild(option);
+
+    });
+
+    console.log("SENARAI POS:", senaraiPos);
+
+  } catch (err) {
+
+    console.error("RALAT LOAD POS:", err);
+
+  }
+}
+
+  
 const bulanMap = {
   Januari: 0, Februari: 1, Mac: 2, April: 3, Mei: 4, Jun: 5,
   Julai: 6, Ogos: 7, September: 8, Oktober: 9, November: 10, Disember: 11
@@ -162,21 +251,45 @@ function kemasKiniTarikhMinggu() {
   }
 }
 
-function paparRK01(){
+function paparRK01() {
+
   kemasKiniTarikhMinggu();
 
-  console.log("PAPAR RK-01", {
-    bulan: document.getElementById("bulanPilihan")?.value,
-    tahun: document.getElementById("tahunPilihan")?.value,
-    minggu: document.getElementById("mingguPilihan")?.value,
-    pos: document.getElementById("posPilihan")?.value
-  });
+  const bulan =
+    document.getElementById("bulanPilihan")?.value;
+
+  const tahun =
+    document.getElementById("tahunPilihan")?.value;
+
+  const minggu =
+    document.getElementById("mingguPilihan")?.value;
+
+  const pos =
+    document.getElementById("posPilihan")?.value;
+
+  console.log("=================================");
+  console.log("PAPAR RK-01");
+  console.log("Bulan :", bulan);
+  console.log("Tahun :", tahun);
+  console.log("Minggu:", minggu);
+  console.log("Pos   :", pos);
+  console.log("=================================");
+
 }
 
-document.getElementById("mingguPilihan")?.addEventListener("change", kemasKiniTarikhMinggu);
-document.getElementById("bulanPilihan")?.addEventListener("change", kemasKiniTarikhMinggu);
-document.getElementById("tahunPilihan")?.addEventListener("change", kemasKiniTarikhMinggu);
+document.getElementById("mingguPilihan")
+  ?.addEventListener("change", kemasKiniTarikhMinggu);
+
+document.getElementById("bulanPilihan")
+  ?.addEventListener("change", kemasKiniTarikhMinggu);
+
+document.getElementById("tahunPilihan")
+  ?.addEventListener("change", kemasKiniTarikhMinggu);
+
 kemasKiniTarikhMinggu();
+
+// Load nama Pos
+muatkanSenaraiPos();
 </script>
 </body>
 </html>
