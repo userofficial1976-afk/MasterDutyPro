@@ -271,6 +271,79 @@
 }
 
 /* =====================================================
+   MOBILE — KECILKAN PAPARAN RK02
+===================================================== */
+
+@media screen and (max-width: 1023px) {
+
+    .page-content {
+        padding-top: 100px !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    .print-area {
+        padding: 10px !important;
+        border-radius: 12px !important;
+    }
+
+    .report-title {
+        margin-bottom: 12px !important;
+    }
+
+    .report-title > div:first-child {
+        font-size: 16px !important;
+    }
+
+    .report-title > div:nth-child(2) {
+        font-size: 12px !important;
+    }
+
+    /* TABLE RK02 */
+    .rk02-table {
+        min-width: 850px !important;
+    }
+
+    .rk02-table th,
+    .rk02-table td {
+        padding: 2px 2px !important;
+        font-size: 8px !important;
+        line-height: 1 !important;
+    }
+
+    .rk02-table td {
+        height: 18px !important;
+    }
+
+    /* Kolum nama jangan terlalu besar di mobile */
+    .rk02-table th:nth-child(3) {
+        width: 180px !important;
+    }
+
+    .rk02-table td.nama {
+        padding-left: 4px !important;
+    }
+
+    /* Bahagian bawah */
+    .bottom-table {
+        min-width: 650px !important;
+        font-size: 9px !important;
+    }
+
+    .bottom-table td,
+    .bottom-table th {
+        padding: 4px !important;
+    }
+
+    /* Pengesahan */
+    .sign-box {
+        padding: 8px !important;
+        font-size: 9px !important;
+    }
+
+}
+    
+/* =====================================================
    PRINT / PDF
    MOBILE NAV WAJIB HILANG
 ===================================================== */
