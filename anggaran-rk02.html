@@ -110,6 +110,39 @@
     min-width: 650px;
 }
 }
+
+
+    @media screen and (max-width: 1023px) {
+
+    /* KECILKAN BAHAGIAN ATAS REPORT */
+    .print-area {
+        padding: 10px !important;
+    }
+
+    .print-area .report-title {
+        margin-bottom: 8px !important;
+    }
+
+    .print-area .report-title > div:first-child {
+        font-size: 14px !important;
+    }
+
+    .print-area .report-title > div:nth-child(2) {
+        font-size: 10px !important;
+    }
+
+    /* KECILKAN BUTANG CETAK */
+    .print-area button,
+    .print-area .no-print button {
+        padding: 5px 8px !important;
+        font-size: 10px !important;
+    }
+
+    /* SYSTEM ONLINE */
+    .print-area .text-xs {
+        font-size: 9px !important;
+    }
+}
 /* =====================================================
    PRINT / PDF
 ===================================================== */
