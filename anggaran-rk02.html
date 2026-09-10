@@ -89,19 +89,26 @@
         max-width: 100%;
     }
 
-    #printArea {
-        min-width: 0;
-        max-width: 100%;
-        overflow-x: auto;
-        overflow-y: visible;
-        -webkit-overflow-scrolling: touch;
-    }
+#printArea {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+}
 
     #printArea .rk02-table {
         width: max-content;
         min-width: 100%;
     }
+.bottom-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 
+.bottom-table {
+    min-width: 650px;
+}
 }
 /* =====================================================
    PRINT / PDF
@@ -647,7 +654,8 @@ GAJI POKOK (RM)
         </div>
 
         <!-- Bahagian bawah: Cuti Awam  + Rumusan KLM -->
-        <table class="bottom-table w-full mt-5 text-xs" style="border-collapse:collapse">
+        <div class="bottom-table-scroll">
+  <table class="bottom-table w-full mt-5 text-xs" style="border-collapse:collapse">
           <colgroup>
             <col style="width:32%">
             <col style="width:5%">
@@ -727,7 +735,10 @@ GAJI POKOK (RM)
               <td class="border border-slate-600 p-1.5 text-right text-teal-400" id="rRmTotal">-</td>
             </tr>
           </tbody>
-        </table>
+          </table>
+</div>
+
+
 
         <!-- Pengesahan -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
