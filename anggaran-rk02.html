@@ -782,7 +782,7 @@ GAJI POKOK (RM)
 <nav class="mobile-bottom no-print">
 
     <a href="dashboard.html" class="mobile-nav-item">
-        <i class="fas fa-chart-pie"></i>
+        <i class="fas fa-home"></i>
         <span>Dash</span>
     </a>
 
@@ -791,10 +791,12 @@ GAJI POKOK (RM)
         <span>Duty</span>
     </a>
 
-    <a href="klm-mingguan.html" class="mobile-nav-item">
-        <i class="fas fa-file-alt"></i>
-        <span>Weekly</span>
-    </a>
+<a href="klm-mingguan.html"
+   id="menuWeekly"
+   class="mobile-nav-item">
+    <i class="fas fa-file-alt"></i>
+    <span>Weekly</span>
+</a>
 
     <a href="anggaran-rk01.html" class="mobile-nav-item">
         <i class="fas fa-chart-line"></i>
@@ -956,6 +958,20 @@ function kawalMenuMengikutPeranan() {
     }
   }
 
+const menuWeekly = document.getElementById("menuWeekly");
+
+if (menuWeekly) {
+    const role = String(currentUser?.role || "").toLowerCase().trim();
+
+    if (role === "ketua unit" || role === "admin") {
+        menuWeekly.style.display = "flex";
+    } else {
+        menuWeekly.style.display = "none";
+    }
+}
+
+
+  
   async function muatAnggota() {
     const { data, error } = await supabaseClient
       .from("Data_Anggota")
