@@ -437,7 +437,20 @@
 }
 
 
+/* FOOTER PDF */
+@media print {
 
+    .print-footer {
+        font-size: 6.5pt !important;
+        color: #999 !important;
+        opacity: 0.65 !important;
+        text-align: center !important;
+        margin-top: 8px !important;
+        line-height: 1.2 !important;
+        letter-spacing: 0.2px;
+    }
+
+}
 
     
 
@@ -807,10 +820,10 @@ GAJI POKOK (RM)
         </div>
       </div>
 
-        <div class="text-center text-slate-500 text-sm py-6">
-          Master Duty Pro — Wilayah Terengganu<br>
-          © 2026 • Operational Duty Management System
-        </div>
+<div class="text-center text-slate-500 text-sm py-6 print-footer">
+    Master Duty Pro — Wilayah Terengganu<br>
+    © 2026 • Operational Duty Management System
+</div>
     </div>
   </main>
 
