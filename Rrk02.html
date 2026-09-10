@@ -492,12 +492,8 @@ async function rkLoadPos() {
             error
         } = await rkDB
             .from("Data_Anggota")
-            .select("poskhidmat")
-            .not(
-                "poskhidmat",
-                "is",
-                null
-            );
+            .select("pos")
+            .not("pos", "is", null);
 
         if (error) {
             console.error(
@@ -507,15 +503,12 @@ async function rkLoadPos() {
             return;
         }
 
-        const posSet =
-            new Set();
+        const posSet = new Set();
 
         (data || []).forEach(row => {
 
             const pos =
-                String(
-                    row.poskhidmat || ""
-                ).trim();
+                String(row.pos || "").trim();
 
             if (pos) {
                 posSet.add(pos);
@@ -598,7 +591,7 @@ async function rkCariAnggota() {
         rkDB
             .from("Data_Anggota")
             .select(
-                "no_skb,nama,poskhidmat,status"
+                "no_skb,nama,pos,status"
             )
             .eq(
                 "status",
@@ -611,7 +604,7 @@ async function rkCariAnggota() {
     ) {
         query =
             query.eq(
-                "poskhidmat",
+                "pos",
                 posDipilih
             );
     }
@@ -631,9 +624,13 @@ async function rkCariAnggota() {
         return [];
     }
 
+    console.log(
+        "ANGGOTA DI POS:",
+        data
+    );
+
     return data || [];
 }
-
 
 /* -----------------------------------------------------
    LOAD DUTY
