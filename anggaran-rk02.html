@@ -111,6 +111,12 @@
 }
 }
 
+@media screen and (max-width: 1023px) {
+    #systemStatus {
+        display: none !important;
+    }
+}
+    
 
     @media screen and (max-width: 1023px) {
 
@@ -529,7 +535,7 @@
             <i class="fas fa-print mr-2"></i> Cetak / PDF
           </button>
           <div class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
-            <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
+            <span id="systemStatus" class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
             System Online
           </div>
         </div>
