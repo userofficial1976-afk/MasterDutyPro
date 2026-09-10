@@ -276,5 +276,978 @@ kemasKiniTarikhMinggu();
 // Load nama Pos
 muatkanSenaraiPos();
 </script>
+
+<script>
+/* =====================================================
+   RK-01 SYSTEM
+===================================================== */
+
+console.log("=================================");
+console.log("RK-01 SYSTEM START");
+
+/* -----------------------------------------------------
+   SUPABASE
+----------------------------------------------------- */
+const rkDB = window.supabaseClient;
+
+if (!rkDB) {
+    console.error("❌ RK-01: window.supabaseClient TIDAK WUJUD");
+} else {
+    console.log("✅ RK-01: SUPABASE CONNECTED");
+}
+
+
+/* -----------------------------------------------------
+   BULAN
+----------------------------------------------------- */
+const rkBulanMap = {
+    Januari: 1,
+    Februari: 2,
+    Mac: 3,
+    April: 4,
+    Mei: 5,
+    Jun: 6,
+    Julai: 7,
+    Ogos: 8,
+    September: 9,
+    Oktober: 10,
+    November: 11,
+    Disember: 12
+};
+
+const rkBulanNama = {
+    1: "JANUARI",
+    2: "FEBRUARI",
+    3: "MAC",
+    4: "APRIL",
+    5: "MEI",
+    6: "JUN",
+    7: "JULAI",
+    8: "OGOS",
+    9: "SEPTEMBER",
+    10: "OKTOBER",
+    11: "NOVEMBER",
+    12: "DISEMBER"
+};
+
+
+/* -----------------------------------------------------
+   TARIKH MINGGU
+----------------------------------------------------- */
+function rkDapatkanTarikhMinggu(bulan, tahun, minggu) {
+
+    const bulanNo = rkBulanMap[bulan];
+
+    if (!bulanNo) {
+        return null;
+    }
+
+    let hariMula = 1;
+    let hariAkhir = 7;
+
+    if (minggu === "MINGGU 2") {
+        hariMula = 8;
+        hariAkhir = 14;
+    }
+
+    if (minggu === "MINGGU 3") {
+        hariMula = 15;
+        hariAkhir = 21;
+    }
+
+    if (minggu === "MINGGU 4") {
+        hariMula = 22;
+        hariAkhir = 28;
+    }
+
+    if (minggu === "MINGGU 5") {
+        hariMula = 29;
+        hariAkhir = new Date(
+            tahun,
+            bulanNo,
+            0
+        ).getDate();
+    }
+
+    const mula = new Date(
+        tahun,
+        bulanNo - 1,
+        hariMula
+    );
+
+    const akhir = new Date(
+        tahun,
+        bulanNo - 1,
+        hariAkhir
+    );
+
+    return {
+        mula,
+        akhir,
+        hariMula,
+        hariAkhir
+    };
+}
+
+
+/* -----------------------------------------------------
+   FORMAT TARIKH
+----------------------------------------------------- */
+function rkFormatTarikh(date) {
+
+    if (!date) return "";
+
+    const dd = String(date.getDate()).padStart(2, "0");
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const yyyy = date.getFullYear();
+
+    return `${dd}/${mm}/${yyyy}`;
+}
+
+
+/* -----------------------------------------------------
+   PAPAR TARIKH HEADER
+----------------------------------------------------- */
+function rkPaparTarikhMinggu() {
+
+    const bulan =
+        document.getElementById("bulanPilihan")?.value;
+
+    const tahun =
+        parseInt(
+            document.getElementById("tahunPilihan")?.value,
+            10
+        );
+
+    const minggu =
+        document.getElementById("mingguPilihan")?.value;
+
+    if (!bulan || !tahun || !minggu) return;
+
+    const range =
+        rkDapatkanTarikhMinggu(
+            bulan,
+            tahun,
+            minggu
+        );
+
+    if (!range) return;
+
+    const dari =
+        document.getElementById("rkDari");
+
+    const hingga =
+        document.getElementById("rkHingga");
+
+    if (dari) {
+        dari.textContent =
+            rkFormatTarikh(range.mula);
+    }
+
+    if (hingga) {
+        hingga.textContent =
+            rkFormatTarikh(range.akhir);
+    }
+
+    /* PAPAR 7 TARIKH */
+    for (let i = 1; i <= 7; i++) {
+
+        const el =
+            document.getElementById("date" + i);
+
+        if (!el) continue;
+
+        const tarikh =
+            new Date(range.mula);
+
+        tarikh.setDate(
+            range.mula.getDate() + (i - 1)
+        );
+
+        if (
+            tarikh.getMonth() ===
+            range.mula.getMonth()
+        ) {
+
+            el.textContent =
+                String(
+                    tarikh.getDate()
+                ).padStart(2, "0");
+
+        } else {
+
+            el.textContent = "";
+        }
+    }
+}
+
+
+/* -----------------------------------------------------
+   LOAD POS
+----------------------------------------------------- */
+async function rkLoadPos() {
+
+    console.log("RK-01: LOAD POS");
+
+    if (!rkDB) {
+        console.error(
+            "❌ rkDB undefined — semak supabase-config.js"
+        );
+        return;
+    }
+
+    try {
+
+        const {
+            data,
+            error
+        } = await rkDB
+            .from("Data_Anggota")
+            .select("poskhidmat")
+            .not(
+                "poskhidmat",
+                "is",
+                null
+            );
+
+        if (error) {
+            console.error(
+                "❌ LOAD POS ERROR:",
+                error
+            );
+            return;
+        }
+
+        const posSet =
+            new Set();
+
+        (data || []).forEach(row => {
+
+            const pos =
+                String(
+                    row.poskhidmat || ""
+                ).trim();
+
+            if (pos) {
+                posSet.add(pos);
+            }
+        });
+
+        const senaraiPos =
+            [...posSet].sort(
+                (a, b) =>
+                    a.localeCompare(
+                        b,
+                        "ms",
+                        {
+                            numeric: true
+                        }
+                    )
+            );
+
+        console.log(
+            "SENARAI POS:",
+            senaraiPos
+        );
+
+        const select =
+            document.getElementById(
+                "posPilihan"
+            );
+
+        if (!select) {
+            console.error(
+                "❌ posPilihan tidak dijumpai"
+            );
+            return;
+        }
+
+        select.innerHTML =
+            `<option value="SEMUA">Semua</option>`;
+
+        senaraiPos.forEach(pos => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value = pos;
+            option.textContent = pos;
+
+            select.appendChild(option);
+        });
+
+    } catch (err) {
+
+        console.error(
+            "❌ LOAD POS EXCEPTION:",
+            err
+        );
+    }
+}
+
+
+/* -----------------------------------------------------
+   CARI ANGGOTA
+----------------------------------------------------- */
+async function rkCariAnggota() {
+
+    if (!rkDB) {
+        console.error(
+            "❌ rkDB tidak tersedia"
+        );
+        return [];
+    }
+
+    const posDipilih =
+        document.getElementById(
+            "posPilihan"
+        )?.value || "SEMUA";
+
+    let query =
+        rkDB
+            .from("Data_Anggota")
+            .select(
+                "no_skb,nama,poskhidmat,status"
+            )
+            .eq(
+                "status",
+                "Aktif"
+            );
+
+    if (
+        posDipilih &&
+        posDipilih !== "SEMUA"
+    ) {
+        query =
+            query.eq(
+                "poskhidmat",
+                posDipilih
+            );
+    }
+
+    const {
+        data,
+        error
+    } = await query;
+
+    if (error) {
+
+        console.error(
+            "❌ CARI ANGGOTA ERROR:",
+            error
+        );
+
+        return [];
+    }
+
+    return data || [];
+}
+
+
+/* -----------------------------------------------------
+   LOAD DUTY
+----------------------------------------------------- */
+async function rkLoadDuty(
+    noSkb,
+    bulan,
+    tahun,
+    posDipilih,
+    range
+) {
+
+    if (!rkDB) return [];
+
+    let query =
+        rkDB
+            .from("jadual_duty")
+            .select(`
+                tarikh,
+                bulan,
+                tahun,
+                no_skb,
+                kod_duty,
+                waktu_tugasan,
+                jam_kerja,
+                jam_klm,
+                pos
+            `)
+            .eq(
+                "no_skb",
+                noSkb
+            )
+            .eq(
+                "bulan",
+                bulan
+            )
+            .eq(
+                "tahun",
+                String(tahun)
+            )
+            .gte(
+                "tarikh",
+                rkFormatTarikh(range.mula)
+            )
+            .lte(
+                "tarikh",
+                rkFormatTarikh(range.akhir)
+            )
+            .order(
+                "tarikh",
+                {
+                    ascending: true
+                }
+            );
+
+    if (
+        posDipilih &&
+        posDipilih !== "SEMUA"
+    ) {
+
+        query =
+            query.eq(
+                "pos",
+                posDipilih
+            );
+    }
+
+    const {
+        data,
+        error
+    } = await query;
+
+    if (error) {
+
+        console.error(
+            "❌ LOAD DUTY ERROR:",
+            error
+        );
+
+        return [];
+    }
+
+    console.log(
+        "RK-01 DUTY:",
+        data
+    );
+
+    return data || [];
+}
+
+
+/* -----------------------------------------------------
+   PAPAR DUTY
+----------------------------------------------------- */
+function rkPaparDuty(
+    rows,
+    range
+) {
+
+    for (let i = 1; i <= 7; i++) {
+
+        const el =
+            document.getElementById(
+                "rkDuty" + i
+            );
+
+        if (el) {
+            el.textContent = "";
+        }
+    }
+
+    if (!rows || !rows.length) {
+        console.log(
+            "RK-01: TIADA DUTY"
+        );
+        return;
+    }
+
+    rows.forEach(row => {
+
+        const tarikh =
+            rkNormaliseTarikh(
+                row.tarikh
+            );
+
+        if (!tarikh) return;
+
+        const index =
+            Math.floor(
+                (
+                    tarikh -
+                    range.mula
+                ) /
+                (
+                    1000 *
+                    60 *
+                    60 *
+                    24
+                )
+            ) + 1;
+
+        if (
+            index < 1 ||
+            index > 7
+        ) return;
+
+        const el =
+            document.getElementById(
+                "rkDuty" + index
+            );
+
+        if (!el) return;
+
+        let teks =
+            row.kod_duty || "";
+
+        if (row.waktu_tugasan) {
+            teks +=
+                " " +
+                row.waktu_tugasan;
+        }
+
+        el.textContent =
+            teks.trim();
+    });
+}
+
+
+/* -----------------------------------------------------
+   NORMALISE TARIKH
+----------------------------------------------------- */
+function rkNormaliseTarikh(value) {
+
+    if (!value) return null;
+
+    if (
+        value instanceof Date
+    ) {
+        return new Date(
+            value.getFullYear(),
+            value.getMonth(),
+            value.getDate()
+        );
+    }
+
+    const text =
+        String(value).trim();
+
+    /* YYYY-MM-DD */
+    if (
+        /^\d{4}-\d{2}-\d{2}$/.test(text)
+    ) {
+
+        const [
+            y,
+            m,
+            d
+        ] =
+            text.split("-").map(Number);
+
+        return new Date(
+            y,
+            m - 1,
+            d
+        );
+    }
+
+    /* DD/MM/YYYY */
+    if (
+        /^\d{2}\/\d{2}\/\d{4}$/.test(text)
+    ) {
+
+        const [
+            d,
+            m,
+            y
+        ] =
+            text.split("/").map(Number);
+
+        return new Date(
+            y,
+            m - 1,
+            d
+        );
+    }
+
+    const parsed =
+        new Date(text);
+
+    if (
+        Number.isNaN(
+            parsed.getTime()
+        )
+    ) {
+        return null;
+    }
+
+    return new Date(
+        parsed.getFullYear(),
+        parsed.getMonth(),
+        parsed.getDate()
+    );
+}
+
+
+/* -----------------------------------------------------
+   PAPAR RK-01
+----------------------------------------------------- */
+async function paparRK01() {
+
+    console.log("=================================");
+    console.log("PAPAR RK-01");
+
+    const bulan =
+        document.getElementById(
+            "bulanPilihan"
+        ).value;
+
+    const tahun =
+        parseInt(
+            document.getElementById(
+                "tahunPilihan"
+            ).value,
+            10
+        );
+
+    const minggu =
+        document.getElementById(
+            "mingguPilihan"
+        ).value;
+
+    const posDipilih =
+        document.getElementById(
+            "posPilihan"
+        ).value;
+
+    console.log(
+        "Bulan :",
+        bulan
+    );
+
+    console.log(
+        "Tahun :",
+        tahun
+    );
+
+    console.log(
+        "Minggu:",
+        minggu
+    );
+
+    console.log(
+        "Pos   :",
+        posDipilih
+    );
+
+    const range =
+        rkDapatkanTarikhMinggu(
+            bulan,
+            tahun,
+            minggu
+        );
+
+    if (!range) {
+        alert(
+            "Tarikh minggu tidak sah."
+        );
+        return;
+    }
+
+    rkPaparTarikhMinggu();
+
+    const kodPos =
+        document.getElementById(
+            "rkKodPos"
+        );
+
+    if (kodPos) {
+        kodPos.textContent =
+            posDipilih === "SEMUA"
+                ? "SEMUA"
+                : posDipilih;
+    }
+
+    const bulanTahun =
+        document.getElementById(
+            "rkBulanTahun"
+        );
+
+    if (bulanTahun) {
+        bulanTahun.textContent =
+            `${rkBulanNama[rkBulanMap[bulan]]} ${tahun}`;
+    }
+
+    const rkMinggu =
+        document.getElementById(
+            "rkMinggu"
+        );
+
+    if (rkMinggu) {
+        rkMinggu.textContent =
+            minggu;
+    }
+
+
+    /* -------------------------------------------------
+       PENTING
+       TIADA LAGI anggota[0]
+       ------------------------------------------------- */
+
+    const anggota =
+        await rkCariAnggota();
+
+    console.log(
+        "JUMLAH ANGGOTA:",
+        anggota.length
+    );
+
+    /*
+       Buat masa ini RK-01 menggunakan
+       konteks pengguna yang sedang login.
+
+       Jika currentUser / mdp_user sudah tersedia,
+       ambil no_skb daripada situ.
+    */
+
+    let noSkb = null;
+    let nama = "";
+
+    if (window.currentUser?.noSkb) {
+
+        noSkb =
+            window.currentUser.noSkb;
+
+        nama =
+            window.currentUser.nama || "";
+
+    } else {
+
+        try {
+
+            const saved =
+                localStorage.getItem(
+                    "mdp_user"
+                );
+
+            if (saved) {
+
+                const user =
+                    JSON.parse(saved);
+
+                noSkb =
+                    user.noSkb ||
+                    user.no_skb ||
+                    user.noskb ||
+                    null;
+
+                nama =
+                    user.nama || "";
+            }
+
+        } catch (e) {
+
+            console.warn(
+                "RK-01: mdp_user tidak dapat dibaca"
+            );
+        }
+    }
+
+
+    /* -------------------------------------------------
+       Jika no_skb ada, cari data anggota sebenar
+       ------------------------------------------------- */
+
+    if (noSkb) {
+
+        const anggotaUser =
+            anggota.find(
+                a =>
+                    String(a.no_skb) ===
+                    String(noSkb)
+            );
+
+        if (anggotaUser) {
+
+            noSkb =
+                anggotaUser.no_skb;
+
+            nama =
+                anggotaUser.nama || nama;
+        }
+    }
+
+
+    /*
+       Jika masih tiada no_skb:
+       jangan ambil anggota[0].
+    */
+
+    if (!noSkb) {
+
+        console.warn(
+            "⚠️ RK-01: NO SKB tidak ditemui."
+        );
+
+        const noSkbEl =
+            document.getElementById(
+                "rkNoSkb"
+            );
+
+        const namaEl =
+            document.getElementById(
+                "rkNama"
+            );
+
+        if (noSkbEl)
+            noSkbEl.textContent = "";
+
+        if (namaEl)
+            namaEl.textContent = "";
+
+        alert(
+            "NO SKB pengguna tidak ditemui. Sila semak maklumat login."
+        );
+
+        return;
+    }
+
+
+    /* PAPAR ANGGOTA */
+    const noSkbEl =
+        document.getElementById(
+            "rkNoSkb"
+        );
+
+    const namaEl =
+        document.getElementById(
+            "rkNama"
+        );
+
+    if (noSkbEl) {
+        noSkbEl.textContent =
+            noSkb;
+    }
+
+    if (namaEl) {
+        namaEl.textContent =
+            nama;
+    }
+
+
+    /* LOAD DUTY */
+    const duty =
+        await rkLoadDuty(
+            noSkb,
+            bulan,
+            tahun,
+            posDipilih,
+            range
+        );
+
+    rkPaparDuty(
+        duty,
+        range
+    );
+
+    console.log(
+        "RK-01 SELESAI"
+    );
+
+    console.log("=================================");
+}
+
+
+/* -----------------------------------------------------
+   CLEAR BORANG
+----------------------------------------------------- */
+function rkKosongkanBorang() {
+
+    [
+        "rkNoSkb",
+        "rkNama",
+        "rkBulanTahun",
+        "rkMinggu",
+        "rkDari",
+        "rkHingga",
+        "rkKodPos"
+    ].forEach(id => {
+
+        const el =
+            document.getElementById(id);
+
+        if (el) {
+            el.textContent = "";
+        }
+    });
+
+    for (let i = 1; i <= 7; i++) {
+
+        const date =
+            document.getElementById(
+                "date" + i
+            );
+
+        const duty =
+            document.getElementById(
+                "rkDuty" + i
+            );
+
+        if (date)
+            date.textContent = "";
+
+        if (duty)
+            duty.textContent = "";
+    }
+}
+
+
+/* -----------------------------------------------------
+   INIT
+----------------------------------------------------- */
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        console.log(
+            "RK-01 DOM READY"
+        );
+
+        await rkLoadPos();
+
+        rkPaparTarikhMinggu();
+
+        document
+            .getElementById(
+                "bulanPilihan"
+            )
+            ?.addEventListener(
+                "change",
+                rkPaparTarikhMinggu
+            );
+
+        document
+            .getElementById(
+                "tahunPilihan"
+            )
+            ?.addEventListener(
+                "change",
+                rkPaparTarikhMinggu
+            );
+
+        document
+            .getElementById(
+                "mingguPilihan"
+            )
+            ?.addEventListener(
+                "change",
+                rkPaparTarikhMinggu
+            );
+    }
+);
+</script>
+
+  
 </body>
 </html>
