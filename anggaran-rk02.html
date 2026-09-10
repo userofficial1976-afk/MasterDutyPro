@@ -57,21 +57,54 @@
     }
 
 /* =====================================================
-   HEADER FIXED — RUANG CONTENT SKRIN
+   HEADER SCREEN — BETUL-BETUL FIXED
 ===================================================== */
 
 @media screen {
 
-    /* HEADER KEKAL DI ATAS SEMASA SCROLL */
     header.no-print {
         position: fixed !important;
         top: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+
+        width: auto !important;
+        height: auto !important;
+
         z-index: 99990 !important;
+
+        margin: 0 !important;
+
+        transform: translate3d(0, 0, 0) !important;
+        -webkit-transform: translate3d(0, 0, 0) !important;
+
+        will-change: transform;
+
+        isolation: isolate;
     }
 
-    /* RUANG SUPAYA CONTENT TAK BERTINDIH DENGAN HEADER */
     .page-content {
         padding-top: 128px !important;
+    }
+
+}
+
+/* DESKTOP — TOLAK SIDEBAR 72 = 18rem */
+@media screen and (min-width: 1024px) {
+
+    header.no-print {
+        left: 18rem !important;
+    }
+
+}
+
+/* MOBILE — HEADER PENUH */
+@media screen and (max-width: 1023px) {
+
+    header.no-print {
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
     }
 
 }
@@ -216,7 +249,6 @@
 
 /* =====================================================
    MOBILE BOTTOM NAVIGATION
-   TIDAK GANGGU SETTING PDF / PRINT
 ===================================================== */
 
 .mobile-bottom {
@@ -226,46 +258,123 @@
 @media screen and (max-width: 1023px) {
 
     body {
-        padding-bottom: 80px;
+        padding-bottom: 80px !important;
+        overflow-x: hidden !important;
     }
 
-.mobile-bottom {
-    display: flex !important;
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    height: 70px !important;
-    z-index: 99999 !important;
-}
+    .mobile-bottom {
+        display: flex !important;
+
+        position: fixed !important;
+
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100vw !important;
+        max-width: 100vw !important;
+
+        height: 70px !important;
+        min-height: 70px !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        background: rgba(15, 23, 42, 0.98) !important;
+
+        border-top: 1px solid rgba(45, 212, 191, 0.25) !important;
+
+        z-index: 99999 !important;
+
+        transform: translate3d(0, 0, 0) !important;
+        -webkit-transform: translate3d(0, 0, 0) !important;
+
+        will-change: transform;
+
+        isolation: isolate;
+
+        box-sizing: border-box !important;
+    }
 
     .mobile-nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
+        flex: 1 1 0% !important;
+
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+
+        height: 70px !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 4px !important;
+
+        padding: 5px 2px !important;
+        margin: 0 !important;
 
         color: #cbd5e1;
-        text-decoration: none;
-        font-size: 11px;
 
-        transition: all 0.2s ease;
+        text-decoration: none;
+
+        font-size: 11px !important;
+        line-height: 1.2 !important;
+
+        box-sizing: border-box !important;
+
+        transition: color 0.2s ease;
     }
 
     .mobile-nav-item i {
-        font-size: 18px;
+        display: block !important;
+
+        font-size: 18px !important;
+
+        width: auto !important;
+        height: auto !important;
+
+        line-height: 1 !important;
+
+        margin: 0 !important;
+    }
+
+    .mobile-nav-item span {
+        display: block !important;
+
+        font-size: 11px !important;
+        line-height: 1.2 !important;
+
+        white-space: nowrap !important;
     }
 
     .mobile-nav-item.active {
-        color: #2dd4bf;
+        color: #2dd4bf !important;
     }
 
     .mobile-nav-item:hover {
-        color: #2dd4bf;
-        transform: translateY(-2px);
+        color: #2dd4bf !important;
+        transform: none !important;
     }
+
+}
+
+/* =====================================================
+   PRINT / PDF
+===================================================== */
+
+@media print {
+
+    .mobile-bottom {
+        display: none !important;
+    }
+
+    body {
+        padding-bottom: 0 !important;
+    }
+
 }
 
 /* =====================================================
@@ -367,7 +476,7 @@
 
   <!-- Main -->
   <main class="flex-1 lg:ml-72">
-    <header class="glass fixed top-0 left-0 right-0 lg:left-72 z-30 border-b border-teal-550/10 px-6 py-4 no-print">
+   <header class="glass border-b border-teal-550/10 px-6 py-4 no-print">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-xl font-bold text-white">Anggaran RK02</h2>
