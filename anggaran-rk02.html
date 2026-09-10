@@ -56,27 +56,26 @@
       background: rgba(15, 23, 42, 0.55);
     }
 
-@media print {
+/* =====================================================
+   HEADER FIXED — RUANG CONTENT SKRIN
+===================================================== */
 
+@media screen {
+    .page-content {
+        padding-top: 128px !important;
+    }
+}
+
+/* =====================================================
+   PRINT / PDF — JANGAN TERKESAN
+===================================================== */
+
+@media print {
     .page-content {
         padding-top: 0 !important;
     }
-
-    /* kod print yang sedia ada... */
-/* RUANG UNTUK HEADER FIXED — SKRIN SAHAJA */
-@media screen {
-  .page-content {
-    padding-top: 100px;
-  }
 }
-
-
-
-
-    
-    /* ========== PRINT / PDF — ikut borang rasmi ========== */
-    @media print {
-      
+   
       #printArea{
   zoom:0.80;
 }
