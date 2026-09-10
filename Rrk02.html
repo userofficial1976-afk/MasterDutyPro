@@ -260,20 +260,7 @@ document.getElementById("bulanPilihan")
 document.getElementById("tahunPilihan")
   ?.addEventListener("change", kemasKiniTarikhMinggu);
 
-const bulanMap = {
-    Januari: 1,
-    Februari: 2,
-    Mac: 3,
-    April: 4,
-    Mei: 5,
-    Jun: 6,
-    Julai: 7,
-    Ogos: 8,
-    September: 9,
-    Oktober: 10,
-    November: 11,
-    Disember: 12
-};
+
 
 
 
@@ -307,7 +294,7 @@ if (!rkDB) {
 /* -----------------------------------------------------
    BULAN
 ----------------------------------------------------- */
-const rkBulanMap = {
+const bulanMap = {
     Januari: 1,
     Februari: 2,
     Mac: 3,
@@ -337,13 +324,13 @@ const rkBulanNama = {
     12: "DISEMBER"
 };
 
-const bulanMap = rkBulanMap;
+
 /* -----------------------------------------------------
    TARIKH MINGGU
 ----------------------------------------------------- */
 function rkDapatkanTarikhMinggu(bulan, tahun, minggu) {
 
-    const bulanNo = rkBulanMap[bulan];
+    const bulanNo = bulanMap[bulan];
 
     if (!bulanNo) {
         return null;
@@ -980,7 +967,7 @@ async function paparRK01() {
 
     if (bulanTahun) {
         bulanTahun.textContent =
-            `${rkBulanNama[rkBulanMap[bulan]]} ${tahun}`;
+            `${rkBulanNama[bulanMap[bulan]]} ${tahun}`;
     }
 
     const rkMinggu =
