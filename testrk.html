@@ -57,14 +57,35 @@ body{
 .rk01{
     width:100%;
     border-collapse:collapse;
+    table-layout:fixed;
 }
 
 .rk01 th,
 .rk01 td{
     border:1px solid #000;
     text-align:center;
-    font-size:6px;
-    padding:1px;
+    vertical-align:middle;
+    padding:4px;
+}
+
+.rk01 thead tr:first-child th{
+    height:30px;
+    font-size:10px;
+}
+
+.rk01 thead tr:nth-child(2) th{
+    height:30px;
+    font-size:9px;
+}
+
+.rk01 tbody td{
+    height:45px;
+}
+
+.rk01 tbody td:first-child{
+    width:50px;
+    font-weight:bold;
+    background:#f5f5f5;
 }
 
 .noskb{
@@ -162,97 +183,85 @@ BORANG RK-01
 
 <table class="rk01">
 
-<thead>
+    <thead>
 
-<tr>
-<th rowspan="4" class="noskb">NO SKB</th>
-<th rowspan="4" class="nama">NAMA</th>
+        <tr>
 
-<th colspan="7">1</th>
-<th colspan="7">2</th>
-<th colspan="7">3</th>
-<th colspan="7">4</th>
-<th colspan="7">5</th>
-<th colspan="7">6</th>
-<th colspan="7">7</th>
-</tr>
+            <th rowspan="2" style="width:50px">
+                HARI
+            </th>
 
-<tr>
+            <th>76001</th>
+            <th>76002</th>
+            <th>76003</th>
+            <th>76004</th>
+            <th>76005</th>
+            <th>76006</th>
+            <th>76007</th>
 
-<th colspan="7">Kerja Lebih Masa</th>
-<th colspan="7">Kerja Lebih Masa</th>
-<th colspan="7">Kerja Lebih Masa</th>
-<th colspan="7">Kerja Lebih Masa</th>
-<th colspan="7">Kerja Lebih Masa</th>
-<th colspan="7">Kerja Lebih Masa</th>
-<th colspan="7">Kerja Lebih Masa</th>
+        </tr>
 
-</tr>
+        <tr>
 
-<tr>
+            <th>MOHD ALI</th>
+            <th>MOHD ABU</th>
+            <th>AHMAD</th>
+            <th>MAMAT</th>
+            <th>RAHMAN</th>
+            <th>KAMAL</th>
+            <th>FAUZI</th>
 
-<th>INV</th><th>A</th><th>B1</th><th>B2</th><th>B3</th><th>C1</th><th>C2</th>
-<th>INV</th><th>A</th><th>B1</th><th>B2</th><th>B3</th><th>C1</th><th>C2</th>
-<th>INV</th><th>A</th><th>B1</th><th>B2</th><th>B3</th><th>C1</th><th>C2</th>
-<th>INV</th><th>A</th><th>B1</th><th>B2</th><th>B3</th><th>C1</th><th>C2</th>
-<th>INV</th><th>A</th><th>B1</th><th>B2</th><th>B3</th><th>C1</th><th>C2</th>
-<th>INV</th><th>A</th><th>B1</th><th>B2</th><th>B3</th><th>C1</th><th>C2</th>
-<th>INV</th><th>A</th><th>B1</th><th>B2</th><th>B3</th><th>C1</th><th>C2</th>
+        </tr>
 
-</tr>
+    </thead>
 
-<tr>
+    <tbody>
 
-<th>JAM</th><th>HARI</th><th>HARI</th><th>JAM</th><th>HARI</th><th>JAM</th><th>JAM</th>
-<th>JAM</th><th>HARI</th><th>HARI</th><th>JAM</th><th>HARI</th><th>JAM</th><th>JAM</th>
-<th>JAM</th><th>HARI</th><th>HARI</th><th>JAM</th><th>HARI</th><th>JAM</th><th>JAM</th>
-<th>JAM</th><th>HARI</th><th>HARI</th><th>JAM</th><th>HARI</th><th>JAM</th><th>JAM</th>
-<th>JAM</th><th>HARI</th><th>HARI</th><th>JAM</th><th>HARI</th><th>JAM</th><th>JAM</th>
-<th>JAM</th><th>HARI</th><th>HARI</th><th>JAM</th><th>HARI</th><th>JAM</th><th>JAM</th>
-<th>JAM</th><th>HARI</th><th>HARI</th><th>JAM</th><th>HARI</th><th>JAM</th><th>JAM</th>
+        <tr>
+            <td>1</td>
+            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+        </tr>
 
-</tr>
+        <tr>
+            <td>2</td>
+            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+        </tr>
 
-</thead>
+        <tr>
+            <td>3</td>
+            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+        </tr>
 
-<tbody>
+        <tr>
+            <td>4</td>
+            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+        </tr>
 
-<!-- ROW KOSONG UNTUK ULANG -->
+        <tr>
+            <td>5</td>
+            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+        </tr>
 
-<tr>
-<td></td>
-<td></td>
-<td colspan="49" style="height:20px;"></td>
-</tr>
+        <tr>
+            <td>6</td>
+            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+        </tr>
 
-<tr>
-<td></td>
-<td></td>
-<td colspan="49" style="height:20px;"></td>
-</tr>
+        <tr>
+            <td>7</td>
+            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+        </tr>
 
-<tr>
-<td></td>
-<td></td>
-<td colspan="49" style="height:20px;"></td>
-</tr>
-
-<tr>
-<td></td>
-<td></td>
-<td colspan="49" style="height:20px;"></td>
-</tr>
-
-<tr>
-<td></td>
-<td></td>
-<td colspan="49" style="height:20px;"></td>
-</tr>
-
-</tbody>
+    </tbody>
 
 </table>
-
 
 <table class="summary-rk01">
 
