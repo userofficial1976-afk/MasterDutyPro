@@ -291,19 +291,13 @@ header.glass{
     </span>
     Maklumat Tarikh & Tugas
   </h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+
           <div><label>Tarikh</label><input type="date" id="tarikh"></div>
           <div><label>Bulan</label><input type="text" id="bulan" readonly></div>
           <div><label>Tahun</label><input type="text" id="tahun" readonly></div>
           <div><label>Hari</label><input type="text" id="hari" readonly></div>
-          <div>
-            <label>Unit</label>
-            <select id="unitPilihan"><option value="">-- Pilih Unit --</option></select>
-          </div>
-          <div>
-            <label>Pos Asal</label>
-            <select id="posAsal"><option value="">-- Pilih Pos Asal --</option></select>
-          </div>
+         
         </div>
       </div>
 
@@ -315,11 +309,28 @@ header.glass{
     </span>
     Maklumat Anggota
   </h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4"> 
-          <div class="md:col-span-2">
-            <label>Nama Anggota</label>
-            <select id="anggota"><option value="">-- Pilih Nama Anggota --</option></select>
-          </div>
+       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+
+  <div>
+    <label>Unit</label>
+    <select id="unitPilihan">
+      <option value="">-- Pilih Unit --</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Pos Asal</label>
+    <select id="posAsal">
+      <option value="">-- Pilih Pos Asal --</option>
+    </select>
+  </div>
+
+  <div class="md:col-span-2">
+    <label>Nama Anggota</label>
+    <select id="anggota">
+      <option value="">-- Pilih Nama Anggota --</option>
+    </select>
+  </div>
           <div><label>No. SKB</label><input id="noSkb" readonly></div>
           <div><label>No. Anggota</label><input id="noAnggota" readonly></div>
           <div><label>Kawasan</label><input id="kawasan" readonly></div>
