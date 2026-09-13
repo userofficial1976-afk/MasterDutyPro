@@ -390,6 +390,21 @@ onclick="paparSenarai('CTR')">
 
 </div> <!-- p-6 space-y-6 -->
 
+
+<!-- Button Laporan Bulanan -->
+
+<div class="mt-5">
+    <button
+        onclick="paparLaporanBulanan()"
+        class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white font-semibold py-4 rounded-xl transition-all duration-300 shadow-lg">
+
+        <i class="fas fa-chart-bar mr-2"></i>
+        Laporan Penuh Sebulan
+
+    </button>
+</div>
+
+      
 </main>
 
 </div> <!-- flex min-h-screen -->
@@ -657,6 +672,142 @@ if(
  document.title =
  "Dashboard Ketua Pos";
 }   
+
+
+function paparLaporanBulanan(){
+
+  const popup =
+  document.createElement("div");
+
+  popup.innerHTML = `
+
+  <div
+    style="
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.75);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index:99999;
+    "
+    onclick="this.remove()">
+
+    <div
+      onclick="event.stopPropagation()"
+      style="
+        width:900px;
+        max-width:95%;
+        max-height:90vh;
+        overflow:auto;
+        background:#0f172a;
+        border:1px solid rgba(45,212,191,.2);
+        border-radius:20px;
+        padding:25px;
+        color:white;
+      ">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+
+        <h2 style="
+          font-size:22px;
+          font-weight:bold;
+          color:#2dd4bf;
+        ">
+          Laporan Penuh Bulan Ini
+        </h2>
+
+        <button
+          onclick="this.closest('[data-popup]').remove()">
+          ✕
+        </button>
+
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+        <div class="p-4 rounded-xl bg-cyan-500/10">
+          <div>Jam Kerja</div>
+          <div id="popupJamKerja" class="text-2xl font-bold mt-2">0</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-orange-500/10">
+          <div>Jam KLM</div>
+          <div id="popupJamKlm" class="text-2xl font-bold mt-2">0</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-teal-500/10">
+          <div>RM KLM</div>
+          <div id="popupRmKlm" class="text-2xl font-bold mt-2">RM0</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-blue-500/10">
+          <div>Hari Offday</div>
+          <div id="popupOffday" class="text-2xl font-bold mt-2">0</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-purple-500/10">
+          <div>Hari Cuti Am</div>
+          <div id="popupCutiAm" class="text-2xl font-bold mt-2">0</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-pink-500/10">
+          <div>Jam Tampungan</div>
+          <div id="popupTampungan" class="text-2xl font-bold mt-2">0</div>
+        </div>
+
+      </div>
+
+      <button
+        onclick="this.closest('[data-popup]').remove()"
+        style="
+          margin-top:20px;
+          width:100%;
+          background:#dc2626;
+          border:none;
+          padding:12px;
+          border-radius:10px;
+          color:white;
+          font-weight:bold;
+          cursor:pointer;
+        ">
+        Tutup
+      </button>
+
+    </div>
+
+  </div>
+
+  `;
+
+  popup.firstElementChild.setAttribute(
+    "data-popup",
+    ""
+  );
+
+  document.body.appendChild(popup);
+
+  document.getElementById("popupJamKerja").textContent =
+  document.getElementById("bulanJamKerja").textContent;
+
+  document.getElementById("popupJamKlm").textContent =
+  document.getElementById("bulanJamKlm").textContent;
+
+  document.getElementById("popupRmKlm").textContent =
+  document.getElementById("bulanRmKlm").textContent;
+
+  document.getElementById("popupOffday").textContent =
+  document.getElementById("bulanOffday").textContent;
+
+  document.getElementById("popupCutiAm").textContent =
+  document.getElementById("bulanCutiAm").textContent;
+
+  document.getElementById("popupTampungan").textContent =
+  document.getElementById("bulanTampungan").textContent;
+}
+
+
+  
 function logout(){
   localStorage.removeItem("mdp_user");
   location.href="login.html";
