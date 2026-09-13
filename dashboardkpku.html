@@ -396,7 +396,7 @@ onclick="paparSenarai('CTR')">
   
 <nav class="mobile-bottom">
 
-    <a href="boardkpku.html" class="mobile-nav-item active">
+    <a href="dashboardkpku.html" class="mobile-nav-item active">
         <i class="fas fa-home"></i>
         <span>Dash</span>
     </a>
@@ -500,6 +500,26 @@ document.getElementById(
   "sidebarJawatanPengguna"
 ).textContent =
 currentUser.jawatan || "-";
+
+
+  document.getElementById("currentDate").textContent =
+new Date().toLocaleDateString("ms-MY",{
+  weekday:"long",
+  day:"2-digit",
+  month:"long",
+  year:"numeric"
+});
+
+document.getElementById("userName").textContent =
+currentUser.name || currentUser.nama || "-";
+
+document.getElementById("userJawatan").textContent =
+currentUser.jawatan || "-";
+
+document.getElementById("userAvatar").textContent =
+(currentUser.name || currentUser.nama || "A")
+.charAt(0)
+.toUpperCase();  
   
 const jawatan =
 String(currentUser.jawatan || "")
