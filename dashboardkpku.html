@@ -292,10 +292,20 @@
             <div id="jumlahTidakBertugas" class="text-3xl font-bold text-yellow-400 mt-2">0</div>
         </div>
 
-        <div class="stat-card glass rounded-2xl p-5">
-            <div class="text-sm text-slate-400">Jam Kerja Hari Ini</div>
-            <div id="jamKerja" class="text-3xl font-bold mt-2">0</div>
-        </div>
+<div
+    class="stat-card glass rounded-2xl p-5 cursor-pointer"
+    onclick="paparDetailJamKerja()">
+
+    <div class="text-sm text-slate-400">
+        Jam Kerja Hari Ini
+    </div>
+
+    <div id="jamKerja"
+         class="text-3xl font-bold mt-2">
+        0
+    </div>
+
+</div>
 
         <div
     class="stat-card glass rounded-2xl p-5 cursor-pointer"
@@ -818,6 +828,154 @@ function paparDetailKLM(){
 }
 
 
+function paparDetailJamKerja(){
+
+  const rekod = dataKLMHariIni;
+
+  const senarai =
+  rekod.length
+  ?
+  rekod.map((r,i)=>`
+
+    <tr>
+      <td>${i+1}</td>
+      <td>${r.no_anggota || "-"}</td>
+      <td>${r.nama_anggota || "-"}</td>
+      <td>${r.kod_waktu_kerja || r.kod_duty || "-"}</td>
+      <td>${r.kod_tempat_kerja || "-"}</td>
+      <td>${r.jam_kerja || 0}</td>
+    </tr>
+
+  `).join("")
+  :
+  `
+  <tr>
+    <td colspan="6">
+      Tiada rekod
+    </td>
+  </tr>
+  `;
+
+  const jumlahJam =
+  rekod.reduce(
+    (t,r)=>t + Number(r.jam_kerja || 0),
+    0
+  );
+
+  const popup =
+  document.createElement("div");
+
+  popup.innerHTML = `
+
+  <div
+    style="
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.7);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index:99999;
+    "
+    onclick="this.remove()">
+
+    <div
+      onclick="event.stopPropagation()"
+      style="
+        width:1000px;
+        max-width:95%;
+        max-height:85vh;
+        overflow:auto;
+        background:#0f172a;
+        color:white;
+        border-radius:16px;
+        padding:20px;
+      ">
+
+      <h3
+        style="
+          color:#2dd4bf;
+          font-size:20px;
+          font-weight:bold;
+          margin-bottom:15px;
+        ">
+        Detail Jam Kerja Hari Ini
+      </h3>
+
+      <table
+        style="
+          width:100%;
+          border-collapse:collapse;
+        ">
+
+        <thead>
+
+          <tr style="background:#1e293b">
+
+            <th style="padding:10px">#</th>
+            <th style="padding:10px">No Anggota</th>
+            <th style="padding:10px">Nama Anggota</th>
+            <th style="padding:10px">WK</th>
+            <th style="padding:10px">TK</th>
+            <th style="padding:10px">Jam Kerja</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${senarai}
+
+        </tbody>
+
+      </table>
+
+      <div
+        style="
+          margin-top:15px;
+          text-align:right;
+          font-size:18px;
+          font-weight:bold;
+          color:#2dd4bf;
+        ">
+        Jumlah Jam Kerja : ${jumlahJam}
+      </div>
+
+      <button
+        onclick="this.parentElement.parentElement.remove()"
+        style="
+          margin-top:15px;
+          width:100%;
+          background:#dc2626;
+          color:white;
+          border:none;
+          padding:12px;
+          border-radius:8px;
+          cursor:pointer;
+        ">
+        Tutup
+      </button>
+
+    </div>
+
+  </div>
+
+  `;
+
+  document.body.appendChild(popup);
+}
+
+
+
+
+
+
+
+
+
+
+  
 
   
 function paparLaporanBulanan(){
@@ -998,9 +1156,10 @@ async function statistikHariIni(){
   let query =
   supabaseClient
   .from("jadual_duty")
- .select(`
+.select(`
   no_anggota,
   nama_anggota,
+  kod_waktu_kerja,
   kod_duty,
   kod_tempat_kerja,
   jam_kerja,
