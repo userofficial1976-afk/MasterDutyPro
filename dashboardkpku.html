@@ -715,6 +715,12 @@ function paparDetailKLM(){
     x => Number(x.jam_klm || 0) > 0
   );
 
+  const jumlahJamKlm =
+rekod.reduce(
+  (t,r)=>t + Number(r.jam_klm || 0),
+  0
+);
+  
   const senarai =
   rekod.length
   ?
@@ -810,6 +816,19 @@ function paparDetailKLM(){
         </tbody>
 
       </table>
+
+<div
+  style="
+    margin-top:15px;
+    text-align:right;
+    font-size:18px;
+    font-weight:bold;
+    color:#f97316;
+  ">
+  Jumlah Jam KLM : ${jumlahJamKlm}
+</div>
+
+
 
       <button
         onclick="this.parentElement.parentElement.remove()"
