@@ -612,7 +612,7 @@
 // STATISTIK DUTY HARI INI
 // =====================================================
 async function statistikDutyHariIni() {
-  const hariIni = new Date().toISOString().split("T")[0];
+  const hariIni = new Date().toLocaleDateString("sv-SE");
 
   const PAGE_SIZE = 1000;
   let rows = [];
@@ -704,7 +704,7 @@ document.getElementById("jumlahKlmCutiAm").innerHTML =
 // STATUS TIDAK BERTUGAS HARI INI
 // =====================================================
 async function statusTidakBertugasHariIni() {
-  const hariIni = new Date().toISOString().split("T")[0];
+ const hariIni = new Date().toLocaleDateString("sv-SE");;
 
   const PAGE_SIZE = 1000;
   let semuaData = [];
