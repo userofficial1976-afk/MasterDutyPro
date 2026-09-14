@@ -944,12 +944,11 @@ main {
 }
 
 .rk01-footer-grid{
-    grid-template-columns:
-        25%
-        15%
-        18%
-        15%
-        27%;
+    display:grid !important;
+    grid-template-columns:25% 15% 18% 15% 27%;
+    gap:0;
+    width:100%;
+    margin-top:8px;
 }
 
 .footer-box{
@@ -959,6 +958,20 @@ main {
     table-layout:fixed;
 }
 
+
+    .footer-box{
+    width:100%;
+    height:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+}
+
+  .rk01-footer-grid > *{
+    height:100%;
+}  
+
+
+    document.querySelector('.rk01-footer-grid')
 .footer-box th,
 .footer-box td{
     border:0.5px solid #000 !important;
@@ -973,7 +986,7 @@ main {
     min-height:14px !important;
     max-height:14px !important;
 }
-`
+
 
 .footer-box th{
     text-align:center;
@@ -1638,7 +1651,7 @@ main {
         </tbody>
 
     </table>
-
+</div>
     <!-- WAKTU KERJA -->
     <table class="footer-box waktu-box">
 
@@ -1661,7 +1674,7 @@ main {
         </tbody>
 
     </table>
-
+</div>
     <!-- TEMPAT KERJA -->
     <table class="footer-box tempat-box">
 
@@ -1684,7 +1697,7 @@ main {
         </tbody>
 
     </table>
-
+</div>
     <!-- JUMLAH JAM -->
     <table class="footer-box jumlah-box">
 
@@ -1707,7 +1720,7 @@ main {
         </tbody>
 
     </table>
-
+</div>
     <!-- PENGESAHAN -->
     <table class="footer-box pengesahan-box">
 
