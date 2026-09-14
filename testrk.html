@@ -1015,6 +1015,45 @@ main {
     flex:1;
     font-size:8px;
 }
+
+/* ==========================================
+   FIX TABLE BAWAH RK01 CETAK PDF
+========================================== */
+
+.rk01-footer,
+.rk01-footer table,
+.rk01-footer th,
+.rk01-footer td,
+.rk01-footer div{
+    background:#fff !important;
+    color:#000 !important;
+}
+
+/* Print */
+@media print{
+
+    .rk01-footer,
+    .rk01-footer table,
+    .rk01-footer th,
+    .rk01-footer td,
+    .rk01-footer div{
+        background:#fff !important;
+        color:#000 !important;
+        border-color:#000 !important;
+    }
+
+    .rk01-footer-table{
+        background:#fff !important;
+    }
+
+    .rk01-footer th{
+        background:#e8e8e8 !important;
+        color:#000 !important;
+        font-weight:bold !important;
+    }
+
+}
+
     
 </style>
 </head>
