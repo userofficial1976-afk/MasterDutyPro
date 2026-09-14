@@ -95,8 +95,8 @@ body{
 
 .rk01-table th,
 .rk01-table td{
-    height: 28px !important;
-    min-height: 28px !important;
+    height: 16px !important;
+    min-height: 16px !important;
 
     white-space: nowrap !important;
     word-break: normal !important;
@@ -108,7 +108,7 @@ body{
     vertical-align: middle !important;
 
     font-family: "Arial Narrow", Arial, sans-serif !important;
-    font-size: 10px !important;
+    font-size: 8px !important;
 }
     
 .rk01-table th,
@@ -118,7 +118,7 @@ body{
     border:1px solid rgba(148,163,184,.30);
     text-align:center;
     padding:3px;
-    font-size:10px;
+    font-size:8px;
 }
 
 .rk01-table th,
@@ -268,7 +268,14 @@ button{
    RK01 — PDF A4 LANDSCAPE
    TABLE LOCK / FIXED PAGE
 ========================================================= */
+@media print {
 
+    .minggu-page-break{
+        page-break-before: always;
+        break-before: page;
+    }
+
+}
 @media print {
 
     @page {
@@ -3914,15 +3921,23 @@ for(let i = 0; i < senaraiTarikh.length; i += 7){
 
 mingguList.forEach((minggu, index) => {
 
-    html += `
-    <tr>
-        <th colspan="58" class="minggu-header">
-            MINGGU ${index + 1}
-        </th>
-    </tr>
-    `;
+ 
 
-    minggu.forEach(item => {
+if(index > 0){
+
+html += `
+
+<tr class="minggu-page-break">
+
+<td colspan="58"></td>
+
+</tr>
+
+`;
+
+}
+
+minggu.forEach(item => {
 
         html += `
 
