@@ -954,7 +954,8 @@ main {
 
 .footer-box{
     width:100%;
-    border-collapse:collapse;
+    border-collapse:collapse !important;
+    border-spacing:0 !important;
     table-layout:fixed;
 }
 
@@ -1024,12 +1025,10 @@ main {
 @media print{
 
 .rk01-footer-grid{
-    grid-template-columns:
-        25%
-        15%
-        18%
-        15%
-        27%;
+    display:grid;
+    grid-template-columns:25% 15% 18% 15% 27%;
+    gap:0;
+    width:100%;
 }
     .footer-box{
         border-collapse:collapse !important;
@@ -1087,12 +1086,10 @@ main {
 }
 
 .rk01-footer-grid{
-    grid-template-columns:
-        25%
-        15%
-        18%
-        15%
-        27%;
+    display:grid;
+    grid-template-columns:25% 15% 18% 15% 27%;
+    gap:0;
+    width:100%;
 }
 
 .footer-box{
@@ -1160,12 +1157,10 @@ main {
 @media print{
 
 .rk01-footer-grid{
-    grid-template-columns:
-        25%
-        15%
-        18%
-        15%
-        27%;
+    display:grid;
+    grid-template-columns:25% 15% 18% 15% 27%;
+    gap:0;
+    width:100%;
 }
 
     .footer-box th,
