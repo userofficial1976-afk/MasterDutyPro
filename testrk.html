@@ -27,51 +27,32 @@
    LOCK COLUMN RK01
 ===================================================== */
 
-/* Jadikan lebar table benar-benar dikawal */
 .rk01-table{
-    table-layout: fixed;
-    width: max-content;
-    min-width: 100%;
-}
-
-/* Kolum Tarikh/Hari */
-.rk01-table .tarikh-hari-col{
-    width: 75px;
-    min-width: 75px;
-    max-width: 75px;
-}
-
-/* Setiap kolum anggota */
-.rk01-table .sub-col,
-.rk01-table td.kod-cell,
-.rk01-table td.klm-cell,
-.rk01-table td.off-cell,
-.rk01-table td.ph-cell{
-    width: 30px;
-    min-width: 30px;
-    max-width: 30px;
-}
-
-/* Header anggota */
-.anggota-head{
-    width: 120px;
-    min-width: 120px;
-    max-width: 120px;
-
-    overflow:hidden;
-}
-
-/* Nama anggota di page */
-.nama-anggota-page{
-    display:block;
-
+    border-collapse:collapse;
     width:100%;
+}
 
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+.rk01-table th,
+.rk01-table td{
+    border:1px solid #000;
+    padding:6px;
+    text-align:center;
+}
 
-    line-height:1.1;
+.rk01-table th{
+    background:#f2f2f2;
+}
+
+.rk01-number{
+    width:40px;
+}
+
+.rk01-wk{
+    width:50px;
+}
+
+.rk01-small{
+    width:55px;
 }
 
 
@@ -3716,112 +3697,71 @@ function janaMatrixRK01() {
     }
 
 
-    /* =================================================
-       HEADER UTAMA
-    ================================================= */
+let html = `
 
-    let html = `
+<thead>
 
-        <thead>
+    <tr>
+        <th rowspan="2">NO SKB</th>
+        <th colspan="9">${anggota.no_skb || ""}</th>
+    </tr>
 
-            <tr>
+    <tr>
+        <th colspan="9">${anggota.nama || ""}</th>
+    </tr>
 
-                <th
-                    rowspan="2"
-                    class="tarikh-hari-col"
-                >
-                    TARIKH / HARI
-                </th>
-    `;
+    <tr>
+        <th rowspan="4">${bil}</th>
 
+        <th>WK</th>
 
-    /* =================================================
-       HEADER 8 ANGGOTA
-    ================================================= */
+        <th colspan="8">
+            Kerja Lebih Masa
+        </th>
+    </tr>
 
-    anggota8.forEach(
-        (anggota, index) => {
+    <tr>
+        <td></td>
 
-            const nama =
-                escapeHtml(
-                    anggota.nama || ""
-                );
+        <td>INV</td>
+        <td>A</td>
+        <td>B1</td>
+        <td>B2</td>
+        <td>B3</td>
+        <td>C1</td>
+        <td>C2</td>
+        <td></td>
+    </tr>
 
-            const noAnggota =
-                escapeHtml(
-                    anggota.no_anggota || ""
-                );
+    <tr>
+        <td></td>
 
+        <td></td>
+        <td>JAM</td>
+        <td>HARI</td>
+        <td>HARI</td>
+        <td>JAM</td>
+        <td>HARI</td>
+        <td>JAM</td>
+        <td></td>
+    </tr>
 
-            html += `
+    <tr>
+        <th>TK</th>
 
-                <th
-                    colspan="4"
-                    class="anggota-head"
-                >
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
 
-                    <div>
-                        ${noAnggota}
-                    </div>
+</thead>
 
-        <div
-            class="nama-anggota-page"
-            title="${nama}"
-        >
-            ${nama}
-        </div>
-
-                </th>
-
-            `;
-
-        }
-    );
-
-
-    html += `
-
-            </tr>
-
-            <tr>
-    `;
-
-
-    /* =================================================
-       SUB HEADER
-       KOD | KLM | OFF | PH
-    ================================================= */
-
-    anggota8.forEach(() => {
-
-        html += `
-
-            <th class="sub-col">
-                KOD
-            </th>
-
-            <th class="sub-col">
-                KLM
-            </th>
-
-            <th class="sub-col">
-                OFF
-            </th>
-
-            <th class="sub-col">
-                PH
-            </th>
-
-        `;
-
-    });
-
-
-    html += `
-
-            </tr>
-
-        </thead>
+`;
 
         <tbody>
 
