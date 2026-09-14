@@ -1261,7 +1261,15 @@ main {
 
         </div>
 
+<div>
+    <label class="block text-xs text-slate-400 mb-2">
+        MINGGU
+    </label>
 
+    <select id="filterMinggu">
+        <option value="">-- Semua Minggu --</option>
+    </select>
+</div>
         <!-- BUTTON -->
 
         <div class="flex items-end">
@@ -1528,6 +1536,8 @@ document.addEventListener(
 
         binaTahun();
 
+        binaMingguBulanan();
+        
         kawalMobileDashboard();
 
         kawalMobileWeekly();
@@ -1604,6 +1614,52 @@ function bacaPengguna(){
 }
 
 
+
+function binaMingguBulanan(){
+
+    const bulan =
+        document.getElementById("filterBulan").value;
+
+    const tahun =
+        document.getElementById("filterTahun").value;
+
+    const select =
+        document.getElementById("filterMinggu");
+
+    if(!select) return;
+
+    const noBulan = nomborBulan(bulan);
+
+    if(!noBulan) return;
+
+    const tarikh =
+        binaTarikhBulanan(
+            parseInt(tahun),
+            noBulan
+        );
+
+    const jumlahMinggu =
+        Math.ceil(tarikh.length / 7);
+
+    select.innerHTML =
+        `<option value="">-- Semua Minggu --</option>`;
+
+    for(let i=1; i<=jumlahMinggu; i++){
+
+        select.innerHTML += `
+            <option value="${i}">
+                Minggu ${i}
+            </option>
+        `;
+
+    }
+
+}
+
+
+
+
+    
 /* =====================================================
    NAMA USER
 ===================================================== */
@@ -3919,7 +3975,26 @@ for(let i = 0; i < senaraiTarikh.length; i += 7){
 
 }
 
-mingguList.forEach((minggu, index) => {
+const mingguDipilih =
+    document.getElementById("filterMinggu")?.value;
+
+let mingguPapar =
+    mingguList;
+
+if(mingguDipilih){
+
+    mingguPapar = [
+        mingguList[
+            parseInt(mingguDipilih) - 1
+        ]
+    ].filter(Boolean);
+
+}
+
+
+    
+mingguPapar.forEach((minggu, index) => {
+
 
  
 
@@ -4721,7 +4796,19 @@ async function janaLaporanRK01(){
    EVENT BULAN / TAHUN
 ===================================================== */
 
+document
+    .getElementById("filterBulan")
+    ?.addEventListener(
+        "change",
+        binaMingguBulanan
+    );
 
+document
+    .getElementById("filterTahun")
+    ?.addEventListener(
+        "change",
+        binaMingguBulanan
+    );
 
 
 
