@@ -3,400 +3,4770 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Borang RK-01</title>
+
+<title>Anggaran RK01</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+
+
+    
+/* =====================================================
+   LOCK COLUMN RK01
+===================================================== */
+
+/* Jadikan lebar table benar-benar dikawal */
+.rk01-table{
+    table-layout: fixed;
+    width: max-content;
+    min-width: 100%;
 }
 
+/* Kolum Tarikh/Hari */
+.rk01-table .tarikh-hari-col{
+    width: 75px;
+    min-width: 75px;
+    max-width: 75px;
+}
+
+/* Setiap kolum anggota */
+.rk01-table .sub-col,
+.rk01-table td.kod-cell,
+.rk01-table td.klm-cell,
+.rk01-table td.off-cell,
+.rk01-table td.ph-cell{
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+}
+
+/* Header anggota */
+.anggota-head{
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+
+    overflow:hidden;
+}
+
+/* Nama anggota di page */
+.nama-anggota-page{
+    display:block;
+
+    width:100%;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+    line-height:1.1;
+}
+
+
+
+    
 body{
-    font-family:Arial,sans-serif;
-    font-size:8px;
-    background:#fff;
+    background:#0b1220;
+    font-family:'Segoe UI',sans-serif;
 }
 
-.page{
-    width:297mm;
-    margin:auto;
-    padding:5mm;
+.glass{
+    background:rgba(15,23,42,.7);
+    backdrop-filter:blur(16px);
+    border:1px solid rgba(45,212,191,.12);
 }
 
-.header{
-    text-align:center;
-    margin-bottom:5px;
+.sidebar-link.active{
+    background:linear-gradient(
+        90deg,
+        rgba(20,184,166,.20),
+        transparent
+    );
+
+    border-left:3px solid #14b8a6;
+    color:#2dd4bf;
 }
 
-.header h2{
-    font-size:14px;
-}
-
-.header h3{
-    font-size:12px;
-}
-
-.info{
+.rk01-table,
+.rumusan-table{
     width:100%;
     border-collapse:collapse;
-    margin-bottom:5px;
 }
 
-.info td{
-    padding:2px;
-}
-
-.line{
-    display:inline-block;
-    border-bottom:1px solid #000;
-    width:80px;
-}
-
-.rk01{
-    width:100%;
-    border-collapse:collapse;
-    table-layout:fixed;
-}
-
-.rk01 th,
-.rk01 td{
-    border:1px solid #000;
+.rk01-table th,
+.rk01-table td,
+.rumusan-table th,
+.rumusan-table td{
+    border:1px solid rgba(148,163,184,.30);
     text-align:center;
-    vertical-align:middle;
-    padding:4px;
-}
-
-.rk01 thead tr:first-child th{
-    height:30px;
+    padding:3px;
     font-size:10px;
 }
 
-.rk01 thead tr:nth-child(2) th{
-    height:30px;
+.rk01-table th,
+.rumusan-table th{
+    background:rgba(20,184,166,.15);
+    color:#2dd4bf;
+}
+
+.tarikh-hari-col{
+    min-width:65px;
+    width:65px;
+}
+
+.hari-duty{
+    font-size:inherit;
+    line-height:1;
+}
+
+.sub-col{
+    width:28px;
+    min-width:28px;
+}
+
+.rk01-table th,
+.rk01-table td{
+    white-space:nowrap;
+}
+
+.rk01-table small{
+    font-size:inherit;
+    display:block;
+}
+
+.anggota-head{
     font-size:9px;
+    line-height:1.1;
+    padding:2px;
 }
 
-.rk01 tbody td{
-    height:45px;
-}
-
-.rk01 tbody td:first-child{
-    width:50px;
-    font-weight:bold;
-    background:#f5f5f5;
-}
-
-.noskb{
-    width:45px;
-}
-
-.nama{
-    width:120px;
-}
-
-.summary-rk01{
+select{
+    background:#0f172a;
+    color:#e2e8f0;
+    border:1px solid rgba(148,163,184,.25);
+    border-radius:10px;
+    padding:10px 12px;
     width:100%;
-    border-collapse:collapse;
-    margin-top:4px;
 }
 
-.summary-rk01 th,
-.summary-rk01 td{
-    border:1px solid #000;
-    height:20px;
-    font-size:6px;
+select:disabled{
+    opacity:.6;
+    cursor:not-allowed;
 }
 
-.rk01-footer{
-    display:grid;
-    grid-template-columns:
-    2fr 1.3fr 1.3fr 1.3fr 2fr;
+button{
+    cursor:pointer;
+}
+
+.loading{
+    opacity:.6;
+    pointer-events:none;
+}
+
+.status-box{
+    font-size:12px;
+    min-height:18px;
+}
+
+
+
+
+    
+@media (max-width:1023px){
+
+    header{
+        position:fixed !important;
+        top:0 !important;
+        left:0 !important;
+        right:0 !important;
+        z-index:99999 !important;
+    }
+
+}
+
+    
+
+
+.kod-cell {
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.kod-cell div {
+    white-space: normal;
+}
+
+.tarikh-hari-col {
+    min-width: 85px;
+    width: 85px;
+    white-space: normal !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.hari-text {
+    margin-top: 3px;
+    font-weight: 600;
+}
+
+
+.kod-cell,
+.off-cell,
+.ph-cell {
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.1;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.kod-cell div,
+.off-cell div,
+.ph-cell div {
+    white-space: normal;
+    line-height: 1.1;
+}
+
+
+/* =========================================================
+   RK01 — PDF A4 LANDSCAPE
+   TABLE LOCK / FIXED PAGE
+========================================================= */
+
+@media print {
+
+    @page {
+        size: A4 landscape;
+        margin: 7mm;
+    }
+
+    /* -----------------------------------------
+       PAGE
+    ----------------------------------------- */
+
+    html,
+    body {
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+
+        overflow: visible !important;
+
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body {
+        font-family: Arial, sans-serif !important;
+    }
+
+    /* -----------------------------------------
+       HIDE UI
+    ----------------------------------------- */
+
+    aside,
+    header,
+    .no-print,
+    .mobile-bottom,
+    .mobile-nav-item {
+        display: none !important;
+    }
+
+    /* -----------------------------------------
+       MAIN
+    ----------------------------------------- */
+
+    main {
+        width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    main > div {
+        width: 100% !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* -----------------------------------------
+       PRINT AREA
+    ----------------------------------------- */
+
+    .print-area {
+        display: block !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        border: none !important;
+        box-shadow: none !important;
+
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    /* -----------------------------------------
+       TAJUK
+    ----------------------------------------- */
+
+    .report-title-main {
+        margin: 0 !important;
+        padding: 0 !important;
+
+        font-size: 13pt !important;
+        line-height: 1.1 !important;
+
+        font-weight: 700 !important;
+
+        color: #000 !important;
+    }
+
+    .report-title-sub {
+        margin: 1mm 0 2mm 0 !important;
+        padding: 0 !important;
+
+        font-size: 9pt !important;
+        line-height: 1.1 !important;
+
+        font-weight: 700 !important;
+
+        color: #000 !important;
+    }
+
+    /* -----------------------------------------
+       INFO
+    ----------------------------------------- */
+
+    .report-info {
+        width: 100% !important;
+
+        margin: 0 0 2mm 0 !important;
+        padding: 0 !important;
+
+        font-size: 7pt !important;
+        line-height: 1.1 !important;
+
+        color: #000 !important;
+    }
+
+    /* =====================================================
+       TABLE WRAPPER
+       PENTING:
+       JANGAN overflow-x:auto ketika PRINT
+    ===================================================== */
+
+    .rk01-table-wrapper {
+        display: block !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: visible !important;
+    }
+
+    /* =====================================================
+       TABLE RK01
+       
+       A4 LANDSCAPE:
+       297mm - 14mm margin
+       = 283mm ruang cetak
+    ===================================================== */
+
+    .rk01-table {
+        display: table !important;
+
+        width: 283mm !important;
+        min-width: 283mm !important;
+        max-width: 283mm !important;
+
+        table-layout: fixed !important;
+
+        border-collapse: collapse !important;
+        border-spacing: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    /* =====================================================
+       33 COLUMN STRUCTURE
+
+       1 kolum TARIKH
+       8 anggota × 4 kolum
+       = 33 kolum
+    ===================================================== */
+
+    .rk01-table col {
+        width: auto;
+    }
+
+    /* -----------------------------------------
+       TARIKH / HARI
+    ----------------------------------------- */
+
+    .rk01-table .tarikh-hari-col {
+        width: 20mm !important;
+        min-width: 20mm !important;
+        max-width: 20mm !important;
+    }
+
+    /* -----------------------------------------
+       SETIAP SUB COLUMN
+       
+       Baki:
+       283mm - 20mm = 263mm
+
+       263 / 32 = 8.21875mm
+    ----------------------------------------- */
+
+    .rk01-table .sub-col,
+    .rk01-table td.kod-cell,
+    .rk01-table td.klm-cell,
+    .rk01-table td.off-cell,
+    .rk01-table td.ph-cell {
+
+        width: 8.21875mm !important;
+        min-width: 8.21875mm !important;
+        max-width: 8.21875mm !important;
+
+        box-sizing: border-box !important;
+    }
+
+    /* -----------------------------------------
+       HEADER ANGGOTA
+
+       4 sub-column × 8.21875mm
+       = 32.875mm seorang
+    ----------------------------------------- */
+
+    .rk01-table .anggota-head {
+
+        width: 32.875mm !important;
+        min-width: 32.875mm !important;
+        max-width: 32.875mm !important;
+
+        box-sizing: border-box !important;
+
+        padding: 1.2mm 0.5mm !important;
+
+        font-size: 6.5pt !important;
+        line-height: 1.05 !important;
+
+        color: #000 !important;
+        background: #eee !important;
+
+        overflow: hidden !important;
+        word-break: break-word !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    /* -----------------------------------------
+       NAMA ANGGOTA
+    ----------------------------------------- */
+
+    .nama-anggota-page {
+
+        width: 100% !important;
+
+        white-space: normal !important;
+
+        overflow: visible !important;
+
+        text-overflow: clip !important;
+
+        word-break: break-word !important;
+
+        overflow-wrap: anywhere !important;
+
+        font-size: 6pt !important;
+
+        line-height: 1.05 !important;
+    }
+
+    /* =====================================================
+       CELL
+    ===================================================== */
+
+    .rk01-table th,
+    .rk01-table td {
+
+        box-sizing: border-box !important;
+
+        border: 0.7pt solid #000 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+
+        padding: 1mm 0.5mm !important;
+
+        font-size: 6.2pt !important;
+
+        line-height: 1.05 !important;
+
+        text-align: center !important;
+
+        vertical-align: middle !important;
+
+        white-space: normal !important;
+
+        word-break: break-word !important;
+
+        overflow-wrap: anywhere !important;
+    }
+
+    /* -----------------------------------------
+       TABLE HEADER
+    ----------------------------------------- */
+
+    .rk01-table thead {
+        display: table-header-group !important;
+    }
+
+    .rk01-table thead th {
+
+        background: #e8e8e8 !important;
+
+        color: #000 !important;
+
+        font-weight: 700 !important;
+
+        vertical-align: middle !important;
+    }
+
+    /* -----------------------------------------
+       KOD / KLM / OFF / PH
+    ----------------------------------------- */
+
+    .kod-cell,
+    .klm-cell,
+    .off-cell,
+    .ph-cell {
+
+        width: 8.21875mm !important;
+
+        min-width: 8.21875mm !important;
+        max-width: 8.21875mm !important;
+
+        white-space: normal !important;
+
+        word-break: break-word !important;
+
+        overflow-wrap: anywhere !important;
+    }
+
+    .kod-cell div,
+    .klm-cell div,
+    .off-cell div,
+    .ph-cell div {
+
+        white-space: normal !important;
+
+        word-break: break-word !important;
+
+        overflow-wrap: anywhere !important;
+
+        line-height: 1 !important;
+    }
+
+    /* -----------------------------------------
+       TARIKH / HARI
+    ----------------------------------------- */
+
+    .hari-text {
+
+        margin-top: 1mm !important;
+
+        font-size: 6pt !important;
+
+        line-height: 1 !important;
+
+        font-weight: 700 !important;
+    }
+
+    .hari-duty {
+
+        font-size: inherit !important;
+
+        line-height: 1 !important;
+    }
+
+    .rk01-table small {
+
+        font-size: inherit !important;
+
+        line-height: 1 !important;
+    }
+
+    /* =====================================================
+       PAGINATION
+       
+       Jangan paksa satu table ke satu page.
+       Table boleh sambung page 2/3,
+       tetapi WIDTH kekal 283mm.
+    ===================================================== */
+
+    .rk01-table {
+        page-break-inside: auto !important;
+    }
+
+    .rk01-table tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .rk01-table thead {
+        page-break-after: auto !important;
+    }
+
+    /* =====================================================
+       RUMUSAN
+    ===================================================== */
+
+    .rumusan-title {
+
+        margin: 4mm 0 2mm 0 !important;
+
+        padding: 0 !important;
+
+        font-size: 8pt !important;
+
+        line-height: 1.1 !important;
+
+        font-weight: 700 !important;
+
+        color: #000 !important;
+    }
+
+    .rumusan-table {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        table-layout: fixed !important;
+
+        border-collapse: collapse !important;
+
+        margin: 0 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .rumusan-table th,
+    .rumusan-table td {
+
+        border: 0.7pt solid #000 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+
+        padding: 1.2mm !important;
+
+        font-size: 7pt !important;
+
+        line-height: 1.05 !important;
+
+        text-align: center !important;
+
+        vertical-align: middle !important;
+    }
+
+    .rumusan-table th {
+
+        background: #e8e8e8 !important;
+
+        font-weight: 700 !important;
+    }
+
+    .rumusan-table tr {
+
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+}
+
+
+    
+/* =====================================================
+   MOBILE BOTTOM NAVIGATION
+   RK01
+===================================================== */
+
+.mobile-bottom {
+  display:none;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:99999;
+}
+
+.mobile-nav-item {
+    text-decoration: none;
+}
+
+@media (max-width: 1023px) {
+
+    body {
+        padding-bottom: 80px;
+    }
+
+  .mobile-bottom{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:70px;
+    background:#0f172a;
+    border-top:1px solid rgba(45,212,191,.2);
+    display:flex;
+    justify-content:space-evenly;
+    align-items:center;
+    z-index:99999;
+    backdrop-filter:blur(12px);
+    width:100%;
+    overflow:hidden;
+  }
+
+  .mobile-nav-item{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    color:#94a3b8;
+    font-size:11px;
     gap:4px;
-    margin-top:4px;
-}
+  }
 
-.footer-box{
-    border:1px solid #000;
-}
-
-.footer-title{
-    font-weight:bold;
+  .mobile-nav-item i{
+    font-size:20px;
+    width:20px;
     text-align:center;
-    border-bottom:1px solid #000;
-    padding:2px;
-}
-
-.footer-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-.footer-table td{
-    border:1px solid #000;
-    font-size:6px;
-    padding:2px;
-}
-
-.pengesahan{
-    padding:4px;
-    min-height:40px;
-    border-bottom:1px solid #000;
-}
-
-@page{
-    size:A4 landscape;
-    margin:4mm;
+  }
 }
 
 
 
- .anggota-block,
-.rk01{
-    width:100%;
-    border-collapse:collapse;
+    .mobile-nav-item.active {
+        color: #2dd4bf;
+    }
+
+
+
+
+/* =====================================================
+   RK01 TABLE WRAPPER
+   ELAK TABLE BESAR MELEBARKAN SCREEN MOBILE
+===================================================== */
+
+.rk01-table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
-.label{
-    width:80px;
-    background:#f3f4f6;
-    font-weight:bold;
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 1023px) {
+
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .flex.min-h-screen {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
-.hari-cell{
-    width:40px;
-    font-size:18px;
-    font-weight:bold;
-}   
+    .rk01-table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .rk01-table {
+        width: max-content !important;
+        min-width: 100%;
+    }
+
+    /* Mobile Nav kekal ikut screen sebenar */
+    .mobile-bottom {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        min-width: 0 !important;
+
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+    }
+}
+    
+    
 </style>
 </head>
 
-<body>
 
-<div class="page">
+<body class="text-slate-200">
 
-<div class="header">
-    <h2>FGV SECURITY SERVICES SDN BHD</h2>
-    <h3>JADUAL TUGAS DAN REKOD KERJA LEBIH MASA ANGGOTA</h3>
+<div class="flex min-h-screen">
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside
+    class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto no-print"
+>
+
+    <div class="p-6">
+
+        <div class="flex items-center gap-3 mb-8">
+
+<div class="w-12 h-12 flex items-center justify-center">
+    <img
+        src="logomdp.png"
+        alt="Master Duty Pro"
+        class="w-12 h-12 object-contain"
+    >
 </div>
 
-<table class="info">
+            <div>
 
-<tr>
-<td>BULAN : <span class="line"></span></td>
-<td>TAHUN : <span class="line"></span></td>
-<td>MINGGU : <span class="line"></span></td>
-<td>DARI : <span class="line"></span></td>
-<td>HINGGA : <span class="line"></span></td>
-<td>KOD POS : <span class="line"></span></td>
-<td style="text-align:right;">
-<b style="border:1px solid #000;padding:3px 10px;">
-BORANG RK-01
-</b>
-</td>
-</tr>
+                <h1 class="font-bold text-white text-lg">
+                    Master Duty Pro
+                </h1>
 
-</table>
+                <p class="text-xs text-teal-450">
+                    Wilayah Terengganu
+                </p>
+
+            </div>
+
+        </div>
 
 
-<table class="rk01">
+        <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
 
-    <thead>
+            <p
+                id="userName"
+                class="text-sm font-semibold text-white truncate"
+            >
+                -
+            </p>
 
-        <tr>
+            <p
+                id="userJawatan"
+                class="text-xs text-teal-400 mt-1"
+            >
+                -
+            </p>
 
-            <th rowspan="2" style="width:50px">
-                HARI
+        </div>
+
+
+
+
+
+            <a
+                href="dashboard.html"
+                id="mobile-menu-dashboard"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+            >
+                <i class="fas fa-chart-pie w-5"></i>
+                Dashboard
+            </a>
+
+
+            <a
+                href="pengurusan-anggota.html"
+                id="menuAnggota"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+            >
+                <i class="fas fa-users w-5"></i>
+                Pengurusan Anggota
+            </a>
+
+
+            <a
+                href="kod-duty.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+            >
+                <i class="fas fa-code w-5"></i>
+                Kod Waktu Kerja
+            </a>
+
+
+            <a
+                href="kod-tempat-kerja.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+            >
+                <i class="fas fa-map-marker-alt w-5"></i>
+                Kod Tempat Kerja
+            </a>
+
+
+            <a
+                href="jadual-duty.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+            >
+                <i class="fas fa-calendar-check w-5"></i>
+                Pengisian Jadual Tugas
+            </a>
+
+
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">
+                Laporan
+            </p>
+
+
+            <a
+                href="laporan-wilayah.html"
+                id="menuLaporan"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+            >
+                <i class="fas fa-file-alt w-5"></i>
+                Laporan Wilayah
+            </a>
+
+
+            <a
+                href="klm-mingguan.html"
+                id="menuMingguan"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+            >
+                <i class="fas fa-file-alt w-5"></i>
+                KLM Mingguan
+            </a>
+
+            <a
+                href="anggaran-rk02.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+            >
+                <i class="fas fa-chart-bar w-5"></i>
+                Anggaran RK02
+            </a>
+
+
+            <a
+                href="anggaran-rk01.html"
+                class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium"
+            >
+                <i class="fas fa-chart-line w-5"></i>
+                Anggaran RK01
+            </a>
+
+
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">
+                Sistem
+            </p>
+
+
+            <a
+                href="#"
+                id="menuTetapan"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+            >
+                <i class="fas fa-cog w-5"></i>
+                Tetapan
+            </a>
+
+
+            <a
+                href="#"
+                onclick="logKeluar(); return false;"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4"
+            >
+                <i class="fas fa-sign-out-alt w-5"></i>
+                Log Keluar
+            </a>
+
+        </nav>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="flex-1 lg:ml-72">
+
+
+<header
+    class="glass fixed top-0 left-0 right-0 lg:left-72 z-[9999] border-b border-teal-550/10 px-6 py-4 no-print"
+>
+
+    <div class="flex items-center justify-between gap-4">
+
+        <div>
+
+            <h2 class="text-xl font-bold text-white">
+                Anggaran RK01
+            </h2>
+
+            <p class="text-sm text-slate-400">
+                Jadual Duty Bulanan Anggota
+            </p>
+
+        </div>
+
+
+        <div class="flex items-center gap-3">
+
+            <div
+                id="statusSistem"
+                class="hidden md:flex items-center gap-2 bg-teal-550/10 text-teal-400 px-4 py-2 rounded-full text-sm"
+            >
+                <span class="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></span>
+                System Online
+            </div>
+
+
+            <button
+                type="button"
+                onclick="window.print()"
+                class="bg-teal-600 hover:bg-teal-500 text-white px-5 py-2 rounded-xl"
+            >
+                <i class="fas fa-print mr-2"></i>
+                Cetak / PDF
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="p-6 pt-28 space-y-6">
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div class="glass rounded-2xl p-5 no-print">
+
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+
+
+        <!-- UNIT -->
+
+        <div>
+
+            <label class="block text-xs text-slate-400 mb-2">
+                UNIT
+            </label>
+
+            <select id="filterUnit">
+                <option value="">
+                    -- Pilih Unit --
+                </option>
+            </select>
+
+        </div>
+
+
+        <!-- POS -->
+
+        <div>
+
+            <label class="block text-xs text-slate-400 mb-2">
+                POS
+            </label>
+
+            <select id="filterPos">
+                <option value="">
+                    -- Pilih Pos --
+                </option>
+            </select>
+
+        </div>
+
+
+        <!-- BULAN -->
+
+        <div>
+
+            <label class="block text-xs text-slate-400 mb-2">
+                BULAN
+            </label>
+
+            <select id="filterBulan"></select>
+
+        </div>
+
+
+        <!-- TAHUN -->
+
+        <div>
+
+            <label class="block text-xs text-slate-400 mb-2">
+                TAHUN
+            </label>
+
+            <select id="filterTahun"></select>
+
+        </div>
+
+
+        <!-- BUTTON -->
+
+        <div class="flex items-end">
+
+            <button
+                id="btnJana"
+                type="button"
+                onclick="janaLaporanRK01()"
+                class="w-full bg-teal-600 hover:bg-teal-500 rounded-xl py-2.5 font-semibold text-white"
+            >
+                <i class="fas fa-file-lines mr-2"></i>
+                Jana Laporan
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="statusLaporan"
+        class="status-box mt-3 text-slate-400"
+    ></div>
+
+</div>
+
+
+<!-- =====================================================
+     LAPORAN RK01
+===================================================== -->
+
+<div class="glass rounded-2xl p-1 print-area">
+
+
+<div class="text-center mb-1">
+
+    <div class="font-bold text-xl report-title-main">
+        FGV SECURITY SERVICES SDN BHD
+    </div>
+
+    <div class="text-teal-400 font-semibold mt-1 report-title-sub">
+        JADUAL DUTY BULANAN ANGGOTA
+    </div>
+
+</div>
+
+
+<!-- INFO -->
+
+<div class="flex justify-between text-sm mb-2 report-info">
+
+    <div>
+        <b>NAMA POS :</b>
+        <span id="namaPos">-</span>
+    </div>
+
+    <div>
+        <b>KAWASAN :</b>
+        <span id="namaKawasan">-</span>
+    </div>
+
+    <div>
+        <b>BULAN :</b>
+        <span id="bulanLaporan">-</span>
+    </div>
+
+    <div>
+        <b>RK-01</b>
+    </div>
+
+</div>
+
+
+<!-- MATRIX -->
+
+<div class="rk01-table-wrapper">
+
+    <table
+        id="rk01Table"
+        class="rk01-table"
+    >
+    </table>
+
+</div>
+
+
+<!-- RUMUSAN -->
+
+<div class="mt-5">
+
+    <div class="text-center font-bold mb-3 rumusan-title">
+        RUMUSAN BY POS
+    </div>
+
+    <table
+        id="rumusanTable"
+        class="rumusan-table"
+    >
+    </table>
+
+</div>
+
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
+
+  const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+let currentUser = null;
+
+let dataAnggota = [];
+
+let dataDuty = [];
+
+let anggotaLaporan = [];
+
+let SENARAI_BULAN = [
+    "Januari",
+    "Februari",
+    "Mac",
+    "April",
+    "Mei",
+    "Jun",
+    "Julai",
+    "Ogos",
+    "September",
+    "Oktober",
+    "November",
+    "Disember"
+];
+
+const SENARAI_HARI = [
+    "Ahad",
+    "Isnin",
+    "Selasa",
+    "Rabu",
+    "Khamis",
+    "Jumaat",
+    "Sabtu"
+];
+
+/* =====================================================
+   MOBILE DASHBOARD — IKUT ROLE
+===================================================== */
+
+function kawalMobileDashboard() {
+
+    const role = rolePengguna();
+
+    const menuDashboard =
+        document.getElementById("mobile-menu-dashboard");
+
+    if (!menuDashboard) return;
+
+    if (role === "admin") {
+
+        menuDashboard.href = "dashboard.html";
+
+    } else if (
+        role === "ketua_unit" ||
+        role === "ketua_pos"
+    ) {
+
+        menuDashboard.href = "dashboardkpku.html";
+
+    } else {
+
+        menuDashboard.href = "dashboard.html";
+
+    }
+}
+
+/* =====================================================
+   MOBILE WEEKLY — KETUA POS HIDE
+===================================================== */
+
+function kawalMobileWeekly() {
+
+    const role = rolePengguna();
+
+    const menuWeekly =
+        document.getElementById("mobile-menu-klm");
+
+    if (!menuWeekly) return;
+
+    if (role === "ketua_pos") {
+
+        menuWeekly.style.display = "none";
+
+    } else {
+
+        menuWeekly.style.display = "";
+
+    }
+}
+
+
+    
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function(){
+
+        currentUser = bacaPengguna();
+
+        if(!currentUser){
+
+            window.location.href = "login.html";
+
+            return;
+        }
+
+
+        console.log(
+            "================================="
+        );
+
+        console.log(
+            "RK01 SYSTEM START"
+        );
+
+        console.log(
+            "USER:",
+            currentUser
+        );
+
+
+        paparMaklumatPengguna();
+
+        kawalMenuMengikutPeranan();
+
+        binaBulan();
+
+        binaTahun();
+
+        kawalMobileDashboard();
+
+        kawalMobileWeekly();
+
+        try{
+
+            await muatDataAnggota();
+
+            binaSenaraiUnit();
+
+            binaSenaraiPos();
+
+            kawalFilterMengikutPeranan();
+
+            kosongkanLaporanRK01();
+            
+
+        }
+        catch(error){
+
+            console.error(
+                "RALAT MULA RK01:",
+                error
+            );
+
+            paparStatus(
+                "Ralat memuatkan data RK01.",
+                "text-red-400"
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   BACA PENGGUNA
+===================================================== */
+
+function bacaPengguna(){
+
+    try{
+
+        const raw =
+            localStorage.getItem("mdp_user");
+
+        if(!raw){
+
+            return null;
+        }
+
+        const user =
+            JSON.parse(raw);
+
+        console.log(
+            "DATA PENGGUNA:",
+            user
+        );
+
+        return user;
+
+    }
+    catch(error){
+
+        console.error(
+            "RALAT BACA PENGGUNA:",
+            error
+        );
+
+        return null;
+    }
+
+}
+
+
+/* =====================================================
+   NAMA USER
+===================================================== */
+
+function namaPengguna(){
+
+    return String(
+        currentUser?.name ||
+        currentUser?.nama ||
+        currentUser?.user_name ||
+        currentUser?.email ||
+        currentUser?.noSkb ||
+        "-"
+    ).trim();
+
+}
+
+
+/* =====================================================
+   ROLE
+   VERSI ROBUST
+   - ketua unit
+   - ketua_unit
+   - Ketua Unit
+   - KETUA_UNIT
+   semua akan dikesan sebagai ketua_unit
+===================================================== */
+
+function rolePengguna(){
+
+    let nilai = String(
+        currentUser?.role ||
+        currentUser?.peranan ||
+        currentUser?.roles ||
+        ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+    /* ================================================
+       NORMALISE ROLE
+
+       ketua_unit
+       ketua-unit
+       ketua unit
+
+       → ketua unit
+    ================================================ */
+
+    nilai = nilai
+        .replace(/[_-]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+
+    console.log(
+        "ROLE RAW RK01:",
+        currentUser?.role ||
+        currentUser?.peranan ||
+        currentUser?.roles
+    );
+
+    console.log(
+        "ROLE NORMALISE RK01:",
+        nilai
+    );
+
+
+    /* ================================================
+       ADMIN
+    ================================================ */
+
+    if(
+        currentUser?.isAdmin === true ||
+        nilai === "admin" ||
+        nilai === "administrator" ||
+        nilai === "pentadbir"
+    ){
+
+        return "admin";
+
+    }
+
+
+    /* ================================================
+       KETUA UNIT
+    ================================================ */
+
+    if(
+        nilai === "ketua unit" ||
+        nilai.includes("ketua unit")
+    ){
+
+        return "ketua_unit";
+
+    }
+
+
+    /* ================================================
+       KETUA POS
+    ================================================ */
+
+    if(
+        nilai === "ketua pos" ||
+        nilai.includes("ketua pos")
+    ){
+
+        return "ketua_pos";
+
+    }
+
+
+    /* ================================================
+       ROLE LAIN
+    ================================================ */
+
+    return "lain";
+
+}
+
+/* =====================================================
+   UNIT USER
+===================================================== */
+
+function unitPengguna(){
+
+    return String(
+        currentUser?.unit ||
+        currentUser?.nama_unit ||
+        currentUser?.unit_name ||
+        ""
+    ).trim();
+
+}
+
+
+/* =====================================================
+   POS USER
+===================================================== */
+
+function posPengguna(){
+
+    return String(
+        currentUser?.pos ||
+        currentUser?.poskhidmat ||
+        currentUser?.nama_pos ||
+        currentUser?.pos_name ||
+        ""
+    ).trim();
+
+}
+
+
+/* =====================================================
+   PAPAR USER
+===================================================== */
+
+function paparMaklumatPengguna(){
+
+    const nama =
+        document.getElementById("userName");
+
+    const jawatan =
+        document.getElementById("userJawatan");
+
+
+    if(nama){
+
+        nama.textContent =
+            namaPengguna();
+
+    }
+
+
+    if(jawatan){
+
+        const role =
+            rolePengguna();
+
+        const unit =
+            unitPengguna();
+
+        const pos =
+            posPengguna();
+
+
+        let teks =
+            currentUser?.jawatan || role;
+
+
+        if(unit){
+
+            teks += " • " + unit;
+        }
+
+        if(
+            role === "ketua_pos" &&
+            pos
+        ){
+
+            teks += " • " + pos;
+        }
+
+
+        jawatan.textContent =
+            teks;
+    }
+
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+function kawalMenuMengikutPeranan(){
+
+    const role = rolePengguna();
+
+    console.log("ROLE PENGGUNA RK01:", role);
+
+    /* =====================================================
+       ADMIN
+       ===================================================== */
+    if(role === "admin"){
+        return;
+    }
+
+/* =====================================================
+   MOBILE DASHBOARD
+   ADMIN      → dashboard.html
+   KETUA UNIT → dashboardkpku.html
+   KETUA POS  → dashboardkpku.html
+===================================================== */
+
+function kawalMobileDashboard(){
+
+    const role = rolePengguna();
+
+    const menuDashboard =
+        document.getElementById("mobile-menu-dashboard");
+
+    if(!menuDashboard){
+        return;
+    }
+
+    if(role === "admin"){
+
+        menuDashboard.href =
+            "dashboard.html";
+
+    }
+    else if(
+        role === "ketua_unit" ||
+        role === "ketua_pos"
+    ){
+
+        menuDashboard.href =
+            "dashboardkpku.html";
+
+    }
+    else{
+
+        menuDashboard.href =
+            "dashboard.html";
+
+    }
+
+}
+
+/* =====================================================
+   MOBILE WEEKLY
+   ADMIN      → Nampak
+   KETUA UNIT → Nampak
+   KETUA POS  → Sembunyi
+===================================================== */
+
+function kawalMobileWeekly(){
+
+    const role = rolePengguna();
+
+    const menuWeekly =
+        document.getElementById("mobile-menu-klm");
+
+    if(!menuWeekly){
+        return;
+    }
+
+    if(role === "ketua_pos"){
+
+        menuWeekly.style.display = "none";
+
+    }
+    else{
+
+        menuWeekly.style.display = "";
+
+    }
+
+}
+
+
+
+
+    
+    /* =====================================================
+       SEMBUNYIKAN MENU ADMIN
+       ===================================================== */
+
+    [
+        "menuDashboard",
+        "menuAnggota",
+        "menuLaporan",
+        "menuTetapan"
+    ].forEach(id => {
+
+        const el =
+            document.getElementById(id);
+
+        if(el){
+            el.style.display = "none";
+        }
+
+    });
+
+
+    /* =====================================================
+       KLM MINGGUAN
+       
+       ADMIN      → Nampak
+       KETUA UNIT → Nampak
+       KETUA POS  → Sembunyi
+       LAIN       → Sembunyi
+       ===================================================== */
+
+    const menuMingguan =
+        document.getElementById("menuMingguan");
+
+    if(menuMingguan){
+
+        if(role === "ketua_unit"){
+
+            menuMingguan.style.display = "";
+
+        }
+        else{
+
+            menuMingguan.style.display = "none";
+
+        }
+
+    }
+
+}
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logKeluar(){
+
+    localStorage.removeItem(
+        "mdp_user"
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =====================================================
+   BULAN
+===================================================== */
+
+function binaBulan(){
+
+    const select =
+        document.getElementById(
+            "filterBulan"
+        );
+
+    if(!select) return;
+
+
+    select.innerHTML = "";
+
+    SENARAI_BULAN.forEach(
+        (bulan,index) => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                bulan;
+
+            option.textContent =
+                bulan;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    const bulanSemasa =
+        new Date().getMonth();
+
+    select.value =
+        SENARAI_BULAN[bulanSemasa];
+
+}
+
+
+/* =====================================================
+   TAHUN
+===================================================== */
+
+function binaTahun(){
+
+    const select =
+        document.getElementById(
+            "filterTahun"
+        );
+
+    if(!select) return;
+
+
+    const tahunSemasa =
+        new Date().getFullYear();
+
+
+    select.innerHTML = "";
+
+
+    for(
+        let tahun =
+            tahunSemasa - 2;
+
+        tahun <=
+            tahunSemasa + 2;
+
+        tahun++
+    ){
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            String(tahun);
+
+        option.textContent =
+            String(tahun);
+
+        select.appendChild(
+            option
+        );
+
+    }
+
+
+    select.value =
+        String(tahunSemasa);
+
+}
+
+
+/* =====================================================
+   LOAD DATA ANGGOTA
+===================================================== */
+
+async function muatDataAnggota(){
+
+    paparStatus(
+        "Memuatkan data anggota...",
+        "text-slate-400"
+    );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("Data_Anggota")
+            .select(`
+                no_skb,
+                no_anggota,
+                nama,
+                pangkat,
+                unit,
+                pos,
+                kawasan,
+                ketua_unit,
+                ketua_pos,
+                status
+            `)
+            .order(
+                "nama",
+                {
+                    ascending:true
+                }
+            );
+
+
+    if(error){
+
+        console.error(
+            "RALAT Data_Anggota:",
+            error
+        );
+
+        throw error;
+    }
+
+
+    dataAnggota =
+        data || [];
+
+
+    console.log(
+        "DATA ANGGOTA:",
+        dataAnggota
+    );
+
+
+    if(!dataAnggota.length){
+
+        paparStatus(
+            "Tiada data anggota dijumpai.",
+            "text-yellow-400"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   BINA UNIT
+===================================================== */
+
+function binaSenaraiUnit(){
+
+    const select =
+        document.getElementById(
+            "filterUnit"
+        );
+
+    if(!select) return;
+
+
+    const role =
+        rolePengguna();
+
+    const unitUser =
+        unitPengguna();
+
+
+    let unitList =
+        [
+            ...new Set(
+                dataAnggota
+                    .map(
+                        a =>
+                            String(
+                                a.unit || ""
+                            ).trim()
+                    )
+                    .filter(Boolean)
+            )
+        ];
+
+
+    unitList.sort();
+
+
+    select.innerHTML = "";
+
+
+    const semua =
+        document.createElement(
+            "option"
+        );
+
+    semua.value = "";
+
+    semua.textContent =
+        "-- Semua Unit --";
+
+    select.appendChild(
+        semua
+    );
+
+
+    unitList.forEach(
+        unit => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                unit;
+
+            option.textContent =
+                unit;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if(
+        role !== "admin" &&
+        unitUser
+    ){
+
+        select.value =
+            unitUser;
+
+        select.disabled =
+            true;
+
+        select.classList.add(
+            "opacity-60"
+        );
+
+    }
+    else{
+
+        select.disabled =
+            false;
+
+        select.classList.remove(
+            "opacity-60"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   BINA POS
+
+   resetPos = true
+   → bila UNIT berubah, POS kembali -- Semua Pos --
+
+   resetPos = false
+   → bila tekan JANA, kekalkan POS yang dipilih
+===================================================== */
+
+function binaSenaraiPos(resetPos = false){
+
+    const selectUnit =
+        document.getElementById(
+            "filterUnit"
+        );
+
+    const selectPos =
+        document.getElementById(
+            "filterPos"
+        );
+
+    if(
+        !selectUnit ||
+        !selectPos
+    ){
+        return;
+    }
+
+
+    const role =
+        rolePengguna();
+
+    const unit =
+        selectUnit.value;
+
+    /* Simpan POS yang sedang dipilih */
+    const posSebelum =
+        selectPos.value;
+
+
+    /* =================================================
+       DAPATKAN DATA POS MENGIKUT UNIT
+    ================================================= */
+
+    let data =
+        dataAnggota.filter(
+            a => {
+
+                if(!unit){
+                    return true;
+                }
+
+                return String(
+                    a.unit || ""
+                ).trim() === unit;
+
+            }
+        );
+
+
+    let posList =
+        [
+            ...new Set(
+                data
+                    .map(
+                        a =>
+                            String(
+                                a.pos || ""
+                            ).trim()
+                    )
+                    .filter(Boolean)
+            )
+        ];
+
+
+    posList.sort();
+
+
+    /* =================================================
+       BINA SEMULA DROPDOWN POS
+    ================================================= */
+
+    selectPos.innerHTML = "";
+
+
+    const semua =
+        document.createElement(
+            "option"
+        );
+
+    semua.value = "";
+
+    semua.textContent =
+        "-- Semua Pos --";
+
+    selectPos.appendChild(
+        semua
+    );
+
+
+    posList.forEach(
+        pos => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                pos;
+
+            option.textContent =
+                pos;
+
+            selectPos.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    /* =================================================
+       JIKA UNIT BERUBAH
+       → POS RESET KE SEMUA POS
+    ================================================= */
+
+    if(resetPos){
+
+        selectPos.value = "";
+
+    }
+    else{
+
+        /* =================================================
+           CUBA KEKALKAN POS SEBELUMNYA
+        ================================================= */
+
+        const posMasihAda =
+            [...selectPos.options]
+                .some(
+                    option =>
+                        option.value ===
+                        posSebelum
+                );
+
+
+        if(posSebelum && posMasihAda){
+
+            selectPos.value =
+                posSebelum;
+
+        }
+        else{
+
+            selectPos.value = "";
+
+        }
+
+    }
+
+
+    /* ================================================
+       KETUA POS
+    ================================================= */
+
+    if(role === "ketua_pos"){
+
+        const posUser =
+            posPengguna();
+
+
+        if(posUser){
+
+            let ada =
+                [...selectPos.options]
+                    .some(
+                        o =>
+                            o.value ===
+                            posUser
+                    );
+
+
+            if(!ada){
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    posUser;
+
+                option.textContent =
+                    posUser;
+
+                selectPos.appendChild(
+                    option
+                );
+
+            }
+
+
+            selectPos.value =
+                posUser;
+
+        }
+
+
+        selectPos.disabled =
+            true;
+
+        selectPos.classList.add(
+            "opacity-60"
+        );
+
+
+        return;
+
+    }
+
+
+    /* ================================================
+       KETUA UNIT
+    ================================================= */
+
+    if(role === "ketua_unit"){
+
+        selectPos.disabled =
+            false;
+
+        selectPos.classList.remove(
+            "opacity-60"
+        );
+
+        return;
+
+    }
+
+
+    /* ================================================
+       ADMIN
+    ================================================= */
+
+    selectPos.disabled =
+        false;
+
+    selectPos.classList.remove(
+        "opacity-60"
+    );
+
+}
+
+
+/* =====================================================
+   KAWAL FILTER MENGIKUT ROLE
+===================================================== */
+
+function kawalFilterMengikutPeranan(){
+
+    const filterUnit =
+        document.getElementById("filterUnit");
+
+    const filterPos =
+        document.getElementById("filterPos");
+
+
+    if(!filterUnit || !filterPos){
+        return;
+    }
+
+
+    const role =
+        rolePengguna();
+
+
+    console.log(
+        "================================="
+    );
+
+    console.log(
+        "ROLE RK01:",
+        role
+    );
+
+    console.log(
+        "UNIT USER:",
+        unitPengguna()
+    );
+
+    console.log(
+        "POS USER:",
+        posPengguna()
+    );
+
+    console.log(
+        "================================="
+    );
+
+
+    /* =================================================
+       ADMIN
+
+       UNIT → BOLEH PILIH
+       POS  → BOLEH PILIH
+    ================================================= */
+
+    if(role === "admin"){
+
+        filterUnit.disabled = false;
+        filterPos.disabled = false;
+
+        filterUnit.classList.remove("opacity-60");
+        filterPos.classList.remove("opacity-60");
+
+        return;
+    }
+
+
+    /* =================================================
+       KETUA UNIT
+
+       UNIT → TERKUNCI
+       POS  → BOLEH PILIH
+       
+       PENTING:
+       POS TIDAK DIISI DENGAN POS USER
+       kerana Ketua Unit boleh pilih:
+       -- Semua Pos --
+       atau Pos tertentu
+    ================================================= */
+
+    if(role === "ketua_unit"){
+
+        const unitUser =
+            unitPengguna();
+
+
+        /* UNIT */
+
+        if(unitUser){
+
+            filterUnit.value =
+                unitUser;
+
+        }
+
+
+        filterUnit.disabled =
+            true;
+
+        filterUnit.classList.add(
+            "opacity-60"
+        );
+
+
+        /* POS MESTI BOLEH PILIH */
+
+        filterPos.disabled =
+            false;
+
+        filterPos.classList.remove(
+            "opacity-60"
+        );
+
+
+        return;
+    }
+
+
+    /* =================================================
+       KETUA POS
+
+       UNIT → TERKUNCI
+       POS  → TERKUNCI
+    ================================================= */
+
+    if(role === "ketua_pos"){
+
+        const unitUser =
+            unitPengguna();
+
+        const posUser =
+            posPengguna();
+
+
+        /* UNIT */
+
+        if(unitUser){
+
+            filterUnit.value =
+                unitUser;
+
+        }
+
+        filterUnit.disabled =
+            true;
+
+        filterUnit.classList.add(
+            "opacity-60"
+        );
+
+
+        /* POS */
+
+        if(posUser){
+
+            filterPos.value =
+                posUser;
+
+        }
+
+        filterPos.disabled =
+            true;
+
+        filterPos.classList.add(
+            "opacity-60"
+        );
+
+
+        return;
+    }
+
+
+    /* =================================================
+       ROLE LAIN
+
+       UNIT → TERKUNCI jika ada
+       POS  → TERKUNCI jika ada
+    ================================================= */
+
+    const unitUser =
+        unitPengguna();
+
+    const posUser =
+        posPengguna();
+
+
+    if(unitUser){
+
+        filterUnit.value =
+            unitUser;
+
+        filterUnit.disabled =
+            true;
+
+        filterUnit.classList.add(
+            "opacity-60"
+        );
+
+    }
+
+
+    if(posUser){
+
+        filterPos.value =
+            posUser;
+
+        filterPos.disabled =
+            true;
+
+        filterPos.classList.add(
+            "opacity-60"
+        );
+
+    }
+
+}
+
+/* =====================================================
+   EVENT UNIT
+   BILA UNIT BERUBAH:
+   → POS RESET KE -- Semua Pos --
+===================================================== */
+
+document
+    .getElementById("filterUnit")
+    ?.addEventListener(
+        "change",
+        function(){
+
+            const role =
+                rolePengguna();
+
+
+            /* =========================================
+               KETUA POS
+               UNIT TIDAK BOLEH DIUBAH
+            ========================================= */
+
+            if(role === "ketua_pos"){
+
+                this.value =
+                    unitPengguna();
+
+                binaSenaraiPos(false);
+
+                return;
+
+            }
+
+
+            /* =========================================
+               ADMIN / KETUA UNIT
+
+               UNIT berubah
+               → POS kembali -- Semua Pos --
+            ========================================= */
+
+            binaSenaraiPos(true);
+
+        }
+    );
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   NUMBER
+===================================================== */
+
+function nombor(value){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+
+        return 0;
+    }
+
+
+    const n =
+        parseFloat(
+            String(value)
+                .replace(
+                    ",",
+                    "."
+                )
+        );
+
+
+    return Number.isFinite(n)
+        ? n
+        : 0;
+
+}
+
+
+/* =====================================================
+   FORMAT NUMBER
+===================================================== */
+
+function formatNombor(value){
+
+    const n =
+        nombor(value);
+
+
+    if(
+        Number.isInteger(n)
+    ){
+
+        return String(n);
+    }
+
+
+    return n
+        .toFixed(2)
+        .replace(
+            /\.?0+$/,
+            ""
+        );
+
+}
+
+
+/* =====================================================
+   FORMAT HARI / JAM
+===================================================== */
+
+function formatHariJam(
+    hari,
+    jam
+){
+
+    const h =
+        nombor(hari);
+
+    const j =
+        nombor(jam);
+
+
+    if(
+        h === 0 &&
+        j === 0
+    ){
+
+        return "";
+    }
+
+
+    let hasil = "";
+
+
+    if(h > 0){
+
+        hasil +=
+            formatNombor(h) +
+            "H";
+
+    }
+
+
+    if(j > 0){
+
+        if(hasil){
+
+            hasil += " ";
+
+        }
+
+        hasil +=
+            formatNombor(j) +
+            "J";
+
+    }
+
+
+    return hasil;
+
+}
+
+
+/* =====================================================
+   BINA TARIKH
+===================================================== */
+
+function binaTarikhBulanan(
+    tahun,
+    bulan
+){
+
+    const senarai = [];
+
+
+    const jumlahHari =
+        new Date(
+            tahun,
+            bulan,
+            0
+        ).getDate();
+
+
+    for(
+        let i = 1;
+        i <= jumlahHari;
+        i++
+    ){
+
+        const tarikhObj =
+            new Date(
+                tahun,
+                bulan - 1,
+                i
+            );
+
+
+        const yyyy =
+            String(tahun);
+
+
+        const mm =
+            String(bulan)
+                .padStart(
+                    2,
+                    "0"
+                );
+
+
+        const dd =
+            String(i)
+                .padStart(
+                    2,
+                    "0"
+                );
+
+
+        senarai.push({
+
+            tarikh:
+                `${dd}/${mm}/${yyyy}`,
+
+            iso:
+                `${yyyy}-${mm}-${dd}`,
+
+            hari:
+                SENARAI_HARI[
+                    tarikhObj.getDay()
+                ]
+
+        });
+
+    }
+
+
+    return senarai;
+
+}
+
+
+/* =====================================================
+   CONVERT BULAN
+===================================================== */
+
+function nomborBulan(
+    namaBulan
+){
+
+    const index =
+        SENARAI_BULAN
+            .findIndex(
+                b =>
+                    b.toLowerCase() ===
+                    String(
+                        namaBulan
+                    )
+                    .toLowerCase()
+            );
+
+
+    return index >= 0
+        ? index + 1
+        : null;
+
+}
+
+
+/* =====================================================
+   QUERY FILTER ROLE
+===================================================== */
+
+function dapatkanFilter(){
+
+    const role =
+        rolePengguna();
+
+
+    let unit =
+        document.getElementById(
+            "filterUnit"
+        )?.value || "";
+
+
+    let pos =
+        document.getElementById(
+            "filterPos"
+        )?.value || "";
+
+
+    /* ================================================
+       ADMIN
+    ================================================= */
+
+    if(role === "admin"){
+
+        return {
+            unit,
+            pos
+        };
+
+    }
+
+
+    /* ================================================
+       KETUA UNIT
+    ================================================= */
+
+    if(role === "ketua_unit"){
+
+        return {
+
+            unit:
+                unitPengguna(),
+
+            pos
+
+        };
+
+    }
+
+
+    /* ================================================
+       KETUA POS
+    ================================================= */
+
+    if(role === "ketua_pos"){
+
+        return {
+
+            unit:
+                unitPengguna(),
+
+            pos:
+                posPengguna()
+
+        };
+
+    }
+
+
+    /* ================================================
+       USER LAIN
+    ================================================= */
+
+    return {
+
+        unit:
+            unitPengguna() || unit,
+
+        pos:
+            posPengguna() || pos
+
+    };
+
+}
+
+
+/* =====================================================
+   LOAD JADUAL DUTY
+===================================================== */
+
+async function muatDataDuty(){
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        ).value;
+
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        ).value;
+
+
+    const filter =
+        dapatkanFilter();
+
+
+    console.log(
+        "FILTER RK01:",
+        filter
+    );
+
+
+    let query =
+        supabaseClient
+            .from("jadual_duty")
+            .select(`
+                id,
+                tarikh,
+                bulan,
+                tahun,
+                no_skb,
+                kod_duty,
+                kod_tempat_kerja,
+                waktu_tugasan,
+                jam_kerja,
+                jam_klm,
+                pos,
+                nama_anggota,
+                no_anggota,
+                kawasan,
+                unit,
+                ketua_unit,
+                ketua_pos,
+                hari,
+                hari_offday_bertugas,
+                jam_offday_bertugas,
+                hari_cutiam_bertugas,
+                jam_cutiam_bertugas
+            `)
+            .eq(
+                "bulan",
+                bulan
+            )
+            .eq(
+                "tahun",
+                String(tahun)
+            );
+
+
+    /* ================================================
+       UNIT
+    ================================================= */
+
+    if(filter.unit){
+
+        query =
+            query.eq(
+                "unit",
+                filter.unit
+            );
+
+    }
+
+
+    /* ================================================
+       POS
+    ================================================= */
+
+    if(filter.pos){
+
+        query =
+            query.eq(
+                "pos",
+                filter.pos
+            );
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await query;
+
+
+    if(error){
+
+        console.error(
+            "RALAT JADUAL DUTY:",
+            error
+        );
+
+        throw error;
+    }
+
+
+    dataDuty =
+        data || [];
+
+
+    console.log(
+        "DATA JADUAL DUTY:",
+        dataDuty
+    );
+
+
+    return dataDuty;
+
+}
+
+
+/* =====================================================
+   DAPATKAN ANGGOTA UNTUK LAPORAN
+   SUSUNAN:
+   1. Sjn
+   2. Kpl
+   3. L/Kpl
+   4. Konst
+   5. PPB
+
+   DALAM PANGKAT YANG SAMA:
+   → SUSUN IKUT NO. ANGGOTA
+===================================================== */
+
+function binaAnggotaLaporan(){
+
+    const filter = dapatkanFilter();
+
+    let senarai = dataAnggota.filter(anggota => {
+
+        const unitAnggota =
+            String(anggota.unit || "").trim();
+
+        const posAnggota =
+            String(anggota.pos || "").trim();
+
+        if(
+            filter.unit &&
+            unitAnggota !== String(filter.unit).trim()
+        ){
+            return false;
+        }
+
+        if(
+            filter.pos &&
+            posAnggota !== String(filter.pos).trim()
+        ){
+            return false;
+        }
+
+        return true;
+    });
+
+
+    /* =====================================================
+       KHAS KETUA POS
+       ===================================================== */
+
+    if(rolePengguna() === "ketua_pos"){
+
+        const unitUser =
+            String(unitPengguna() || "").trim();
+
+        const posUser =
+            String(posPengguna() || "").trim();
+
+        senarai = senarai.filter(anggota => {
+
+            return (
+                String(anggota.unit || "").trim() === unitUser &&
+                String(anggota.pos || "").trim() === posUser
+            );
+
+        });
+    }
+
+
+    /* =====================================================
+       NORMALISASI PANGKAT
+       ===================================================== */
+
+   function normalisePangkat(pangkat){
+
+    let p = String(pangkat ?? "")
+        .trim()
+        .toUpperCase()
+        .normalize("NFKC");
+
+    /*
+    =====================================================
+    BUANG SIMBOL DAN RUANG UNTUK PERBANDINGAN
+    =====================================================
+    */
+
+    const compact =
+        p.replace(/[^A-Z]/g, "");
+
+
+    /*
+    =====================================================
+    SJN / SARJAN
+    =====================================================
+    */
+
+    if(
+        compact === "SJN" ||
+        compact === "SARJAN"
+    ){
+        return "SJN";
+    }
+
+
+    /*
+    =====================================================
+    KPL / KOPERAL
+    =====================================================
+    */
+
+    if(
+        compact === "KPL" ||
+        compact === "KOPERAL"
+    ){
+        return "KPL";
+    }
+
+
+    /*
+    =====================================================
+    L/KPL / LANS KOPERAL
+    =====================================================
+    */
+
+    if(
+        compact === "LKPL" ||
+        compact === "LKOPERAL" ||
+        compact === "LANSKOPERAL"
+    ){
+        return "L/KPL";
+    }
+
+
+    /*
+    =====================================================
+    KONST / KONSTABEL
+    =====================================================
+    */
+
+    if(
+        compact === "KONST" ||
+        compact === "KONSTABEL"
+    ){
+        return "KONST";
+    }
+
+
+    /*
+    =====================================================
+    PPB
+    =====================================================
+    */
+
+    if(
+        compact === "PPB"
+    ){
+        return "PPB";
+    }
+
+
+    /*
+    =====================================================
+    PANGKAT LAIN
+    =====================================================
+    */
+
+    return p;
+}
+
+
+    /* =====================================================
+       SUSUNAN PANGKAT
+       ===================================================== */
+
+    const susunanPangkat = {
+
+        "SJN": 1,
+
+        "KPL": 2,
+
+        "L/KPL": 3,
+
+        "KONST": 4,
+
+        "PPB": 5
+
+    };
+
+
+    /* =====================================================
+       SORT
+       ===================================================== */
+
+    senarai.sort((a, b) => {
+
+        const pangkatA =
+            normalisePangkat(a.pangkat);
+
+        const pangkatB =
+            normalisePangkat(b.pangkat);
+
+
+        const rankA =
+            susunanPangkat[pangkatA] ?? 99;
+
+        const rankB =
+            susunanPangkat[pangkatB] ?? 99;
+
+
+        /*
+        -----------------------------------------------
+        PANGKAT BERBEZA
+        -----------------------------------------------
+        */
+
+        if(rankA !== rankB){
+
+            return rankA - rankB;
+
+        }
+
+
+        /*
+        -----------------------------------------------
+        PANGKAT SAMA
+        SUSUN NO ANGGOTA
+        -----------------------------------------------
+        */
+
+        const noA =
+            String(a.no_anggota || "").trim();
+
+        const noB =
+            String(b.no_anggota || "").trim();
+
+
+        return noA.localeCompare(
+            noB,
+            "ms",
+            {
+                numeric: true,
+                sensitivity: "base"
+            }
+        );
+
+    });
+
+
+    /* =====================================================
+       DEBUG SORT
+       ===================================================== */
+
+    console.log("=================================");
+    console.log("SORT PANGKAT RK01");
+    console.log("=================================");
+
+    console.table(
+        senarai.map((anggota, index) => {
+
+            const pangkatAsal =
+                String(anggota.pangkat || "").trim();
+
+            const pangkatNormal =
+                normalisePangkat(anggota.pangkat);
+
+            return {
+
+                Bil: index + 1,
+
+                "Pangkat Asal":
+                    pangkatAsal,
+
+                "Pangkat Normal":
+                    pangkatNormal,
+
+                "Rank":
+                    susunanPangkat[pangkatNormal] ?? 99,
+
+                "No Anggota":
+                    anggota.no_anggota,
+
+                "Nama":
+                    anggota.nama,
+
+                "Unit":
+                    anggota.unit,
+
+                "Pos":
+                    anggota.pos
+
+            };
+
+        })
+    );
+
+
+    console.log("ANGGOTA SELEPAS SORT:", senarai);
+
+    console.log("===== UJIAN L/KPL =====");
+
+senarai.forEach((a, i) => {
+
+    console.log(
+        i + 1,
+        "| Asal:",
+        JSON.stringify(a.pangkat),
+        "| Normal:",
+        JSON.stringify(normalisePangkat(a.pangkat)),
+        "| No:",
+        a.no_anggota
+    );
+
+});
+
+    
+    return senarai;
+}
+/* =====================================================
+   DAPATKAN REKOD ANGGOTA
+===================================================== */
+
+function rekodAnggota(
+    noSkb,
+    iso
+){
+
+    return dataDuty.find(
+        r => {
+
+            return String(
+                r.no_skb
+            ) === String(
+                noSkb
+            )
+            &&
+            normaliseTarikh(
+                r.tarikh
+            ) === iso;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NORMALISE TARIKH
+===================================================== */
+
+function normaliseTarikh(
+    tarikh
+){
+
+    if(!tarikh){
+
+        return "";
+    }
+
+
+    const value =
+        String(tarikh)
+            .trim();
+
+
+    /* YYYY-MM-DD */
+
+    if(
+        /^\d{4}-\d{2}-\d{2}$/
+            .test(value)
+    ){
+
+        return value;
+    }
+
+
+    /* DD/MM/YYYY */
+
+    const parts =
+        value.split("/");
+
+
+    if(
+        parts.length === 3
+    ){
+
+        const dd =
+            parts[0]
+                .padStart(
+                    2,
+                    "0"
+                );
+
+        const mm =
+            parts[1]
+                .padStart(
+                    2,
+                    "0"
+                );
+
+        const yyyy =
+            parts[2];
+
+
+        if(
+            yyyy.length === 4
+        ){
+
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+    }
+
+
+    return value;
+
+}
+
+
+/* =====================================================
+   KOD UNTUK RK01
+===================================================== */
+
+function nilaiKodDuty(rekod) {
+    if (!rekod) return "";
+
+    const kodDuty = String(rekod.kod_duty || "").trim();
+    const kodTempatKerja = String(rekod.kod_tempat_kerja || "").trim();
+
+    let html = "";
+
+    if (kodDuty) {
+        html += `<div>${escapeHtml(kodDuty)}</div>`;
+    }
+
+    if (kodTempatKerja && kodTempatKerja !== kodDuty) {
+        html += `<div>${escapeHtml(kodTempatKerja)}</div>`;
+    }
+
+    return html;
+}
+
+/* =====================================================
+   KLM
+===================================================== */
+
+function nilaiKLM(
+    rekod
+){
+
+    if(!rekod){
+
+        return "";
+    }
+
+
+    const jam =
+        nombor(
+            rekod.jam_klm
+        );
+
+
+    if(jam === 0){
+
+        return "";
+    }
+
+
+    return formatNombor(
+        jam
+    );
+
+}
+
+
+/* =====================================================
+   OFF
+===================================================== */
+
+function nilaiOFF(rekod) {
+    if (!rekod) return "";
+
+    const hari = String(rekod.hari_offday_bertugas || "").trim();
+    const jam = nombor(rekod.jam_offday_bertugas);
+
+    let html = "";
+
+    // Hari hanya papar jika bukan 0
+    if (hari && nombor(hari.replace(/[^\d.-]/g, "")) !== 0) {
+        html += `<div>${escapeHtml(hari)}Hari</div>`;
+    }
+
+    // Jam hanya papar jika bukan 0
+    if (jam !== 0) {
+        html += `<div>${formatNombor(jam)}Jam</div>`;
+    }
+
+    return html;
+}
+
+/* =====================================================
+   PH / CUTI AM
+===================================================== */
+
+function nilaiPH(rekod) {
+    if (!rekod) return "";
+
+    const hari = String(rekod.hari_cutiam_bertugas || "").trim();
+    const jam = nombor(rekod.jam_cutiam_bertugas);
+
+    let html = "";
+
+    // Hari hanya papar jika bukan 0
+    if (hari && nombor(hari.replace(/[^\d.-]/g, "")) !== 0) {
+        html += `<div>${escapeHtml(hari)}Hari</div>`;
+    }
+
+    // Jam hanya papar jika bukan 0
+    if (jam !== 0) {
+        html += `<div>${formatNombor(jam)}Jam</div>`;
+    }
+
+    return html;
+}
+
+/* =====================================================
+   JANA MATRIX RK01
+   - SENTIASA 8 ANGGOTA
+   - TARIKH + HARI = 1 KOLUM
+   - SETIAP ANGGOTA:
+       KOD | KLM | OFF | PH
+   - KOD:
+       kod_duty
+       kod_tempat_kerja
+     DALAM SEL YANG SAMA
+===================================================== */
+
+function janaMatrixRK01() {
+
+    const table =
+        document.getElementById("rk01Table");
+
+    if (!table) return;
+
+
+    /* =================================================
+       SENTIASA 8 SLOT ANGGOTA
+    ================================================= */
+
+    const anggota8 = [];
+
+    for (let i = 0; i < 8; i++) {
+
+        if (anggotaLaporan[i]) {
+
+            anggota8.push(
+                anggotaLaporan[i]
+            );
+
+        } else {
+
+            anggota8.push({
+                no_skb: "",
+                no_anggota: "",
+                nama: ""
+            });
+
+        }
+
+    }
+
+
+    /* =================================================
+       HEADER UTAMA
+    ================================================= */
+
+    let html = `
+
+        <thead>
+
+            <tr>
+
+                <th
+                    rowspan="2"
+                    class="tarikh-hari-col"
+                >
+                    TARIKH / HARI
+                </th>
+    `;
+
+
+    /* =================================================
+       HEADER 8 ANGGOTA
+    ================================================= */
+
+    anggota8.forEach(
+        (anggota, index) => {
+
+            const nama =
+                escapeHtml(
+                    anggota.nama || ""
+                );
+
+            const noAnggota =
+                escapeHtml(
+                    anggota.no_anggota || ""
+                );
+
+
+            html += `
+
+                <th
+                    colspan="4"
+                    class="anggota-head"
+                >
+
+                    <div>
+                        ${noAnggota}
+                    </div>
+
+        <div
+            class="nama-anggota-page"
+            title="${nama}"
+        >
+            ${nama}
+        </div>
+
+                </th>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+            </tr>
+
+            <tr>
+    `;
+
+
+    /* =================================================
+       SUB HEADER
+       KOD | KLM | OFF | PH
+    ================================================= */
+
+    anggota8.forEach(() => {
+
+        html += `
+
+            <th class="sub-col">
+                KOD
             </th>
 
-            <th>76001</th>
-            <th>76002</th>
-            <th>76003</th>
-            <th>76004</th>
-            <th>76005</th>
-            <th>76006</th>
-            <th>76007</th>
+            <th class="sub-col">
+                KLM
+            </th>
+
+            <th class="sub-col">
+                OFF
+            </th>
+
+            <th class="sub-col">
+                PH
+            </th>
+
+        `;
+
+    });
+
+
+    html += `
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+    `;
+
+
+    /* =================================================
+       BULAN / TAHUN
+    ================================================= */
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        )?.value || "";
+
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        )?.value || "";
+
+
+    const nomborBulanDipilih =
+        nomborBulan(bulan);
+
+
+    if (
+        !nomborBulanDipilih ||
+        !tahun
+    ) {
+
+        html += `
+
+            <tr>
+
+                <td
+                    colspan="33"
+                    class="empty-row"
+                >
+                    Sila pilih bulan dan tahun.
+                </td>
+
+            </tr>
+
+        `;
+
+        html += `
+            </tbody>
+        `;
+
+        table.innerHTML =
+            html;
+
+        return;
+
+    }
+
+
+    /* =================================================
+       SENARAI TARIKH BULAN
+    ================================================= */
+
+    const senaraiTarikh =
+        binaTarikhBulanan(
+            parseInt(tahun),
+            nomborBulanDipilih
+        );
+
+
+    /* =================================================
+       LOOP SETIAP TARIKH
+    ================================================= */
+
+    senaraiTarikh.forEach(
+        item => {
+
+            html += `
+
+                <tr>
+
+                    <!-- =========================
+                         TARIKH + HARI
+                    ========================== -->
+
+                    <td
+                        class="tarikh-hari-col"
+                    >
+
+                        <div>
+                            ${item.tarikh}
+                        </div>
+
+                        <div class="hari-text">
+                            ${item.hari}
+                        </div>
+
+                    </td>
+
+            `;
+
+
+            /* =========================================
+               8 ANGGOTA
+            ========================================= */
+
+            anggota8.forEach(
+                anggota => {
+
+                    const rekod =
+                        rekodAnggota(
+                            anggota.no_skb,
+                            item.iso
+                        );
+
+
+                    /* =============================
+                       KOD
+                    ============================== */
+
+                    const kod =
+                        nilaiKodDuty(
+                            rekod
+                        );
+
+
+                    /* =============================
+                       KLM
+                    ============================== */
+
+                    const klm =
+                        nilaiKLM(
+                            rekod
+                        );
+
+
+                    /* =============================
+                       OFF
+                    ============================== */
+
+                    const off =
+                        nilaiOFF(
+                            rekod
+                        );
+
+
+                    /* =============================
+                       PH
+                    ============================== */
+
+                    const ph =
+                        nilaiPH(
+                            rekod
+                        );
+
+
+                    /* =============================
+                       PAPAR 4 KOLUM
+                    ============================== */
+
+                    html += `
+
+                        <td class="kod-cell">
+                            ${kod}
+                        </td>
+
+                        <td class="klm-cell">
+                            ${klm}
+                        </td>
+
+                        <td class="off-cell">
+                            ${off}
+                        </td>
+
+                        <td class="ph-cell">
+                            ${ph}
+                        </td>
+
+                    `;
+
+                }
+            );
+
+
+            html += `
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    /* =================================================
+       TUTUP TABLE
+    ================================================= */
+
+    html += `
+
+        </tbody>
+
+    `;
+
+
+    table.innerHTML =
+        html;
+
+}
+
+/* =====================================================
+   RUMUSAN BY POS
+===================================================== */
+
+function binaRumusanRK01(){
+
+    const table =
+        document.getElementById(
+            "rumusanTable"
+        );
+
+
+    if(!table){
+
+        return;
+    }
+
+
+    if(!anggotaLaporan.length){
+
+        table.innerHTML =
+            `<tbody>
+                <tr>
+                    <td>
+                        TIADA DATA
+                    </td>
+                </tr>
+             </tbody>`;
+
+        return;
+    }
+
+
+    let jumlahKLM = 0;
+
+    let jumlahOffHari = 0;
+
+    let jumlahOffJam = 0;
+
+    let jumlahCutiHari = 0;
+
+    let jumlahCutiJam = 0;
+
+
+    let html = `
+
+        <thead>
+
+            <tr>
+
+                <th>NO ANGGOTA</th>
+
+                <th>NAMA ANGGOTA</th>
+
+                <th>JUMLAH KLM</th>
+
+                <th>OFF HARI</th>
+
+                <th>OFF JAM</th>
+
+                <th>CUTIAM HARI</th>
+
+                <th>CUTIAM JAM</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+    `;
+
+
+    anggotaLaporan.forEach(
+        anggota => {
+
+
+            const rekodAnggotaBulan =
+                dataDuty.filter(
+                    r =>
+                        String(
+                            r.no_skb
+                        ) === String(
+                            anggota.no_skb
+                        )
+                );
+
+
+            let klm = 0;
+
+            let offHari = 0;
+
+            let offJam = 0;
+
+            let cutiHari = 0;
+
+            let cutiJam = 0;
+
+
+            rekodAnggotaBulan.forEach(
+                rekod => {
+
+                    klm +=
+                        nombor(
+                            rekod.jam_klm
+                        );
+
+                    offHari +=
+                        nombor(
+                            rekod.hari_offday_bertugas
+                        );
+
+                    offJam +=
+                        nombor(
+                            rekod.jam_offday_bertugas
+                        );
+
+                    cutiHari +=
+                        nombor(
+                            rekod.hari_cutiam_bertugas
+                        );
+
+                    cutiJam +=
+                        nombor(
+                            rekod.jam_cutiam_bertugas
+                        );
+
+                }
+            );
+
+
+            jumlahKLM +=
+                klm;
+
+            jumlahOffHari +=
+                offHari;
+
+            jumlahOffJam +=
+                offJam;
+
+            jumlahCutiHari +=
+                cutiHari;
+
+            jumlahCutiJam +=
+                cutiJam;
+
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(
+                            anggota.no_anggota ||
+                            anggota.no_skb ||
+                            "-"
+                        )}
+                    </td>
+
+                    <td class="text-left">
+                        ${escapeHtml(
+                            anggota.nama ||
+                            "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatNombor(klm)}
+                    </td>
+
+                    <td>
+                        ${formatNombor(offHari)}
+                    </td>
+
+                    <td>
+                        ${formatNombor(offJam)}
+                    </td>
+
+                    <td>
+                        ${formatNombor(cutiHari)}
+                    </td>
+
+                    <td>
+                        ${formatNombor(cutiJam)}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+        <tr class="font-bold">
+
+            <td colspan="2">
+                JUMLAH KESELURUHAN
+            </td>
+
+            <td>
+                ${formatNombor(
+                    jumlahKLM
+                )}
+            </td>
+
+            <td>
+                ${formatNombor(
+                    jumlahOffHari
+                )}
+            </td>
+
+            <td>
+                ${formatNombor(
+                    jumlahOffJam
+                )}
+            </td>
+
+            <td>
+                ${formatNombor(
+                    jumlahCutiHari
+                )}
+            </td>
+
+            <td>
+                ${formatNombor(
+                    jumlahCutiJam
+                )}
+            </td>
 
         </tr>
 
-        <tr>
+        </tbody>
 
-            <th>MOHD ALI</th>
-            <th>MOHD ABU</th>
-            <th>AHMAD</th>
-            <th>MAMAT</th>
-            <th>RAHMAN</th>
-            <th>KAMAL</th>
-            <th>FAUZI</th>
-
-        </tr>
-
-    </thead>
-
-    <tbody>
-
-<tr>
-    <th class="label">NO SKB</th>
-    <td colspan="8"></td>
-</tr>
-
-<tr>
-    <th class="label">NAMA</th>
-    <td colspan="8"></td>
-</tr>
-
-<tr>
-    <td rowspan="4" class="hari-cell">1</td>
-
-    <th>WK</th>
-
-    <th colspan="7">
-        Kerja Lebih Masa
-    </th>
-</tr>
-
-<tr>
-    <td></td>
-
-    <td>INV</td>
-    <td>A</td>
-    <td>B1</td>
-    <td>B2</td>
-    <td>B3</td>
-    <td>C1</td>
-    <td>C2</td>
-</tr>
-
-<tr>
-    <td></td>
-
-    <td></td>
-    <td>JAM</td>
-    <td>HARI</td>
-    <td>HARI</td>
-    <td>JAM</td>
-    <td>HARI</td>
-    <td>JAM</td>
-</tr>
-
-<tr>
-    <th>TK</th>
-
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-</tr>
-
-</tbody>
-
-</table>
-
-<table class="summary-rk01">
-
-<tr>
-<th>MINGGU INI</th>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-
-<tr>
-<th>SEHINGGA KINI</th>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-
-<tr>
-<th>TANDA TANGAN</th>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-
-</table>
+    `;
 
 
-<div class="rk01-footer">
+    table.innerHTML =
+        html;
 
-<div class="footer-box">
-<div class="footer-title">PETUNJUK</div>
-<table class="footer-table">
-<tr><td style="height:120px;"></td></tr>
-</table>
-</div>
+}
 
-<div class="footer-box">
-<div class="footer-title">WAKTU KERJA</div>
-<table class="footer-table">
-<tr><td style="height:120px;"></td></tr>
-</table>
-</div>
 
-<div class="footer-box">
-<div class="footer-title">TEMPAT KERJA</div>
-<table class="footer-table">
-<tr><td style="height:120px;"></td></tr>
-</table>
-</div>
+function kosongkanLaporanRK01(){
 
-<div class="footer-box">
-<div class="footer-title">JUMLAH JAM SEHINGGA KINI</div>
-<table class="footer-table">
-<tr><td style="height:120px;"></td></tr>
-</table>
-</div>
+    const table =
+        document.getElementById("rk01Table");
 
-<div class="footer-box">
+    if(table){
 
-<div class="pengesahan">
-Semua maklumat kerja dan jumlah jam kerja lebih masa yang tercatat dalam Borang RK-01 ini adalah disahkan betul.
-</div>
+        table.innerHTML = `
+            <tbody>
+                <tr>
+                    <td
+                        colspan="33"
+                        class="empty-row"
+                        style="padding:30px;"
+                    >
+                        Sila pilih Unit, Pos, Bulan dan Tahun,
+                        kemudian tekan <b>Jana Laporan</b>.
+                    </td>
+                </tr>
+            </tbody>
+        `;
 
-<table class="footer-table">
+    }
 
-<tr>
-<td>Disediakan Oleh</td>
-<td>Diperiksa Oleh</td>
-<td>Disahkan Oleh</td>
-</tr>
 
-<tr>
-<td style="height:70px;"></td>
-<td></td>
-<td></td>
-</tr>
+    const rumusan =
+        document.getElementById("rumusanTable");
 
-<tr>
-<td>Ketua Pos</td>
-<td>Ketua Unit</td>
-<td>Pegawai Operasi Wilayah</td>
-</tr>
+    if(rumusan){
 
-</table>
+        rumusan.innerHTML = `
+            <tbody>
+                <tr>
+                    <td style="padding:20px;">
+                        Rumusan akan dipaparkan selepas laporan dijana.
+                    </td>
+                </tr>
+            </tbody>
+        `;
 
-</div>
+    }
 
-</div>
 
-</div>
+    const namaPos =
+        document.getElementById("namaPos");
 
+    const namaKawasan =
+        document.getElementById("namaKawasan");
+
+    const bulanLaporan =
+        document.getElementById("bulanLaporan");
+
+
+    if(namaPos){
+
+        namaPos.textContent = "-";
+
+    }
+
+
+    if(namaKawasan){
+
+        namaKawasan.textContent = "-";
+
+    }
+
+
+    if(bulanLaporan){
+
+        bulanLaporan.textContent = "-";
+
+    }
+
+}
+
+/* =====================================================
+   INFO LAPORAN
+===================================================== */
+
+function kemaskiniInfoLaporan(){
+
+    const filter =
+        dapatkanFilter();
+
+
+    const namaPos =
+        document.getElementById(
+            "namaPos"
+        );
+
+
+    const namaKawasan =
+        document.getElementById(
+            "namaKawasan"
+        );
+
+
+    const bulanLaporan =
+        document.getElementById(
+            "bulanLaporan"
+        );
+
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        ).value;
+
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        ).value;
+
+
+    /* =================================================
+       POS
+    ================================================= */
+
+    if(namaPos){
+
+        if(filter.pos){
+
+            namaPos.textContent =
+                filter.pos;
+
+        }
+        else{
+
+            const posList =
+                [
+                    ...new Set(
+                        anggotaLaporan
+                            .map(
+                                a =>
+                                    String(
+                                        a.pos || ""
+                                    ).trim()
+                            )
+                            .filter(Boolean)
+                    )
+                ];
+
+
+            if(
+                posList.length === 1
+            ){
+
+                namaPos.textContent =
+                    posList[0];
+
+            }
+            else{
+
+                namaPos.textContent =
+                    "SEMUA POS";
+
+            }
+
+        }
+
+    }
+
+
+    /* =================================================
+       KAWASAN
+    ================================================= */
+
+    if(namaKawasan){
+
+        const kawasanList =
+            [
+                ...new Set(
+                    anggotaLaporan
+                        .map(
+                            a =>
+                                String(
+                                    a.kawasan || ""
+                                ).trim()
+                        )
+                        .filter(Boolean)
+                )
+            ];
+
+
+        if(
+            kawasanList.length === 1
+        ){
+
+            namaKawasan.textContent =
+                kawasanList[0];
+
+        }
+        else if(
+            kawasanList.length > 1
+        ){
+
+            namaKawasan.textContent =
+                "PELBAGAI KAWASAN";
+
+        }
+        else{
+
+            const kawasanDuty =
+                [
+                    ...new Set(
+                        dataDuty
+                            .map(
+                                r =>
+                                    String(
+                                        r.kawasan || ""
+                                    ).trim()
+                            )
+                            .filter(Boolean)
+                    )
+                ];
+
+
+            if(
+                kawasanDuty.length === 1
+            ){
+
+                namaKawasan.textContent =
+                    kawasanDuty[0];
+
+            }
+            else{
+
+                namaKawasan.textContent =
+                    "-";
+
+            }
+
+        }
+
+    }
+
+
+    /* =================================================
+       BULAN
+    ================================================= */
+
+    if(bulanLaporan){
+
+        bulanLaporan.textContent =
+            `${bulan} ${tahun}`;
+
+    }
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function paparStatus(
+    mesej,
+    kelas = "text-slate-400"
+){
+
+    const el =
+        document.getElementById(
+            "statusLaporan"
+        );
+
+
+    if(!el){
+
+        return;
+    }
+
+
+    el.className =
+        `status-box mt-3 ${kelas}`;
+
+
+    el.textContent =
+        mesej;
+
+}
+
+
+/* =====================================================
+   JANA LAPORAN UTAMA
+===================================================== */
+
+async function janaLaporanRK01(){
+
+    const btn =
+        document.getElementById(
+            "btnJana"
+        );
+
+
+    try{
+
+        if(btn){
+
+            btn.disabled =
+                true;
+
+            btn.classList.add(
+                "loading"
+            );
+
+            btn.innerHTML =
+                `
+                <i class="fas fa-spinner fa-spin mr-2"></i>
+                Memuatkan...
+                `;
+
+        }
+
+
+        paparStatus(
+            "Memuatkan jadual duty...",
+            "text-teal-400"
+        );
+
+
+        /* =============================================
+           PASTIKAN ROLE FILTER BETUL
+        ============================================= */
+
+        binaSenaraiPos(false);
+
+        kawalFilterMengikutPeranan();
+
+
+        /* =============================================
+           LOAD DUTY
+        ============================================= */
+
+        await muatDataDuty();
+
+
+        /* =============================================
+           ANGGOTA
+        ============================================= */
+
+        anggotaLaporan =
+            binaAnggotaLaporan();
+
+
+        console.log(
+            "ANGGOTA LAPORAN:",
+            anggotaLaporan
+        );
+
+
+        /* =============================================
+           MATRIX
+        ============================================= */
+
+        janaMatrixRK01();
+
+
+        /* =============================================
+           RUMUSAN
+        ============================================= */
+
+        binaRumusanRK01();
+
+
+        /* =============================================
+           INFO
+        ============================================= */
+
+        kemaskiniInfoLaporan();
+
+
+        /* =============================================
+           STATUS
+        ============================================= */
+
+        if(
+            dataDuty.length
+        ){
+
+            paparStatus(
+                `${dataDuty.length} rekod duty dimuatkan.`,
+                "text-teal-400"
+            );
+
+        }
+        else{
+
+            paparStatus(
+                "Tiada rekod duty untuk pilihan tersebut.",
+                "text-yellow-400"
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "RALAT JANA RK01:",
+            error
+        );
+
+
+        paparStatus(
+            "Ralat memuatkan laporan. Sila semak Console.",
+            "text-red-400"
+        );
+
+
+
+    }
+    finally{
+
+        if(btn){
+
+            btn.disabled =
+                false;
+
+            btn.classList.remove(
+                "loading"
+            );
+
+            btn.innerHTML =
+                `
+                <i class="fas fa-file-lines mr-2"></i>
+                Jana Laporan
+                `;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   EVENT BULAN / TAHUN
+===================================================== */
+
+
+
+
+
+    
+</script>
+
+<!-- =====================================================
+     MOBILE BOTTOM NAVIGATION
+===================================================== -->
+
+<nav class="mobile-bottom">
+
+<a href="#" id="mobile-menu-dashboard" class="mobile-nav-item">
+    <i class="fas fa-home"></i>
+    <span>Dash</span>
+</a>
+
+    <a href="jadual-duty.html" class="mobile-nav-item">
+        <i class="fas fa-calendar-check"></i>
+        <span>Duty</span>
+    </a>
+
+    <a href="klm-mingguan.html"
+       id="mobile-menu-klm"
+       class="mobile-nav-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Weekly</span>
+    </a>
+
+    <a href="anggaran-rk01.html"
+       class="mobile-nav-item active">
+        <i class="fas fa-chart-line"></i>
+        <span>RK01</span>
+    </a>
+
+    <a href="anggaran-rk02.html"
+       class="mobile-nav-item">
+        <i class="fas fa-chart-bar"></i>
+        <span>RK02</span>
+    </a>
+
+    <a href="#"
+       onclick="logout()"
+       class="mobile-nav-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </a>
+
+</nav>
+
+    
 </body>
 </html>
