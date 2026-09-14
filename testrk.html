@@ -3902,7 +3902,7 @@ let html = `
         );
 
 
-    const mingguList = [];
+const mingguList = [];
 
 for(let i = 0; i < senaraiTarikh.length; i += 7){
 
@@ -3912,9 +3912,16 @@ for(let i = 0; i < senaraiTarikh.length; i += 7){
 
 }
 
+mingguList.forEach((minggu, index) => {
 
+    html += `
+    <tr>
+        <th colspan="58" class="minggu-header">
+            MINGGU ${index + 1}
+        </th>
+    </tr>
+    `;
 
-    
     minggu.forEach(item => {
 
         html += `
