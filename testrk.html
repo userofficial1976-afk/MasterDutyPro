@@ -3699,72 +3699,34 @@ function janaMatrixRK01() {
 
 let html = `
 
+
+
 <thead>
 
-    <tr>
-        <th rowspan="2">NO SKB</th>
-        <th colspan="9"></th>
-    </tr>
+<tr>
+    <th colspan="2">NO SKB</th>
 
-    <tr>
-        <th colspan="9"></th>
-    </tr>
-
-    <tr>
-        <th rowspan="4">1</th>
-
-        <th>WK</th>
-
-        <th colspan="8">
-            Kerja Lebih Masa
+    ${anggota8.map(a => `
+        <th colspan="7">
+            ${a.no_skb || ""}
         </th>
-    </tr>
+    `).join("")}
+</tr>
 
-    <tr>
-        <td></td>
+<tr>
+    <th colspan="2">NAMA</th>
 
-        <td>INV</td>
-        <td>A</td>
-        <td>B1</td>
-        <td>B2</td>
-        <td>B3</td>
-        <td>C1</td>
-        <td>C2</td>
-        <td></td>
-    </tr>
-
-    <tr>
-        <td></td>
-
-        <td></td>
-        <td>JAM</td>
-        <td>HARI</td>
-        <td>HARI</td>
-        <td>JAM</td>
-        <td>HARI</td>
-        <td>JAM</td>
-        <td></td>
-    </tr>
-
-    <tr>
-        <th>TK</th>
-
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+    ${anggota8.map(a => `
+        <th colspan="7">
+            ${a.nama || ""}
+        </th>
+    `).join("")}
+</tr>
 
 </thead>
 
 <tbody>
-
 `;
-
   
 
 
@@ -3831,129 +3793,66 @@ let html = `
         );
 
 
-    /* =================================================
-       LOOP SETIAP TARIKH
-    ================================================= */
+senaraiTarikh.forE*ch(item => {
 
-    senaraiTarikh.forEach(
-        item => {
+    html += `
 
-            html += `
+    <*r>
+        <th rowspan="4">${item.*arikh.split('/')[0]}</th>
+        *th>WK</th>
 
-                <tr>
+        ${anggota8.map*() => `
+            <td></td>
+    *       <td colspan="6">Kerja Lebih*Masa</td>
+        `).join("")}
+   *</tr>
 
-                    <!-- =========================
-                         TARIKH + HARI
-                    ========================== -->
+    <tr>
+        <th></th>
+*        ${anggota8.map(() => `
+   *        <td>INV</td>
+            <*d>A</td>
+            <td>B1</td>
+ *          <td>B2</td>
+            *td>B3</td>
+            <td>C1</td>*            <td>C2</td>
+        `)*join("")}
+    </tr>
 
-                    <td
-                        class="tarikh-hari-col"
-                    >
+    <tr>
+    *   <th></th>
 
-                        <div>
-                            ${item.tarikh}
-                        </div>
+        ${anggota8.m*p(() => `
+            <td></td>
+  *         <td>JAM</td>
+            *td>HARI</td>
+            <td>HARI<*td>
+            <td>JAM</td>
+     *      <td>HARI</td>
+            <t*>JAM</td>
+        `).join("")}
+   *</tr>
 
-                        <div class="hari-text">
-                            ${item.hari}
-                        </div>
+    <tr>
+        <th>TK</th*
 
-                    </td>
+        ${anggota8.map(() => `
+ *          <td></td>
+            <t*></td>
+            <td></td>
+     *      <td></td>
+            <td></*d>
+            <td></td>
+         *  <td></td>
+        `).join("")}
+ *  </tr>
 
-            `;
-
-
-            /* =========================================
-               8 ANGGOTA
-            ========================================= */
-
-            anggota8.forEach(
-                anggota => {
-
-                    const rekod =
-                        rekodAnggota(
-                            anggota.no_skb,
-                            item.iso
-                        );
-
-
-                    /* =============================
-                       KOD
-                    ============================== */
-
-                    const kod =
-                        nilaiKodDuty(
-                            rekod
-                        );
-
-
-                    /* =============================
-                       KLM
-                    ============================== */
-
-                    const klm =
-                        nilaiKLM(
-                            rekod
-                        );
+    `;
+});
 
 
-                    /* =============================
-                       OFF
-                    ============================== */
 
-                    const off =
-                        nilaiOFF(
-                            rekod
-                        );
-
-
-                    /* =============================
-                       PH
-                    ============================== */
-
-                    const ph =
-                        nilaiPH(
-                            rekod
-                        );
-
-
-                    /* =============================
-                       PAPAR 4 KOLUM
-                    ============================== */
-
-                    html += `
-
-                        <td class="kod-cell">
-                            ${kod}
-                        </td>
-
-                        <td class="klm-cell">
-                            ${klm}
-                        </td>
-
-                        <td class="off-cell">
-                            ${off}
-                        </td>
-
-                        <td class="ph-cell">
-                            ${ph}
-                        </td>
-
-                    `;
-
-                }
-            );
-
-
-            html += `
-
-                </tr>
-
-            `;
-
-        }
-    );
-
+     
 
     /* =================================================
        TUTUP TABLE
