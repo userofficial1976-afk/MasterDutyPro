@@ -75,57 +75,6 @@
 }
 
 
-/* =====================================================
-   PRINT / PDF
-   NAMA PENUH
-===================================================== */
-
-@media print{
-
-    .rk01-table{
-        table-layout:fixed !important;
-        width:100% !important;
-        min-width:0 !important;
-        max-width:100% !important;
-    }
-
-
-
-    .rk01-table .tarikh-hari-col{
-        width:45px !important;
-        min-width:45px !important;
-        max-width:45px !important;
-    }
-
-    .rk01-table .sub-col,
-    .rk01-table td.kod-cell,
-    .rk01-table td.klm-cell,
-    .rk01-table td.off-cell,
-    .rk01-table td.ph-cell{
-        width:18px !important;
-        min-width:18px !important;
-        max-width:18px !important;
-    }
-
-    .anggota-head{
-        width:auto !important;
-        min-width:0 !important;
-        max-width:none !important;
-
-        overflow:visible !important;
-    }
-
-    /* PDF → nama penuh */
-    .nama-anggota-page{
-        white-space:normal !important;
-        overflow:visible !important;
-        text-overflow:clip !important;
-        word-break:normal !important;
-        overflow-wrap:normal !important;
-    }
-
-}
-
 
     
 body{
@@ -231,21 +180,6 @@ button{
     min-height:18px;
 }
 
-@media print{
-
-    .mobile-bottom,
-    .mobile-nav-item{
-        display:none !important;
-        visibility:hidden !important;
-    }
-
-.p-6.pt-28.space-y-6{
-    padding-top:0 !important;
-
-}
-
-    
-}
 
 
 
@@ -263,102 +197,7 @@ button{
 }
 
     
-@media print{
 
-    @page{
-        size:A4 landscape;
-        margin:0mm;
-    }
-
-    aside,
-    header,
-    .no-print{
-        display:none !important;
-    }
-
-    main{
-        margin:0 !important;
-    }
-
-    body{
-        background:#fff !important;
-        color:#000 !important;
-    }
-
-    .glass{
-        border:none !important;
-        background:#fff !important;
-        padding:0 !important;
-    }
-
-    .rk01-table th,
-    .rk01-table td,
-    .rumusan-table th,
-    .rumusan-table td{
-        border:1px solid #000 !important;
-        color:#000 !important;
-        background:#fff !important;
-        font-size:6px !important;
-        padding:1px !important;
-        line-height:.95 !important;
-    }
-
-    .report-info{
-        font-size:7px !important;
-        margin-bottom:0 !important;
-        line-height:1;
-    }
-
-    .report-title{
-        margin-top:-15px !important;
-        margin-bottom:2px !important;
-    }
-
-    .report-title-main{
-        font-size:9px !important;
-        font-weight:700;
-        line-height:1;
-        margin-top:-10px !important;
-    }
-
-    .report-title-sub{
-        font-size:8px !important;
-        line-height:1;
-        margin-top:1px !important;
-        margin-bottom:2px !important;
-    }
-
-    .print-area{
-        margin-top:0 !important;
-        
-    }
-
-    .rk01-table{
-        table-layout:fixed;
-    }
-
-    .sub-col{
-        width:18px !important;
-    }
-
-    .anggota-head{
-        font-size:6px !important;
-    }
-
-.tarikh-hari-col{
-    width:45px !important;
-}
-
-    .rk01-table small,
-    .hari-duty{
-        font-size:inherit !important;
-    }
-
-    .rumusan-title{
-        font-size:8px !important;
-        margin:3px 0 !important;
-    }
-}
 
 .kod-cell {
     white-space: normal !important;
@@ -405,6 +244,484 @@ button{
     line-height: 1.1;
 }
 
+
+/* =========================================================
+   RK01 — PDF A4 LANDSCAPE
+   TABLE LOCK / FIXED PAGE
+========================================================= */
+
+@media print {
+
+    @page {
+        size: A4 landscape;
+        margin: 7mm;
+    }
+
+    /* -----------------------------------------
+       PAGE
+    ----------------------------------------- */
+
+    html,
+    body {
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+
+        overflow: visible !important;
+
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body {
+        font-family: Arial, sans-serif !important;
+    }
+
+    /* -----------------------------------------
+       HIDE UI
+    ----------------------------------------- */
+
+    aside,
+    header,
+    .no-print,
+    .mobile-bottom,
+    .mobile-nav-item {
+        display: none !important;
+    }
+
+    /* -----------------------------------------
+       MAIN
+    ----------------------------------------- */
+
+    main {
+        width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    main > div {
+        width: 100% !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* -----------------------------------------
+       PRINT AREA
+    ----------------------------------------- */
+
+    .print-area {
+        display: block !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        border: none !important;
+        box-shadow: none !important;
+
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    /* -----------------------------------------
+       TAJUK
+    ----------------------------------------- */
+
+    .report-title-main {
+        margin: 0 !important;
+        padding: 0 !important;
+
+        font-size: 13pt !important;
+        line-height: 1.1 !important;
+
+        font-weight: 700 !important;
+
+        color: #000 !important;
+    }
+
+    .report-title-sub {
+        margin: 1mm 0 2mm 0 !important;
+        padding: 0 !important;
+
+        font-size: 9pt !important;
+        line-height: 1.1 !important;
+
+        font-weight: 700 !important;
+
+        color: #000 !important;
+    }
+
+    /* -----------------------------------------
+       INFO
+    ----------------------------------------- */
+
+    .report-info {
+        width: 100% !important;
+
+        margin: 0 0 2mm 0 !important;
+        padding: 0 !important;
+
+        font-size: 7pt !important;
+        line-height: 1.1 !important;
+
+        color: #000 !important;
+    }
+
+    /* =====================================================
+       TABLE WRAPPER
+       PENTING:
+       JANGAN overflow-x:auto ketika PRINT
+    ===================================================== */
+
+    .rk01-table-wrapper {
+        display: block !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: visible !important;
+    }
+
+    /* =====================================================
+       TABLE RK01
+       
+       A4 LANDSCAPE:
+       297mm - 14mm margin
+       = 283mm ruang cetak
+    ===================================================== */
+
+    .rk01-table {
+        display: table !important;
+
+        width: 283mm !important;
+        min-width: 283mm !important;
+        max-width: 283mm !important;
+
+        table-layout: fixed !important;
+
+        border-collapse: collapse !important;
+        border-spacing: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    /* =====================================================
+       33 COLUMN STRUCTURE
+
+       1 kolum TARIKH
+       8 anggota × 4 kolum
+       = 33 kolum
+    ===================================================== */
+
+    .rk01-table col {
+        width: auto;
+    }
+
+    /* -----------------------------------------
+       TARIKH / HARI
+    ----------------------------------------- */
+
+    .rk01-table .tarikh-hari-col {
+        width: 20mm !important;
+        min-width: 20mm !important;
+        max-width: 20mm !important;
+    }
+
+    /* -----------------------------------------
+       SETIAP SUB COLUMN
+       
+       Baki:
+       283mm - 20mm = 263mm
+
+       263 / 32 = 8.21875mm
+    ----------------------------------------- */
+
+    .rk01-table .sub-col,
+    .rk01-table td.kod-cell,
+    .rk01-table td.klm-cell,
+    .rk01-table td.off-cell,
+    .rk01-table td.ph-cell {
+
+        width: 8.21875mm !important;
+        min-width: 8.21875mm !important;
+        max-width: 8.21875mm !important;
+
+        box-sizing: border-box !important;
+    }
+
+    /* -----------------------------------------
+       HEADER ANGGOTA
+
+       4 sub-column × 8.21875mm
+       = 32.875mm seorang
+    ----------------------------------------- */
+
+    .rk01-table .anggota-head {
+
+        width: 32.875mm !important;
+        min-width: 32.875mm !important;
+        max-width: 32.875mm !important;
+
+        box-sizing: border-box !important;
+
+        padding: 1.2mm 0.5mm !important;
+
+        font-size: 6.5pt !important;
+        line-height: 1.05 !important;
+
+        color: #000 !important;
+        background: #eee !important;
+
+        overflow: hidden !important;
+        word-break: break-word !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    /* -----------------------------------------
+       NAMA ANGGOTA
+    ----------------------------------------- */
+
+    .nama-anggota-page {
+
+        width: 100% !important;
+
+        white-space: normal !important;
+
+        overflow: visible !important;
+
+        text-overflow: clip !important;
+
+        word-break: break-word !important;
+
+        overflow-wrap: anywhere !important;
+
+        font-size: 6pt !important;
+
+        line-height: 1.05 !important;
+    }
+
+    /* =====================================================
+       CELL
+    ===================================================== */
+
+    .rk01-table th,
+    .rk01-table td {
+
+        box-sizing: border-box !important;
+
+        border: 0.7pt solid #000 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+
+        padding: 1mm 0.5mm !important;
+
+        font-size: 6.2pt !important;
+
+        line-height: 1.05 !important;
+
+        text-align: center !important;
+
+        vertical-align: middle !important;
+
+        white-space: normal !important;
+
+        word-break: break-word !important;
+
+        overflow-wrap: anywhere !important;
+    }
+
+    /* -----------------------------------------
+       TABLE HEADER
+    ----------------------------------------- */
+
+    .rk01-table thead {
+        display: table-header-group !important;
+    }
+
+    .rk01-table thead th {
+
+        background: #e8e8e8 !important;
+
+        color: #000 !important;
+
+        font-weight: 700 !important;
+
+        vertical-align: middle !important;
+    }
+
+    /* -----------------------------------------
+       KOD / KLM / OFF / PH
+    ----------------------------------------- */
+
+    .kod-cell,
+    .klm-cell,
+    .off-cell,
+    .ph-cell {
+
+        width: 8.21875mm !important;
+
+        min-width: 8.21875mm !important;
+        max-width: 8.21875mm !important;
+
+        white-space: normal !important;
+
+        word-break: break-word !important;
+
+        overflow-wrap: anywhere !important;
+    }
+
+    .kod-cell div,
+    .klm-cell div,
+    .off-cell div,
+    .ph-cell div {
+
+        white-space: normal !important;
+
+        word-break: break-word !important;
+
+        overflow-wrap: anywhere !important;
+
+        line-height: 1 !important;
+    }
+
+    /* -----------------------------------------
+       TARIKH / HARI
+    ----------------------------------------- */
+
+    .hari-text {
+
+        margin-top: 1mm !important;
+
+        font-size: 6pt !important;
+
+        line-height: 1 !important;
+
+        font-weight: 700 !important;
+    }
+
+    .hari-duty {
+
+        font-size: inherit !important;
+
+        line-height: 1 !important;
+    }
+
+    .rk01-table small {
+
+        font-size: inherit !important;
+
+        line-height: 1 !important;
+    }
+
+    /* =====================================================
+       PAGINATION
+       
+       Jangan paksa satu table ke satu page.
+       Table boleh sambung page 2/3,
+       tetapi WIDTH kekal 283mm.
+    ===================================================== */
+
+    .rk01-table {
+        page-break-inside: auto !important;
+    }
+
+    .rk01-table tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .rk01-table thead {
+        page-break-after: auto !important;
+    }
+
+    /* =====================================================
+       RUMUSAN
+    ===================================================== */
+
+    .rumusan-title {
+
+        margin: 4mm 0 2mm 0 !important;
+
+        padding: 0 !important;
+
+        font-size: 8pt !important;
+
+        line-height: 1.1 !important;
+
+        font-weight: 700 !important;
+
+        color: #000 !important;
+    }
+
+    .rumusan-table {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        table-layout: fixed !important;
+
+        border-collapse: collapse !important;
+
+        margin: 0 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .rumusan-table th,
+    .rumusan-table td {
+
+        border: 0.7pt solid #000 !important;
+
+        background: #fff !important;
+        color: #000 !important;
+
+        padding: 1.2mm !important;
+
+        font-size: 7pt !important;
+
+        line-height: 1.05 !important;
+
+        text-align: center !important;
+
+        vertical-align: middle !important;
+    }
+
+    .rumusan-table th {
+
+        background: #e8e8e8 !important;
+
+        font-weight: 700 !important;
+    }
+
+    .rumusan-table tr {
+
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+}
+
+
+    
 /* =====================================================
    MOBILE BOTTOM NAVIGATION
    RK01
