@@ -3993,9 +3993,24 @@ html += `
 
 html += `
 
-<tfoot>
+<tr>
+
+    <th colspan="2"></th>
+
+    ${anggota8.map(() => `
+        <td></td>
+        <td>JAM</td>
+        <td>HARI</td>
+        <td>HARI</td>
+        <td>JAM</td>
+        <td>HARI</td>
+        <td>JAM</td>
+    `).join("")}
+
+</tr>
 
 <tr>
+
     <th colspan="2">
         MINGGU INI
     </th>
@@ -4009,9 +4024,11 @@ html += `
         <td></td>
         <td></td>
     `).join("")}
+
 </tr>
 
 <tr>
+
     <th colspan="2">
         SEHINGGA KINI
     </th>
@@ -4025,19 +4042,8 @@ html += `
         <td></td>
         <td></td>
     `).join("")}
+
 </tr>
-
-<tr>
-    <th colspan="2">
-        TANDA TANGAN
-    </th>
-
-    ${anggota8.map(() => `
-        <td colspan="7" style="height:40px;"></td>
-    `).join("")}
-</tr>
-
-</tfoot>
 
 `;
 
