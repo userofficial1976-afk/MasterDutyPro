@@ -479,10 +479,10 @@ button{
     .rk01-table td.off-cell,
     .rk01-table td.ph-cell {
 
-        width: 8.21875mm !important;
-        min-width: 8.21875mm !important;
-        max-width: 8.21875mm !important;
-
+        width: 8mm !important;
+        min-width: 8mm !important;
+        max-width: 8mm !important;
+        height: 8mm !important;
         box-sizing: border-box !important;
     }
 
@@ -597,10 +597,10 @@ button{
     .off-cell,
     .ph-cell {
 
-        width: 8.21875mm !important;
+        width: 8mm !important;
 
-        min-width: 8.21875mm !important;
-        max-width: 8.21875mm !important;
+        min-width: 8mm !important;
+        max-width: 8mm !important;
 
         white-space: nowrap !important;
 
@@ -887,7 +887,41 @@ main {
     vertical-align: middle !important;
 }
 
+/* Kolum tarikh 01,02,03... */
 
+.rk01-table tbody th[rowspan="4"]{
+    width: 10mm !important;
+    min-width: 10mm !important;
+    max-width: 10mm !important;
+
+    height: 22px !important;
+
+    font-size: 10px !important;
+    font-weight: 700 !important;
+}
+
+/* Semua sel lain kecil dan hampir square */
+
+.rk01-table th,
+.rk01-table td{
+
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    padding: 1px !important;
+
+    font-family: "Arial Narrow", Arial, sans-serif !important;
+    font-size: 10px !important;
+
+    white-space: nowrap !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
     
 </style>
 </head>
