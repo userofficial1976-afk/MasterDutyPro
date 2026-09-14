@@ -1866,81 +1866,6 @@ function kawalMenuMengikutPeranan(){
         return;
     }
 
-/* =====================================================
-   MOBILE DASHBOARD
-   ADMIN      → dashboard.html
-   KETUA UNIT → dashboardkpku.html
-   KETUA POS  → dashboardkpku.html
-===================================================== */
-
-function kawalMobileDashboard(){
-
-    const role = rolePengguna();
-
-    const menuDashboard =
-        document.getElementById("mobile-menu-dashboard");
-
-    if(!menuDashboard){
-        return;
-    }
-
-    if(role === "admin"){
-
-        menuDashboard.href =
-            "dashboard.html";
-
-    }
-    else if(
-        role === "ketua_unit" ||
-        role === "ketua_pos"
-    ){
-
-        menuDashboard.href =
-            "dashboardkpku.html";
-
-    }
-    else{
-
-        menuDashboard.href =
-            "dashboard.html";
-
-    }
-
-}
-
-/* =====================================================
-   MOBILE WEEKLY
-   ADMIN      → Nampak
-   KETUA UNIT → Nampak
-   KETUA POS  → Sembunyi
-===================================================== */
-
-function kawalMobileWeekly(){
-
-    const role = rolePengguna();
-
-    const menuWeekly =
-        document.getElementById("mobile-menu-klm");
-
-    if(!menuWeekly){
-        return;
-    }
-
-    if(role === "ketua_pos"){
-
-        menuWeekly.style.display = "none";
-
-    }
-    else{
-
-        menuWeekly.style.display = "";
-
-    }
-
-}
-
-
-
 
     
     /* =====================================================
@@ -4064,7 +3989,7 @@ html += `
     </tbody>
 `;
 
-tabl*.innerHTML = html;
+table.innerHTML = html;
 
 }
 
