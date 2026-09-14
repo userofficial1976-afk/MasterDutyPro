@@ -1007,14 +1007,17 @@ main {
 
 @media print{
 
-    .rk01-footer-grid{
-        display:grid !important;
-        grid-template-columns:26% 18% 18% 16% 22% !important;
-        gap:4px !important;
-        width:100% !important;
-        page-break-inside:avoid !important;
-    }
-
+.rk01-footer-grid{
+    display:grid;
+    grid-template-columns:
+        23.3%
+        15.5%
+        17.1%
+        15.5%
+        28.6%;
+    gap:3px;
+    width:100%;
+}
     .footer-box{
         border-collapse:collapse !important;
     }
@@ -1072,7 +1075,7 @@ main {
 
 .rk01-footer-grid{
     display:grid;
-    grid-template-columns:26% 18% 18% 16% 22%;
+    grid-template-columns:395fr 263fr 290fr 262fr 483fr;
     gap:4px;
     width:100%;
     margin-top:2px;
@@ -1130,11 +1133,16 @@ main {
 
 @media print{
 
-    .rk01-footer-grid{
-        display:grid !important;
-        grid-template-columns:26% 18% 18% 16% 22% !important;
-        gap:4px !important;
-    }
+.rk01-footer-grid{
+    display:grid !important;
+    grid-template-columns:
+        395fr
+        263fr
+        290fr
+        262fr
+        483fr !important;
+    gap:3px !important;
+}
 
     .footer-box th,
     .footer-box td{
@@ -1544,7 +1552,7 @@ main {
         class="rk01-table"
     >
     </table>
-
+</div>
 <!-- =====================================================
      RK01 FOOTER
 ===================================================== -->
