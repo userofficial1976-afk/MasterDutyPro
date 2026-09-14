@@ -268,14 +268,7 @@ button{
    RK01 — PDF A4 LANDSCAPE
    TABLE LOCK / FIXED PAGE
 ========================================================= */
-@media print {
 
-    .minggu-page-break{
-        page-break-before: always;
-        break-before: page;
-    }
-
-}
 @media print {
 
     @page {
@@ -284,9 +277,7 @@ button{
     }
 
 
-    .minggu-page-break{
-    page-break-before: always;
-}
+
     /* -----------------------------------------
        PAGE
     ----------------------------------------- */
@@ -1356,21 +1347,7 @@ main {
 </div>
 
 
-<!-- RUMUSAN -->
 
-<div class="mt-5">
-
-    <div class="text-center font-bold mb-3 rumusan-title">
-        RUMUSAN BY POS
-    </div>
-
-    <table
-        id="rumusanTable"
-        class="rumusan-table"
-    >
-    </table>
-
-</div>
 
 
 </div>
@@ -3942,9 +3919,6 @@ let html = `
 
         `;
 
-        html += `
-            </tbody>
-        `;
 
         table.innerHTML =
             html;
@@ -3998,19 +3972,7 @@ mingguPapar.forEach((minggu, index) => {
 
  
 
-if(index > 0){
 
-html += `
-
-<tr class="minggu-page-break">
-
-<td colspan="58"></td>
-
-</tr>
-
-`;
-
-}
 
 minggu.forEach(item => {
 
@@ -4111,243 +4073,8 @@ minggu.forEach(item => {
 
 }
 
-/* =====================================================
-   RUMUSAN BY POS
-===================================================== */
 
-function binaRumusanRK01(){
 
-    const table =
-        document.getElementById(
-            "rumusanTable"
-        );
-
-
-    if(!table){
-
-        return;
-    }
-
-
-    if(!anggotaLaporan.length){
-
-        table.innerHTML =
-            `<tbody>
-                <tr>
-                    <td>
-                        TIADA DATA
-                    </td>
-                </tr>
-             </tbody>`;
-
-        return;
-    }
-
-
-    let jumlahKLM = 0;
-
-    let jumlahOffHari = 0;
-
-    let jumlahOffJam = 0;
-
-    let jumlahCutiHari = 0;
-
-    let jumlahCutiJam = 0;
-
-
-    let html = `
-
-        <thead>
-
-            <tr>
-
-                <th>NO ANGGOTA</th>
-
-                <th>NAMA ANGGOTA</th>
-
-                <th>JUMLAH KLM</th>
-
-                <th>OFF HARI</th>
-
-                <th>OFF JAM</th>
-
-                <th>CUTIAM HARI</th>
-
-                <th>CUTIAM JAM</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-    `;
-
-
-    anggotaLaporan.forEach(
-        anggota => {
-
-
-            const rekodAnggotaBulan =
-                dataDuty.filter(
-                    r =>
-                        String(
-                            r.no_skb
-                        ) === String(
-                            anggota.no_skb
-                        )
-                );
-
-
-            let klm = 0;
-
-            let offHari = 0;
-
-            let offJam = 0;
-
-            let cutiHari = 0;
-
-            let cutiJam = 0;
-
-
-            rekodAnggotaBulan.forEach(
-                rekod => {
-
-                    klm +=
-                        nombor(
-                            rekod.jam_klm
-                        );
-
-                    offHari +=
-                        nombor(
-                            rekod.hari_offday_bertugas
-                        );
-
-                    offJam +=
-                        nombor(
-                            rekod.jam_offday_bertugas
-                        );
-
-                    cutiHari +=
-                        nombor(
-                            rekod.hari_cutiam_bertugas
-                        );
-
-                    cutiJam +=
-                        nombor(
-                            rekod.jam_cutiam_bertugas
-                        );
-
-                }
-            );
-
-
-            jumlahKLM +=
-                klm;
-
-            jumlahOffHari +=
-                offHari;
-
-            jumlahOffJam +=
-                offJam;
-
-            jumlahCutiHari +=
-                cutiHari;
-
-            jumlahCutiJam +=
-                cutiJam;
-
-
-            html += `
-
-                <tr>
-
-                    <td>
-                        ${escapeHtml(
-                            anggota.no_anggota ||
-                            anggota.no_skb ||
-                            "-"
-                        )}
-                    </td>
-
-                    <td class="text-left">
-                        ${escapeHtml(
-                            anggota.nama ||
-                            "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${formatNombor(klm)}
-                    </td>
-
-                    <td>
-                        ${formatNombor(offHari)}
-                    </td>
-
-                    <td>
-                        ${formatNombor(offJam)}
-                    </td>
-
-                    <td>
-                        ${formatNombor(cutiHari)}
-                    </td>
-
-                    <td>
-                        ${formatNombor(cutiJam)}
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-
-    html += `
-
-        <tr class="font-bold">
-
-            <td colspan="2">
-                JUMLAH KESELURUHAN
-            </td>
-
-            <td>
-                ${formatNombor(
-                    jumlahKLM
-                )}
-            </td>
-
-            <td>
-                ${formatNombor(
-                    jumlahOffHari
-                )}
-            </td>
-
-            <td>
-                ${formatNombor(
-                    jumlahOffJam
-                )}
-            </td>
-
-            <td>
-                ${formatNombor(
-                    jumlahCutiHari
-                )}
-            </td>
-
-            <td>
-                ${formatNombor(
-                    jumlahCutiJam
-                )}
-            </td>
-
-        </tr>
-
-        </tbody>
-
-    `;
 
 
     table.innerHTML =
@@ -4381,22 +4108,7 @@ function kosongkanLaporanRK01(){
     }
 
 
-    const rumusan =
-        document.getElementById("rumusanTable");
 
-    if(rumusan){
-
-        rumusan.innerHTML = `
-            <tbody>
-                <tr>
-                    <td style="padding:20px;">
-                        Rumusan akan dipaparkan selepas laporan dijana.
-                    </td>
-                </tr>
-            </tbody>
-        `;
-
-    }
 
 
     const namaPos =
@@ -4718,7 +4430,7 @@ async function janaLaporanRK01(){
            RUMUSAN
         ============================================= */
 
-        binaRumusanRK01();
+      
 
 
         /* =============================================
