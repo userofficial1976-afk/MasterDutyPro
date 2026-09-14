@@ -3991,6 +3991,58 @@ html += `
     </tbody>
 `;
 
+html += `
+
+<tfoot>
+
+<tr>
+    <th colspan="2">
+        MINGGU INI
+    </th>
+
+    ${anggota8.map(() => `
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    `).join("")}
+</tr>
+
+<tr>
+    <th colspan="2">
+        SEHINGGA KINI
+    </th>
+
+    ${anggota8.map(() => `
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    `).join("")}
+</tr>
+
+<tr>
+    <th colspan="2">
+        TANDA TANGAN
+    </th>
+
+    ${anggota8.map(() => `
+        <td colspan="7" style="height:40px;"></td>
+    `).join("")}
+</tr>
+
+</tfoot>
+
+`;
+
+
+    
 table.innerHTML = html;
 
 }
