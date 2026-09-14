@@ -3793,64 +3793,65 @@ let html = `
         );
 
 
-senaraiTarikh.forE*ch(item => {
+senaraiTarikh.forEach(item => {
 
     html += `
 
     <tr>
-        <th rowspan="4">${item.*arikh.split('/')[0]}</th>
-        *th>WK</th>
+        <th rowspan="4">${item.tarikh.split('/')[0]}</th>
+        <th>WK</th>
 
-        ${anggota8.map*() => `
+        ${anggota8.map(() => `
             <td></td>
-    *       <td colspan="6">Kerja Lebih*Masa</td>
+            <td colspan="6">Kerja Lebih Masa</td>
         `).join("")}
-   *</tr>
-
-    <tr>
-        <th></th>
-*        ${anggota8.map(() => `
-   *        <td>INV</td>
-            <*d>A</td>
-            <td>B1</td>
- *          <td>B2</td>
-            *td>B3</td>
-            <td>C1</td>*            <td>C2</td>
-        `)*join("")}
     </tr>
 
     <tr>
-    *   <th></th>
-
-        ${anggota8.m*p(() => `
-            <td></td>
-  *         <td>JAM</td>
-            *td>HARI</td>
-            <td>HARI<*td>
-            <td>JAM</td>
-     *      <td>HARI</td>
-            <t*>JAM</td>
-        `).join("")}
-   *</tr>
-
-    <tr>
-        <th>TK</th*
+        <th></th>
 
         ${anggota8.map(() => `
- *          <td></td>
-            <t*></td>
-            <td></td>
-     *      <td></td>
-            <td></*d>
-            <td></td>
-         *  <td></td>
+            <td>INV</td>
+            <td>A</td>
+            <td>B1</td>
+            <td>B2</td>
+            <td>B3</td>
+            <td>C1</td>
+            <td>C2</td>
         `).join("")}
- *  </tr>
+    </tr>
+
+    <tr>
+        <th></th>
+
+        ${anggota8.map(() => `
+            <td></td>
+            <td>JAM</td>
+            <td>HARI</td>
+            <td>HARI</td>
+            <td>JAM</td>
+            <td>HARI</td>
+            <td>JAM</td>
+        `).join("")}
+    </tr>
+
+    <tr>
+        <th>TK</th>
+
+        ${anggota8.map(() => `
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        `).join("")}
+    </tr>
 
     `;
+
 });
-
-
 
      
 
