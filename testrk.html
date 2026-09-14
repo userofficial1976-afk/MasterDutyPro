@@ -1022,78 +1022,277 @@ main {
 }
 
 /* =========================================================
-   RK01 - JADUAL PALING BAWAH
-   PETUNJUK / WAKTU KERJA / TEMPAT KERJA / PENGESAHAN
+   RK01 — TABLE PALING BAWAH
 ========================================================= */
 
-.rk01-bottom-table {
-    width: 100%;
-    border-collapse: collapse !important;
-    table-layout: fixed;
-    background: #fff !important;
-    color: #000 !important;
+.rk01-footer{
+    width:100%;
+    margin-top:3px;
+    padding:0;
+}
+
+.rk01-bottom-table{
+    width:100%;
+    border-collapse:collapse !important;
+    table-layout:fixed !important;
+
+    background:#fff !important;
+    color:#000 !important;
+
+    border:1px solid #000 !important;
 }
 
 .rk01-bottom-table th,
-.rk01-bottom-table td {
-    border: 1px solid #000 !important;
-    border-collapse: collapse !important;
-    color: #000 !important;
-    background: #fff !important;
-    padding: 3px 4px !important;
-    font-size: 7.5px !important;
-    line-height: 1.15 !important;
-    vertical-align: middle !important;
+.rk01-bottom-table td{
+
+    border:1px solid #000 !important;
+
+    background:#fff !important;
+    color:#000 !important;
+
+    font-family:"Arial Narrow", Arial, sans-serif !important;
+
+    font-size:7.5px !important;
+
+    line-height:1.15 !important;
+
+    padding:3px 4px !important;
+
+    vertical-align:top !important;
 }
 
-.rk01-bottom-table tr {
-    border-top: 1px solid #000 !important;
-    border-bottom: 1px solid #000 !important;
+.rk01-bottom-table th{
+
+    text-align:center !important;
+
+    font-weight:700 !important;
+
+    vertical-align:middle !important;
+
+    height:18px !important;
 }
 
-.rk01-bottom-table th {
-    font-weight: 700 !important;
-    text-align: center !important;
+
+/* =========================================================
+   PETUNJUK
+========================================================= */
+
+.bottom-petunjuk{
+
+    text-align:left !important;
+
+    line-height:1.25 !important;
+
+    vertical-align:top !important;
 }
 
-.rk01-bottom-table td {
-    text-align: left;
+.bottom-petunjuk div{
+    margin-bottom:1px;
 }
 
-/* Garisan luar */
-.rk01-bottom-table {
-    border: 1px solid #000 !important;
+
+/* =========================================================
+   WAKTU KERJA
+========================================================= */
+
+.bottom-waktu{
+
+    text-align:left !important;
+
+    line-height:1.35 !important;
 }
 
-/* Pastikan cell kosong pun ada garisan */
-.rk01-bottom-table td:empty,
-.rk01-bottom-table th:empty {
-    border: 1px solid #000 !important;
+.bottom-waktu div{
+    margin-bottom:2px;
 }
 
-/* Cetakan PDF */
-@media print {
 
-    .rk01-bottom-table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-        border: 1px solid #000 !important;
+/* =========================================================
+   TEMPAT KERJA
+========================================================= */
+
+.bottom-tempat{
+
+    text-align:left !important;
+
+    line-height:1.35 !important;
+}
+
+.bottom-tempat div{
+    margin-bottom:3px;
+}
+
+
+/* =========================================================
+   JUMLAH JAM / CATATAN
+========================================================= */
+
+.bottom-jumlah{
+
+    text-align:center !important;
+
+    vertical-align:top !important;
+
+    padding:0 !important;
+}
+
+.catatan-title{
+
+    font-weight:700;
+
+    text-align:center;
+
+    padding:3px;
+
+    font-size:7.5px;
+}
+
+.catatan-space{
+
+    height:100px;
+
+    border-top:1px solid #000;
+}
+
+
+/* =========================================================
+   PENGESAHAN
+========================================================= */
+
+.bottom-pengesahan{
+
+    text-align:center !important;
+
+    vertical-align:top !important;
+
+    padding:5px !important;
+}
+
+.ayat-pengesahan{
+
+    font-size:7px;
+
+    line-height:1.3;
+
+    text-align:center;
+
+    margin-bottom:15px;
+}
+
+
+/* =========================================================
+   3 RUANG TANDATANGAN
+========================================================= */
+
+.tandatangan-container{
+
+    display:flex;
+
+    width:100%;
+
+    gap:5px;
+
+    text-align:center;
+
+    align-items:flex-end;
+}
+
+.tandatangan-box{
+
+    flex:1;
+
+    font-size:7px;
+
+    line-height:1.2;
+
+    min-width:0;
+}
+
+.ruang-tandatangan{
+
+    margin-top:25px;
+
+    white-space:nowrap;
+
+    font-size:7px;
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+@media print{
+
+    .rk01-footer{
+
+        width:100% !important;
+
+        margin-top:2mm !important;
+
+        page-break-inside:avoid !important;
+
+        break-inside:avoid !important;
+    }
+
+    .rk01-bottom-table{
+
+        width:100% !important;
+
+        table-layout:fixed !important;
+
+        border-collapse:collapse !important;
+
+        border:1px solid #000 !important;
+
+        background:#fff !important;
+
+        color:#000 !important;
     }
 
     .rk01-bottom-table th,
-    .rk01-bottom-table td {
-        border: 1px solid #000 !important;
-        color: #000 !important;
-        background: #fff !important;
+    .rk01-bottom-table td{
+
+        border:1px solid #000 !important;
+
+        background:#fff !important;
+
+        color:#000 !important;
+
+        font-family:"Arial Narrow",Arial,sans-serif !important;
+
+        font-size:7pt !important;
+
+        line-height:1.15 !important;
     }
 
-    .rk01-bottom-table tr {
-        border-top: 1px solid #000 !important;
-        border-bottom: 1px solid #000 !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
+    .catatan-space{
+
+        height:28mm !important;
     }
+
+    .ayat-pengesahan{
+
+        font-size:6.5pt !important;
+
+        line-height:1.25 !important;
+
+        margin-bottom:5mm !important;
+    }
+
+    .ruang-tandatangan{
+
+        margin-top:10mm !important;
+    }
+
+    .tandatangan-box{
+
+        font-size:6.5pt !important;
+    }
+
 }
+
+
     
 </style>
 </head>
@@ -1496,109 +1695,244 @@ main {
     >
     </table>
 
-<!-- ================================
-     BAHAGIAN AKHIR RK01
-================================ -->
+<!-- =====================================================
+     TABLE PALING BAWAH RK-01
+===================================================== -->
 
 <div class="rk01-footer">
 
-<table class="rk01-footer-table">
+    <table class="rk01-bottom-table">
 
-    <thead>
-        <tr>
-            <th style="width:26%">PETUNJUK</th>
-            <th style="width:18%">WAKTU KERJA</th>
-            <th style="width:18%">TEMPAT KERJA</th>
-            <th style="width:16%">JUMLAH JAM SEHINGGA KINI</th>
-            <th style="width:22%">PENGESAHAN</th>
-        </tr>
-    </thead>
+        <thead>
+            <tr>
 
-    <tbody>
+                <th style="width:25%;">
+                    PETUNJUK
+                </th>
 
-        <tr>
-            <td>
-                TK = TEMPAT KERJA<br>
-                WK = WAKTU KERJA<br>
-                A = KLM Hari Tugas Biasa<br>
-                B1 = KLM Hari Off Kurang Dari 4 Jam<br>
-                B2 = KLM Hari Off Antara 4 - 8 Jam<br>
-                B3 = KLM Hari Off Lebih 8 Jam<br>
-                C1 = KLM Hari Cuti AM Sehingga 8 Jam<br>
-                C2 = KLM Hari Cuti AM Lebih 8 Jam<br>
-                INV = No Invois Eskort
-            </td>
+                <th style="width:18%;">
+                    WAKTU KERJA
+                </th>
 
-            <td>
-                A = 0800hrs hingga 1600hrs<br>
-                B = 1600hrs hingga 0000hrs<br>
-                C =<br>
-                D =<br>
-                E =<br>
-                F =<br>
-                G =
-            </td>
+                <th style="width:18%;">
+                    TEMPAT KERJA
+                </th>
 
-            <td>
-                W = F102-01 (SS) Klang Sawit Jerangau<br>
-                X = F102-02 (SS) Klang Sawit Jerangau Barat<br>
-                Y = F102-25 (ST) Ar-Rahn Kuala Berang<br>
-                Z =
-            </td>
+                <th style="width:17%;">
+                    JUMLAH JAM<br>
+                    SEHINGGA KINI
+                </th>
 
-            <td style="vertical-align:top;height:120px">
-                Ruangan Untuk Catatan
-            </td>
+                <th style="width:22%;">
+                    PENGESAHAN
+                </th>
 
-            <td>
+            </tr>
+        </thead>
 
-                <div style="font-size:8px;line-height:1.3;margin-bottom:25px;">
-                    Semua maklumat kerja dan jumlah jam kerja lebih masa
-                    yang tercatat dalam Borang RK-01 ini adalah disahkan
-                    betul.
-                </div>
 
-<div style="
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    margin-top:20px;
-    text-align:center;
-">
+        <tbody>
 
-    <div style="flex:1">
-        Disediakan Oleh
-        <br><br><br><br>
-        ....................................
-        <br>
-        Ketua Pos
-    </div>
+            <tr>
 
-    <div style="flex:1">
-        Diperiksa Oleh
-        <br><br><br><br>
-        ....................................
-        <br>
-        Ketua Unit
-    </div>
+                <!-- =====================================
+                     PETUNJUK
+                ====================================== -->
 
-    <div style="flex:1">
-        Disahkan Oleh
-        <br><br><br><br>
-        ....................................
-        <br>
-        Pegawai Operasi Wilayah
-    </div>
+                <td class="bottom-petunjuk">
 
-</div>
+                    <div>
+                        <b>TK</b> = TEMPAT KERJA
+                    </div>
 
-            </td>
+                    <div>
+                        <b>WK</b> = WAKTU KERJA
+                    </div>
 
-        </tr>
+                    <div>
+                        <b>A</b> = KLM Hari Tugas Biasa
+                    </div>
 
-    </tbody>
+                    <div>
+                        <b>B1</b> = KLM Hari Off Kurang Dari 4 Jam
+                    </div>
 
-</table>
+                    <div>
+                        <b>B2</b> = KLM Hari Off Antara 4 - 8 Jam
+                    </div>
+
+                    <div>
+                        <b>B3</b> = KLM Hari Off Lebih 8 Jam
+                    </div>
+
+                    <div>
+                        <b>C1</b> = KLM Hari Cuti AM Sehingga 8 Jam
+                    </div>
+
+                    <div>
+                        <b>C2</b> = KLM Hari Cuti AM Lebih 8 Jam
+                    </div>
+
+                    <div>
+                        <b>INV</b> = No Invois Eskort
+                    </div>
+
+                </td>
+
+
+                <!-- =====================================
+                     WAKTU KERJA
+                ====================================== -->
+
+                <td class="bottom-waktu">
+
+                    <div>
+                        <b>A</b> = 0800hrs hingga 1600hrs
+                    </div>
+
+                    <div>
+                        <b>B</b> = 1600hrs hingga 0000hrs
+                    </div>
+
+                    <div>
+                        <b>C</b> =
+                    </div>
+
+                    <div>
+                        <b>D</b> =
+                    </div>
+
+                    <div>
+                        <b>E</b> =
+                    </div>
+
+                    <div>
+                        <b>F</b> =
+                    </div>
+
+                    <div>
+                        <b>G</b> =
+                    </div>
+
+                </td>
+
+
+                <!-- =====================================
+                     TEMPAT KERJA
+                ====================================== -->
+
+                <td class="bottom-tempat">
+
+                    <div>
+                        <b>W</b> = F102-01 (SS) Klang Sawit Jerangau
+                    </div>
+
+                    <div>
+                        <b>X</b> = F102-02 (SS) Klang Sawit Jerangau Barat
+                    </div>
+
+                    <div>
+                        <b>Y</b> = F102-25 (ST) Ar-Rahn Kuala Berang
+                    </div>
+
+                    <div>
+                        <b>Z</b> =
+                    </div>
+
+                </td>
+
+
+                <!-- =====================================
+                     JUMLAH JAM
+                ====================================== -->
+
+                <td class="bottom-jumlah">
+
+                    <div class="catatan-title">
+                        RUANGAN UNTUK CATATAN
+                    </div>
+
+                    <div class="catatan-space"></div>
+
+                </td>
+
+
+                <!-- =====================================
+                     PENGESAHAN
+                ====================================== -->
+
+                <td class="bottom-pengesahan">
+
+                    <div class="ayat-pengesahan">
+
+                        Semua maklumat kerja dan jumlah jam kerja
+                        lebih masa yang tercatat dalam Borang RK-01
+                        ini adalah disahkan betul.
+
+                    </div>
+
+
+                    <div class="tandatangan-container">
+
+                        <div class="tandatangan-box">
+
+                            <div>
+                                Disediakan Oleh
+                            </div>
+
+                            <div class="ruang-tandatangan">
+                                ................................
+                            </div>
+
+                            <div>
+                                Ketua Pos
+                            </div>
+
+                        </div>
+
+
+                        <div class="tandatangan-box">
+
+                            <div>
+                                Diperiksa Oleh
+                            </div>
+
+                            <div class="ruang-tandatangan">
+                                ................................
+                            </div>
+
+                            <div>
+                                Ketua Unit
+                            </div>
+
+                        </div>
+
+
+                        <div class="tandatangan-box">
+
+                            <div>
+                                Disahkan Oleh
+                            </div>
+
+                            <div class="ruang-tandatangan">
+                                ................................
+                            </div>
+
+                            <div>
+                                Pegawai Operasi Wilayah
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
 
 </div>
 
