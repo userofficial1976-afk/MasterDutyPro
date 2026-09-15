@@ -4846,18 +4846,41 @@ minggu.forEach(item => {
 
         html += `
 
-        <tr>
-            <th rowspan="4">
-                ${item.tarikh.split('/')[0]}
-            </th>
+    <tr>
+    <th rowspan="4">
+        ${item.tarikh.split('/')[0]}
+    </th>
 
-            <th>WK</th>
+    <th>WK</th>
 
-            ${anggota8.map(() => `
-                <td></td>
-                <td colspan="6">Kerja Lebih Masa</td>
-            `).join("")}
-        </tr>
+    ${anggota8.map(a => {
+
+const rekod =
+    rekodAnggota(
+        a.no_skb,
+        item.iso
+    );
+
+console.log(
+    item.iso,
+    a.no_skb,
+    rekod
+);
+
+        
+        return `
+            <td>
+                ${rekod?.kod_duty || ""}
+            </td>
+
+            <td colspan="6">
+                Kerja Lebih Masa
+            </td>
+        `;
+
+    }).join("")}
+</tr>
+
 
         <tr>
             <th></th>
@@ -4887,19 +4910,29 @@ minggu.forEach(item => {
             `).join("")}
         </tr>
 
-        <tr>
-            <th>TK</th>
+<tr>
+    <th>TK</th>
 
-            ${anggota8.map(() => `
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            `).join("")}
-        </tr>
+    ${anggota8.map(a => {
+
+        const rekod =
+            rekodAnggota(
+                a.no_skb,
+                item.iso
+            );
+
+        return `
+            <td>${rekod?.kod_tempat_kerja || ""}</td>
+            <td>${rekod?.jam_klm || ""}</td>
+            <td></td>
+            <td>${rekod?.hari_offday_bertugas || ""}</td>
+            <td>${rekod?.jam_offday_bertugas || ""}</td>
+            <td>${rekod?.hari_cutiam_bertugas || ""}</td>
+            <td>${rekod?.jam_cutiam_bertugas || ""}</td>
+        `;
+
+    }).join("")}
+</tr>
 
         `;
 
