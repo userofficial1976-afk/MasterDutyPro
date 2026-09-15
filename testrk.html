@@ -945,27 +945,52 @@ main {
 
 /* =====================================================
    TABLE FOOTER RK01
+   A4 LANDSCAPE — FIXED FOOTER
 ===================================================== */
 
 .rk01-footer-grid {
+
     display: grid;
-    grid-template-columns: 24% 16% 16% 16% 28%;
+
+    grid-template-columns:
+        24%
+        16%
+        16%
+        16%
+        28%;
+
     width: 100%;
+    max-width: 100%;
+
+    margin-top: 5px;
+
+    padding: 0;
+
     gap: 0 !important;
-    margin-top: 6px;
+
+    align-items: stretch;
 
     page-break-inside: avoid;
     break-inside: avoid;
 }
 
 
-/* SEMUA TABLE FOOTER */
+/* =====================================================
+   SEMUA TABLE FOOTER
+===================================================== */
 
 .rk01-footer-grid .footer-box {
+
     width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
     margin: 0 !important;
+    padding: 0 !important;
 
     border-collapse: collapse !important;
+    border-spacing: 0 !important;
+
     table-layout: fixed !important;
 
     background: #fff !important;
@@ -973,50 +998,89 @@ main {
 
     font-family: Arial, sans-serif !important;
     font-size: 7px !important;
+
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
 }
 
 
-/* HEADER FOOTER */
+/* =====================================================
+   HEADER
+===================================================== */
 
 .rk01-footer-grid .footer-box th {
+
+    height: 15px !important;
+    min-height: 15px !important;
+
+    padding: 2px !important;
+
     background: #fff !important;
     color: #000 !important;
 
-    border: 1px solid #000 !important;
+    border: 0.5pt solid #000 !important;
 
-    text-align: center;
-    vertical-align: middle;
+    text-align: center !important;
+    vertical-align: middle !important;
 
-    font-weight: bold;
+    font-family: Arial, sans-serif !important;
     font-size: 7px !important;
+    font-weight: 700 !important;
 
-    height: 15px;
-    padding: 2px;
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+
+    box-sizing: border-box !important;
 }
 
 
-/* CELL FOOTER */
+/* =====================================================
+   CELL
+===================================================== */
 
 .rk01-footer-grid .footer-box td {
+
+    height: 13px !important;
+    min-height: 13px !important;
+
+    padding: 1.5px 2px !important;
+
     background: #fff !important;
     color: #000 !important;
 
-    border: 1px solid #000 !important;
+    border: 0.5pt solid #000 !important;
 
-    vertical-align: middle;
+    vertical-align: middle !important;
 
+    font-family: Arial, sans-serif !important;
     font-size: 7px !important;
-    line-height: 1.05;
 
-    padding: 2px;
+    line-height: 1.05 !important;
+
+    box-sizing: border-box !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+
+    text-overflow: clip !important;
 }
 
 
 /* =====================================================
    PETUNJUK
-   KOLOM 1 = 80%
-   KOLOM 2 = 20%
+   80% / 20%
 ===================================================== */
+
+.rk01-footer-grid .petunjuk-box {
+
+    width: 100% !important;
+}
+
+.rk01-footer-grid .petunjuk-box th {
+    width: 100% !important;
+}
 
 .rk01-footer-grid .petunjuk-box td:first-child {
     width: 80% !important;
@@ -1029,9 +1093,13 @@ main {
 
 /* =====================================================
    WAKTU KERJA
-   KOLOM 1 = 10%
-   KOLOM 2 = 90%
+   10% / 90%
 ===================================================== */
+
+.rk01-footer-grid .waktu-box {
+
+    width: 100% !important;
+}
 
 .rk01-footer-grid .waktu-box td:first-child {
     width: 10% !important;
@@ -1044,9 +1112,13 @@ main {
 
 /* =====================================================
    TEMPAT KERJA
-   KOLOM 1 = 15%
-   KOLOM 2 = 85%
+   15% / 85%
 ===================================================== */
+
+.rk01-footer-grid .tempat-box {
+
+    width: 100% !important;
+}
 
 .rk01-footer-grid .tempat-box td:first-child {
     width: 15% !important;
@@ -1061,8 +1133,27 @@ main {
    JUMLAH JAM
 ===================================================== */
 
+.rk01-footer-grid .jumlah-box {
+
+    width: 100% !important;
+}
+
+.rk01-footer-grid .jumlah-box th {
+
+    white-space: normal !important;
+
+    line-height: 1 !important;
+
+    height: 15px !important;
+}
+
 .rk01-footer-grid .jumlah-box td {
-    text-align: center;
+
+    text-align: center !important;
+
+    vertical-align: middle !important;
+
+    white-space: normal !important;
 }
 
 
@@ -1070,9 +1161,57 @@ main {
    PENGESAHAN
 ===================================================== */
 
+.rk01-footer-grid .pengesahan-box {
+
+    width: 100% !important;
+}
+
 .rk01-footer-grid .pengesahan-box td {
+
+    text-align: center !important;
+
+    vertical-align: middle !important;
+
+    white-space: normal !important;
+
+    line-height: 1.1 !important;
+
+    padding: 3px !important;
+}
+
+
+/* =====================================================
+   TTD ROW
+===================================================== */
+
+.rk01-footer-grid .ttd-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr
+        1fr;
+
+    width: 100%;
+
+    margin-top: 4px;
+
     text-align: center;
-    vertical-align: middle;
+
+    font-size: 6.5px;
+
+    line-height: 1.05;
+}
+
+
+.rk01-footer-grid .ttd-row > div {
+
+    min-width: 0;
+
+    text-align: center;
+
+    padding: 0 2px;
 }
 
 
@@ -1083,33 +1222,118 @@ main {
 @media print {
 
     .rk01-footer-grid {
+
+        display: grid !important;
+
         width: 100% !important;
-        grid-template-columns: 24% 16% 16% 16% 28% !important;
+        max-width: 100% !important;
+
+        grid-template-columns:
+            24%
+            16%
+            16%
+            16%
+            28% !important;
+
         gap: 0 !important;
+
+        margin-top: 2mm !important;
+
+        padding: 0 !important;
+
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+
+        overflow: visible !important;
+    }
+
+
+    /* ---------------------------------------------
+       SEMUA FOOTER TABLE
+    --------------------------------------------- */
+
+    .rk01-footer-grid .footer-box {
+
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        table-layout: fixed !important;
+
+        border-collapse: collapse !important;
+        border-spacing: 0 !important;
+
+        background: #fff !important;
+        color: #000 !important;
 
         page-break-inside: avoid !important;
         break-inside: avoid !important;
     }
 
-    .rk01-footer-grid .footer-box {
-        width: 100% !important;
-        table-layout: fixed !important;
+
+    /* ---------------------------------------------
+       HEADER FOOTER
+    --------------------------------------------- */
+
+    .rk01-footer-grid .footer-box th {
+
+        height: 14px !important;
+        min-height: 14px !important;
+
+        padding: 1.5px !important;
 
         background: #fff !important;
         color: #000 !important;
 
-        border-collapse: collapse !important;
+        border: 0.5pt solid #000 !important;
+
+        font-family: Arial, sans-serif !important;
+        font-size: 6.5pt !important;
+
+        font-weight: 700 !important;
+
+        line-height: 1 !important;
+
+        text-align: center !important;
+        vertical-align: middle !important;
+
+        box-sizing: border-box !important;
     }
 
-    .rk01-footer-grid .footer-box th,
+
+    /* ---------------------------------------------
+       CELL FOOTER
+    --------------------------------------------- */
+
     .rk01-footer-grid .footer-box td {
+
+        height: 12px !important;
+        min-height: 12px !important;
+
+        padding: 1px 2px !important;
+
         background: #fff !important;
         color: #000 !important;
 
-        border: 1px solid #000 !important;
+        border: 0.5pt solid #000 !important;
 
-        font-size: 7px !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 6.5pt !important;
+
+        line-height: 1 !important;
+
+        vertical-align: middle !important;
+
+        box-sizing: border-box !important;
     }
+
+
+    /* ---------------------------------------------
+       PETUNJUK
+    --------------------------------------------- */
 
     .rk01-footer-grid .petunjuk-box td:first-child {
         width: 80% !important;
@@ -1119,6 +1343,11 @@ main {
         width: 20% !important;
     }
 
+
+    /* ---------------------------------------------
+       WAKTU
+    --------------------------------------------- */
+
     .rk01-footer-grid .waktu-box td:first-child {
         width: 10% !important;
     }
@@ -1127,6 +1356,11 @@ main {
         width: 90% !important;
     }
 
+
+    /* ---------------------------------------------
+       TEMPAT
+    --------------------------------------------- */
+
     .rk01-footer-grid .tempat-box td:first-child {
         width: 15% !important;
     }
@@ -1134,10 +1368,100 @@ main {
     .rk01-footer-grid .tempat-box td:last-child {
         width: 85% !important;
     }
+
+
+    /* ---------------------------------------------
+       JUMLAH JAM
+    --------------------------------------------- */
+
+    .rk01-footer-grid .jumlah-box th {
+
+        font-size: 6.5pt !important;
+
+        height: 14px !important;
+
+        white-space: normal !important;
+    }
+
+
+    .rk01-footer-grid .jumlah-box td {
+
+        text-align: center !important;
+
+        vertical-align: middle !important;
+
+        white-space: normal !important;
+    }
+
+
+    /* ---------------------------------------------
+       PENGESAHAN
+    --------------------------------------------- */
+
+    .rk01-footer-grid .pengesahan-box td {
+
+        text-align: center !important;
+
+        vertical-align: middle !important;
+
+        white-space: normal !important;
+
+        font-size: 6.5pt !important;
+
+        line-height: 1.05 !important;
+
+        padding: 2px !important;
+    }
+
+
+    /* ---------------------------------------------
+       TTD
+    --------------------------------------------- */
+
+    .rk01-footer-grid .ttd-row {
+
+        display: grid !important;
+
+        grid-template-columns:
+            1fr
+            1fr
+            1fr !important;
+
+        width: 100% !important;
+
+        margin-top: 3px !important;
+
+        font-size: 6pt !important;
+
+        line-height: 1 !important;
+    }
+
+
+    .rk01-footer-grid .ttd-row > div {
+
+        min-width: 0 !important;
+
+        padding: 0 1px !important;
+
+        text-align: center !important;
+    }
+
 }
 
+
+.jumlah-ruang-catatan {
+    height: 108px !important;
+}
+
+@media print {
+    .jumlah-ruang-catatan {
+        height: 100px !important;
+    }
+}
     
-</>
+
+    
+</style>
 </head>
 
 
@@ -1649,27 +1973,29 @@ main {
     </table>
 
     <!-- JUMLAH JAM -->
-    <table class="footer-box jumlah-box">
+<table class="footer-box jumlah-box">
 
-        <thead>
-            <tr>
-                <th>JUMLAH JAM SEHINGGA KINI</th>
-            </tr>
-        </thead>
+    <thead>
+        <tr>
+            <th>JUMLAH JAM SEHINGGA KINI</th>
+        </tr>
+    </thead>
 
-        <tbody>
-            <tr>
-                <td style="text-align:center">
-                    Ruangan Untuk Catatan
-                </td>
-            </tr>
+    <tbody>
 
-            <tr>
-                <td style="height:95px"></td>
-            </tr>
-        </tbody>
+        <tr>
+            <td>
+                Ruangan Untuk Catatan
+            </td>
+        </tr>
 
-    </table>
+        <tr>
+            <td class="jumlah-ruang-catatan"></td>
+        </tr>
+
+    </tbody>
+
+</table>
 
     <!-- PENGESAHAN -->
     <table class="footer-box pengesahan-box">
