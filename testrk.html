@@ -2105,29 +2105,27 @@ grid-template-columns:
 
 <!-- INFO -->
 
-<div class="flex justify-between text-sm mb-2 report-info">
+<div class="rk01-header">
 
-    <div>
-        <b>NAMA POS :</b>
-        <span id="namaPos">-</span>
-    </div>
+    <table class="rk01-info">
+        <tr>
+            <td>BULAN : <span id="bulanLaporan"></span></td>
+            <td>TAHUN : <span id="tahunLaporan"></span></td>
+            <td>MINGGU : <span id="mingguLaporan"></span></td>
+            <td>DARI : <span id="tarikhMula"></span></td>
+            <td>HINGGA : <span id="tarikhAkhir"></span></td>
+            <td>KOD POS : <span id="namaPos"></span></td>
 
-    <div>
-        <b>KAWASAN :</b>
-        <span id="namaKawasan">-</span>
-    </div>
-
-    <div>
-        <b>BULAN :</b>
-        <span id="bulanLaporan">-</span>
-    </div>
-
-    <div>
-        <b>RK-01</b>
-    </div>
+            <td class="rk01-kod-borang">
+                BORANG RK-01
+            </td>
+        </tr>
+    </table>
 
 </div>
 
+<table id="rk01Table">
+</table>
 
 <!-- MATRIX -->
 
