@@ -943,38 +943,95 @@ main {
     border-bottom:1px solid #000 !important;
 }
 
-/* ===============================
-   RK01 FOOTER
-=============================== */
+/* =====================================================
+   RK01 FOOTER — FIX A4 LANDSCAPE
+===================================================== */
 
 .rk01-footer-grid{
     display:grid;
-    grid-template-columns:24% 16% 16% 16% 28%;
-    gap:8px;
+    grid-template-columns:
+        minmax(0, 24%)
+        minmax(0, 16%)
+        minmax(0, 16%)
+        minmax(0, 16%)
+        minmax(0, 28%);
+
+    gap:0;
     width:100%;
-    margin-top:8px;
+    margin-top:6px;
+
+    page-break-inside:avoid;
+    break-inside:avoid;
 }
 
 
+/* =====================================================
+   SEMUA TABLE FOOTER
+===================================================== */
 
-.footer-box th,
-.footer-box td{
-    border:1px solid #000;
-    padding:2px 4px;
-    font-family:"Arial Narrow",Arial,sans-serif;
-    font-size:8px;
-    line-height:1.1;
+.rk01-footer-grid .footer-box{
+    width:100%;
+    min-width:0;
+    border-collapse:collapse;
+    border-spacing:0;
+
+    table-layout:fixed;
+
+    margin:0;
+    padding:0;
+
+    page-break-inside:avoid;
+    break-inside:avoid;
+
     color:#000;
-    
-    vertical-align:top;
+    background:#fff;
 }
 
-.footer-box th{
+
+/* =====================================================
+   BORDER + FONT
+===================================================== */
+
+.rk01-footer-grid .footer-box th,
+.rk01-footer-grid .footer-box td{
+    border:1px solid #000;
+
+    padding:2px 3px;
+
+    font-family:
+        "Arial Narrow",
+        Arial,
+        sans-serif;
+
+    font-size:8px;
+    line-height:1.05;
+
+    color:#000;
+
+    vertical-align:middle;
+}
+
+
+/* =====================================================
+   HEADER FOOTER
+===================================================== */
+
+.rk01-footer-grid .footer-box th{
     text-align:center;
-    font-weight:bold;
+    font-weight:700;
+
+    height:18px;
+    white-space:nowrap;
 }
 
-/* PETUNJUK */
+
+/* =====================================================
+   PETUNJUK
+===================================================== */
+
+.petunjuk-box{
+    height:190px;
+}
 
 .petunjuk-box td:first-child{
     width:92%;
@@ -984,10 +1041,16 @@ main {
 .petunjuk-box td:last-child{
     width:8%;
     text-align:center;
-    white-space:nowrap;
 }
 
-/* WAKTU KERJA */
+
+/* =====================================================
+   WAKTU KERJA
+===================================================== */
+
+.waktu-box{
+    height:190px;
+}
 
 .waktu-box td:first-child{
     width:15%;
@@ -998,7 +1061,14 @@ main {
     width:85%;
 }
 
-/* TEMPAT KERJA */
+
+/* =====================================================
+   TEMPAT KERJA
+===================================================== */
+
+.tempat-box{
+    height:190px;
+}
 
 .tempat-box td:first-child{
     width:15%;
@@ -1009,24 +1079,188 @@ main {
     width:85%;
 }
 
-/* JUMLAH JAM */
 
-.jumlah-box tbody tr:last-child td{
-    height:95px;
+/* =====================================================
+   SAMAKAN BARIS 3 TABLE KIRI
+===================================================== */
+
+.petunjuk-box tbody tr,
+.waktu-box tbody tr,
+.tempat-box tbody tr{
+    height:19px;
 }
 
-/* TANDATANGAN */
+.petunjuk-box td,
+.waktu-box td,
+.tempat-box td{
+    height:19px !important;
+    min-height:19px !important;
+
+    padding:0 3px !important;
+
+    line-height:1 !important;
+    font-size:8px !important;
+}
+
+
+/* =====================================================
+   JUMLAH JAM
+===================================================== */
+
+.jumlah-box{
+    height:190px;
+}
+
+.jumlah-box th{
+    height:18px;
+}
+
+.jumlah-box tbody tr:first-child td{
+    height:20px;
+    text-align:center;
+    font-weight:700;
+}
+
+.jumlah-box tbody tr:last-child td{
+    height:150px !important;
+    vertical-align:top;
+}
+
+
+/* =====================================================
+   PENGESAHAN
+===================================================== */
+
+.pengesahan-box{
+    height:190px;
+}
+
+.pengesahan-box td{
+    vertical-align:top !important;
+    padding:5px !important;
+    line-height:1.15 !important;
+}
+
+
+/* =====================================================
+   RUANGAN TANDATANGAN
+===================================================== */
 
 .ttd-row{
     display:flex;
-    justify-content:space-between;
-    gap:10px;
+
+    width:100%;
+
+    margin-top:18px;
+    padding:0;
+
+    gap:0;
+
     text-align:center;
-    margin-top:25px;
 }
 
 .ttd-row > div{
     flex:1;
+    min-width:0;
+
+    font-size:7px;
+    line-height:1.05;
+}
+
+
+/* =====================================================
+   PRINT A4
+===================================================== */
+
+@media print{
+
+    .rk01-footer-grid{
+        display:grid !important;
+
+        grid-template-columns:
+            24%
+            16%
+            16%
+            16%
+            28% !important;
+
+        width:100% !important;
+
+        gap:0 !important;
+
+        margin-top:4px !important;
+
+        page-break-inside:avoid !important;
+        break-inside:avoid !important;
+    }
+
+
+    .rk01-footer-grid .footer-box{
+        width:100% !important;
+        min-width:0 !important;
+        max-width:100% !important;
+
+        height:190px !important;
+
+        margin:0 !important;
+        padding:0 !important;
+
+        table-layout:fixed !important;
+
+        page-break-inside:avoid !important;
+        break-inside:avoid !important;
+    }
+
+
+    .rk01-footer-grid .footer-box th,
+    .rk01-footer-grid .footer-box td{
+        border:0.5px solid #000 !important;
+
+        font-family:
+            "Arial Narrow",
+            Arial,
+            sans-serif !important;
+
+        font-size:7pt !important;
+
+        line-height:1.05 !important;
+
+        color:#000 !important;
+
+        padding:2px !important;
+    }
+
+
+    .petunjuk-box td,
+    .waktu-box td,
+    .tempat-box td{
+        height:19px !important;
+        min-height:19px !important;
+        padding:0 2px !important;
+        font-size:7pt !important;
+    }
+
+
+    .jumlah-box tbody tr:last-child td{
+        height:150px !important;
+    }
+
+
+    .pengesahan-box td{
+        padding:4px !important;
+        font-size:7pt !important;
+    }
+
+
+    .ttd-row{
+        margin-top:18px !important;
+        gap:0 !important;
+    }
+
+
+    .ttd-row > div{
+        font-size:7pt !important;
+    }
 }
 
 @media print{
