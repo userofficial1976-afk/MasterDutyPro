@@ -4881,7 +4881,32 @@ if(mingguDipilih){
 const mingguSemasa =
     mingguPapar[0] || [];
 
-    
+    let tarikhSehinggaKini = [];
+
+if(mingguDipilih){
+
+    const idx =
+        parseInt(mingguDipilih) - 1;
+
+    for(let i = 0; i <= idx; i++){
+
+        if(mingguList[i]){
+
+            tarikhSehinggaKini.push(
+                ...mingguList[i]
+            );
+
+        }
+
+    }
+
+}
+else{
+
+    tarikhSehinggaKini =
+        senaraiTarikh;
+
+}
 mingguPapar.forEach((minggu, index) => {
 
 
@@ -5066,11 +5091,11 @@ const j =
 
     ${anggota8.map(a => {
 
-        const j =
-            kiraJumlahAnggota(
-                a.no_skb,
-                senaraiTarikh
-            );
+const j =
+    kiraJumlahAnggota(
+        a.no_skb,
+        tarikhSehinggaKini
+    );
 
         return `
             <td></td>
