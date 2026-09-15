@@ -2472,6 +2472,7 @@ document.addEventListener(
 
             kawalFilterMengikutPeranan();
 
+            
             kosongkanLaporanRK01();
             
 
@@ -5409,6 +5410,17 @@ function paparStatus(
 
 async function janaLaporanRK01(){
 
+const mingguDipilih =
+document.getElementById("filterMinggu")?.value;
+if(!mingguDipilih){
+alert(
+"Sila pilih minggu terlebih dahulu."
+);
+
+return;
+
+}
+    
     const btn =
         document.getElementById(
             "btnJana"
