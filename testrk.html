@@ -4678,7 +4678,53 @@ function nilaiPH(rekod) {
        kod_tempat_kerja
      DALAM SEL YANG SAMA
 ===================================================== */
+function kiraJumlahAnggota(noSkb, senaraiTarikh){
 
+    let jumlahKLM = 0;
+    let jumlahOffHari = 0;
+    let jumlahOffJam = 0;
+    let jumlahPHHari = 0;
+    let jumlahPHJam = 0;
+
+    senaraiTarikh.forEach(item => {
+
+        const rekod = rekodAnggota(
+            noSkb,
+            item.iso
+        );
+
+        if(!rekod) return;
+
+        jumlahKLM += nombor(rekod.jam_klm);
+
+        jumlahOffHari += nombor(
+            rekod.hari_offday_bertugas
+        );
+
+        jumlahOffJam += nombor(
+            rekod.jam_offday_bertugas
+        );
+
+        jumlahPHHari += nombor(
+            rekod.hari_cutiam_bertugas
+        );
+
+        jumlahPHJam += nombor(
+            rekod.jam_cutiam_bertugas
+        );
+
+    });
+
+    return {
+        klm: jumlahKLM,
+        offHari: jumlahOffHari,
+        offJam: jumlahOffJam,
+        phHari: jumlahPHHari,
+        phJam: jumlahPHJam
+    };
+}
+
+    
 function janaMatrixRK01() {
 
     const table =
@@ -4832,7 +4878,8 @@ if(mingguDipilih){
     ].filter(Boolean);
 
 }
-
+const mingguSemasa =
+    mingguPapar[0] || [];
 
     
 mingguPapar.forEach((minggu, index) => {
@@ -4989,15 +5036,25 @@ html += `
         MINGGU INI
     </th>
 
-    ${anggota8.map(() => `
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    `).join("")}
+    ${anggota8.map(a => {
+
+     const j =
+    kiraJumlahAnggota(
+        a.no_skb,
+        minggu
+    );
+
+        return `
+            <td></td>
+            <td>${formatNombor(j.klm)}</td>
+            <td></td>
+            <td>${formatNombor(j.offHari)}</td>
+            <td>${formatNombor(j.offJam)}</td>
+            <td>${formatNombor(j.phHari)}</td>
+            <td>${formatNombor(j.phJam)}</td>
+        `;
+
+    }).join("")}
 
 </tr>
 
@@ -5007,15 +5064,25 @@ html += `
         SEHINGGA KINI
     </th>
 
-    ${anggota8.map(() => `
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    `).join("")}
+    ${anggota8.map(a => {
+
+        const j =
+            kiraJumlahAnggota(
+                a.no_skb,
+                senaraiTarikh
+            );
+
+        return `
+            <td></td>
+            <td>${formatNombor(j.klm)}</td>
+            <td></td>
+            <td>${formatNombor(j.offHari)}</td>
+            <td>${formatNombor(j.offJam)}</td>
+            <td>${formatNombor(j.phHari)}</td>
+            <td>${formatNombor(j.phJam)}</td>
+        `;
+
+    }).join("")}
 
 </tr>
 <tr>
