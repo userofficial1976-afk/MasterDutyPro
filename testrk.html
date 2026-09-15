@@ -1737,6 +1737,27 @@ grid-template-columns:
     text-align:center !important;
     vertical-align:middle !important;
 }
+
+.report-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:12px;
+    margin-bottom:6px;
+    flex-wrap:nowrap;
+}
+
+.rk01-box{
+    margin-left:auto;
+    border:1px solid #000;
+    padding:2px 8px;
+    font-weight:bold;
+}
+`
+
+    
+
+
     
 </style>
 </head>
@@ -2107,24 +2128,41 @@ grid-template-columns:
 
 <div class="flex justify-between text-sm mb-2 report-info">
 
-    <div>
-        <b>NAMA POS :</b>
-        <span id="namaPos">-</span>
-    </div>
+<div class="report-info">
 
-    <div>
-        <b>KAWASAN :</b>
-        <span id="namaKawasan">-</span>
-    </div>
-
-    <div>
+    <span>
         <b>BULAN :</b>
         <span id="bulanLaporan">-</span>
-    </div>
+    </span>
 
-    <div>
-        <b>RK-01</b>
-    </div>
+    <span>
+        <b>TAHUN :</b>
+        <span id="tahunLaporan">-</span>
+    </span>
+
+    <span>
+        <b>MINGGU :</b>
+        <span id="mingguLaporan">-</span>
+    </span>
+
+    <span>
+        <b>DARI :</b>
+        <span id="tarikhMula">-</span>
+    </span>
+
+    <span>
+        <b>HINGGA :</b>
+        <span id="tarikhAkhir">-</span>
+    </span>
+
+    <span>
+        <b>NAMA POS :</b>
+        <span id="namaPos">-</span>
+    </span>
+
+    <span class="rk01-box">
+        BORANG RK-01
+    </span>
 
 </div>
 
