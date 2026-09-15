@@ -944,20 +944,23 @@ main {
 }
 
 /* =====================================================
-   RK01 FOOTER — FIX A4 LANDSCAPE
+   RK01 FOOTER
+   A4 LANDSCAPE — FIXED
 ===================================================== */
 
 .rk01-footer-grid{
     display:grid;
-    grid-template-columns:
-        minmax(0, 24%)
-        minmax(0, 16%)
-        minmax(0, 16%)
-        minmax(0, 16%)
-        minmax(0, 28%);
 
-    gap:0;
+    grid-template-columns:
+        24%
+        16%
+        16%
+        16%
+        28%;
+
     width:100%;
+    gap:0;
+
     margin-top:6px;
 
     page-break-inside:avoid;
@@ -966,37 +969,41 @@ main {
 
 
 /* =====================================================
-   SEMUA TABLE FOOTER
+   SEMUA FOOTER TABLE
 ===================================================== */
 
 .rk01-footer-grid .footer-box{
     width:100%;
     min-width:0;
+    max-width:100%;
+
+    margin:0;
+    padding:0;
+
     border-collapse:collapse;
     border-spacing:0;
 
     table-layout:fixed;
 
-    margin:0;
-    padding:0;
+    background:#fff;
+    color:#000;
 
     page-break-inside:avoid;
     break-inside:avoid;
-
-    color:#000;
-    background:#fff;
 }
 
 
 /* =====================================================
-   BORDER + FONT
+   SEMUA CELL FOOTER
 ===================================================== */
 
 .rk01-footer-grid .footer-box th,
 .rk01-footer-grid .footer-box td{
+
     border:1px solid #000;
 
-    padding:2px 3px;
+    background:#fff;
+    color:#000;
 
     font-family:
         "Arial Narrow",
@@ -1004,9 +1011,10 @@ main {
         sans-serif;
 
     font-size:8px;
+
     line-height:1.05;
 
-    color:#000;
+    padding:0 2px;
 
     vertical-align:middle;
 }
@@ -1017,89 +1025,93 @@ main {
 ===================================================== */
 
 .rk01-footer-grid .footer-box th{
-    text-align:center;
-    font-weight:700;
 
     height:18px;
+
+    font-weight:700;
+
+    text-align:center;
+
     white-space:nowrap;
+
+    background:#fff;
+    color:#000;
 }
 
 
 /* =====================================================
    PETUNJUK
+   KOLUM 1 = 80%
+   KOLUM 2 = 20%
 ===================================================== */
 
 .petunjuk-box{
+    width:100% !important;
+
+    table-layout:fixed !important;
+
     height:190px;
 }
 
 .petunjuk-box td:first-child{
-    width:92%;
-    white-space:nowrap;
+    width:80% !important;
 }
 
 .petunjuk-box td:last-child{
-    width:8%;
-    text-align:center;
-}
+    width:20% !important;
 
 
 /* =====================================================
    WAKTU KERJA
+   KOLUM 1 = 10%
+   KOLUM 2 = 90%
 ===================================================== */
 
 .waktu-box{
+    width:100% !important;
+
+    table-layout:fixed !important;
+
     height:190px;
 }
 
 .waktu-box td:first-child{
-    width:15%;
+    width:10% !important;
+
     text-align:center;
 }
 
 .waktu-box td:last-child{
-    width:85%;
+    width:90% !important;
+
+    text-align:left;
 }
 
 
 /* =====================================================
    TEMPAT KERJA
+   KOLUM 1 = 15%
+   KOLUM 2 = 85%
 ===================================================== */
 
 .tempat-box{
+    width:100% !important;
+
+    table-layout:fixed !important;
+
     height:190px;
 }
 
 .tempat-box td:first-child{
-    width:15%;
+    width:15% !important;
+
     text-align:center;
 }
 
 .tempat-box td:last-child{
-    width:85%;
-}
+    width:85% !important;
 
-
-/* =====================================================
-   SAMAKAN BARIS 3 TABLE KIRI
-===================================================== */
-
-.petunjuk-box tbody tr,
-.waktu-box tbody tr,
-.tempat-box tbody tr{
-    height:19px;
-}
-
-.petunjuk-box td,
-.waktu-box td,
-.tempat-box td{
-    height:19px !important;
-    min-height:19px !important;
-
-    padding:0 3px !important;
-
-    line-height:1 !important;
-    font-size:8px !important;
+    text-align:left;
 }
 
 
@@ -1108,7 +1120,11 @@ main {
 ===================================================== */
 
 .jumlah-box{
+    width:100% !important;
+
     height:190px;
+
+    table-layout:fixed !important;
 }
 
 .jumlah-box th{
@@ -1116,13 +1132,18 @@ main {
 }
 
 .jumlah-box tbody tr:first-child td{
+
     height:20px;
+
     text-align:center;
+
     font-weight:700;
 }
 
 .jumlah-box tbody tr:last-child td{
+
     height:150px !important;
+
     vertical-align:top;
 }
 
@@ -1132,26 +1153,36 @@ main {
 ===================================================== */
 
 .pengesahan-box{
+
+    width:100% !important;
+
     height:190px;
+
+    table-layout:fixed !important;
 }
 
 .pengesahan-box td{
+
     vertical-align:top !important;
+
     padding:5px !important;
+
     line-height:1.15 !important;
 }
 
 
 /* =====================================================
-   RUANGAN TANDATANGAN
+   TANDATANGAN
 ===================================================== */
 
 .ttd-row{
+
     display:flex;
 
     width:100%;
 
     margin-top:18px;
+
     padding:0;
 
     gap:0;
@@ -1160,21 +1191,25 @@ main {
 }
 
 .ttd-row > div{
+
     flex:1;
+
     min-width:0;
 
     font-size:7px;
+
     line-height:1.05;
 }
 
 
 /* =====================================================
-   PRINT A4
+   PRINT / PDF
 ===================================================== */
 
 @media print{
 
     .rk01-footer-grid{
+
         display:grid !important;
 
         grid-template-columns:
@@ -1191,30 +1226,45 @@ main {
         margin-top:4px !important;
 
         page-break-inside:avoid !important;
+
         break-inside:avoid !important;
     }
 
 
     .rk01-footer-grid .footer-box{
+
         width:100% !important;
+
         min-width:0 !important;
+
         max-width:100% !important;
 
         height:190px !important;
 
         margin:0 !important;
+
         padding:0 !important;
 
         table-layout:fixed !important;
 
+        background:#fff !important;
+
+        color:#000 !important;
+
         page-break-inside:avoid !important;
+
         break-inside:avoid !important;
     }
 
 
     .rk01-footer-grid .footer-box th,
     .rk01-footer-grid .footer-box td{
-        border:0.5px solid #000 !important;
+
+        border:0.5pt solid #000 !important;
+
+        background:#fff !important;
+
+        color:#000 !important;
 
         font-family:
             "Arial Narrow",
@@ -1225,40 +1275,87 @@ main {
 
         line-height:1.05 !important;
 
-        color:#000 !important;
-
-        padding:2px !important;
+        padding:0 2px !important;
     }
 
 
-    .petunjuk-box td,
-    .waktu-box td,
-    .tempat-box td{
-        height:19px !important;
-        min-height:19px !important;
-        padding:0 2px !important;
-        font-size:7pt !important;
+    /* -----------------------------------------
+       PETUNJUK 80 / 20
+    ----------------------------------------- */
+
+    .petunjuk-box{
+        table-layout:fixed !important;
+    }
+
+    .petunjuk-box td:first-child{
+        width:80% !important;
+    }
+
+    .petunjuk-box td:last-child{
+        width:20% !important;
+    }
+
+
+    /* -----------------------------------------
+       WAKTU KERJA 10 / 90
+    ----------------------------------------- */
+
+    .waktu-box{
+        table-layout:fixed !important;
+    }
+
+    .waktu-box td:first-child{
+        width:10% !important;
+    }
+
+    .waktu-box td:last-child{
+        width:90% !important;
+    }
+
+
+    /* -----------------------------------------
+       TEMPAT KERJA 15 / 85
+    ----------------------------------------- */
+
+    .tempat-box{
+        table-layout:fixed !important;
+    }
+
+    .tempat-box td:first-child{
+        width:15% !important;
+    }
+
+    .tempat-box td:last-child{
+        width:85% !important;
     }
 
 
     .jumlah-box tbody tr:last-child td{
+
         height:150px !important;
+
+        vertical-align:top !important;
     }
 
 
     .pengesahan-box td{
+
         padding:4px !important;
+
         font-size:7pt !important;
     }
 
 
     .ttd-row{
+
         margin-top:18px !important;
+
         gap:0 !important;
     }
 
 
     .ttd-row > div{
+
         font-size:7pt !important;
     }
 }
@@ -1519,7 +1616,7 @@ main {
     
 
     
-</style>
+</>
 </head>
 
 
