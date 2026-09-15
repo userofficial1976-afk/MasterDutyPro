@@ -1202,7 +1202,8 @@ filtered.forEach((cuti, idx) => {
           jamEskot: 0, rmEskot: 0,
           jamTambahan: 0, rmTambahan: 0,
           jamOffKhas: 0, rmOffKhas: 0,
-          jamKursus: 0, rmKursus: 0
+          jamKursus: 0, rmKursus: 0 ,jamKlmOff: 0,
+          rmKlmOff: 0
         };
       }
 
@@ -1236,6 +1237,9 @@ d.rmCuti8p += num(row.rm_jam_cutiam);
       d.rmTambahan += num(row.rm_klm_tambahan);
       d.jamKursus += num(row.jam_klm_kursus);
       d.rmKursus += num(row.rm_klm_kursus);
+      d.jamKlmOff += num(row.jam_klm_off);
+      d.rmKlmOff += num(row.rm_klm_off);
+      
       d.jamOffKhas += num(row.jam_klm_wajib) + num(row.jam_klm_mc) +
                       num(row.jam_klm_cuti_tahun) + num(row.jam_klm_cuti_ehsan) + num(row.jam_klm_cuti_ganti);
       d.rmOffKhas += num(row.rm_klm_wajib) + num(row.rm_klm_mc) +
@@ -1289,7 +1293,9 @@ senarai.sort((a, b) => {
       off4: 0, rmOff4: 0, off48: 0, rmOff48: 0, off8: 0, rmOff8: 0,
       cuti8: 0, rmCuti8: 0, cuti8p: 0, rmCuti8p: 0, jumlahRM: 0,
       jamTampung: 0, rmTampung: 0, jamEskot: 0, rmEskot: 0,
-      jamTambahan: 0, rmTambahan: 0, jamKursus: 0, rmKursus: 0,
+      jamTambahan: 0, rmTambahan: 0,
+      jamKursus: 0, rmKursus: 0,
+      jamKlmOff: 0, rmKlmOff: 0,
       jamOffKhas: 0, rmOffKhas: 0
     };
 
@@ -1324,8 +1330,14 @@ senarai.sort((a, b) => {
       T.jamTampung += d.jamTampung; T.rmTampung += d.rmTampung;
       T.jamEskot += d.jamEskot; T.rmEskot += d.rmEskot;
       T.jamTambahan += d.jamTambahan; T.rmTambahan += d.rmTambahan;
-      T.jamKursus += d.jamKursus; T.rmKursus += d.rmKursus;
-      T.jamOffKhas += d.jamOffKhas; T.rmOffKhas += d.rmOffKhas;
+      T.jamKursus += d.jamKursus;
+      T.rmKursus += d.rmKursus;
+
+      T.jamKlmOff += d.jamKlmOff;
+      T.rmKlmOff += d.rmKlmOff;
+
+      T.jamOffKhas += d.jamOffKhas;
+      T.rmOffKhas += d.rmOffKhas;
     });
 
     while (bil <= 10) {
@@ -1392,8 +1404,8 @@ set("rRmEskot", formatRM(T.rmEskot));
 set("rJamTambahan", T.jamTambahan);
 set("rRmTambahan", formatRM(T.rmTambahan));
 
-set("rJamPejabat", "-");
-set("rRmPejabat", "-");
+set("rJamPejabat", T.jamKlmOff);
+set("rRmPejabat", formatRM(T.rmKlmOff));
 
 set("rJamCit", "-");
 set("rRmCit", "-");
