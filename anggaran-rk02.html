@@ -1198,8 +1198,14 @@ filtered.forEach((cuti, idx) => {
           off8: 0, rmOff8: 0,
           cuti8: 0, rmCuti8: 0,
           cuti8p: 0, rmCuti8p: 0,
-          jamTampung: 0, rmTampung: 0,
-          jamEskot: 0, rmEskot: 0,
+          jamTampung: 0,
+          rmTampung: 0,
+
+          jamPentadbiran: 0,
+          rmPentadbiran: 0,
+
+          jamEskot: 0,
+          rmEskot: 0,
           jamTambahan: 0, rmTambahan: 0,
           jamOffKhas: 0, rmOffKhas: 0,
           jamKursus: 0, rmKursus: 0 ,jamKlmOff: 0,
@@ -1229,8 +1235,22 @@ d.rmCuti8p += num(row.rm_jam_cutiam);
 
 
       // Kategori lain
-      d.jamTampung += num(row.jam_tampungan);
-      d.rmTampung += num(row.rm_klm_tampungan);
+      const posTampungan =
+    String(row.pos_tampungan || "").trim().toUpperCase();
+
+if (posTampungan === "PEJABAT FGVSSSB WILAYAH TERENGGANU") {
+
+    // 07 KLM Pentadbiran
+    d.jamPentadbiran += num(row.jam_tampungan);
+    d.rmPentadbiran += num(row.rm_klm_tampungan);
+
+} else {
+
+    // 04 KLM Tampungan
+    d.jamTampung += num(row.jam_tampungan);
+    d.rmTampung += num(row.rm_klm_tampungan);
+
+}
       d.jamEskot += num(row.jam_klm_eskot);
       d.rmEskot += num(row.rm_klm_eskot);
       d.jamTambahan += num(row.jam_klm_tambahan);
@@ -1292,7 +1312,8 @@ senarai.sort((a, b) => {
       jamBiasa: 0, rmBiasa: 0,
       off4: 0, rmOff4: 0, off48: 0, rmOff48: 0, off8: 0, rmOff8: 0,
       cuti8: 0, rmCuti8: 0, cuti8p: 0, rmCuti8p: 0, jumlahRM: 0,
-      jamTampung: 0, rmTampung: 0, jamEskot: 0, rmEskot: 0,
+      jamTampung: 0, rmTampung: 0, jamPentadbiran: 0,
+rmPentadbiran: 0, jamEskot: 0, rmEskot: 0,
       jamTambahan: 0, rmTambahan: 0,
       jamKursus: 0, rmKursus: 0,
       jamKlmOff: 0, rmKlmOff: 0,
@@ -1328,6 +1349,8 @@ senarai.sort((a, b) => {
       T.cuti8p += d.cuti8p; T.rmCuti8p += d.rmCuti8p;
       T.jumlahRM += d.jumlahRM;
       T.jamTampung += d.jamTampung; T.rmTampung += d.rmTampung;
+      T.jamPentadbiran += d.jamPentadbiran;
+      T.rmPentadbiran += d.rmPentadbiran;
       T.jamEskot += d.jamEskot; T.rmEskot += d.rmEskot;
       T.jamTambahan += d.jamTambahan; T.rmTambahan += d.rmTambahan;
       T.jamKursus += d.jamKursus;
@@ -1377,6 +1400,7 @@ const rmKawalanFinal =
     rmTotal
     - T.rmEskot
     - T.rmTampung
+    - T.rmPentadbiran
     - T.rmKursus
     - T.rmTambahan;
 
@@ -1384,6 +1408,7 @@ const jamKawalanFinal =
     T.jamBiasa
     - T.jamEskot
     - T.jamTampung
+    - T.jamPentadbiran
     - T.jamKursus
     - T.jamTambahan;
 
@@ -1410,8 +1435,8 @@ set("rRmPejabat", formatRM(T.rmKlmOff));
 set("rJamCit", "-");
 set("rRmCit", "-");
 
-set("rJamPentadbiran", "-");
-set("rRmPentadbiran", "-");
+set("rJamPentadbiran", T.jamPentadbiran);
+set("rRmPentadbiran", formatRM(T.rmPentadbiran));
     // Tandatangan
     if (senarai.length) {
       const kp = senarai[0].ketua_pos || "-";
