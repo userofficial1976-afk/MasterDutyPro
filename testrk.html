@@ -1447,7 +1447,76 @@ main {
     border: 1px solid #000000 !important;
 }
 
+/* =====================================================
+   PETUNJUK
+   KOLUM 1 = 80%
+   KOLUM 2 = 20%
+===================================================== */
 
+.petunjuk-box {
+    width: 100%;
+    table-layout: fixed !important;
+}
+
+.petunjuk-box td:first-child {
+    width: 80% !important;
+}
+
+.petunjuk-box td:last-child {
+    width: 20% !important;
+}
+
+
+/* =====================================================
+   WAKTU KERJA
+   KOLUM 1 = 10%
+   KOLUM 2 = 90%
+===================================================== */
+
+.waktu-box {
+    width: 100%;
+    table-layout: fixed !important;
+}
+
+.waktu-box td:first-child {
+    width: 10% !important;
+}
+
+.waktu-box td:last-child {
+    width: 90% !important;
+}
+
+@media print {
+
+    .petunjuk-box {
+        width: 100% !important;
+        table-layout: fixed !important;
+    }
+
+    .petunjuk-box td:first-child {
+        width: 80% !important;
+    }
+
+    .petunjuk-box td:last-child {
+        width: 20% !important;
+    }
+
+
+    .waktu-box {
+        width: 100% !important;
+        table-layout: fixed !important;
+    }
+
+    .waktu-box td:first-child {
+        width: 10% !important;
+    }
+
+    .waktu-box td:last-child {
+        width: 90% !important;
+    }
+
+}
+    
 
     
 </style>
