@@ -1236,9 +1236,9 @@ d.rmCuti8p += num(row.rm_jam_cutiam);
       d.rmTambahan += num(row.rm_klm_tambahan);
       d.jamKursus += num(row.jam_klm_kursus);
       d.rmKursus += num(row.rm_klm_kursus);
-      d.jamOffKhas += num(row.jam_klm_off) + num(row.jam_klm_wajib) + num(row.jam_klm_mc) +
+      d.jamOffKhas += num(row.jam_klm_wajib) + num(row.jam_klm_mc) +
                       num(row.jam_klm_cuti_tahun) + num(row.jam_klm_cuti_ehsan) + num(row.jam_klm_cuti_ganti);
-      d.rmOffKhas += num(row.rm_klm_off) + num(row.rm_klm_wajib) + num(row.rm_klm_mc) +
+      d.rmOffKhas += num(row.rm_klm_wajib) + num(row.rm_klm_mc) +
                      num(row.rm_klm_cuti_tahun) + num(row.rm_klm_cuti_ehsan) + num(row.rm_klm_cuti_ganti);
     });
 
@@ -1301,8 +1301,8 @@ senarai.sort((a, b) => {
         <td>${formatRM(d.gaji)}</td>
         <td>${d.jamBiasa}</td>
         <td>${formatRM(d.rmBiasa)}</td>
-        <td>${d.off4}</td>
-        <td>${formatRM(d.rmOff4)}</td>
+        <td>0</td>
+        <td>${formatRM(0)}</td>
         <td>${d.off48}</td>
         <td>${formatRM(d.rmOff48)}</td>
         <td>${d.off8}</td>
