@@ -766,45 +766,73 @@ async function muatSemuaDuty(){
             supabaseClient
                 .from("jadual_duty")
                 .select(`
-                    id,
-                    tarikh,
-                    bulan,
-                    tahun,
-                    no_skb,
-                    kod_duty,
-                    waktu_tugasan,
-                    jam_kerja,
-                    jam_klm,
-                    pos,
-                    nama_anggota,
-                    no_anggota,
-                    unit,
-                    nama_pos_asal,
+id,
+tarikh,
+bulan,
+tahun,
+no_skb,
+kod_duty,
+waktu_tugasan,
+jam_kerja,
+jam_klm,
+pos,
+nama_anggota,
+no_anggota,
+unit,
+nama_pos_asal,
 
-                    pos_tampungan,
-                    jam_tampungan,
-                    rm_klm_tampungan,
+pos_tampungan,
+jam_tampungan,
+rm_klm_tampungan,
 
-                    hari_offday_bertugas,
-                    jam_offday_bertugas,
+hari_offday_bertugas,
+jam_offday_bertugas,
 
-                    hari_cutiam_bertugas,
-                    jam_cutiam_bertugas,
+hari_cutiam_bertugas,
+jam_cutiam_bertugas,
 
-                    jumlah_offday,
-                    rm_hari_offday,
-                    rm_jam_offday,
+jumlah_offday,
+rm_hari_offday,
+rm_jam_offday,
 
-                    jumlah_cutiam,
-                    rm_hari_cutiam,
-                    rm_jam_cutiam,
+jumlah_cutiam,
+rm_hari_cutiam,
+rm_jam_cutiam,
 
-                    rm_klm_hari_biasa,
-                    rm_klm_seluruh,
+rm_klm_hari_biasa,
+rm_klm_seluruh,
 
-                    Data_Anggota (
-                        gaji_pokok
-                    )
+/* KLM KHAS */
+jam_klm_off,
+rm_klm_off,
+
+jam_klm_mc,
+rm_klm_mc,
+
+jam_klm_eskot,
+rm_klm_eskot,
+
+jam_klm_wajib,
+rm_klm_wajib,
+
+jam_klm_cuti_tahun,
+rm_klm_cuti_tahun,
+
+jam_klm_kursus,
+rm_klm_kursus,
+
+jam_klm_cuti_ehsan,
+rm_klm_cuti_ehsan,
+
+jam_klm_cuti_ganti,
+rm_klm_cuti_ganti,
+
+jam_klm_tambahan,
+rm_klm_tambahan,
+
+Data_Anggota (
+    gaji_pokok
+)
                 `)
                 .eq(
                     "tahun",
@@ -1209,6 +1237,136 @@ function kiraKlm(rows){
 
 }
 
+/* =====================================================
+   KIRA 9 KLM KHAS
+===================================================== */
+
+function kiraKlmKhas(rows){
+
+    const hasil = {
+
+        off: {
+            jam: 0,
+            rm: 0
+        },
+
+        mc: {
+            jam: 0,
+            rm: 0
+        },
+
+        eskot: {
+            jam: 0,
+            rm: 0
+        },
+
+        wajib: {
+            jam: 0,
+            rm: 0
+        },
+
+        cutiTahun: {
+            jam: 0,
+            rm: 0
+        },
+
+        kursus: {
+            jam: 0,
+            rm: 0
+        },
+
+        cutiEhsan: {
+            jam: 0,
+            rm: 0
+        },
+
+        cutiGanti: {
+            jam: 0,
+            rm: 0
+        },
+
+        tambahan: {
+            jam: 0,
+            rm: 0
+        }
+
+    };
+
+
+    rows.forEach(row => {
+
+        hasil.off.jam +=
+            num(row.jam_klm_off);
+
+        hasil.off.rm +=
+            num(row.rm_klm_off);
+
+
+        hasil.mc.jam +=
+            num(row.jam_klm_mc);
+
+        hasil.mc.rm +=
+            num(row.rm_klm_mc);
+
+
+        hasil.eskot.jam +=
+            num(row.jam_klm_eskot);
+
+        hasil.eskot.rm +=
+            num(row.rm_klm_eskot);
+
+
+        hasil.wajib.jam +=
+            num(row.jam_klm_wajib);
+
+        hasil.wajib.rm +=
+            num(row.rm_klm_wajib);
+
+
+        hasil.cutiTahun.jam +=
+            num(row.jam_klm_cuti_tahun);
+
+        hasil.cutiTahun.rm +=
+            num(row.rm_klm_cuti_tahun);
+
+
+        hasil.kursus.jam +=
+            num(row.jam_klm_kursus);
+
+        hasil.kursus.rm +=
+            num(row.rm_klm_kursus);
+
+
+        hasil.cutiEhsan.jam +=
+            num(row.jam_klm_cuti_ehsan);
+
+        hasil.cutiEhsan.rm +=
+            num(row.rm_klm_cuti_ehsan);
+
+
+        hasil.cutiGanti.jam +=
+            num(row.jam_klm_cuti_ganti);
+
+        hasil.cutiGanti.rm +=
+            num(row.rm_klm_cuti_ganti);
+
+
+        hasil.tambahan.jam +=
+            num(row.jam_klm_tambahan);
+
+        hasil.tambahan.rm +=
+            num(row.rm_klm_tambahan);
+
+    });
+
+
+    return hasil;
+
+}
+
+
+
+    
 function kiraTampungan(rows){
 
     return rows.reduce(
@@ -1465,10 +1623,8 @@ document.getElementById(
 
 function paparKadKLM(rows){
 
-    const klm =
-        kiraKlm(
-            rows
-        );
+    const klm = kiraKlm(rows);
+    const khas = kiraKlmKhas(rows);
 
     const tampungan =
         kiraTampungan(rows);
@@ -1495,7 +1651,71 @@ if(elJamCuti){
         " Hari / " +
         num(klm.jamCuti) +
         " Jam";
+/* =====================================================
+   PAPAR 9 KLM KHAS
+===================================================== */
 
+document.getElementById("klmOffJam").textContent =
+    decimal(khas.off.jam);
+
+document.getElementById("klmOffRM").textContent =
+    money(khas.off.rm);
+
+
+document.getElementById("klmMcJam").textContent =
+    decimal(khas.mc.jam);
+
+document.getElementById("klmMcRM").textContent =
+    money(khas.mc.rm);
+
+
+document.getElementById("klmEskotJam").textContent =
+    decimal(khas.eskot.jam);
+
+document.getElementById("klmEskotRM").textContent =
+    money(khas.eskot.rm);
+
+
+document.getElementById("klmWajibJam").textContent =
+    decimal(khas.wajib.jam);
+
+document.getElementById("klmWajibRM").textContent =
+    money(khas.wajib.rm);
+
+
+document.getElementById("klmCutiTahunJam").textContent =
+    decimal(khas.cutiTahun.jam);
+
+document.getElementById("klmCutiTahunRM").textContent =
+    money(khas.cutiTahun.rm);
+
+
+document.getElementById("klmKursusJam").textContent =
+    decimal(khas.kursus.jam);
+
+document.getElementById("klmKursusRM").textContent =
+    money(khas.kursus.rm);
+
+
+document.getElementById("klmCutiEhsanJam").textContent =
+    decimal(khas.cutiEhsan.jam);
+
+document.getElementById("klmCutiEhsanRM").textContent =
+    money(khas.cutiEhsan.rm);
+
+
+document.getElementById("klmCutiGantiJam").textContent =
+    decimal(khas.cutiGanti.jam);
+
+document.getElementById("klmCutiGantiRM").textContent =
+    money(khas.cutiGanti.rm);
+
+
+document.getElementById("klmTambahanJam").textContent =
+    decimal(khas.tambahan.jam);
+
+document.getElementById("klmTambahanRM").textContent =
+    money(khas.tambahan.rm);
 }
 
 
@@ -3557,7 +3777,233 @@ Jana Laporan
 
 </div>
 
+<!-- =====================================================
+     9 KLM KHAS
+===================================================== -->
 
+<!-- KLM LATIHAN DWI BULANAN -->
+<div
+    id="cardKlmOff"
+    class="glass rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition"
+    onclick="bukaModalKlmKhas('off')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Latihan Dwi Bulanan
+        </div>
+
+        <i class="fa-solid fa-person-chalkboard text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmOffJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmOffRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM MC -->
+<div
+    id="cardKlmMc"
+    class="glass rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition"
+    onclick="bukaModalKlmKhas('mc')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM MC
+        </div>
+
+        <i class="fa-solid fa-notes-medical text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmMcJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmMcRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM ESKOT -->
+<div
+    id="cardKlmEskot"
+    class="glass rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition"
+    onclick="bukaModalKlmKhas('eskot')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Eskot
+        </div>
+
+        <i class="fa-solid fa-user-shield text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmEskotJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmEskotRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM WAJIB -->
+<div
+    id="cardKlmWajib"
+    class="glass rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition"
+    onclick="bukaModalKlmKhas('wajib')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Wajib
+        </div>
+
+        <i class="fa-solid fa-clipboard-check text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmWajibJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmWajibRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM CUTI TAHUN -->
+<div
+    id="cardKlmCutiTahun"
+    class="glass rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition"
+    onclick="bukaModalKlmKhas('cutiTahun')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Cuti Tahun
+        </div>
+
+        <i class="fa-solid fa-calendar-check text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmCutiTahunJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmCutiTahunRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM KURSUS -->
+<div
+    id="cardKlmKursus"
+    class="glass rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition"
+    onclick="bukaModalKlmKhas('kursus')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Kursus
+        </div>
+
+        <i class="fa-solid fa-graduation-cap text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmKursusJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmKursusRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM CUTI EHSAN -->
+<div
+    id="cardKlmCutiEhsan"
+    class="glass rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition"
+    onclick="bukaModalKlmKhas('cutiEhsan')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Cuti Ehsan
+        </div>
+
+        <i class="fa-solid fa-heart text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmCutiEhsanJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmCutiEhsanRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM CUTI GANTI -->
+<div
+    id="cardKlmCutiGanti"
+    class="glass rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition"
+    onclick="bukaModalKlmKhas('cutiGanti')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Cuti Ganti
+        </div>
+
+        <i class="fa-solid fa-arrows-rotate text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmCutiGantiJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmCutiGantiRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM KAWALAN TAMBAHAN -->
+<div
+    id="cardKlmTambahan"
+    class="glass rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition"
+    onclick="bukaModalKlmKhas('tambahan')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Kawalan Tambahan
+        </div>
+
+        <i class="fa-solid fa-shield-halved text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmTambahanJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmTambahanRM">0.00</span>
+    </div>
+</div>
 <!-- =====================================================
      RUMUSAN UNIT
 ===================================================== -->
