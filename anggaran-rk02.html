@@ -1401,6 +1401,7 @@ const rmTotal = T.jumlahRM;
 
 const rmKawalanFinal =
     rmTotal
+    - T.rmKlmOff
     - T.rmEskot
     - T.rmTampung
     - T.rmPentadbiran
@@ -1409,6 +1410,7 @@ const rmKawalanFinal =
 
 const jamKawalanFinal =
     T.jamBiasa
+    - T.jamKlmOff
     - T.jamEskot
     - T.jamTampung
     - T.jamPentadbiran
@@ -1435,8 +1437,8 @@ set("rRmTambahan", formatRM(T.rmTambahan));
 set("rJamPejabat", T.jamKlmOff);
 set("rRmPejabat", formatRM(T.rmKlmOff));
 
-set("rJamCit", "-");
-set("rRmCit", "-");
+set("rJamCit", 0);
+set("rRmCit", formatRM(0));
 
 set("rJamPentadbiran", T.jamPentadbiran);
 set("rRmPentadbiran", formatRM(T.rmPentadbiran));
