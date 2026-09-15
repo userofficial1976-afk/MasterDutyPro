@@ -1459,7 +1459,271 @@ main {
     }
 }
     
+/* =====================================================
+   FOOTER RK01 — 5 TABLE TERPISAH
+===================================================== */
 
+.rk01-footer-grid{
+    display:grid;
+
+    /* 5 table */
+    grid-template-columns:
+        24%
+        16%
+        16%
+        16%
+        28%;
+
+    /* JARAK ANTARA TABLE */
+    gap:2mm;
+
+    width:100%;
+    max-width:100%;
+
+    margin-top:6px;
+
+    page-break-inside:avoid;
+    break-inside:avoid;
+
+    align-items:stretch;
+}
+
+
+/* =====================================================
+   SETIAP TABLE
+===================================================== */
+
+.rk01-footer-grid .footer-box{
+
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+
+    margin:0 !important;
+
+    border-collapse:collapse !important;
+    border-spacing:0 !important;
+
+    table-layout:fixed !important;
+
+    background:#fff !important;
+    color:#000 !important;
+
+    font-family:Arial, sans-serif !important;
+    font-size:7px !important;
+
+    page-break-inside:avoid;
+    break-inside:avoid;
+}
+
+
+/* =====================================================
+   HEADER TABLE
+===================================================== */
+
+.rk01-footer-grid .footer-box th{
+
+    background:#fff !important;
+    color:#000 !important;
+
+    border:1px solid #000 !important;
+
+    text-align:center;
+    vertical-align:middle;
+
+    font-weight:bold;
+
+    font-size:7px !important;
+
+    height:15px;
+
+    padding:2px;
+
+    line-height:1.05;
+}
+
+
+/* =====================================================
+   ISI TABLE
+===================================================== */
+
+.rk01-footer-grid .footer-box td{
+
+    background:#fff !important;
+    color:#000 !important;
+
+    border:1px solid #000 !important;
+
+    vertical-align:middle;
+
+    font-size:7px !important;
+
+    line-height:1.05;
+
+    padding:2px;
+}
+
+
+/* =====================================================
+   PETUNJUK
+===================================================== */
+
+.rk01-footer-grid .petunjuk-box td:first-child{
+    width:80% !important;
+}
+
+.rk01-footer-grid .petunjuk-box td:last-child{
+    width:20% !important;
+}
+
+
+/* =====================================================
+   WAKTU KERJA
+===================================================== */
+
+.rk01-footer-grid .waktu-box td:first-child{
+    width:10% !important;
+}
+
+.rk01-footer-grid .waktu-box td:last-child{
+    width:90% !important;
+}
+
+
+/* =====================================================
+   TEMPAT KERJA
+===================================================== */
+
+.rk01-footer-grid .tempat-box td:first-child{
+    width:15% !important;
+}
+
+.rk01-footer-grid .tempat-box td:last-child{
+    width:85% !important;
+}
+
+
+/* =====================================================
+   JUMLAH JAM
+===================================================== */
+
+.rk01-footer-grid .jumlah-box td{
+    text-align:center;
+}
+
+
+/* Ruangan catatan */
+.jumlah-ruang-catatan{
+    height:100px !important;
+}
+
+
+/* =====================================================
+   PENGESAHAN
+===================================================== */
+
+.rk01-footer-grid .pengesahan-box td{
+    text-align:center;
+    vertical-align:middle;
+}
+
+
+/* Tandatangan 3 bahagian */
+.ttd-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+
+    gap:8px;
+
+    margin-top:8px;
+}
+
+.ttd-row > div{
+    text-align:center;
+    font-size:7px;
+}
+
+
+/* =====================================================
+   PRINT / PDF A4 LANDSCAPE
+===================================================== */
+
+@media print{
+
+    .rk01-footer-grid{
+
+        width:100% !important;
+        max-width:100% !important;
+
+        grid-template-columns:
+            24%
+            16%
+            16%
+            16%
+            28%;
+
+        /* JARAK TABLE */
+        gap:2mm !important;
+
+        margin-top:2mm !important;
+
+        page-break-inside:avoid !important;
+        break-inside:avoid !important;
+    }
+
+
+    .rk01-footer-grid .footer-box{
+
+        width:100% !important;
+        min-width:0 !important;
+
+        margin:0 !important;
+
+        border-collapse:collapse !important;
+        border-spacing:0 !important;
+
+        table-layout:fixed !important;
+
+        background:#fff !important;
+        color:#000 !important;
+
+        page-break-inside:avoid !important;
+        break-inside:avoid !important;
+    }
+
+
+    .rk01-footer-grid .footer-box th,
+    .rk01-footer-grid .footer-box td{
+
+        background:#fff !important;
+        color:#000 !important;
+
+        border:1px solid #000 !important;
+
+        font-size:7px !important;
+    }
+
+
+    .rk01-footer-grid .footer-box th{
+        height:14px !important;
+    }
+
+
+    .rk01-footer-grid .footer-box td{
+        padding:2px !important;
+    }
+
+
+    .jumlah-ruang-catatan{
+        height:100px !important;
+    }
+
+
+    .ttd-row{
+        gap:5px !important;
+        margin-top:6px !important;
+    }
+}
     
 </style>
 </head>
