@@ -1076,58 +1076,190 @@ kiraSemuaRM();
     return semuaAnggota.find(a => String(a.no_skb) === String(noSkb));
   }
 
-  function kiraSemuaRM() {
-    const anggota = dapatkanAnggotaSemasa();
-    if (!anggota) {
-      ["rmHariOffday","rmJamOffday","jumlahOffday","rmHariCutiam","rmJamCutiam","jumlahCutiam","rmKlmHariBiasa","rmTampung"].forEach(id => setValue(id, "0.00"));
-      return;
-    }
-    const hariOffday = document.getElementById("hariOffday");
-    const hariCutiam = document.getElementById("hariCutiam");
-    const jamOffday = Number(getValue("jamOffday") || 0);
-    const jamCutiam = Number(getValue("jamCutiam") || 0);
-    const jamKlm = Number(getValue("jamKlm") || 0);
-    const jamTampung = Number(getValue("jamTampung") || 0);
-    const kadarKlm = Number(anggota.rm_pehariklmbiasa || 0);
+function kiraSemuaRM() {
+  const anggota = dapatkanAnggotaSemasa();
 
-const rmKlmWajib =
-  Number(getValue("klmWajib") || 0) * kadarKlm;
+  // Simpan nilai raw / penuh
+  window._kiraanRM = {
+    rmKlmHariBiasa: 0,
+    rmTampung: 0,
+    rmHariOffday: 0,
+    rmJamOffday: 0,
+    jumlahOffday: 0,
+    rmHariCutiam: 0,
+    rmJamCutiam: 0,
+    jumlahCutiam: 0,
 
-const rmKlmMc =
-  Number(getValue("klmMc") || 0) * kadarKlm;
+    rmKlmOff: 0,
+    rmKlmWajib: 0,
+    rmKlmMc: 0,
+    rmKlmCutiTahun: 0,
+    rmKlmCutiEhsan: 0,
+    rmKlmKursus: 0,
+    rmKlmCutiGanti: 0,
+    rmKlmTambahan: 0
+  };
 
-const rmKlmCutiTahun =
-  Number(getValue("klmCutiTahun") || 0) * kadarKlm;
+  if (!anggota) {
+    [
+      "rmHariOffday",
+      "rmJamOffday",
+      "jumlahOffday",
+      "rmHariCutiam",
+      "rmJamCutiam",
+      "jumlahCutiam",
+      "rmKlmHariBiasa",
+      "rmTampung"
+    ].forEach(id => setValue(id, "0.00"));
 
-const rmKlmCutiEhsan =
-  Number(getValue("klmCutiEhsan") || 0) * kadarKlm;
-
-const rmKlmKursus =
-  Number(getValue("klmKursus") || 0) * kadarKlm;
-
-const rmKlmTambahan =
-  Number(getValue("klmKawalanTambahan") || 0) * kadarKlm;
-
-const rmKlmOff =
-  Number(getValue("klmOffday") || 0) * kadarKlm;
-
-    
-    
-
-    setValue("rmKlmHariBiasa", formatRM(jamKlm * kadarKlm));
-    setValue("rmTampung", formatRM(jamTampung * kadarKlm));
-    const rmHariOffday = (hariOffday && hariOffday.checked) ? Number(anggota.rm_perharioffday || 0) : 0;
-    const rmJamOffday = jamOffday * Number(anggota.rm_perjamoffday || 0);
-    const rmHariCutiam = (hariCutiam && hariCutiam.checked) ? Number(anggota.rm_perharicutiam || 0) : 0;
-    const rmJamCutiam = jamCutiam * Number(anggota.rm_perjamcutiam || 0);
-    setValue("rmHariOffday", formatRM(rmHariOffday));
-    setValue("rmJamOffday", formatRM(rmJamOffday));
-    setValue("jumlahOffday", formatRM(rmHariOffday + rmJamOffday));
-    setValue("rmHariCutiam", formatRM(rmHariCutiam));
-    setValue("rmJamCutiam", formatRM(rmJamCutiam));
-    setValue("jumlahCutiam", formatRM(rmHariCutiam + rmJamCutiam));
+    return;
   }
 
+  const hariOffday = document.getElementById("hariOffday");
+  const hariCutiam = document.getElementById("hariCutiam");
+
+  const jamOffday = Number(getValue("jamOffday") || 0);
+  const jamCutiam = Number(getValue("jamCutiam") || 0);
+  const jamKlm = Number(getValue("jamKlm") || 0);
+  const jamTampung = Number(getValue("jamTampung") || 0);
+
+  // Kadar sebenar dari Data_Anggota
+  const kadarKlm = Number(anggota.rm_pehariklmbiasa || 0);
+  const kadarOffHari = Number(anggota.rm_perharioffday || 0);
+  const kadarOffJam = Number(anggota.rm_perjamoffday || 0);
+  const kadarCutiHari = Number(anggota.rm_perharicutiam || 0);
+  const kadarCutiJam = Number(anggota.rm_perjamcutiam || 0);
+
+  // =========================
+  // KIRAAN RAW / NILAI PENUH
+  // =========================
+
+  const rmKlmHariBiasa = jamKlm * kadarKlm;
+  const rmTampung = jamTampung * kadarKlm;
+
+  const rmHariOffday =
+    (hariOffday && hariOffday.checked)
+      ? kadarOffHari
+      : 0;
+
+  const rmJamOffday =
+    jamOffday * kadarOffJam;
+
+  const rmHariCutiam =
+    (hariCutiam && hariCutiam.checked)
+      ? kadarCutiHari
+      : 0;
+
+  const rmJamCutiam =
+    jamCutiam * kadarCutiJam;
+
+  const jumlahOffday =
+    rmHariOffday + rmJamOffday;
+
+  const jumlahCutiam =
+    rmHariCutiam + rmJamCutiam;
+
+
+  // =========================
+  // KLM MENGIKUT KATEGORI
+  // =========================
+
+  const rmKlmOff =
+    Number(getValue("klmOffday") || 0) * kadarKlm;
+
+  const rmKlmWajib =
+    Number(getValue("klmWajib") || 0) * kadarKlm;
+
+  const rmKlmMc =
+    Number(getValue("klmMc") || 0) * kadarKlm;
+
+  const rmKlmCutiTahun =
+    Number(getValue("klmCutiTahun") || 0) * kadarKlm;
+
+  const rmKlmCutiEhsan =
+    Number(getValue("klmCutiEhsan") || 0) * kadarKlm;
+
+  const rmKlmKursus =
+    Number(getValue("klmKursus") || 0) * kadarKlm;
+
+  const rmKlmCutiGanti =
+    Number(getValue("klmCutiGanti") || 0) * kadarKlm;
+
+  const rmKlmTambahan =
+    Number(getValue("klmKawalanTambahan") || 0) * kadarKlm;
+
+
+  // =========================
+  // SIMPAN NILAI PENUH
+  // =========================
+
+  window._kiraanRM = {
+    rmKlmHariBiasa,
+    rmTampung,
+
+    rmHariOffday,
+    rmJamOffday,
+    jumlahOffday,
+
+    rmHariCutiam,
+    rmJamCutiam,
+    jumlahCutiam,
+
+    rmKlmOff,
+    rmKlmWajib,
+    rmKlmMc,
+    rmKlmCutiTahun,
+    rmKlmCutiEhsan,
+    rmKlmKursus,
+    rmKlmCutiGanti,
+    rmKlmTambahan
+  };
+
+
+  // =========================
+  // PAPARAN SAHAJA
+  // =========================
+
+  setValue(
+    "rmKlmHariBiasa",
+    formatRM(rmKlmHariBiasa)
+  );
+
+  setValue(
+    "rmTampung",
+    formatRM(rmTampung)
+  );
+
+  setValue(
+    "rmHariOffday",
+    formatRM(rmHariOffday)
+  );
+
+  setValue(
+    "rmJamOffday",
+    formatRM(rmJamOffday)
+  );
+
+  setValue(
+    "jumlahOffday",
+    formatRM(jumlahOffday)
+  );
+
+  setValue(
+    "rmHariCutiam",
+    formatRM(rmHariCutiam)
+  );
+
+  setValue(
+    "rmJamCutiam",
+    formatRM(rmJamCutiam)
+  );
+
+  setValue(
+    "jumlahCutiam",
+    formatRM(jumlahCutiam)
+  );
+}
   // =====================================================
   // SIMPAN DUTY
   // =====================================================
@@ -1183,17 +1315,14 @@ const rmKlmOff =
       const hariCutiam = document.getElementById("hariCutiam");
       const kadarKlm = Number(anggota.rm_pehariklmbiasa || 0);
 
-      const rm_klm_seluruh =
+      const kiraan = window._kiraanRM || {};
 
-      Number(getValue("rmHariOffday") || 0) +
-
-      Number(getValue("rmHariCutiam") || 0) +
-
-      Number(getValue("rmJamOffday") || 0) +
-
-      Number(getValue("rmJamCutiam") || 0) +
-
-      Number(getValue("rmKlmHariBiasa") || 0);
+const rm_klm_seluruh =
+  (kiraan.rmHariOffday || 0) +
+  (kiraan.rmHariCutiam || 0) +
+  (kiraan.rmJamOffday || 0) +
+  (kiraan.rmJamCutiam || 0) +
+  (kiraan.rmKlmHariBiasa || 0);
 
       console.log("rm_klm_seluruh", rm_klm_seluruh);
       
@@ -1211,48 +1340,41 @@ jam_klm: Number(getValue("jamKlm") || 0),
         jam_offday_bertugas: Number(getValue("jamOffday") || 0),
         hari_cutiam_bertugas: (hariCutiam && hariCutiam.checked) ? 1 : 0,
         jam_cutiam_bertugas: Number(getValue("jamCutiam") || 0),
-rm_klm_hari_biasa: Number(getValue("rmKlmHariBiasa") || 0),
-rm_klm_tampungan: Number(getValue("rmTampung") || 0),
+rm_klm_hari_biasa: kiraan.rmKlmHariBiasa || 0,
+rm_klm_tampungan: kiraan.rmTampung || 0,
 rm_klm_seluruh: rm_klm_seluruh,
-rm_hari_offday: Number(getValue("rmHariOffday") || 0),
-rm_jam_offday: Number(getValue("rmJamOffday") || 0),
-jumlah_offday: Number(getValue("jumlahOffday") || 0),
 
-rm_hari_cutiam: Number(getValue("rmHariCutiam") || 0),
-rm_jam_cutiam: Number(getValue("rmJamCutiam") || 0),
-jumlah_cutiam: Number(getValue("jumlahCutiam") || 0),
+rm_hari_offday: kiraan.rmHariOffday || 0,
+rm_jam_offday: kiraan.rmJamOffday || 0,
+jumlah_offday: kiraan.jumlahOffday || 0,
+
+rm_hari_cutiam: kiraan.rmHariCutiam || 0,
+rm_jam_cutiam: kiraan.rmJamCutiam || 0,
+jumlah_cutiam: kiraan.jumlahCutiam || 0,
 
 jam_klm_off: Number(getValue("klmOffday") || 0),
-rm_klm_off:
-  Number(getValue("klmOffday") || 0) * kadarKlm,
+rm_klm_off: kiraan.rmKlmOff || 0,
 
 jam_klm_wajib: Number(getValue("klmWajib") || 0),
-rm_klm_wajib:
-  Number(getValue("klmWajib") || 0) * kadarKlm,
+rm_klm_wajib: kiraan.rmKlmWajib || 0,
 
 jam_klm_mc: Number(getValue("klmMc") || 0),
-rm_klm_mc:
-  Number(getValue("klmMc") || 0) * kadarKlm,
+rm_klm_mc: kiraan.rmKlmMc || 0,
 
 jam_klm_cuti_tahun: Number(getValue("klmCutiTahun") || 0),
-rm_klm_cuti_tahun:
-  Number(getValue("klmCutiTahun") || 0) * kadarKlm,
+rm_klm_cuti_tahun: kiraan.rmKlmCutiTahun || 0,
 
 jam_klm_cuti_ehsan: Number(getValue("klmCutiEhsan") || 0),
-rm_klm_cuti_ehsan:
-  Number(getValue("klmCutiEhsan") || 0) * kadarKlm,
+rm_klm_cuti_ehsan: kiraan.rmKlmCutiEhsan || 0,
 
 jam_klm_kursus: Number(getValue("klmKursus") || 0),
-rm_klm_kursus:
-  Number(getValue("klmKursus") || 0) * kadarKlm,
+rm_klm_kursus: kiraan.rmKlmKursus || 0,
 
 jam_klm_cuti_ganti: Number(getValue("klmCutiGanti") || 0),
-rm_klm_cuti_ganti:
-  Number(getValue("klmCutiGanti") || 0) * kadarKlm,
+rm_klm_cuti_ganti: kiraan.rmKlmCutiGanti || 0,
 
 jam_klm_tambahan: Number(getValue("klmKawalanTambahan") || 0),
-rm_klm_tambahan:
-  Number(getValue("klmKawalanTambahan") || 0) * kadarKlm,
+rm_klm_tambahan: kiraan.rmKlmTambahan || 0,
         
         dikemaskini_oleh: currentUser?.name || "Sistem",
         dikemaskini_pada: new Date().toISOString()
