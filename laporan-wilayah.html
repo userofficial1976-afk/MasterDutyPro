@@ -2993,50 +2993,43 @@ document.addEventListener(
 
 
     
-function downloadExcelJadualDuty(){
+
+function downloadExcelJadualDuty() {
 
     /* =====================================================
        SEMAK LIBRARY EXCEL
     ===================================================== */
 
-    if(typeof XLSX === "undefined"){
-
+    if (typeof XLSX === "undefined") {
         alert("Library Excel (SheetJS) tidak dijumpai.");
         return;
-
     }
 
 
     /* =====================================================
-       AMBIL BULAN + TAHUN
+       BULAN + TAHUN
     ===================================================== */
 
     const bulan =
-        document.getElementById("filterBulan")?.value || "";
+        String(document.getElementById("filterBulan")?.value || "").trim();
 
     const tahun =
-        document.getElementById("filterTahun")?.value || "";
+        String(document.getElementById("filterTahun")?.value || "").trim();
 
 
-    if(!bulan){
-
+    if (!bulan) {
         alert("Sila pilih bulan terlebih dahulu.");
         return;
-
     }
 
-
-    if(!tahun){
-
+    if (!tahun) {
         alert("Sila pilih tahun terlebih dahulu.");
         return;
-
     }
 
 
     /* =====================================================
-       DATA JADUAL DUTY
-       SEMUA DATA INI SUDAH DI FILTER PADA PAGE
+       DATA
     ===================================================== */
 
     const sourceRows =
@@ -3049,52 +3042,74 @@ function downloadExcelJadualDuty(){
        FILTER BULAN + TAHUN
     ===================================================== */
 
-    const rows =
-        sourceRows.filter(row => {
+    const rows = sourceRows.filter(row => {
 
-            const rowBulan =
-                String(row.bulan ?? "")
-                    .trim()
-                    .toLowerCase();
+        const rowBulan =
+            String(row.bulan ?? "")
+                .trim()
+                .toLowerCase();
 
-            const rowTahun =
-                String(row.tahun ?? "")
-                    .trim();
+        const rowTahun =
+            String(row.tahun ?? "")
+                .trim();
 
+        return (
+            rowBulan === bulan.toLowerCase() &&
+            rowTahun === tahun
+        );
 
-            return (
-                rowBulan ===
-                    String(bulan)
-                        .trim()
-                        .toLowerCase()
-                &&
-                rowTahun ===
-                    String(tahun)
-                        .trim()
-            );
-
-        });
+    });
 
 
-    if(!rows.length){
+    if (!rows.length) {
 
         alert(
             `Tiada rekod jadual_duty untuk ${bulan} ${tahun}.`
         );
 
         return;
-
     }
 
 
     /* =====================================================
-       COLUMN YANG PERLU DIJUMLAHKAN
-       1 ANGGOTA = 1 BARIS
+       FUNGSI NUMBER
+       Sokong:
+       680.03
+       RM 680.03
+       "1,200.50"
+       null
+       ""
     ===================================================== */
+
+    function num(value) {
+
+        if (
+            value === null ||
+            value === undefined ||
+            value === ""
+        ) {
+            return 0;
+        }
+
+        const clean =
+            String(value)
+                .replace(/RM/gi, "")
+                .replace(/,/g, "")
+                .trim();
+
+        const n = Number(clean);
+
+        return Number.isFinite(n) ? n : 0;
+    }
+
+
+    /* =====================================================
+       KOLOM NUMERIC
+       JANGAN MASUKKAN JAM_KERJA
+       ===================================================== */
 
     const sumColumns = [
 
-        "jam_kerja",
         "jam_klm",
 
         "rm_klm_hari_biasa",
@@ -3143,180 +3158,124 @@ function downloadExcelJadualDuty(){
 
 
     /* =====================================================
-       FUNCTION NOMBOR
-    ===================================================== */
+       GROUP IKUT NO SKB
+       1 ANGGOTA = 1 BARIS
+       ===================================================== */
 
-    function toNumber(value){
-
-        if(
-            value === null ||
-            value === undefined ||
-            value === ""
-        ){
-
-            return 0;
-
-        }
-
-
-        if(typeof value === "number"){
-
-            return value;
-
-        }
-
-
-        /*
-         * Buang RM, koma dan space
-         */
-
-        const cleaned =
-            String(value)
-                .replace(/RM/gi, "")
-                .replace(/,/g, "")
-                .trim();
-
-
-        const number =
-            parseFloat(cleaned);
-
-
-        return Number.isFinite(number)
-            ? number
-            : 0;
-
-    }
-
-
-    /* =====================================================
-       GROUP BY NO SKB
-    ===================================================== */
-
-    const grouped =
-        new Map();
+    const grouped = new Map();
 
 
     rows.forEach(row => {
 
-        /*
-         * NO SKB ialah ID anggota
-         */
+        const key = String(row.no_skb ?? "").trim();
 
-        const key =
-            String(
-                row.no_skb ?? ""
-            ).trim();
+        if (!key) return;
 
 
-        if(!key){
-
-            return;
-
-        }
-
-
-        /* ---------------------------------------------
-           JIKA ANGGOTA BELUM ADA
-        --------------------------------------------- */
-
-        if(!grouped.has(key)){
+        if (!grouped.has(key)) {
 
             const item = {
 
-                bulan:
-                    row.bulan ?? "",
+                bulan: bulan,
+                tahun: tahun,
 
-                tahun:
-                    row.tahun ?? "",
+                kawasan: row.kawasan ?? "",
+                unit: row.unit ?? "",
+                pos: row.pos ?? "",
 
-                kawasan:
-                    row.kawasan ?? "",
+                no_skb: row.no_skb ?? "",
+                nama_anggota: row.nama_anggota ?? "",
+                no_anggota: row.no_anggota ?? "",
 
-                unit:
-                    row.unit ?? "",
-
-                pos:
-                    row.pos ??
-                    row.nama_pos_asal ??
-                    "",
-
-                no_skb:
-                    row.no_skb ?? "",
-
-                nama_anggota:
-                    row.nama_anggota ?? "",
-
-                no_anggota:
-                    row.no_anggota ?? "",
-
-                ketua_unit:
-                    row.ketua_unit ?? "",
-
-                nama_ketua_pos:
-                    row.nama_ketua_pos ?? ""
+                hari_offday_bertugas: new Set(),
+                hari_cutiam_bertugas: new Set()
 
             };
 
 
-            /*
-             * Initial semua column jumlah = 0
-             */
+            sumColumns.forEach(col => {
 
-            sumColumns.forEach(column => {
-
-                item[column] = 0;
+                item[col] = 0;
 
             });
 
 
-            grouped.set(
-                key,
-                item
-            );
+            grouped.set(key, item);
 
         }
 
 
-        /* ---------------------------------------------
-           AMBIL DATA ANGGOTA
-        --------------------------------------------- */
-
-        const item =
-            grouped.get(key);
+        const item = grouped.get(key);
 
 
-        /* ---------------------------------------------
-           JUMLAHKAN SEMUA COLUMN
-        --------------------------------------------- */
+        /* =================================================
+           JUMLAHKAN SEMUA COLUMN NUMERIC
+        ================================================= */
 
-        sumColumns.forEach(column => {
+        sumColumns.forEach(col => {
 
-            item[column] +=
-                toNumber(
-                    row[column]
-                );
+            item[col] += num(row[col]);
 
         });
+
+
+        /* =================================================
+           HARI OFFDAY
+           Contoh:
+
+           0
+           1
+           0
+           1
+
+           Hasil:
+
+           1
+        ================================================= */
+
+        const offday =
+            String(row.hari_offday_bertugas ?? "").trim();
+
+        if (
+            offday &&
+            offday !== "0" &&
+            offday !== "0.0" &&
+            offday !== "0.00"
+        ) {
+
+            item.hari_offday_bertugas.add(offday);
+
+        }
+
+
+        /* =================================================
+           HARI CUTI AM
+        ================================================= */
+
+        const cutiam =
+            String(row.hari_cutiam_bertugas ?? "").trim();
+
+        if (
+            cutiam &&
+            cutiam !== "0" &&
+            cutiam !== "0.0" &&
+            cutiam !== "0.00"
+        ) {
+
+            item.hari_cutiam_bertugas.add(cutiam);
+
+        }
 
     });
 
 
     /* =====================================================
-       SUSUN DATA EXCEL
-    ===================================================== */
+       TUKAR MAP → ARRAY
+       ===================================================== */
 
-    const excelData = [];
+    const data = Array.from(grouped.values()).map(item => {
 
-
-    let bil = 1;
-
-
-    grouped.forEach(item => {
-
-        excelData.push({
-
-            "BIL":
-                bil++,
+        return {
 
             "BULAN":
                 item.bulan,
@@ -3342,37 +3301,19 @@ function downloadExcelJadualDuty(){
             "NO ANGGOTA":
                 item.no_anggota,
 
-            "KETUA UNIT":
-                item.ketua_unit,
-
-            "NAMA KETUA POS":
-                item.nama_ketua_pos,
-
-
-            /* KERJA */
-
-            "JUMLAH JAM KERJA":
-                item.jam_kerja,
-
-            "JUMLAH JAM KLM":
+            "JAM KLM":
                 item.jam_klm,
-
-
-            /* BIASA */
 
             "RM KLM HARI BIASA":
                 item.rm_klm_hari_biasa,
 
-
-            /* OFFDAY */
-
-            "HARI OFFDAY BERTUGAS":
-                item.hari_offday_bertugas ?? "",
+            "HARI OFFDAY":
+                Array.from(item.hari_offday_bertugas).join(", "),
 
             "RM HARI OFFDAY":
                 item.rm_hari_offday,
 
-            "JAM OFFDAY BERTUGAS":
+            "JAM OFFDAY":
                 item.jam_offday_bertugas,
 
             "RM JAM OFFDAY":
@@ -3381,16 +3322,13 @@ function downloadExcelJadualDuty(){
             "JUMLAH OFFDAY":
                 item.jumlah_offday,
 
-
-            /* CUTI AM */
-
-            "HARI CUTIAM BERTUGAS":
-                item.hari_cutiam_bertugas ?? "",
+            "HARI CUTIAM":
+                Array.from(item.hari_cutiam_bertugas).join(", "),
 
             "RM HARI CUTIAM":
                 item.rm_hari_cutiam,
 
-            "JAM CUTIAM BERTUGAS":
+            "JAM CUTIAM":
                 item.jam_cutiam_bertugas,
 
             "RM JAM CUTIAM":
@@ -3399,17 +3337,11 @@ function downloadExcelJadualDuty(){
             "JUMLAH CUTIAM":
                 item.jumlah_cutiam,
 
-
-            /* TAMPUNGAN */
-
             "JAM TAMPUNGAN":
                 item.jam_tampungan,
 
-            "RM KLM TAMPUNGAN":
+            "RM TAMPUNGAN":
                 item.rm_klm_tampungan,
-
-
-            /* WAJIB */
 
             "JAM KLM WAJIB":
                 item.jam_klm_wajib,
@@ -3417,213 +3349,199 @@ function downloadExcelJadualDuty(){
             "RM KLM WAJIB":
                 item.rm_klm_wajib,
 
-
-            /* MC */
-
             "JAM KLM MC":
                 item.jam_klm_mc,
 
             "RM KLM MC":
                 item.rm_klm_mc,
 
-
-            /* CUTI TAHUN */
-
-            "JAM KLM CUTI TAHUN":
+            "JAM CUTI TAHUN":
                 item.jam_klm_cuti_tahun,
 
-            "RM KLM CUTI TAHUN":
+            "RM CUTI TAHUN":
                 item.rm_klm_cuti_tahun,
 
-
-            /* CUTI EHSAN */
-
-            "JAM KLM CUTI EHSAN":
+            "JAM CUTI EHSAN":
                 item.jam_klm_cuti_ehsan,
 
-            "RM KLM CUTI EHSAN":
+            "RM CUTI EHSAN":
                 item.rm_klm_cuti_ehsan,
 
-
-            /* ESKOT */
-
-            "JAM KLM ESKOT":
+            "JAM ESKOT":
                 item.jam_klm_eskot,
 
-            "RM KLM ESKOT":
+            "RM ESKOT":
                 item.rm_klm_eskot,
 
-
-            /* TAMBAHAN */
-
-            "JAM KLM TAMBAHAN":
+            "JAM TAMBAHAN":
                 item.jam_klm_tambahan,
 
-            "RM KLM TAMBAHAN":
+            "RM TAMBAHAN":
                 item.rm_klm_tambahan,
 
-
-            /* KURSUS */
-
-            "JAM KLM KURSUS":
+            "JAM KURSUS":
                 item.jam_klm_kursus,
 
-            "RM KLM KURSUS":
+            "RM KURSUS":
                 item.rm_klm_kursus,
 
-
-            /* CUTI GANTI */
-
-            "JAM KLM CUTI GANTI":
+            "JAM CUTI GANTI":
                 item.jam_klm_cuti_ganti,
 
-            "RM KLM CUTI GANTI":
+            "RM CUTI GANTI":
                 item.rm_klm_cuti_ganti,
 
-
-            /* OFF */
-
-            "JAM KLM OFF":
+            "JAM OFF":
                 item.jam_klm_off,
 
-            "RM KLM OFF":
+            "RM OFF":
                 item.rm_klm_off
 
-        });
+        };
 
     });
 
 
     /* =====================================================
-       CREATE WORKSHEET
-    ===================================================== */
+       SUSUN IKUT NAMA
+       ===================================================== */
 
-    const worksheet =
-        XLSX.utils.json_to_sheet(
-            excelData
-        );
+    data.sort((a, b) =>
+        String(a["NAMA ANGGOTA"])
+            .localeCompare(
+                String(b["NAMA ANGGOTA"]),
+                "ms"
+            )
+    );
+
+
+    /* =====================================================
+       TAMBAH BIL
+       ===================================================== */
+
+    const finalData = data.map((row, index) => {
+
+        return {
+
+            "BIL":
+                index + 1,
+
+            ...row
+
+        };
+
+    });
+
+
+    /* =====================================================
+       WORKSHEET
+       ===================================================== */
+
+    const ws =
+        XLSX.utils.json_to_sheet(finalData);
 
 
     /* =====================================================
        LEBAR COLUMN
-    ===================================================== */
+       ===================================================== */
 
-    worksheet["!cols"] = [
+    ws["!cols"] = [
 
-        { wch: 6 },
-        { wch: 14 },
-        { wch: 8 },
-        { wch: 18 },
-        { wch: 18 },
-        { wch: 22 },
-        { wch: 14 },
-        { wch: 35 },
-        { wch: 14 },
-        { wch: 25 },
-        { wch: 30 },
-
-        { wch: 18 },
-        { wch: 18 },
-
-        { wch: 20 },
-
-        { wch: 25 },
-        { wch: 18 },
-        { wch: 20 },
-        { wch: 18 },
-        { wch: 18 },
-
-        { wch: 25 },
-        { wch: 18 },
-        { wch: 20 },
-        { wch: 18 },
-        { wch: 18 },
-
-        { wch: 18 },
-        { wch: 20 },
-
-        { wch: 18 },
-        { wch: 18 },
-
-        { wch: 18 },
-        { wch: 18 },
-
-        { wch: 22 },
-        { wch: 22 },
-
-        { wch: 22 },
-        { wch: 22 },
-
-        { wch: 20 },
-        { wch: 20 },
-
-        { wch: 22 },
-        { wch: 22 },
-
-        { wch: 20 },
-        { wch: 20 },
-
-        { wch: 22 },
-        { wch: 22 },
-
-        { wch: 18 },
-        { wch: 18 }
+        { wch: 6 },   // BIL
+        { wch: 12 },  // BULAN
+        { wch: 8 },   // TAHUN
+        { wch: 18 },  // KAWASAN
+        { wch: 18 },  // UNIT
+        { wch: 18 },  // POS
+        { wch: 12 },  // NO SKB
+        { wch: 35 },  // NAMA
+        { wch: 15 },  // NO ANGGOTA
+        { wch: 12 },  // JAM KLM
+        { wch: 18 },  // RM KLM
+        { wch: 15 },  // HARI OFFDAY
+        { wch: 16 },  // RM HARI OFFDAY
+        { wch: 14 },  // JAM OFFDAY
+        { wch: 16 },  // RM JAM OFFDAY
+        { wch: 16 },  // JUMLAH OFFDAY
+        { wch: 15 },  // HARI CUTIAM
+        { wch: 16 },  // RM HARI CUTIAM
+        { wch: 14 },  // JAM CUTIAM
+        { wch: 16 },  // RM JAM CUTIAM
+        { wch: 16 },  // JUMLAH CUTIAM
+        { wch: 16 },  // JAM TAMPUNGAN
+        { wch: 16 },  // RM TAMPUNGAN
+        { wch: 16 },  // JAM WAJIB
+        { wch: 16 },  // RM WAJIB
+        { wch: 14 },  // JAM MC
+        { wch: 14 },  // RM MC
+        { wch: 16 },  // JAM CUTI TAHUN
+        { wch: 16 },  // RM CUTI TAHUN
+        { wch: 16 },  // JAM CUTI EHSAN
+        { wch: 16 },  // RM CUTI EHSAN
+        { wch: 14 },  // JAM ESKOT
+        { wch: 14 },  // RM ESKOT
+        { wch: 16 },  // JAM TAMBAHAN
+        { wch: 16 },  // RM TAMBAHAN
+        { wch: 14 },  // JAM KURSUS
+        { wch: 14 },  // RM KURSUS
+        { wch: 16 },  // JAM CUTI GANTI
+        { wch: 16 },  // RM CUTI GANTI
+        { wch: 12 },  // JAM OFF
+        { wch: 12 }   // RM OFF
 
     ];
 
 
     /* =====================================================
-       CREATE WORKBOOK
-    ===================================================== */
+       FREEZE HEADER
+       ===================================================== */
 
-    const workbook =
+    ws["!freeze"] = {
+        xSplit: 8,
+        ySplit: 1
+    };
+
+
+    /* =====================================================
+       WORKBOOK
+       ===================================================== */
+
+    const wb =
         XLSX.utils.book_new();
 
-
     XLSX.utils.book_append_sheet(
-        workbook,
-        worksheet,
-        "jadual_duty"
+        wb,
+        ws,
+        "Jumlah RM"
     );
 
 
     /* =====================================================
-       NAMA FILE
-    ===================================================== */
+       NAMA FAIL
+       ===================================================== */
 
-    const namaBulan =
-        String(bulan)
-            .trim()
-            .replace(
-                /[^a-zA-Z0-9_-]/g,
-                "_"
-            );
+    const safeBulan =
+        bulan.replace(/[\\/:*?"<>|]/g, "_");
+
+    const safeTahun =
+        tahun.replace(/[\\/:*?"<>|]/g, "_");
 
 
-    const namaTahun =
-        String(tahun)
-            .trim()
-            .replace(
-                /[^0-9]/g,
-                ""
-            );
-
-
-    const namaFail =
-        `jadual_duty_bulanan_${namaBulan}_${namaTahun}.xlsx`;
+    const fileName =
+        `Jadual_Duty_Jumlah_RM_${safeBulan}_${safeTahun}.xlsx`;
 
 
     /* =====================================================
        DOWNLOAD
-    ===================================================== */
+       ===================================================== */
 
     XLSX.writeFile(
-        workbook,
-        namaFail
+        wb,
+        fileName
     );
 
 }
-    
+
 /* =====================================================
    KAD KLM
 ===================================================== */
