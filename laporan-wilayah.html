@@ -5190,6 +5190,66 @@ function isiModalJumlahRM() {
 
     const data = Array.from(grouped.values());
 
+    // =====================================================
+// KIRA JUMLAH FOOTER SEMUA LAJUR NUMERIC
+// =====================================================
+
+const footerTotals = {
+    jam_klm: 0,
+    rm_klm_hari_biasa: 0,
+
+    rm_hari_offday: 0,
+    jam_offday_bertugas: 0,
+    rm_jam_offday: 0,
+    jumlah_offday: 0,
+
+    rm_hari_cutiam: 0,
+    jam_cutiam_bertugas: 0,
+    rm_jam_cutiam: 0,
+    jumlah_cutiam: 0,
+
+    jam_tampungan: 0,
+    rm_klm_tampungan: 0,
+
+    jam_klm_wajib: 0,
+    rm_klm_wajib: 0,
+
+    jam_klm_mc: 0,
+    rm_klm_mc: 0,
+
+    jam_klm_cuti_tahun: 0,
+    rm_klm_cuti_tahun: 0,
+
+    jam_klm_cuti_ehsan: 0,
+    rm_klm_cuti_ehsan: 0,
+
+    jam_klm_eskot: 0,
+    rm_klm_eskot: 0,
+
+    jam_klm_tambahan: 0,
+    rm_klm_tambahan: 0,
+
+    jam_klm_kursus: 0,
+    rm_klm_kursus: 0,
+
+    jam_klm_cuti_ganti: 0,
+    rm_klm_cuti_ganti: 0,
+
+    jam_klm_off: 0,
+    rm_klm_off: 0
+};
+
+
+// Jumlahkan semua anggota
+data.forEach(g => {
+
+    Object.keys(footerTotals).forEach(key => {
+
+        footerTotals[key] += num(g[key]);
+
+    });
+
+});
 
     console.log("Jumlah anggota selepas GROUP BY no_skb:", data.length);
     console.log("Data grouped:", data);
