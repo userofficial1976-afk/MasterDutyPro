@@ -2760,81 +2760,164 @@ function bukaModalJumlahRM(){
             document.createElement("tr");
 
 
-        tr.innerHTML = `
+tr.innerHTML = `
 
-            <td>${bil++}</td>
+    <!-- 1 BIL -->
+    <td>${index + 1}</td>
 
-            <td>${escapeHtml(item.bulan)}</td>
+    <!-- 2 BULAN -->
+    <td>${esc(g.bulan)}</td>
 
-            <td>${escapeHtml(item.tahun)}</td>
+    <!-- 3 TAHUN -->
+    <td>${esc(g.tahun)}</td>
 
-            <td>${escapeHtml(item.kawasan)}</td>
+    <!-- 4 KAWASAN -->
+    <td>${esc(g.kawasan)}</td>
 
-            <td>${escapeHtml(item.unit)}</td>
+    <!-- 5 UNIT -->
+    <td>${esc(g.unit)}</td>
 
-            <td>${escapeHtml(item.pos)}</td>
+    <!-- 6 POS -->
+    <td>${esc(g.pos)}</td>
 
-            <td>${escapeHtml(item.no_skb)}</td>
+    <!-- 7 NO SKB -->
+    <td>${esc(g.no_skb)}</td>
 
-            <td class="nama">
-                ${escapeHtml(item.nama_anggota)}
-            </td>
+    <!-- 8 NAMA ANGGOTA -->
+    <td>${esc(g.nama_anggota)}</td>
 
-            <td>${escapeHtml(item.no_anggota)}</td>
+    <!-- 9 NO ANGGOTA -->
+    <td>${esc(g.no_anggota)}</td>
 
-            <td>${escapeHtml(item.ketua_unit)}</td>
 
-            <td>${escapeHtml(item.nama_ketua_pos)}</td>
+    <!-- 10 JAM KLM -->
+    <td>${jam(g.jam_klm)}</td>
 
-            <td>${item.jam_kerja}</td>
 
-            <td>${item.jam_klm}</td>
+    <!-- 11 RM KLM HARI BIASA -->
+    <td>${rm(g.rm_klm_hari_biasa)}</td>
 
-            <td>RM ${money(item.rm_klm_hari_biasa)}</td>
 
-            <td>-</td>
-            <td>RM ${money(item.rm_hari_offday)}</td>
-            <td>${item.jam_offday_bertugas}</td>
-            <td>RM ${money(item.rm_jam_offday)}</td>
-            <td>${item.jumlah_offday}</td>
+    <!-- 12 HARI OFFDAY -->
+    <td>${esc(hariOff || "-")}</td>
 
-            <td>-</td>
-            <td>RM ${money(item.rm_hari_cutiam)}</td>
-            <td>${item.jam_cutiam_bertugas}</td>
-            <td>RM ${money(item.rm_jam_cutiam)}</td>
-            <td>${item.jumlah_cutiam}</td>
 
-            <td>${item.jam_tampungan}</td>
-            <td>RM ${money(item.rm_klm_tampungan)}</td>
+    <!-- 13 RM HARI OFFDAY -->
+    <td>${rm(g.rm_hari_offday)}</td>
 
-            <td>${item.jam_klm_wajib}</td>
-            <td>RM ${money(item.rm_klm_wajib)}</td>
 
-            <td>${item.jam_klm_mc}</td>
-            <td>RM ${money(item.rm_klm_mc)}</td>
+    <!-- 14 JAM OFFDAY -->
+    <td>${jam(g.jam_offday_bertugas)}</td>
 
-            <td>${item.jam_klm_cuti_tahun}</td>
-            <td>RM ${money(item.rm_klm_cuti_tahun)}</td>
 
-            <td>${item.jam_klm_cuti_ehsan}</td>
-            <td>RM ${money(item.rm_klm_cuti_ehsan)}</td>
+    <!-- 15 RM JAM OFFDAY -->
+    <td>${rm(g.rm_jam_offday)}</td>
 
-            <td>${item.jam_klm_eskot}</td>
-            <td>RM ${money(item.rm_klm_eskot)}</td>
 
-            <td>${item.jam_klm_tambahan}</td>
-            <td>RM ${money(item.rm_klm_tambahan)}</td>
+    <!-- 16 JUMLAH OFFDAY -->
+    <td>${jam(g.jumlah_offday)}</td>
 
-            <td>${item.jam_klm_kursus}</td>
-            <td>RM ${money(item.rm_klm_kursus)}</td>
 
-            <td>${item.jam_klm_cuti_ganti}</td>
-            <td>RM ${money(item.rm_klm_cuti_ganti)}</td>
+    <!-- 17 HARI CUTIAM -->
+    <td>${esc(hariCuti || "-")}</td>
 
-            <td>${item.jam_klm_off}</td>
-            <td>RM ${money(item.rm_klm_off)}</td>
 
-        `;
+    <!-- 18 RM HARI CUTIAM -->
+    <td>${rm(g.rm_hari_cutiam)}</td>
+
+
+    <!-- 19 JAM CUTIAM -->
+    <td>${jam(g.jam_cutiam_bertugas)}</td>
+
+
+    <!-- 20 RM JAM CUTIAM -->
+    <td>${rm(g.rm_jam_cutiam)}</td>
+
+
+    <!-- 21 JUMLAH CUTIAM -->
+    <td>${jam(g.jumlah_cutiam)}</td>
+
+
+    <!-- 22 JAM TAMPUNGAN -->
+    <td>${jam(g.jam_tampungan)}</td>
+
+
+    <!-- 23 RM TAMPUNGAN -->
+    <td>${rm(g.rm_klm_tampungan)}</td>
+
+
+    <!-- 24 JAM KLM WAJIB -->
+    <td>${jam(g.jam_klm_wajib)}</td>
+
+
+    <!-- 25 RM KLM WAJIB -->
+    <td>${rm(g.rm_klm_wajib)}</td>
+
+
+    <!-- 26 JAM KLM MC -->
+    <td>${jam(g.jam_klm_mc)}</td>
+
+
+    <!-- 27 RM KLM MC -->
+    <td>${rm(g.rm_klm_mc)}</td>
+
+
+    <!-- 28 JAM CUTI TAHUN -->
+    <td>${jam(g.jam_klm_cuti_tahun)}</td>
+
+
+    <!-- 29 RM CUTI TAHUN -->
+    <td>${rm(g.rm_klm_cuti_tahun)}</td>
+
+
+    <!-- 30 JAM CUTI EHSAN -->
+    <td>${jam(g.jam_klm_cuti_ehsan)}</td>
+
+
+    <!-- 31 RM CUTI EHSAN -->
+    <td>${rm(g.rm_klm_cuti_ehsan)}</td>
+
+
+    <!-- 32 JAM ESKOT -->
+    <td>${jam(g.jam_klm_eskot)}</td>
+
+
+    <!-- 33 RM ESKOT -->
+    <td>${rm(g.rm_klm_eskot)}</td>
+
+
+    <!-- 34 JAM TAMBAHAN -->
+    <td>${jam(g.jam_klm_tambahan)}</td>
+
+
+    <!-- 35 RM TAMBAHAN -->
+    <td>${rm(g.rm_klm_tambahan)}</td>
+
+
+    <!-- 36 JAM KURSUS -->
+    <td>${jam(g.jam_klm_kursus)}</td>
+
+
+    <!-- 37 RM KURSUS -->
+    <td>${rm(g.rm_klm_kursus)}</td>
+
+
+    <!-- 38 JAM CUTI GANTI -->
+    <td>${jam(g.jam_klm_cuti_ganti)}</td>
+
+
+    <!-- 39 RM CUTI GANTI -->
+    <td>${rm(g.rm_klm_cuti_ganti)}</td>
+
+
+    <!-- 40 JAM OFF -->
+    <td>${jam(g.jam_klm_off)}</td>
+
+
+    <!-- 41 RM OFF -->
+    <td>${rm(g.rm_klm_off)}</td>
+
+`;
 
 
         tbody.appendChild(tr);
@@ -5283,7 +5366,11 @@ function isiModalJumlahRM() {
 
 }
 
-    
+function jam(value) {
+    return num(value).toLocaleString("ms-MY", {
+        maximumFractionDigits: 2
+    });
+}    
 
 function tutupModalJumlahRM() {
 
@@ -7080,106 +7167,411 @@ Jana Laporan
         </div>
 
 
-        <!-- TABLE -->
-        <div class="overflow-auto max-h-[60vh]">
+<!-- =====================================================
+     TABLE PERINCIAN JUMLAH RM
+===================================================== -->
 
-            <table class="report-table text-sm min-w-max">
+<div class="overflow-auto max-h-[60vh]">
 
-                <thead class="sticky top-0 z-10">
+    <table class="report-table text-sm min-w-max">
 
-                    <tr>
+        <!-- =========================
+             HEADER
+        ========================== -->
+        <thead class="sticky top-0 z-10">
 
-                        <th>BIL</th>
-                        <th>BULAN</th>
-                        <th>TAHUN</th>
-                        <th>KAWASAN</th>
-                        <th>UNIT</th>
-                        <th>POS</th>
-                        <th>NO SKB</th>
-                        <th>NAMA ANGGOTA</th>
-                        <th>NO ANGGOTA</th>
-                        <th>KETUA UNIT</th>
-                        <th>NAMA KETUA POS</th>
+            <tr>
 
-                        <th>JAM KERJA</th>
-                        <th>JAM KLM</th>
+                <th>BIL</th>
+                <th>BULAN</th>
+                <th>TAHUN</th>
+                <th>KAWASAN</th>
+                <th>UNIT</th>
+                <th>POS</th>
+                <th>NO SKB</th>
+                <th>NAMA ANGGOTA</th>
+                <th>NO ANGGOTA</th>
 
-                        <th>RM KLM HARI BIASA</th>
+                <th>JAM KLM</th>
 
-                        <th>HARI OFFDAY</th>
-                        <th>RM HARI OFFDAY</th>
-                        <th>JAM OFFDAY</th>
-                        <th>RM JAM OFFDAY</th>
-                        <th>JUMLAH OFFDAY</th>
+                <th>RM KLM HARI BIASA</th>
 
-                        <th>HARI CUTIAM</th>
-                        <th>RM HARI CUTIAM</th>
-                        <th>JAM CUTIAM</th>
-                        <th>RM JAM CUTIAM</th>
-                        <th>JUMLAH CUTIAM</th>
+                <th>HARI OFFDAY</th>
+                <th>RM HARI OFFDAY</th>
+                <th>JAM OFFDAY</th>
+                <th>RM JAM OFFDAY</th>
+                <th>JUMLAH OFFDAY</th>
 
-                        <th>JAM TAMPUNGAN</th>
-                        <th>RM TAMPUNGAN</th>
+                <th>HARI CUTIAM</th>
+                <th>RM HARI CUTIAM</th>
+                <th>JAM CUTIAM</th>
+                <th>RM JAM CUTIAM</th>
+                <th>JUMLAH CUTIAM</th>
 
-                        <th>JAM KLM WAJIB</th>
-                        <th>RM KLM WAJIB</th>
+                <th>JAM TAMPUNGAN</th>
+                <th>RM TAMPUNGAN</th>
 
-                        <th>JAM KLM MC</th>
-                        <th>RM KLM MC</th>
+                <th>JAM KLM WAJIB</th>
+                <th>RM KLM WAJIB</th>
 
-                        <th>JAM CUTI TAHUN</th>
-                        <th>RM CUTI TAHUN</th>
+                <th>JAM KLM MC</th>
+                <th>RM KLM MC</th>
 
-                        <th>JAM CUTI EHSAN</th>
-                        <th>RM CUTI EHSAN</th>
+                <th>JAM CUTI TAHUN</th>
+                <th>RM CUTI TAHUN</th>
 
-                        <th>JAM ESKOT</th>
-                        <th>RM ESKOT</th>
+                <th>JAM CUTI EHSAN</th>
+                <th>RM CUTI EHSAN</th>
 
-                        <th>JAM TAMBAHAN</th>
-                        <th>RM TAMBAHAN</th>
+                <th>JAM ESKOT</th>
+                <th>RM ESKOT</th>
 
-                        <th>JAM KURSUS</th>
-                        <th>RM KURSUS</th>
+                <th>JAM TAMBAHAN</th>
+                <th>RM TAMBAHAN</th>
 
-                        <th>JAM CUTI GANTI</th>
-                        <th>RM CUTI GANTI</th>
+                <th>JAM KURSUS</th>
+                <th>RM KURSUS</th>
 
-                        <th>JAM OFF</th>
-                        <th>RM OFF</th>
+                <th>JAM CUTI GANTI</th>
+                <th>RM CUTI GANTI</th>
 
-                    </tr>
+                <th>JAM OFF</th>
+                <th>RM OFF</th>
 
-                </thead>
+            </tr>
 
-                <tbody id="tbodyJumlahRM"></tbody>
+        </thead>
 
-                <tfoot>
 
-                    <tr>
+        <!-- =========================
+             DATA
+        ========================== -->
 
-                        <td
-                            colspan="12"
-                            class="text-right font-bold"
-                        >
-                            JUMLAH BULANAN
-                        </td>
+        <tbody id="tbodyJumlahRM"></tbody>
 
-                        <td
-                            id="footerJumlahRM"
-                            class="font-bold text-teal-400"
-                        >
-                            RM 0.00
-                        </td>
 
-                    </tr>
+        <!-- =========================
+             JUMLAH SETIAP COLUMN
+        ========================== -->
 
-                </tfoot>
+        <tfoot id="tfootJumlahRM">
 
-            </table>
+            <tr>
 
-        </div>
+                <!-- 1 BIL -->
+                <td class="font-bold text-white">
+                    JUMLAH
+                </td>
 
+                <!-- 2 BULAN -->
+                <td></td>
+
+                <!-- 3 TAHUN -->
+                <td></td>
+
+                <!-- 4 KAWASAN -->
+                <td></td>
+
+                <!-- 5 UNIT -->
+                <td></td>
+
+                <!-- 6 POS -->
+                <td></td>
+
+                <!-- 7 NO SKB -->
+                <td></td>
+
+                <!-- 8 NAMA -->
+                <td></td>
+
+                <!-- 9 NO ANGGOTA -->
+                <td></td>
+
+
+                <!-- 10 JAM KLM -->
+                <td
+                    id="ftJamKlm"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 11 RM KLM HARI BIASA -->
+                <td
+                    id="ftRmKlmBiasa"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 12 HARI OFFDAY -->
+                <td></td>
+
+
+                <!-- 13 RM HARI OFFDAY -->
+                <td
+                    id="ftRmHariOffday"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 14 JAM OFFDAY -->
+                <td
+                    id="ftJamOffday"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 15 RM JAM OFFDAY -->
+                <td
+                    id="ftRmJamOffday"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 16 JUMLAH OFFDAY -->
+                <td
+                    id="ftJumlahOffday"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 17 HARI CUTIAM -->
+                <td></td>
+
+
+                <!-- 18 RM HARI CUTIAM -->
+                <td
+                    id="ftRmHariCutiam"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 19 JAM CUTIAM -->
+                <td
+                    id="ftJamCutiam"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 20 RM JAM CUTIAM -->
+                <td
+                    id="ftRmJamCutiam"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 21 JUMLAH CUTIAM -->
+                <td
+                    id="ftJumlahCutiam"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 22 JAM TAMPUNGAN -->
+                <td
+                    id="ftJamTampungan"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 23 RM TAMPUNGAN -->
+                <td
+                    id="ftRmTampungan"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 24 JAM KLM WAJIB -->
+                <td
+                    id="ftJamWajib"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 25 RM KLM WAJIB -->
+                <td
+                    id="ftRmWajib"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 26 JAM KLM MC -->
+                <td
+                    id="ftJamMC"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 27 RM KLM MC -->
+                <td
+                    id="ftRmMC"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 28 JAM CUTI TAHUN -->
+                <td
+                    id="ftJamCutiTahun"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 29 RM CUTI TAHUN -->
+                <td
+                    id="ftRmCutiTahun"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 30 JAM CUTI EHSAN -->
+                <td
+                    id="ftJamCutiEhsan"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 31 RM CUTI EHSAN -->
+                <td
+                    id="ftRmCutiEhsan"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 32 JAM ESKOT -->
+                <td
+                    id="ftJamEskot"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 33 RM ESKOT -->
+                <td
+                    id="ftRmEskot"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 34 JAM TAMBAHAN -->
+                <td
+                    id="ftJamTambahan"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 35 RM TAMBAHAN -->
+                <td
+                    id="ftRmTambahan"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 36 JAM KURSUS -->
+                <td
+                    id="ftJamKursus"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 37 RM KURSUS -->
+                <td
+                    id="ftRmKursus"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 38 JAM CUTI GANTI -->
+                <td
+                    id="ftJamCutiGanti"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 39 RM CUTI GANTI -->
+                <td
+                    id="ftRmCutiGanti"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+
+                <!-- 40 JAM OFF -->
+                <td
+                    id="ftJamOff"
+                    class="font-bold text-teal-400"
+                >
+                    0
+                </td>
+
+
+                <!-- 41 RM OFF -->
+                <td
+                    id="ftRmOff"
+                    class="font-bold text-teal-400"
+                >
+                    RM 0.00
+                </td>
+
+            </tr>
+
+        </tfoot>
+
+    </table>
+
+</div>
 
         <!-- FOOTER -->
         <div
