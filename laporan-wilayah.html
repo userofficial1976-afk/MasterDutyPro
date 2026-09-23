@@ -2852,6 +2852,9 @@ function bukaModalJumlahRM(){
 
 }
 
+    window.bukaModalJumlahRM = bukaModalJumlahRM;
+window.tutupModalJumlahRM = tutupModalJumlahRM;
+window.downloadExcelJadualDuty = downloadExcelJadualDuty;
 
 /* =====================================================
    TUTUP MODAL JUMLAH RM
@@ -4807,6 +4810,42 @@ document.addEventListener(
     }
 );
 
+
+function bukaModalJumlahRM() {
+
+    console.log("BUKA MODAL JUMLAH RM");
+
+    const modal = document.getElementById("modalJumlahRM");
+
+    if (!modal) {
+        console.error("ERROR: #modalJumlahRM tidak dijumpai.");
+        return;
+    }
+
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+
+    // Panggil fungsi isi modal
+    if (typeof isiModalJumlahRM === "function") {
+        isiModalJumlahRM();
+    }
+}
+
+
+function tutupModalJumlahRM() {
+
+    const modal = document.getElementById("modalJumlahRM");
+
+    if (!modal) {
+        console.error("ERROR: #modalJumlahRM tidak dijumpai.");
+        return;
+    }
+
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+}
+
+    
 </script>
 
 
@@ -6498,6 +6537,235 @@ Jana Laporan
     </div>
 
 </div>
+
+
+<!-- =====================================================
+     MODAL JUMLAH RM
+===================================================== -->
+
+<div
+    id="modalJumlahRM"
+    class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+>
+    <div
+        class="w-full max-w-[1600px] max-h-[92vh] overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl"
+    >
+
+        <!-- HEADER -->
+        <div class="flex items-center justify-between border-b border-slate-700 px-6 py-4">
+
+            <div>
+                <h3 class="text-xl font-bold text-white">
+                    Perincian Jumlah RM Bulanan
+                </h3>
+
+                <p
+                    id="modalJumlahRMInfo"
+                    class="text-sm text-teal-400 mt-1"
+                >
+                    -
+                </p>
+            </div>
+
+            <button
+                type="button"
+                onclick="tutupModalJumlahRM()"
+                class="w-10 h-10 rounded-lg bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <!-- RINGKASAN -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-5 border-b border-slate-700">
+
+            <div class="rounded-xl bg-slate-800/70 border border-slate-700 p-4">
+                <p class="text-xs text-slate-400">
+                    Jumlah Anggota
+                </p>
+
+                <p
+                    id="modalJumlahRMAnggota"
+                    class="text-2xl font-bold text-white mt-1"
+                >
+                    0
+                </p>
+            </div>
+
+
+            <div class="rounded-xl bg-slate-800/70 border border-slate-700 p-4">
+                <p class="text-xs text-slate-400">
+                    Jumlah Rekod Jadual
+                </p>
+
+                <p
+                    id="modalJumlahRMRekod"
+                    class="text-2xl font-bold text-white mt-1"
+                >
+                    0
+                </p>
+            </div>
+
+
+            <div class="rounded-xl bg-teal-500/10 border border-teal-500/20 p-4">
+
+                <p class="text-xs text-slate-400">
+                    Jumlah RM Bulanan
+                </p>
+
+                <p
+                    id="modalJumlahRMTotal"
+                    class="text-2xl font-bold text-teal-400 mt-1"
+                >
+                    RM 0.00
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE -->
+        <div class="overflow-auto max-h-[60vh]">
+
+            <table class="report-table text-sm min-w-max">
+
+                <thead class="sticky top-0 z-10">
+
+                    <tr>
+
+                        <th>BIL</th>
+                        <th>BULAN</th>
+                        <th>TAHUN</th>
+                        <th>KAWASAN</th>
+                        <th>UNIT</th>
+                        <th>POS</th>
+                        <th>NO SKB</th>
+                        <th>NAMA ANGGOTA</th>
+                        <th>NO ANGGOTA</th>
+                        <th>KETUA UNIT</th>
+                        <th>NAMA KETUA POS</th>
+
+                        <th>JAM KERJA</th>
+                        <th>JAM KLM</th>
+
+                        <th>RM KLM HARI BIASA</th>
+
+                        <th>HARI OFFDAY</th>
+                        <th>RM HARI OFFDAY</th>
+                        <th>JAM OFFDAY</th>
+                        <th>RM JAM OFFDAY</th>
+                        <th>JUMLAH OFFDAY</th>
+
+                        <th>HARI CUTIAM</th>
+                        <th>RM HARI CUTIAM</th>
+                        <th>JAM CUTIAM</th>
+                        <th>RM JAM CUTIAM</th>
+                        <th>JUMLAH CUTIAM</th>
+
+                        <th>JAM TAMPUNGAN</th>
+                        <th>RM TAMPUNGAN</th>
+
+                        <th>JAM KLM WAJIB</th>
+                        <th>RM KLM WAJIB</th>
+
+                        <th>JAM KLM MC</th>
+                        <th>RM KLM MC</th>
+
+                        <th>JAM CUTI TAHUN</th>
+                        <th>RM CUTI TAHUN</th>
+
+                        <th>JAM CUTI EHSAN</th>
+                        <th>RM CUTI EHSAN</th>
+
+                        <th>JAM ESKOT</th>
+                        <th>RM ESKOT</th>
+
+                        <th>JAM TAMBAHAN</th>
+                        <th>RM TAMBAHAN</th>
+
+                        <th>JAM KURSUS</th>
+                        <th>RM KURSUS</th>
+
+                        <th>JAM CUTI GANTI</th>
+                        <th>RM CUTI GANTI</th>
+
+                        <th>JAM OFF</th>
+                        <th>RM OFF</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tbodyJumlahRM"></tbody>
+
+                <tfoot>
+
+                    <tr>
+
+                        <td
+                            colspan="12"
+                            class="text-right font-bold"
+                        >
+                            JUMLAH BULANAN
+                        </td>
+
+                        <td
+                            id="footerJumlahRM"
+                            class="font-bold text-teal-400"
+                        >
+                            RM 0.00
+                        </td>
+
+                    </tr>
+
+                </tfoot>
+
+            </table>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div
+            class="flex flex-col md:flex-row justify-between items-center gap-3 border-t border-slate-700 px-6 py-4"
+        >
+
+            <div class="text-xs text-slate-500">
+                1 baris = 1 anggota / 1 bulan
+            </div>
+
+
+            <div class="flex items-center gap-2">
+
+                <button
+                    type="button"
+                    onclick="downloadExcelJadualDuty()"
+                    class="px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold transition flex items-center gap-2"
+                >
+                    <i class="fa-solid fa-file-excel"></i>
+                    Download Excel
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="tutupModalJumlahRM()"
+                    class="px-5 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-sm font-semibold transition"
+                >
+                    Tutup
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+    
 </body>
 </html>
 
