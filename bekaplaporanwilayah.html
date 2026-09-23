@@ -1,0 +1,4926 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Laporan Wilayah — Master Duty Pro</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+let currentUser = null;
+let semuaDuty = [];
+
+const SENARAI_BULAN = [
+    "Januari",
+    "Februari",
+    "Mac",
+    "April",
+    "Mei",
+    "Jun",
+    "Julai",
+    "Ogos",
+    "September",
+    "Oktober",
+    "November",
+    "Disember"
+];
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        currentUser = bacaPengguna();
+
+        if (!currentUser) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        paparMaklumatPengguna();
+
+        kawalMenuMengikutPeranan();
+
+        
+        await isiDropdown();
+        await janaLaporan();
+
+        const btn =
+            document.getElementById(
+                "btnJanaLaporan"
+            );
+
+        if (btn) {
+
+            btn.addEventListener(
+                "click",
+                janaLaporan
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   USER
+===================================================== */
+
+function bacaPengguna(){
+
+    try{
+
+        const data =
+            localStorage.getItem(
+                "mdp_user"
+            );
+
+        return data
+            ? JSON.parse(data)
+            : null;
+
+    }catch(error){
+
+        console.error(
+            "RALAT USER:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+function paparMaklumatPengguna(){
+
+    if(!currentUser) return;
+
+    const userName =
+        document.getElementById(
+            "userName"
+        );
+
+    const userJawatan =
+        document.getElementById(
+            "userJawatan"
+        );
+
+    if(userName){
+
+        userName.textContent =
+            currentUser.name ||
+            currentUser.noSkb ||
+            "-";
+
+    }
+
+    if(userJawatan){
+
+        userJawatan.textContent =
+            currentUser.jawatan ||
+            "-";
+
+    }
+
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+function kawalMenuMengikutPeranan(){
+
+    if(
+        !currentUser ||
+        currentUser.isAdmin
+    ){
+
+        return;
+
+    }
+
+    [
+        "menuDashboard",
+        "menuAnggota",
+        "menuTetapan"
+    ].forEach(id => {
+
+        const el =
+            document.getElementById(id);
+
+        if(el){
+
+            el.style.display =
+                "none";
+
+        }
+
+    });
+
+}
+
+
+function logKeluar(){
+
+    localStorage.removeItem(
+        "mdp_user"
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =====================================================
+   DROPDOWN — AMBIL UNIT & POS DARIPADA DATA_ANGGOTA
+===================================================== */
+
+async function isiDropdown(){
+
+    const filterUnit =
+        document.getElementById("filterUnit");
+
+    const filterPos =
+        document.getElementById("filterPos");
+
+    const filterBulan =
+        document.getElementById("filterBulan");
+
+    const filterTahun =
+        document.getElementById("filterTahun");
+
+
+    /* =====================================================
+       UNIT & POS DARIPADA Data_Anggota
+    ===================================================== */
+
+    const { data, error } =
+        await supabaseClient
+            .from("Data_Anggota")
+            .select("unit, pos")
+            .order("unit", { ascending: true })
+            .order("pos", { ascending: true });
+
+
+    if(error){
+
+        console.error(
+            "RALAT LOAD UNIT/POS:",
+            error
+        );
+
+        filterUnit.innerHTML = `
+            <option value="">
+                Semua Unit
+            </option>
+        `;
+
+        filterPos.innerHTML = `
+            <option value="">
+                Semua Pos
+            </option>
+        `;
+
+    }else{
+
+        /* =====================================================
+           SENARAI UNIT UNIK
+        ===================================================== */
+
+        const senaraiUnit =
+            [...new Set(
+                (data || [])
+                    .map(row =>
+                        String(
+                            row.unit || ""
+                        ).trim()
+                    )
+                    .filter(Boolean)
+            )]
+            .sort(
+                (a,b) =>
+                    a.localeCompare(
+                        b,
+                        "ms"
+                    )
+            );
+
+
+        /* =====================================================
+           SENARAI POS UNIK
+        ===================================================== */
+
+        const senaraiPos =
+            [...new Set(
+                (data || [])
+                    .map(row =>
+                        String(
+                            row.pos || ""
+                        ).trim()
+                    )
+                    .filter(Boolean)
+            )]
+            .sort(
+                (a,b) =>
+                    a.localeCompare(
+                        b,
+                        "ms"
+                    )
+            );
+
+
+        /* =====================================================
+           DROPDOWN UNIT
+        ===================================================== */
+
+        filterUnit.innerHTML = `
+            <option value="">
+                Semua Unit
+            </option>
+
+            ${
+                senaraiUnit
+                    .map(unit => `
+                        <option value="${escapeHtml(unit)}">
+                            ${escapeHtml(unit)}
+                        </option>
+                    `)
+                    .join("")
+            }
+        `;
+
+
+        /* =====================================================
+           DROPDOWN POS
+        ===================================================== */
+
+        filterPos.innerHTML = `
+            <option value="">
+                Semua Pos
+            </option>
+
+            ${
+                senaraiPos
+                    .map(pos => `
+                        <option value="${escapeHtml(pos)}">
+                            ${escapeHtml(pos)}
+                        </option>
+                    `)
+                    .join("")
+            }
+        `;
+
+
+        console.log(
+            "JUMLAH UNIT:",
+            senaraiUnit.length
+        );
+
+        console.log(
+            "SENARAI UNIT:",
+            senaraiUnit
+        );
+
+        console.log(
+            "JUMLAH POS:",
+            senaraiPos.length
+        );
+
+        console.log(
+            "SENARAI POS:",
+            senaraiPos
+        );
+
+    }
+
+
+    /* =====================================================
+       BULAN
+    ===================================================== */
+
+    filterBulan.innerHTML =
+        SENARAI_BULAN
+            .map(
+                bulan =>
+                    `<option value="${bulan}">
+                        ${bulan}
+                    </option>`
+            )
+            .join("");
+
+
+    /* =====================================================
+       TAHUN
+    ===================================================== */
+
+    filterTahun.innerHTML = `
+
+        <option>2024</option>
+
+        <option>2025</option>
+
+        <option selected>2026</option>
+
+        <option>2027</option>
+
+    `;
+
+}
+
+function paparSenaraiTampungan(rows){
+
+    const tbody =
+        document.getElementById(
+            "senaraiKlmTampungan"
+        );
+
+    if(!tbody) return;
+
+
+    /*
+     * Hanya rekod yang mempunyai
+     * tampungan.
+     */
+
+const data =
+    rows.filter(
+        row =>
+            String(
+                row.pos_tampungan ||
+                ""
+            ).trim() !== ""
+            &&
+            num(
+                row.jam_tampungan
+            ) > 0
+    );
+
+
+    /*
+     * Gabungkan mengikut:
+     *
+     * POS TAMPUNGAN
+     * SKB
+     *
+     * supaya jumlah bulanan
+     * tidak pecah mengikut duty.
+     */
+
+    const map =
+        new Map();
+
+
+    data.forEach(row => {
+
+        const posTampungan =
+            String(
+                row.pos_tampungan ||
+                ""
+            ).trim();
+
+        const skb =
+            String(
+                row.no_skb ||
+                ""
+            ).trim();
+
+        const key =
+            posTampungan +
+            "|" +
+            skb;
+
+
+        if(!map.has(key)){
+
+            map.set(
+                key,
+                {
+
+                    posTampungan,
+
+                    skb,
+
+                    nama:
+                        row.nama_anggota ||
+                        "-",
+
+                    pos:
+                        row.pos ||
+                        row.nama_pos_asal ||
+                        "-",
+
+                    basic:
+                        num(
+                            row.Data_Anggota
+                            ?.gaji_pokok
+                        ),
+
+                    jam:0,
+
+                    rm:0
+
+                }
+            );
+
+        }
+
+
+        const item =
+            map.get(key);
+
+
+        item.jam +=
+            num(
+                row.jam_tampungan
+            );
+
+
+        item.rm +=
+            num(
+                row.rm_klm_tampungan
+            );
+
+    });
+
+
+    const senarai =
+        [...map.values()]
+            .sort(
+                (a,b) => {
+
+                    const p =
+                        a.posTampungan.localeCompare(
+                            b.posTampungan
+                        );
+
+                    if(p !== 0)
+                        return p;
+
+                    return String(
+                        a.nama
+                    ).localeCompare(
+                        String(b.nama)
+                    );
+
+                }
+            );
+
+
+    tbody.innerHTML =
+        senarai.map(
+            item => `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(
+                            item.posTampungan
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            item.skb
+                        )}
+                    </td>
+
+                    <td class="nama">
+                        ${escapeHtml(
+                            item.nama
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            item.pos
+                        )}
+                    </td>
+
+                    <td>
+                        ${money(
+                            item.basic
+                        )}
+                    </td>
+
+                    <td>
+                        ${num(
+                            item.jam
+                        )}
+                    </td>
+
+                    <td>
+                        ${money(
+                            item.rm
+                        )}
+                    </td>
+
+                </tr>
+
+            `
+        ).join("");
+
+
+    if(!senarai.length){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="text-center py-6 text-slate-400"
+                >
+                    Tiada rekod tampungan
+                    bagi bulan yang dipilih.
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+/* =====================================================
+   UTIL
+===================================================== */
+
+function num(value){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+
+        return 0;
+
+    }
+
+    const n =
+        Number(
+            String(value)
+                .replace(/,/g,"")
+                .trim()
+        );
+
+    return Number.isFinite(n)
+        ? n
+        : 0;
+
+}
+
+
+function money(value){
+
+    return "RM " +
+        num(value).toLocaleString(
+            "ms-MY",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+}
+
+
+function decimal(value){
+
+    return num(value).toLocaleString(
+        "ms-MY",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+
+}
+
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   PAGINATION SUPABASE
+===================================================== */
+
+async function muatSemuaDuty(){
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        ).value;
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        ).value;
+
+    const unit =
+        document.getElementById(
+            "filterUnit"
+        ).value;
+
+    const pos =
+        document.getElementById(
+            "filterPos"
+        ).value;
+
+
+    const PAGE_SIZE = 1000;
+
+    let semuaData = [];
+
+    let from = 0;
+
+    let pageNumber = 1;
+
+
+    console.log(
+        "================================"
+    );
+
+    console.log(
+        "MULA LOAD LAPORAN WILAYAH"
+    );
+
+    console.log(
+        "BULAN:",
+        bulan
+    );
+
+    console.log(
+        "TAHUN:",
+        tahun
+    );
+
+    console.log(
+        "================================"
+    );
+
+
+    while(true){
+
+        const to =
+            from +
+            PAGE_SIZE -
+            1;
+
+
+        console.log(
+            `LOAD PAGE ${pageNumber}: ${from} - ${to}`
+        );
+
+
+        let query =
+            supabaseClient
+                .from("jadual_duty")
+                .select(`
+id,
+tarikh,
+bulan,
+tahun,
+no_skb,
+kod_duty,
+waktu_tugasan,
+jam_kerja,
+jam_klm,
+pos,
+nama_anggota,
+no_anggota,
+unit,
+nama_pos_asal,
+
+pos_tampungan,
+jam_tampungan,
+rm_klm_tampungan,
+
+hari_offday_bertugas,
+jam_offday_bertugas,
+
+hari_cutiam_bertugas,
+jam_cutiam_bertugas,
+
+jumlah_offday,
+rm_hari_offday,
+rm_jam_offday,
+
+jumlah_cutiam,
+rm_hari_cutiam,
+rm_jam_cutiam,
+
+rm_klm_hari_biasa,
+rm_klm_seluruh,
+
+
+jam_klm_off,
+rm_klm_off,
+
+jam_klm_mc,
+rm_klm_mc,
+
+jam_klm_eskot,
+rm_klm_eskot,
+
+jam_klm_wajib,
+rm_klm_wajib,
+
+jam_klm_cuti_tahun,
+rm_klm_cuti_tahun,
+
+jam_klm_kursus,
+rm_klm_kursus,
+
+jam_klm_cuti_ehsan,
+rm_klm_cuti_ehsan,
+
+jam_klm_cuti_ganti,
+rm_klm_cuti_ganti,
+
+jam_klm_tambahan,
+rm_klm_tambahan,
+
+Data_Anggota (
+    gaji_pokok
+)
+                `)
+                .eq(
+                    "tahun",
+                    String(tahun)
+                )
+                .order(
+                    "id",
+                    {
+                        ascending:true
+                    }
+                )
+                .range(
+                    from,
+                    to
+                );
+
+
+        if(unit){
+
+            query =
+                query.eq(
+                    "unit",
+                    unit
+                );
+
+        }
+
+
+        if(pos){
+
+            query =
+                query.eq(
+                    "pos",
+                    pos
+                );
+
+        }
+
+
+        /*
+         * BULAN ditapis selepas data
+         * diterima supaya tidak bergantung
+         * kepada jenis format bulan dalam DB.
+         *
+         * Ini membenarkan:
+         * Januari
+         * 1
+         * "01"
+         */
+        
+
+        const {
+            data,
+            error
+        } = await query;
+
+
+        if(error){
+
+            console.error(
+                "RALAT SUPABASE:",
+                error
+            );
+
+            throw error;
+
+        }
+
+
+        const batch =
+            data || [];
+
+
+        console.log(
+            `PAGE ${pageNumber}: ${batch.length} rekod`
+        );
+
+
+        semuaData =
+            semuaData.concat(
+                batch
+            );
+
+
+        /*
+         * Kurang daripada 1000 bermaksud
+         * sudah sampai rekod terakhir.
+         */
+
+        if(
+            batch.length <
+            PAGE_SIZE
+        ){
+
+            break;
+
+        }
+
+
+        from += PAGE_SIZE;
+
+        pageNumber++;
+
+    }
+
+
+    console.log(
+        "JUMLAH REKOD SEBELUM FILTER BULAN:",
+        semuaData.length
+    );
+
+
+    /*
+     * FILTER BULAN
+     */
+
+    const bulanIndex =
+        SENARAI_BULAN.indexOf(
+            bulan
+        ) + 1;
+
+
+    semuaData =
+        semuaData.filter(
+            row => {
+
+                const bulanDb =
+                    String(
+                        row.bulan ??
+                        ""
+                    )
+                    .trim();
+
+
+                /*
+                 * Jika bulan DB ialah nama.
+                 */
+
+                if(
+                    bulanDb.toLowerCase() ===
+                    bulan.toLowerCase()
+                ){
+
+                    return true;
+
+                }
+
+
+                /*
+                 * Jika bulan DB ialah nombor.
+                 */
+
+                const bulanNumber =
+                    Number(
+                        bulanDb
+                    );
+
+
+                if(
+                    Number.isFinite(
+                        bulanNumber
+                    ) &&
+                    bulanNumber ===
+                    bulanIndex
+                ){
+
+                    return true;
+
+                }
+
+
+                /*
+                 * Fallback berdasarkan tarikh.
+                 */
+
+                const tarikh =
+                    parseTarikh(
+                        row.tarikh
+                    );
+
+
+                if(
+                    tarikh &&
+                    tarikh.month ===
+                    bulanIndex
+                ){
+
+                    return true;
+
+                }
+
+
+                return false;
+
+            }
+        );
+
+
+    console.log(
+        "JUMLAH REKOD SELEPAS FILTER BULAN:",
+        semuaData.length
+    );
+
+
+    return semuaData;
+
+}
+
+
+/* =====================================================
+   PARSE TARIKH
+===================================================== */
+
+function parseTarikh(value){
+
+    if(!value){
+
+        return null;
+
+    }
+
+
+    const str =
+        String(value)
+            .trim();
+
+
+    let match =
+        str.match(
+            /^(\d{4})-(\d{1,2})-(\d{1,2})/
+        );
+
+
+    if(match){
+
+        return {
+
+            year:
+                Number(match[1]),
+
+            month:
+                Number(match[2]),
+
+            day:
+                Number(match[3])
+
+        };
+
+    }
+
+
+    match =
+        str.match(
+            /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+        );
+
+
+    if(match){
+
+        return {
+
+            year:
+                Number(match[3]),
+
+            month:
+                Number(match[2]),
+
+            day:
+                Number(match[1])
+
+        };
+
+    }
+
+
+    match =
+        str.match(
+            /^(\d{1,2})-(\d{1,2})-(\d{4})/
+        );
+
+
+    if(match){
+
+        return {
+
+            year:
+                Number(match[3]),
+
+            month:
+                Number(match[2]),
+
+            day:
+                Number(match[1])
+
+        };
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   KIRA KLM
+===================================================== */
+
+function kiraKlm(rows){
+
+    return rows.reduce(
+        (total,row) => {
+
+            total.jamBiasa +=
+                num(
+                    row.jam_klm
+                );
+
+
+            total.rmBiasa +=
+                num(
+                    row.rm_klm_hari_biasa
+                );
+
+
+            total.hariOff +=
+                num(
+                    row.jumlah_offday
+                );
+
+
+            total.jamOff +=
+                num(
+                    row.jam_offday_bertugas
+                );
+
+
+            total.rmHariOff +=
+                num(
+                    row.rm_hari_offday
+                );
+
+
+            total.rmJamOff +=
+                num(
+                    row.rm_jam_offday
+                );
+
+
+            total.hariCuti +=
+                num(
+                    row.hari_cutiam_bertugas
+                );
+
+
+            total.jamCuti +=
+                num(
+                    row.jam_cutiam_bertugas
+                );
+
+
+            total.rmHariCuti +=
+                num(
+                    row.rm_hari_cutiam
+                );
+
+
+            total.rmJamCuti +=
+                num(
+                    row.rm_jam_cutiam
+                );
+
+
+            total.rmSeluruh +=
+                num(
+                    row.rm_klm_seluruh
+                );
+
+
+            return total;
+
+        },
+        {
+
+            jamBiasa:0,
+            rmBiasa:0,
+
+            hariOff:0,
+            jamOff:0,
+            rmHariOff:0,
+            rmJamOff:0,
+
+            hariCuti:0,
+            jamCuti:0,
+            rmHariCuti:0,
+            rmJamCuti:0,
+
+            rmSeluruh:0
+
+        }
+    );
+
+}
+
+/* =====================================================
+   KIRA 9 KLM KHAS
+===================================================== */
+
+function kiraKlmKhas(rows){
+
+    const hasil = {
+
+        off: {
+            jam: 0,
+            rm: 0
+        },
+
+        mc: {
+            jam: 0,
+            rm: 0
+        },
+
+        eskot: {
+            jam: 0,
+            rm: 0
+        },
+
+        wajib: {
+            jam: 0,
+            rm: 0
+        },
+
+        cutiTahun: {
+            jam: 0,
+            rm: 0
+        },
+
+        kursus: {
+            jam: 0,
+            rm: 0
+        },
+
+        cutiEhsan: {
+            jam: 0,
+            rm: 0
+        },
+
+        cutiGanti: {
+            jam: 0,
+            rm: 0
+        },
+
+        tambahan: {
+            jam: 0,
+            rm: 0
+        }
+
+    };
+
+
+    rows.forEach(row => {
+
+        hasil.off.jam +=
+            num(row.jam_klm_off);
+
+        hasil.off.rm +=
+            num(row.rm_klm_off);
+
+
+        hasil.mc.jam +=
+            num(row.jam_klm_mc);
+
+        hasil.mc.rm +=
+            num(row.rm_klm_mc);
+
+
+        hasil.eskot.jam +=
+            num(row.jam_klm_eskot);
+
+        hasil.eskot.rm +=
+            num(row.rm_klm_eskot);
+
+
+        hasil.wajib.jam +=
+            num(row.jam_klm_wajib);
+
+        hasil.wajib.rm +=
+            num(row.rm_klm_wajib);
+
+
+        hasil.cutiTahun.jam +=
+            num(row.jam_klm_cuti_tahun);
+
+        hasil.cutiTahun.rm +=
+            num(row.rm_klm_cuti_tahun);
+
+
+        hasil.kursus.jam +=
+            num(row.jam_klm_kursus);
+
+        hasil.kursus.rm +=
+            num(row.rm_klm_kursus);
+
+
+        hasil.cutiEhsan.jam +=
+            num(row.jam_klm_cuti_ehsan);
+
+        hasil.cutiEhsan.rm +=
+            num(row.rm_klm_cuti_ehsan);
+
+
+        hasil.cutiGanti.jam +=
+            num(row.jam_klm_cuti_ganti);
+
+        hasil.cutiGanti.rm +=
+            num(row.rm_klm_cuti_ganti);
+
+
+        hasil.tambahan.jam +=
+            num(row.jam_klm_tambahan);
+
+        hasil.tambahan.rm +=
+            num(row.rm_klm_tambahan);
+
+    });
+
+
+    return hasil;
+
+}
+
+
+
+    
+function kiraTampungan(rows){
+
+    return rows.reduce(
+        (total, row) => {
+
+            total.jam +=
+                num(row.jam_tampungan);
+
+            total.rm +=
+                num(row.rm_klm_tampungan);
+
+            return total;
+
+        },
+        {
+            jam: 0,
+            rm: 0
+        }
+    );
+
+}
+
+/* =====================================================
+   MODAL 9 KLM KHAS
+===================================================== */
+
+const NAMA_KLM_KHAS = {
+
+    off: "KLM Latihan Dwi Bulanan",
+
+    mc: "KLM MC",
+
+    eskot: "KLM Eskot",
+
+    wajib: "KLM Wajib",
+
+    cutiTahun: "KLM Cuti Tahun",
+
+    kursus: "KLM Kursus",
+
+    cutiEhsan: "KLM Cuti Ehsan",
+
+    cutiGanti: "KLM Cuti Ganti",
+
+    tambahan: "KLM Kawalan Tambahan"
+
+};
+
+
+const FIELD_KLM_KHAS = {
+
+    off: {
+        jam: "jam_klm_off",
+        rm: "rm_klm_off"
+    },
+
+    mc: {
+        jam: "jam_klm_mc",
+        rm: "rm_klm_mc"
+    },
+
+    eskot: {
+        jam: "jam_klm_eskot",
+        rm: "rm_klm_eskot"
+    },
+
+    wajib: {
+        jam: "jam_klm_wajib",
+        rm: "rm_klm_wajib"
+    },
+
+    cutiTahun: {
+        jam: "jam_klm_cuti_tahun",
+        rm: "rm_klm_cuti_tahun"
+    },
+
+    kursus: {
+        jam: "jam_klm_kursus",
+        rm: "rm_klm_kursus"
+    },
+
+    cutiEhsan: {
+        jam: "jam_klm_cuti_ehsan",
+        rm: "rm_klm_cuti_ehsan"
+    },
+
+    cutiGanti: {
+        jam: "jam_klm_cuti_ganti",
+        rm: "rm_klm_cuti_ganti"
+    },
+
+    tambahan: {
+        jam: "jam_klm_tambahan",
+        rm: "rm_klm_tambahan"
+    }
+
+};
+
+/* =====================================================
+   BUKA MODAL KLM KHAS
+===================================================== */
+
+function bukaModalKlmKhas(jenis){
+
+    const modal =
+        document.getElementById("modalKlmKhas");
+
+    const tbody =
+        document.getElementById("tbodyKlmKhas");
+
+    const title =
+        document.getElementById("modalKlmKhasTitle");
+
+    const jumlahJam =
+        document.getElementById("jumlahJamKlmKhas");
+
+    const jumlahRM =
+        document.getElementById("jumlahRmKlmKhas");
+
+
+    if(!modal || !tbody){
+
+        console.error(
+            "Modal KLM Khas tidak dijumpai."
+        );
+
+        return;
+    }
+
+
+    const field =
+        FIELD_KLM_KHAS[jenis];
+
+    if(!field){
+
+        console.error(
+            "Jenis KLM tidak sah:",
+            jenis
+        );
+
+        return;
+    }
+
+
+    /* TAJUK MODAL */
+
+    title.textContent =
+        NAMA_KLM_KHAS[jenis] || "KLM";
+
+
+    /* KOSONGKAN TABLE */
+
+    tbody.innerHTML = "";
+
+
+    /*
+       KUMPUL DATA MENGIKUT NO. SKB
+    */
+
+    const anggotaMap = new Map();
+
+
+    (semuaDuty || []).forEach(row => {
+
+        const jam =
+            num(row[field.jam]);
+
+        const rm =
+            num(row[field.rm]);
+
+
+        if(jam === 0 && rm === 0){
+            return;
+        }
+
+
+        const noSkb =
+            String(
+                row.no_skb ??
+                ""
+            ).trim();
+
+
+        if(!noSkb){
+            return;
+        }
+
+
+        if(!anggotaMap.has(noSkb)){
+
+            anggotaMap.set(
+                noSkb,
+                {
+                    no_skb: noSkb,
+
+                    nama:
+                        row.nama_anggota ||
+                        "-",
+
+                    jam: 0,
+
+                    rm: 0
+                }
+            );
+
+        }
+
+
+        const anggota =
+            anggotaMap.get(noSkb);
+
+
+        anggota.jam += jam;
+
+        anggota.rm += rm;
+
+    });
+
+
+    /*
+       SUSUN MENGIKUT NAMA
+    */
+
+    const senarai =
+        Array.from(
+            anggotaMap.values()
+        ).sort(
+            (a,b) =>
+                String(a.nama)
+                    .localeCompare(
+                        String(b.nama),
+                        "ms"
+                    )
+        );
+
+
+    let totalJam = 0;
+
+    let totalRM = 0;
+
+
+    /*
+       PAPAR BARIS
+    */
+
+    senarai.forEach((anggota, index) => {
+
+        totalJam += anggota.jam;
+
+        totalRM += anggota.rm;
+
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.className =
+            "hover:bg-slate-800/50 transition";
+
+
+        tr.innerHTML = `
+
+            <td class="px-5 py-3 text-slate-300">
+                ${escapeHtml(anggota.no_skb)}
+            </td>
+
+            <td class="px-5 py-3 text-white font-medium">
+                ${escapeHtml(anggota.nama)}
+            </td>
+
+            <td class="px-5 py-3 text-right text-teal-400 font-semibold">
+                ${decimal(anggota.jam)}
+            </td>
+
+            <td class="px-5 py-3 text-right text-teal-400 font-semibold">
+                RM ${money(anggota.rm)}
+            </td>
+
+        `;
+
+
+        tbody.appendChild(tr);
+
+    });
+
+
+    /*
+       TIADA DATA
+    */
+
+    if(senarai.length === 0){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="4"
+                    class="px-5 py-10 text-center text-slate-500"
+                >
+                    Tiada rekod untuk ${escapeHtml(
+                        NAMA_KLM_KHAS[jenis] || "KLM"
+                    )}
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    /*
+       JUMLAH
+    */
+
+    jumlahJam.textContent =
+        decimal(totalJam);
+
+
+    jumlahRM.textContent =
+        "RM " + money(totalRM);
+
+
+    /*
+       BUKA MODAL
+    */
+
+    modal.classList.remove("hidden");
+
+    modal.classList.add("flex");
+
+}
+
+/* =====================================================
+   TUTUP MODAL KLM KHAS
+===================================================== */
+
+function tutupModalKlmKhas(){
+
+    const modal =
+        document.getElementById(
+            "modalKlmKhas"
+        );
+
+    if(!modal){
+        return;
+    }
+
+
+    modal.classList.add("hidden");
+
+    modal.classList.remove("flex");
+
+}
+
+    /* =====================================================
+   KLIK LUAR MODAL
+===================================================== */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const modal =
+            document.getElementById(
+                "modalKlmKhas"
+            );
+
+
+        if(!modal){
+            return;
+        }
+
+
+        if(
+            event.target === modal
+        ){
+
+            tutupModalKlmKhas();
+
+        }
+
+    }
+);
+    
+    
+    
+/* =====================================================
+   JANA LAPORAN
+===================================================== */
+
+async function janaLaporan(){
+
+    try{
+
+        const btn =
+            document.getElementById(
+                "btnJanaLaporan"
+            );
+
+
+        if(btn){
+
+            btn.disabled = true;
+
+            btn.innerHTML = `
+                <i class="fas fa-spinner fa-spin mr-2"></i>
+                Memuatkan...
+            `;
+
+        }
+
+
+        semuaDuty =
+            await muatSemuaDuty();
+
+
+        paparRingkasan(
+            semuaDuty
+        );
+
+
+        paparKadKLM(
+            semuaDuty
+        );
+
+        paparSenaraiTampungan(
+    semuaDuty
+);
+
+        paparRumusanUnit(
+            semuaDuty
+        );
+
+
+        paparRumusanPos(
+            semuaDuty
+        );
+
+
+        paparTop10(
+            semuaDuty
+        );
+
+
+        paparSenaraiCutiAm(
+            semuaDuty
+        );
+
+
+        console.log(
+            "================================"
+        );
+
+        console.log(
+            "LAPORAN SIAP"
+        );
+
+        console.log(
+            "JUMLAH REKOD:",
+            semuaDuty.length
+        );
+
+        console.log(
+            "================================"
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "RALAT JANA LAPORAN:",
+            error
+        );
+
+
+        alert(
+            "Gagal memuatkan laporan:\n\n" +
+            (
+                error.message ||
+                "Ralat Supabase"
+            )
+        );
+
+    }finally{
+
+        const btn =
+            document.getElementById(
+                "btnJanaLaporan"
+            );
+
+
+        if(btn){
+
+            btn.disabled = false;
+
+            btn.innerHTML = `
+                <i class="fas fa-sync-alt mr-2"></i>
+                Jana Laporan
+            `;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   RINGKASAN UTAMA
+===================================================== */
+
+function paparRingkasan(rows){
+
+    const jumlahAnggota =
+        new Set(
+            rows
+                .map(
+                    r => r.no_skb
+                )
+                .filter(
+                    v =>
+                        v !== null &&
+                        v !== undefined &&
+                        v !== ""
+                )
+        ).size;
+
+
+    const jumlahDuty =
+        rows.length;
+
+
+    const jumlahJamKerja =
+        rows.reduce(
+            (t,r) =>
+                t +
+                num(
+                    r.jam_kerja
+                ),
+            0
+        );
+
+
+    const jumlahJamKLM =
+        rows.reduce(
+            (t,r) =>
+                t +
+                num(
+                    r.jam_klm
+                ),
+            0
+        );
+
+
+    /*
+     * JUMLAH RM RASMI
+     *
+     * Jangan bina semula.
+     *
+     * Ambil terus daripada
+     * rm_klm_seluruh.
+     */
+
+    const jumlahRM =
+        rows.reduce(
+            (t,r) =>
+                t +
+                num(
+                    r.rm_klm_seluruh
+                ),
+            0
+        );
+
+
+    document.getElementById(
+        "cardJumlahAnggota"
+    ).textContent =
+        jumlahAnggota;
+
+
+document.getElementById(
+    "cardJumlahDuty"
+).textContent =
+    num(jumlahDuty);
+
+
+    document.getElementById(
+        "cardJumlahJamKerja"
+    ).textContent =
+        num(
+            jumlahJamKerja
+        );
+
+
+    document.getElementById(
+        "cardJumlahJamKLM"
+    ).textContent =
+        num(
+            jumlahJamKLM
+        );
+
+
+    document.getElementById(
+        "cardJumlahRM"
+    ).textContent =
+        money(
+            jumlahRM
+        );
+
+}
+
+
+/* =====================================================
+   KAD KLM
+===================================================== */
+
+function paparKadKLM(rows){
+
+    const klm = kiraKlm(rows);
+    const khas = kiraKlmKhas(rows);
+
+    const tampungan =
+        kiraTampungan(rows);
+    /*
+     * CUTI AM
+     */
+
+    const elJamCuti =
+        document.getElementById(
+            "jamKlmCutiAm"
+        );
+
+
+    const elRmCuti =
+        document.getElementById(
+            "rmKlmCutiAm"
+        );
+
+
+if(elJamCuti){
+
+    elJamCuti.textContent =
+        num(klm.hariCuti) +
+        " Hari / " +
+        num(klm.jamCuti) +
+        " Jam";
+/* =====================================================
+   PAPAR 9 KLM KHAS
+===================================================== */
+
+document.getElementById("klmOffJam").textContent =
+    decimal(khas.off.jam);
+
+document.getElementById("klmOffRM").textContent =
+    money(khas.off.rm);
+
+
+document.getElementById("klmMcJam").textContent =
+    decimal(khas.mc.jam);
+
+document.getElementById("klmMcRM").textContent =
+    money(khas.mc.rm);
+
+
+document.getElementById("klmEskotJam").textContent =
+    decimal(khas.eskot.jam);
+
+document.getElementById("klmEskotRM").textContent =
+    money(khas.eskot.rm);
+
+
+document.getElementById("klmWajibJam").textContent =
+    decimal(khas.wajib.jam);
+
+document.getElementById("klmWajibRM").textContent =
+    money(khas.wajib.rm);
+
+
+document.getElementById("klmCutiTahunJam").textContent =
+    decimal(khas.cutiTahun.jam);
+
+document.getElementById("klmCutiTahunRM").textContent =
+    money(khas.cutiTahun.rm);
+
+
+document.getElementById("klmKursusJam").textContent =
+    decimal(khas.kursus.jam);
+
+document.getElementById("klmKursusRM").textContent =
+    money(khas.kursus.rm);
+
+
+document.getElementById("klmCutiEhsanJam").textContent =
+    decimal(khas.cutiEhsan.jam);
+
+document.getElementById("klmCutiEhsanRM").textContent =
+    money(khas.cutiEhsan.rm);
+
+
+document.getElementById("klmCutiGantiJam").textContent =
+    decimal(khas.cutiGanti.jam);
+
+document.getElementById("klmCutiGantiRM").textContent =
+    money(khas.cutiGanti.rm);
+
+
+document.getElementById("klmTambahanJam").textContent =
+    decimal(khas.tambahan.jam);
+
+document.getElementById("klmTambahanRM").textContent =
+    money(khas.tambahan.rm);
+}
+
+
+
+
+    if(elRmCuti){
+
+        /*
+         * RM CUTI AM sebenar:
+         *
+         * rm_hari_cutiam
+         * +
+         * rm_jam_cutiam
+         */
+
+        const rmCuti =
+            klm.rmHariCuti +
+            klm.rmJamCuti;
+
+
+        elRmCuti.textContent =
+            money(
+                rmCuti
+            );
+
+    }
+
+
+    /*
+     * OFFDAY
+     */
+
+    const cardOff =
+        document.getElementById(
+            "valueKlmOffday"
+        );
+
+
+    const rmOff =
+        document.getElementById(
+            "valueRmOffday"
+        );
+
+
+    if(cardOff){
+
+        cardOff.textContent =
+            num(
+                klm.jamOff
+            ) +
+            " Jam";
+
+    }
+
+
+    if(rmOff){
+
+        rmOff.textContent =
+            money(
+                klm.rmHariOff +
+                klm.rmJamOff
+            );
+
+    }
+
+
+    /*
+     * HARI BIASA
+     */
+
+    const cardBiasa =
+        document.getElementById(
+            "valueKlmBiasa"
+        );
+
+
+    const rmBiasa =
+        document.getElementById(
+            "valueRmBiasa"
+        );
+
+
+    if(cardBiasa){
+
+        cardBiasa.textContent =
+            num(
+                klm.jamBiasa
+            ) +
+            " Jam";
+
+    }
+
+
+    if(rmBiasa){
+
+        rmBiasa.textContent =
+            money(
+                klm.rmBiasa
+            );
+
+    }
+
+    const elJamTampungan =
+        document.getElementById(
+            "valueKlmTampungan"
+        );
+
+    const elRmTampungan =
+        document.getElementById(
+            "valueRmTampungan"
+        );
+
+    if(elJamTampungan){
+
+        elJamTampungan.textContent =
+            num(
+                tampungan.jam
+            ) +
+            " Jam";
+
+    }
+
+    if(elRmTampungan){
+
+        elRmTampungan.textContent =
+            money(
+                tampungan.rm
+            );
+
+    }
+
+}
+
+    
+
+
+
+/* =====================================================
+   RUMUSAN UNIT
+===================================================== */
+
+function paparRumusanUnit(rows){
+
+    const tbody =
+        document.getElementById(
+            "tbodyRumusanUnit"
+        );
+
+
+    if(!tbody) return;
+
+
+    const map =
+        new Map();
+
+
+    rows.forEach(row => {
+
+        const unit =
+            String(
+                row.unit ||
+                "TANPA UNIT"
+            ).trim();
+
+
+        if(!map.has(unit)){
+
+map.set(unit, {
+    unit,
+    anggota: new Set(),
+
+    jamBiasa: 0,
+    rmBiasa: 0,
+
+    hariOff: 0,
+    rmHariOff: 0,
+
+    jamOff: 0,
+    rmJamOff: 0,
+
+    hariCuti: 0,
+    rmHariCuti: 0,
+
+    jamCuti: 0,
+    rmJamCuti: 0,
+
+    jumlahRM: 0
+});
+
+        }
+
+
+        const item =
+            map.get(
+                unit
+            );
+
+
+        if(
+            row.no_skb !== null &&
+            row.no_skb !== undefined
+        ){
+
+            item.anggota.add(
+                row.no_skb
+            );
+
+        }
+
+
+item.jamBiasa += num(row.jam_klm);
+item.rmBiasa += num(row.rm_klm_hari_biasa);
+
+item.hariOff += num(row.jumlah_offday);
+item.rmHariOff += num(row.rm_hari_offday);
+
+item.jamOff += num(row.jam_offday_bertugas);
+item.rmJamOff += num(row.rm_jam_offday);
+
+item.hariCuti += num(row.hari_cutiam_bertugas);
+item.rmHariCuti += num(row.rm_hari_cutiam);
+
+item.jamCuti += num(row.jam_cutiam_bertugas);
+item.rmJamCuti += num(row.rm_jam_cutiam);
+
+item.jumlahRM += num(row.rm_klm_seluruh);
+
+    });
+
+
+    const data =
+        [...map.values()]
+            .sort(
+                (a,b) =>
+                    a.unit.localeCompare(
+                        b.unit
+                    )
+            );
+
+
+    tbody.innerHTML =
+        data.map(
+            item => `
+
+<tr>
+
+<td>${escapeHtml(item.unit)}</td>
+
+<td>${item.anggota.size}</td>
+
+<td>${num(item.jamBiasa)}</td>
+<td>${money(item.rmBiasa)}</td>
+
+<td>${num(item.hariOff)}</td>
+<td>${money(item.rmHariOff)}</td>
+
+<td>${num(item.jamOff)}</td>
+<td>${money(item.rmJamOff)}</td>
+
+<td>${num(item.hariCuti)}</td>
+<td>${money(item.rmHariCuti)}</td>
+
+<td>${num(item.jamCuti)}</td>
+<td>${money(item.rmJamCuti)}</td>
+
+<td>${money(item.jumlahRM)}</td>
+
+</tr>
+
+            `
+        ).join("");
+
+
+    if(!data.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="13">
+                    Tiada data
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   RUMUSAN POS
+===================================================== */
+
+function paparRumusanPos(rows){
+
+    const tbody =
+        document.getElementById(
+            "tbodyRumusanPos"
+        );
+
+
+    if(!tbody) return;
+
+
+    const map =
+        new Map();
+
+
+    rows.forEach(row => {
+
+        const pos =
+            String(
+                row.pos ||
+                row.nama_pos_asal ||
+                "TANPA POS"
+            ).trim();
+
+
+        if(!map.has(pos)){
+
+map.set(pos, {
+    pos,
+    anggota: new Set(),
+
+    jamBiasa: 0,
+    rmBiasa: 0,
+
+    hariOff: 0,
+    rmHariOff: 0,
+
+    jamOff: 0,
+    rmJamOff: 0,
+
+    hariCuti: 0,
+    rmHariCuti: 0,
+
+    jamCuti: 0,
+    rmJamCuti: 0,
+
+    jumlahRM: 0
+});
+
+            
+}
+        
+
+
+        const item =
+            map.get(
+                pos
+            );
+
+
+        if(
+            row.no_skb !== null &&
+            row.no_skb !== undefined
+        ){
+
+            item.anggota.add(
+                row.no_skb
+            );
+
+        }
+
+
+item.jamBiasa += num(row.jam_klm);
+item.rmBiasa += num(row.rm_klm_hari_biasa);
+
+item.hariOff += num(row.jumlah_offday);
+item.rmHariOff += num(row.rm_hari_offday);
+
+item.jamOff += num(row.jam_offday_bertugas);
+item.rmJamOff += num(row.rm_jam_offday);
+
+item.hariCuti += num(row.hari_cutiam_bertugas);
+item.rmHariCuti += num(row.rm_hari_cutiam);
+
+item.jamCuti += num(row.jam_cutiam_bertugas);
+item.rmJamCuti += num(row.rm_jam_cutiam);
+
+item.jumlahRM += num(row.rm_klm_seluruh);
+
+
+    });
+
+
+    const data =
+        [...map.values()]
+            .sort(
+                (a,b) =>
+                    a.pos.localeCompare(
+                        b.pos
+                    )
+            );
+
+
+    tbody.innerHTML =
+        data.map(
+            item => `
+
+    <tr>
+
+    <td class="nama">${escapeHtml(item.pos)}</td>
+
+    <td>${item.anggota.size}</td>
+
+    <td>${num(item.jamBiasa)}</td>
+
+    <td>${money(item.rmBiasa)}</td>
+
+    <td>${num(item.hariOff)}</td>
+
+    <td>${money(item.rmHariOff)}</td>
+
+    <td>${num(item.jamOff)}</td>
+
+    <td>${money(item.rmJamOff)}</td>
+
+    <td>${num(item.hariCuti)}</td>
+
+    <td>${money(item.rmHariCuti)}</td>
+
+    <td>${num(item.jamCuti)}</td>
+
+    <td>${money(item.rmJamCuti)}</td>
+
+    <td>${money(item.jumlahRM)}</td>
+
+</tr>
+
+            `
+        ).join("");
+
+
+    if(!data.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="13">
+                    Tiada data
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   TOP 10
+===================================================== */
+
+function paparTop10(rows){
+
+    const tbody =
+        document.getElementById(
+            "tbodyTop10"
+        );
+
+
+    if(!tbody) return;
+
+
+    const map =
+        new Map();
+
+
+    rows.forEach(row => {
+
+        const key =
+            String(
+                row.no_skb ??
+                row.no_anggota ??
+                row.nama_anggota ??
+                ""
+            );
+
+
+        if(!key) return;
+
+
+        if(!map.has(key)){
+
+            map.set(
+                key,
+                {
+
+                    no_skb:
+                        row.no_skb,
+
+                    nama:
+                        row.nama_anggota ||
+                        "—",
+
+                    unit:
+                        row.unit ||
+                        "—",
+
+                    klm:0,
+
+                    rm:0
+
+                }
+            );
+
+        }
+
+
+        const item =
+            map.get(
+                key
+            );
+
+
+        item.klm +=
+            num(
+                row.jam_klm
+            );
+
+
+        item.rm +=
+            num(
+                row.rm_klm_seluruh
+            );
+
+    });
+
+
+const data =
+    [...map.values()]
+        .sort((a, b) => {
+
+            if (b.rm !== a.rm) {
+                return b.rm - a.rm;
+            }
+
+            return b.klm - a.klm;
+
+        })
+        .slice(0, 10);
+
+
+    tbody.innerHTML =
+        data.map(
+            item => `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(
+                            item.no_skb
+                        )}
+                    </td>
+
+                    <td class="nama">
+                        ${escapeHtml(
+                            item.nama
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            item.unit
+                        )}
+                    </td>
+
+                    <td>
+                        ${num(
+                            item.klm
+                        )}
+                    </td>
+
+                    <td>
+                        ${money(
+                            item.rm
+                        )}
+                    </td>
+
+                </tr>
+
+            `
+        ).join("");
+
+
+    if(!data.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    Tiada data
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+function bukaKlmTampungan(){
+
+    document
+        .getElementById(
+            "modalKlmTampungan"
+        )
+        ?.classList.remove(
+            "hidden"
+        );
+
+}
+
+
+function tutupKlmTampungan(){
+
+    document
+        .getElementById(
+            "modalKlmTampungan"
+        )
+        ?.classList.add(
+            "hidden"
+        );
+
+}
+
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target.closest(
+                "#cardKlmTampungan"
+            )
+        ){
+
+            bukaKlmTampungan();
+
+        }
+
+    }
+);
+/* =====================================================
+   CUTI AM
+===================================================== */
+
+function paparSenaraiCutiAm(rows){
+
+    const tbody =
+        document.getElementById(
+            "senaraiKlmCutiAm"
+        );
+
+
+    if(!tbody) return;
+
+
+    const data =
+        rows.filter(
+            row =>
+                num(
+                    row.jumlah_cutiam
+                ) > 0
+        );
+
+
+    tbody.innerHTML =
+        data.map(
+            row => {
+
+                const rmHari =
+                    num(
+                        row.rm_hari_cutiam
+                    );
+
+
+                const rmJam =
+                    num(
+                        row.rm_jam_cutiam
+                    );
+
+
+                const rmJumlah =
+                    rmHari +
+                    rmJam;
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                row.no_skb
+                            )}
+                        </td>
+
+                        <td class="nama">
+                            ${escapeHtml(
+                                row.nama_anggota ||
+                                row.nama ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                row.Data_Anggota
+                                ?.gaji_pokok
+                            )}
+                        </td>
+
+                        <td>
+                            ${num(
+                                row.hari_cutiam_bertugas
+                            )}
+                        </td>
+
+                        <td>
+                            ${num(
+                                row.jam_cutiam_bertugas
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                rmJumlah
+                            )}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+
+    if(!data.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    Tiada rekod KLM Cuti AM
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   DOWNLOAD EXCEL — KLM CUTI AM
+===================================================== */
+
+function downloadExcelCutiAm(){
+
+    const rows =
+        semuaDuty.filter(
+            row =>
+                num(row.jumlah_cutiam) > 0
+                ||
+                num(row.hari_cutiam_bertugas) > 0
+                ||
+                num(row.jam_cutiam_bertugas) > 0
+        );
+
+
+    if(!rows.length){
+
+        alert(
+            "Tiada rekod KLM Cuti Am untuk dimuat turun."
+        );
+
+        return;
+
+    }
+
+
+    const data =
+        rows.map(row => {
+
+            const rmHari =
+                num(
+                    row.rm_hari_cutiam
+                );
+
+            const rmJam =
+                num(
+                    row.rm_jam_cutiam
+                );
+
+            return {
+
+                "NO SKB":
+                    row.no_skb || "",
+
+                "NAMA ANGGOTA":
+                    row.nama_anggota ||
+                    row.nama ||
+                    "",
+
+                "UNIT":
+                    row.unit ||
+                    "",
+
+                "POS":
+                    row.pos ||
+                    row.nama_pos_asal ||
+                    "",
+
+                "BASIC GAJI":
+                    num(
+                        row.Data_Anggota
+                        ?.gaji_pokok
+                    ),
+
+                "HARI":
+                    num(
+                        row.hari_cutiam_bertugas
+                    ),
+
+                "JAM":
+                    num(
+                        row.jam_cutiam_bertugas
+                    ),
+
+                "RM HARI CUTI AM":
+                    rmHari,
+
+                "RM JAM CUTI AM":
+                    rmJam,
+
+                "JUMLAH KLM (RM)":
+                    rmHari + rmJam
+
+            };
+
+        });
+
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(
+            data
+        );
+
+
+    const workbook =
+        XLSX.utils.book_new();
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "KLM Cuti Am"
+    );
+
+
+    /* Lebar kolum */
+
+    worksheet["!cols"] = [
+
+        { wch: 15 },
+        { wch: 35 },
+        { wch: 22 },
+        { wch: 25 },
+        { wch: 15 },
+        { wch: 10 },
+        { wch: 10 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 }
+
+    ];
+
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        )?.value ||
+        "Bulan";
+
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        )?.value ||
+        "Tahun";
+
+
+    XLSX.writeFile(
+        workbook,
+        `KLM_Cuti_Am_${bulan}_${tahun}.xlsx`
+    );
+
+}
+
+
+/* =====================================================
+   DOWNLOAD EXCEL — KLM TAMPUNGAN
+===================================================== */
+
+function downloadExcelTampungan(){
+
+    const rows =
+        semuaDuty.filter(
+            row =>
+                String(
+                    row.pos_tampungan ||
+                    ""
+                ).trim() !== ""
+                &&
+                num(
+                    row.jam_tampungan
+                ) > 0
+        );
+
+
+    if(!rows.length){
+
+        alert(
+            "Tiada rekod KLM Tampungan untuk dimuat turun."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Gabungkan mengikut:
+     *
+     * POS TAMPUNGAN + NO SKB
+     *
+     * sama seperti popup.
+     */
+
+    const map =
+        new Map();
+
+
+    rows.forEach(row => {
+
+        const posTampungan =
+            String(
+                row.pos_tampungan ||
+                ""
+            ).trim();
+
+        const skb =
+            String(
+                row.no_skb ||
+                ""
+            ).trim();
+
+
+        const key =
+            posTampungan +
+            "|" +
+            skb;
+
+
+        if(!map.has(key)){
+
+            map.set(
+                key,
+                {
+
+                    posTampungan,
+
+                    skb,
+
+                    nama:
+                        row.nama_anggota ||
+                        "-",
+
+                    pos:
+                        row.pos ||
+                        row.nama_pos_asal ||
+                        "-",
+
+                    basic:
+                        num(
+                            row.Data_Anggota
+                            ?.gaji_pokok
+                        ),
+
+                    jam: 0,
+
+                    rm: 0
+
+                }
+            );
+
+        }
+
+
+        const item =
+            map.get(key);
+
+
+        item.jam +=
+            num(
+                row.jam_tampungan
+            );
+
+
+        item.rm +=
+            num(
+                row.rm_klm_tampungan
+            );
+
+    });
+
+
+    const data =
+        [...map.values()]
+            .sort(
+                (a,b) => {
+
+                    const p =
+                        a.posTampungan.localeCompare(
+                            b.posTampungan,
+                            "ms"
+                        );
+
+                    if(p !== 0){
+
+                        return p;
+
+                    }
+
+
+                    return String(
+                        a.nama
+                    ).localeCompare(
+                        String(b.nama),
+                        "ms"
+                    );
+
+                }
+            )
+            .map(item => ({
+
+                "POS TAMPUNGAN":
+                    item.posTampungan,
+
+                "SKB":
+                    item.skb,
+
+                "NAMA ANGGOTA":
+                    item.nama,
+
+                "POS":
+                    item.pos,
+
+                "BASIC GAJI":
+                    item.basic,
+
+                "JUMLAH JAM TAMPUNG / BLN":
+                    item.jam,
+
+                "JUMLAH KLM (RM)":
+                    item.rm
+
+            }));
+
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(
+            data
+        );
+
+
+    const workbook =
+        XLSX.utils.book_new();
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "KLM Tampungan"
+    );
+
+
+    /* Lebar kolum */
+
+    worksheet["!cols"] = [
+
+        { wch: 25 },
+        { wch: 15 },
+        { wch: 35 },
+        { wch: 25 },
+        { wch: 15 },
+        { wch: 25 },
+        { wch: 20 }
+
+    ];
+
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        )?.value ||
+        "Bulan";
+
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        )?.value ||
+        "Tahun";
+
+
+    XLSX.writeFile(
+        workbook,
+        `KLM_Tampungan_${bulan}_${tahun}.xlsx`
+    );
+
+}
+
+
+/* =====================================================
+   MODAL CUTI AM
+===================================================== */
+
+function bukaKlmCutiAm(){
+
+    document
+        .getElementById(
+            "modalKlmCutiAm"
+        )
+        ?.classList.remove(
+            "hidden"
+        );
+
+}
+
+
+function tutupKlmCutiAm(){
+
+    document
+        .getElementById(
+            "modalKlmCutiAm"
+        )
+        ?.classList.add(
+            "hidden"
+        );
+
+}
+
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target.closest(
+                "#cardKlmCutiAm"
+            )
+        ){
+
+            bukaKlmCutiAm();
+
+        }
+
+    }
+);
+
+</script>
+
+
+<script>
+
+tailwind.config = {
+
+    theme: {
+
+        extend: {
+
+            colors: {
+
+                teal: {
+
+                    450:
+                        "#2dd4bf",
+
+                    550:
+                        "#14b8a6",
+
+                    650:
+                        "#0d9488",
+
+                    750:
+                        "#0f766e"
+
+                }
+
+            }
+
+        }
+
+    }
+
+};
+
+</script>
+
+
+<style>
+
+body{
+
+    background:#0b1220;
+
+    font-family:
+        'Segoe UI',
+        system-ui,
+        sans-serif;
+
+}
+
+
+.glass{
+
+    background:
+        rgba(
+            15,
+            23,
+            42,
+            .7
+        );
+
+    backdrop-filter:
+        blur(16px);
+
+    border:
+        1px solid
+        rgba(
+            45,
+            212,
+            191,
+            .12
+        );
+
+}
+
+
+.sidebar-link.active{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(
+                20,
+                184,
+                166,
+                .2
+            ),
+            transparent
+        );
+
+    border-left:
+        3px solid
+        #14b8a6;
+
+    color:
+        #2dd4bf;
+
+}
+
+
+select:disabled{
+
+    opacity:.7;
+
+    cursor:
+        not-allowed;
+
+}
+
+
+.glass-card{
+
+    background:
+        rgba(
+            15,
+            23,
+            42,
+            .7
+        );
+
+    backdrop-filter:
+        blur(16px);
+
+    border:
+        1px solid
+        rgba(
+            45,
+            212,
+            191,
+            .12
+        );
+
+    transition:
+        all .25s ease;
+
+}
+
+
+.glass-card:hover{
+
+    border-color:
+        #14b8a6;
+
+    background:
+        rgba(
+            20,
+            184,
+            166,
+            .08
+        );
+
+    transform:
+        translateY(
+            -2px
+        );
+
+}
+
+
+.report-table{
+
+    width:100%;
+
+    border-collapse:
+        collapse;
+
+}
+
+
+.report-table th{
+
+    background:
+        rgba(
+            20,
+            184,
+            166,
+            .15
+        );
+
+    color:
+        #2dd4bf;
+
+    font-weight:
+        600;
+
+}
+
+
+.report-table td,
+.report-table th{
+
+    border:
+        1px solid
+        rgba(
+            148,
+            163,
+            184,
+            .3
+        );
+
+    padding:
+        10px;
+
+}
+
+
+.report-table tbody tr:hover{
+
+    background:
+        rgba(
+            20,
+            184,
+            166,
+            .08
+        );
+
+}
+
+
+.report-table td.nama{
+
+    text-align:
+        left;
+
+}
+
+
+@media print{
+
+    body{
+
+        background:white;
+        color:black;
+
+    }
+
+    .no-print{
+
+        display:none !important;
+
+    }
+
+    main{
+
+        margin-left:0 !important;
+
+    }
+
+    .glass,
+    .glass-card{
+
+        background:white;
+        color:black;
+        box-shadow:none;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body class="text-slate-200">
+
+
+<div class="flex min-h-screen">
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside
+    class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto no-print"
+>
+
+<div class="p-6">
+
+
+<div class="flex items-center gap-3 mb-8">
+
+<div class="w-12 h-12 flex items-center justify-center">
+    <img
+        src="logomdp.png"
+        alt="Master Duty Pro"
+        class="w-12 h-12 object-contain"
+    >
+</div>
+
+
+<div>
+
+<h1
+    class="font-bold text-white text-lg"
+>
+    Master Duty Pro
+</h1>
+
+<p
+    class="text-xs text-teal-450"
+>
+    Wilayah Terengganu
+</p>
+
+</div>
+
+</div>
+
+
+<div
+    class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10"
+>
+
+<p
+    id="userName"
+    class="text-sm font-semibold text-white truncate"
+>
+    -
+</p>
+
+<p
+    id="userJawatan"
+    class="text-xs text-teal-400 mt-1"
+>
+    -
+</p>
+
+</div>
+
+
+<nav class="space-y-1">
+
+<p
+    class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3"
+>
+    Menu Utama
+</p>
+
+
+<a
+    href="dashboard.html"
+    id="menuDashboard"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+>
+
+<i class="fas fa-chart-pie w-5"></i>
+
+Dashboard
+
+</a>
+
+
+<a
+    href="pengurusan-anggota.html"
+    id="menuAnggota"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+>
+
+<i class="fas fa-users w-5"></i>
+
+Pengurusan Anggota
+
+</a>
+
+
+<a
+    href="kod-duty.html"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+>
+
+<i class="fas fa-code w-5"></i>
+
+Kod Waktu Kerja
+
+</a>
+
+
+<a
+    href="kod-tempat-kerja.html"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+>
+
+<i class="fas fa-map-marker-alt w-5"></i>
+
+Kod Tempat Kerja
+
+</a>
+
+
+<a
+    href="jadual-duty.html"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+>
+
+<i class="fas fa-calendar-check w-5"></i>
+
+Pengisian Jadual Tugas
+
+</a>
+
+
+<p
+    class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3"
+>
+    Laporan
+</p>
+
+
+<a
+    href="laporan-wilayah.html"
+    id="menuLaporan"
+    class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium"
+>
+
+<i class="fas fa-file-alt w-5"></i>
+
+Laporan Wilayah
+
+</a>
+
+
+<a
+    href="klm-mingguan.html"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+>
+
+<i class="fas fa-users w-5"></i>
+
+KLM Mingguan
+
+</a>
+
+
+<a
+    href="anggaran-rk02.html"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+>
+
+<i class="fas fa-table w-5"></i>
+
+Anggaran RK02
+
+</a>
+
+
+<a
+    href="anggaran-rk01.html"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+>
+
+<i class="fas fa-chart-line w-5"></i>
+
+Anggaran RK01
+
+</a>
+
+
+<p
+    class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3"
+>
+    Sistem
+</p>
+
+
+<a
+    href="#"
+    id="menuTetapan"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition"
+>
+
+<i class="fas fa-cog w-5"></i>
+
+Tetapan
+
+</a>
+
+
+<a
+    href="#"
+    onclick="logKeluar()"
+    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4"
+>
+
+<i class="fas fa-sign-out-alt w-5"></i>
+
+Log Keluar
+
+</a>
+
+
+</nav>
+
+</div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="flex-1 lg:ml-72">
+
+
+<header
+    class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4 no-print"
+>
+
+<div
+    class="flex items-center justify-between"
+>
+
+<div>
+
+<h2
+    class="text-xl font-bold text-white"
+>
+    Laporan Wilayah
+</h2>
+
+<p
+    class="text-sm text-teal-400"
+>
+    Dashboard Rumusan Wilayah Terengganu
+</p>
+
+</div>
+
+
+<div
+    class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium"
+>
+
+<span
+    class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"
+></span>
+
+System Online
+
+</div>
+
+</div>
+
+</header>
+
+
+<div class="p-6 space-y-6">
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div
+    class="glass glass-card rounded-2xl p-5"
+>
+
+<div
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 items-end"
+>
+
+
+<div>
+
+<label
+    class="block text-sm text-slate-400 mb-2"
+>
+    Unit
+</label>
+
+<select
+    id="filterUnit"
+    class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2"
+>
+</select>
+
+</div>
+
+
+<div>
+
+<label
+    class="block text-sm text-slate-400 mb-2"
+>
+    Pos
+</label>
+
+<select
+    id="filterPos"
+    class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2"
+>
+</select>
+
+</div>
+
+
+<div>
+
+<label
+    class="block text-sm text-slate-400 mb-2"
+>
+    Bulan
+</label>
+
+<select
+    id="filterBulan"
+    class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2"
+>
+</select>
+
+</div>
+
+
+<div>
+
+<label
+    class="block text-sm text-slate-400 mb-2"
+>
+    Tahun
+</label>
+
+<select
+    id="filterTahun"
+    class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2"
+>
+</select>
+
+</div>
+
+
+<div>
+
+<button
+    id="btnJanaLaporan"
+    class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-xl transition"
+>
+
+<i class="fas fa-sync-alt mr-2"></i>
+
+Jana Laporan
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     RINGKASAN
+===================================================== -->
+
+<div
+    id="ringkasanCards"
+    class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4"
+>
+
+
+<div
+    class="glass glass-card rounded-2xl p-5"
+>
+
+<div
+    class="text-teal-400 text-sm font-semibold"
+>
+    Jumlah Anggota
+</div>
+
+<div
+    id="cardJumlahAnggota"
+    class="text-4xl font-bold text-teal-400 mt-2"
+>
+    0
+</div>
+
+</div>
+
+
+<div
+    class="glass glass-card rounded-2xl p-5"
+>
+
+<div
+    class="text-teal-400 text-sm font-semibold"
+>
+    Jumlah Duty
+</div>
+
+<div
+    id="cardJumlahDuty"
+    class="text-4xl font-bold text-teal-400 mt-2"
+>
+    0
+</div>
+
+</div>
+
+
+<div
+    class="glass glass-card rounded-2xl p-5"
+>
+
+<div
+    class="text-teal-400 text-sm font-semibold"
+>
+    Jumlah Jam Kerja
+</div>
+
+<div
+    id="cardJumlahJamKerja"
+    class="text-4xl font-bold text-teal-400 mt-2"
+>
+   0
+</div>
+
+</div>
+
+
+<div
+    class="glass glass-card rounded-2xl p-5"
+>
+
+<div
+    class="text-teal-400 text-sm font-semibold"
+>
+    Jumlah Jam KLM
+</div>
+
+<div
+    id="cardJumlahJamKLM"
+    class="text-4xl font-bold text-teal-400 mt-2"
+>
+    0
+</div>
+
+</div>
+
+
+<div
+    class="glass glass-card rounded-2xl p-5"
+>
+
+<div
+    class="text-teal-400 text-sm font-semibold"
+>
+    Jumlah RM
+</div>
+
+<div
+    id="cardJumlahRM"
+    class="text-4xl font-bold text-teal-400 mt-2"
+>
+    RM 0.00
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     KAD KLM
+===================================================== -->
+
+<div
+    id="klmCards"
+    class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"
+>
+
+
+<div
+    id="cardKlmBiasa"
+    class="glass glass-card rounded-2xl p-4"
+>
+
+<p
+    class="text-teal-400 text-sm font-semibold"
+>
+    KLM Hari Biasa
+</p>
+
+<h3
+    id="valueKlmBiasa"
+    class="text-2xl font-bold text-white mt-2"
+>
+    0 Jam
+</h3>
+
+<p
+    id="valueRmBiasa"
+    class="text-teal-400"
+>
+    RM 0.00
+</p>
+
+</div>
+
+
+<div
+    id="cardKlmOffday"
+    class="glass glass-card rounded-2xl p-4"
+>
+
+<p
+    class="text-teal-400 text-sm font-semibold"
+>
+    KLM Offday
+</p>
+
+<h3
+    id="valueKlmOffday"
+    class="text-2xl font-bold text-white mt-2"
+>
+    0 Jam
+</h3>
+
+<p
+    id="valueRmOffday"
+    class="text-teal-400"
+>
+    RM 0.00
+</p>
+
+</div>
+
+
+<div
+    id="cardKlmCutiAm"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer"
+>
+
+<p
+    class="text-teal-400 text-sm font-semibold"
+>
+    KLM Cuti Am
+</p>
+
+<h3
+    id="jamKlmCutiAm"
+    class="text-2xl font-bold text-white mt-2"
+>
+    0 Jam
+</h3>
+
+<p
+    id="rmKlmCutiAm"
+    class="text-teal-400"
+>
+    RM 0.00
+</p>
+
+</div>
+
+
+<div
+    id="cardKlmTampungan"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer"
+>
+
+    <p class="text-teal-400 text-sm font-semibold">
+        KLM Tampungan
+    </p>
+
+    <h3
+        id="valueKlmTampungan"
+        class="text-2xl font-bold text-white mt-2"
+    >
+        0 Jam
+    </h3>
+
+    <p
+        id="valueRmTampungan"
+        class="text-teal-400"
+    >
+        RM 0.00
+    </p>
+
+</div>
+
+
+
+
+<!-- =====================================================
+     9 KLM KHAS
+===================================================== -->
+
+<!-- KLM LATIHAN DWI BULANAN -->
+<div
+    id="cardKlmOff"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition h-full"
+    onclick="bukaModalKlmKhas('off')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Latihan Dwi Bulanan
+        </div>
+
+        <i class="fa-solid fa-person-chalkboard text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmOffJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmOffRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM MC -->
+<div
+    id="cardKlmMc"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition h-full"
+    onclick="bukaModalKlmKhas('mc')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM MC
+        </div>
+
+        <i class="fa-solid fa-notes-medical text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmMcJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmMcRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM ESKOT -->
+<div
+    id="cardKlmEskot"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition h-full"
+    onclick="bukaModalKlmKhas('eskot')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Eskot
+        </div>
+
+        <i class="fa-solid fa-user-shield text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmEskotJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmEskotRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM WAJIB -->
+<div
+    id="cardKlmWajib"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition h-full"
+    onclick="bukaModalKlmKhas('wajib')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Wajib
+        </div>
+
+        <i class="fa-solid fa-clipboard-check text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmWajibJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmWajibRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM CUTI TAHUN -->
+<div
+    id="cardKlmCutiTahun"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition h-full"
+    onclick="bukaModalKlmKhas('cutiTahun')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Cuti Tahun
+        </div>
+
+        <i class="fa-solid fa-calendar-check text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmCutiTahunJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmCutiTahunRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM KURSUS -->
+<div
+    id="cardKlmKursus"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition h-full"
+    onclick="bukaModalKlmKhas('kursus')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Kursus
+        </div>
+
+        <i class="fa-solid fa-graduation-cap text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmKursusJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmKursusRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM CUTI EHSAN -->
+<div
+    id="cardKlmCutiEhsan"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition h-full"
+    onclick="bukaModalKlmKhas('cutiEhsan')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Cuti Ehsan
+        </div>
+
+        <i class="fa-solid fa-heart text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmCutiEhsanJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmCutiEhsanRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM CUTI GANTI -->
+<div
+    id="cardKlmCutiGanti"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition h-full"
+    onclick="bukaModalKlmKhas('cutiGanti')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Cuti Ganti
+        </div>
+
+        <i class="fa-solid fa-arrows-rotate text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmCutiGantiJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmCutiGantiRM">0.00</span>
+    </div>
+</div>
+
+
+<!-- KLM KAWALAN TAMBAHAN -->
+<div
+    id="cardKlmTambahan"
+    class="glass glass-card rounded-2xl p-4 cursor-pointer hover:scale-[1.02] transition h-full"
+    onclick="bukaModalKlmKhas('tambahan')"
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-white">
+            KLM Kawalan Tambahan
+        </div>
+
+        <i class="fa-solid fa-shield-halved text-teal-400"></i>
+    </div>
+
+    <div class="text-2xl font-bold text-teal-400">
+        <span id="klmTambahanJam">0.00</span>
+        <span class="text-sm font-normal text-slate-400"> Jam</span>
+    </div>
+
+    <div class="text-sm text-slate-400 mt-1">
+        RM <span id="klmTambahanRM">0.00</span>
+    </div>
+</div>
+    </div>
+<!-- =====================================================
+     RUMUSAN UNIT
+===================================================== -->
+
+<div
+    id="rumusanUnit"
+    class="glass glass-card rounded-2xl p-5"
+>
+
+<h3
+    class="text-lg font-bold text-white mb-4"
+>
+    Rumusan Mengikut Unit
+</h3>
+
+
+<div class="overflow-x-auto">
+
+<table
+    class="report-table text-sm"
+>
+
+<thead>
+
+<tr>
+
+<th>Unit</th>
+<th>Bil Anggota</th>
+<th>Jam KLM Hari Biasa</th>
+<th>RM KLM Hari Biasa</th>
+<th>Hari Offday</th>
+<th>RM Hari Offday</th>
+<th>Jam Offday</th>
+<th>RM Jam Offday</th>
+<th>Hari Cuti Am</th>
+<th>RM Hari Cuti Am</th>
+<th>Jam Cuti Am</th>
+<th>RM Jam Cuti Am</th>
+<th>Jumlah RM</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tbodyRumusanUnit">
+
+<tr>
+
+<td colspan="5">
+    Memuatkan...
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     RUMUSAN POS
+===================================================== -->
+
+<div
+    id="rumusanPos"
+    class="glass glass-card rounded-2xl p-5"
+>
+
+<h3
+    class="text-lg font-bold text-white mb-4"
+>
+    Rumusan Mengikut Pos
+</h3>
+
+
+<div class="overflow-x-auto">
+
+<table
+    class="report-table text-sm"
+>
+
+<thead>
+
+<tr>
+
+<th>Pos</th>
+<th>Bil Anggota</th>
+<th>Jam KLM Hari Biasa</th>
+<th>RM KLM Hari Biasa</th>
+<th>Hari Offday</th>
+<th>RM Hari Offday</th>
+<th>Jam Offday</th>
+<th>RM Jam Offday</th>
+<th>Hari Cuti Am</th>
+<th>RM Hari Cuti Am</th>
+<th>Jam Cuti Am</th>
+<th>RM Jam Cuti Am</th>
+<th>Jumlah RM</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tbodyRumusanPos">
+
+<tr>
+
+<td colspan="5">
+    Memuatkan...
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     TOP 10
+===================================================== -->
+
+<div
+    id="top10"
+    class="glass glass-card rounded-2xl p-5"
+>
+
+<h3
+    class="text-lg font-bold text-white mb-4"
+>
+    Top 10 Anggota (RM) KLM Tertinggi
+</h3>
+
+
+<div class="overflow-x-auto">
+
+<table
+    class="report-table text-sm"
+>
+
+<thead>
+
+<tr>
+
+<th>
+    No SKB
+</th>
+
+<th>
+    Nama
+</th>
+
+<th>
+    Unit
+</th>
+
+<th>
+    KLM
+</th>
+
+<th>
+    RM
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tbodyTop10">
+
+<tr>
+
+<td colspan="5">
+    Memuatkan...
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL CUTI AM
+===================================================== -->
+
+<div
+    id="modalKlmCutiAm"
+    class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-6"
+>
+
+
+<div
+    class="glass rounded-2xl w-full max-w-7xl max-h-[90vh] overflow-auto p-6"
+>
+
+
+<div
+    class="flex justify-between items-center mb-4"
+>
+
+
+<h3
+    class="text-xl font-bold text-white"
+>
+    Senarai KLM Cuti Am
+</h3>
+
+
+<div class="flex items-center gap-2">
+
+    <button
+        onclick="downloadExcelCutiAm()"
+        class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg font-semibold"
+    >
+        <i class="fas fa-file-excel mr-2"></i>
+        Download Excel
+    </button>
+
+    <button
+        onclick="tutupKlmCutiAm()"
+        class="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg"
+    >
+        Tutup
+    </button>
+
+</div>
+
+
+</div>
+
+
+<div class="overflow-x-auto">
+
+<table
+    class="report-table text-sm"
+>
+
+<thead>
+
+<tr>
+
+<th>
+    NO SKB
+</th>
+
+<th>
+    NAMA ANGGOTA
+</th>
+
+<th>
+    BASIC GAJI
+</th>
+
+<th>
+    HARI
+</th>
+
+<th>
+    JAM
+</th>
+
+<th>
+    JUMLAH KLM (RM)
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody
+    id="senaraiKlmCutiAm"
+>
+
+</tbody>
+
+</table>
+
+</div>
+
+
+</div>
+
+</div>
+<div
+    id="modalKlmTampungan"
+    class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-6"
+>
+
+    <div
+        class="glass rounded-2xl w-full max-w-7xl max-h-[90vh] overflow-auto p-6"
+    >
+
+        <div
+            class="flex justify-between items-center mb-4"
+        >
+
+            <div>
+
+                <h3
+                    class="text-xl font-bold text-white"
+                >
+                    KLM Tampungan
+                </h3>
+
+                <p
+                    class="text-sm text-teal-400 mt-1"
+                >
+                    Rumusan tampungan mengikut bulan
+                </p>
+
+            </div>
+
+<div class="flex items-center gap-2">
+
+    <button
+        onclick="downloadExcelTampungan()"
+        class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg font-semibold"
+    >
+        <i class="fas fa-file-excel mr-2"></i>
+        Download Excel
+    </button>
+
+    <button
+        onclick="tutupKlmTampungan()"
+        class="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg"
+    >
+        Tutup
+    </button>
+
+</div>
+
+        </div>
+
+
+        <div class="overflow-x-auto">
+
+            <table class="report-table text-sm">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            POS TAMPUNGAN
+                        </th>
+
+                        <th>
+                            SKB
+                        </th>
+
+                        <th>
+                            NAMA ANGGOTA
+                        </th>
+
+                        <th>
+                            POS
+                        </th>
+
+                        <th>
+                            BASIC GAJI
+                        </th>
+
+                        <th>
+                            JUMLAH JAM TAMPUNG / BLN
+                        </th>
+
+                        <th>
+                            JUMLAH KLM (RM)
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="senaraiKlmTampungan"
+                >
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     MODAL 9 KLM KHAS
+===================================================== -->
+
+<div
+    id="modalKlmKhas"
+    class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+>
+
+    <div
+        class="w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl"
+    >
+
+        <!-- HEADER -->
+        <div
+            class="flex items-center justify-between border-b border-slate-700 px-6 py-4"
+        >
+
+            <div>
+                <h3
+                    id="modalKlmKhasTitle"
+                    class="text-lg font-bold text-white"
+                >
+                    KLM
+                </h3>
+
+                <p class="text-xs text-slate-400 mt-1">
+                    Perincian KLM Anggota
+                </p>
+            </div>
+
+            <button
+                type="button"
+                onclick="tutupModalKlmKhas()"
+                class="w-9 h-9 rounded-lg bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <!-- TABLE -->
+        <div class="overflow-auto max-h-[70vh]">
+
+            <table class="w-full text-sm">
+
+                <thead class="sticky top-0 bg-slate-800 z-10">
+
+                    <tr>
+
+                        <th
+                            class="px-5 py-3 text-left text-xs font-semibold text-slate-300 uppercase"
+                        >
+                            No. SKB
+                        </th>
+
+                        <th
+                            class="px-5 py-3 text-left text-xs font-semibold text-slate-300 uppercase"
+                        >
+                            Nama Anggota
+                        </th>
+
+                        <th
+                            class="px-5 py-3 text-right text-xs font-semibold text-slate-300 uppercase"
+                        >
+                            Jam
+                        </th>
+
+                        <th
+                            class="px-5 py-3 text-right text-xs font-semibold text-slate-300 uppercase"
+                        >
+                            RM
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="tbodyKlmKhas"
+                    class="divide-y divide-slate-800"
+                >
+
+                </tbody>
+
+
+                <tfoot class="bg-slate-800/80">
+
+                    <tr>
+
+                        <td
+                            colspan="2"
+                            class="px-5 py-3 text-right font-bold text-white"
+                        >
+                            JUMLAH
+                        </td>
+
+                        <td
+                            id="jumlahJamKlmKhas"
+                            class="px-5 py-3 text-right font-bold text-teal-400"
+                        >
+                            0.00
+                        </td>
+
+                        <td
+                            id="jumlahRmKlmKhas"
+                            class="px-5 py-3 text-right font-bold text-teal-400"
+                        >
+                            RM 0.00
+                        </td>
+
+                    </tr>
+
+                </tfoot>
+
+            </table>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div
+            class="flex justify-end border-t border-slate-700 px-6 py-4"
+        >
+
+            <button
+                type="button"
+                onclick="tutupModalKlmKhas()"
+                class="px-5 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-sm font-semibold transition"
+            >
+                Tutup
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
+
