@@ -4832,6 +4832,459 @@ function bukaModalJumlahRM() {
 }
 
 
+function isiModalJumlahRM() {
+
+    console.log("================================");
+    console.log("ISI MODAL JUMLAH RM");
+    console.log("================================");
+
+    const rows = Array.isArray(semuaDuty) ? semuaDuty : [];
+
+    console.log("Jumlah data semuaDuty:", rows.length);
+
+    const bulan = document.getElementById("filterBulan")?.value || "";
+    const tahun = document.getElementById("filterTahun")?.value || "";
+
+    console.log("Bulan:", bulan);
+    console.log("Tahun:", tahun);
+
+    // --------------------------------------------------
+    // ELEMENT MODAL
+    // --------------------------------------------------
+
+    const info = document.getElementById("modalJumlahRMInfo");
+    const anggotaEl = document.getElementById("modalJumlahRMAnggota");
+    const rekodEl = document.getElementById("modalJumlahRMRekod");
+    const totalEl = document.getElementById("modalJumlahRMTotal");
+    const tbody = document.getElementById("tbodyJumlahRM");
+    const footer = document.getElementById("footerJumlahRM");
+
+    if (!tbody) {
+        console.error("ERROR: #tbodyJumlahRM tidak dijumpai.");
+        return;
+    }
+
+    // --------------------------------------------------
+    // FORMAT NUMBER
+    // --------------------------------------------------
+
+    function num(value) {
+        if (value === null || value === undefined || value === "") {
+            return 0;
+        }
+
+        const n = Number(String(value).replace(/,/g, ""));
+
+        return Number.isFinite(n) ? n : 0;
+    }
+
+
+    function rm(value) {
+        return "RM " + num(value).toLocaleString("ms-MY", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+
+    function esc(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    // --------------------------------------------------
+    // DATA
+    // --------------------------------------------------
+
+    if (rows.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="44"
+                    class="text-center py-10 text-slate-400"
+                >
+                    Tiada data untuk bulan / tahun yang dipilih.
+                </td>
+            </tr>
+        `;
+
+        if (info) {
+            info.textContent = `${bulan || "-"} / ${tahun || "-"}`;
+        }
+
+        if (anggotaEl) anggotaEl.textContent = "0";
+        if (rekodEl) rekodEl.textContent = "0";
+        if (totalEl) totalEl.textContent = "RM 0.00";
+        if (footer) footer.textContent = "RM 0.00";
+
+        return;
+    }
+
+
+    // --------------------------------------------------
+    // GROUP BY NO SKB
+    // --------------------------------------------------
+
+    const grouped = new Map();
+
+
+    rows.forEach(row => {
+
+        const key = String(row.no_skb ?? "").trim();
+
+        if (!key) return;
+
+
+        if (!grouped.has(key)) {
+
+            grouped.set(key, {
+
+                bulan: row.bulan ?? bulan,
+                tahun: row.tahun ?? tahun,
+
+                kawasan: row.kawasan ?? "",
+                unit: row.unit ?? "",
+                pos: row.pos ?? "",
+
+                no_skb: row.no_skb ?? "",
+                nama_anggota: row.nama_anggota ?? "",
+                no_anggota: row.no_anggota ?? "",
+
+                ketua_unit: row.ketua_unit ?? "",
+                nama_ketua_pos: row.nama_ketua_pos ?? "",
+
+                jam_kerja: 0,
+                jam_klm: 0,
+
+                rm_klm_hari_biasa: 0,
+
+                hari_offday_bertugas: new Set(),
+                rm_hari_offday: 0,
+                jam_offday_bertugas: 0,
+                rm_jam_offday: 0,
+                jumlah_offday: 0,
+
+                hari_cutiam_bertugas: new Set(),
+                rm_hari_cutiam: 0,
+                jam_cutiam_bertugas: 0,
+                rm_jam_cutiam: 0,
+                jumlah_cutiam: 0,
+
+                jam_tampungan: 0,
+                rm_klm_tampungan: 0,
+
+                jam_klm_wajib: 0,
+                rm_klm_wajib: 0,
+
+                jam_klm_mc: 0,
+                rm_klm_mc: 0,
+
+                jam_klm_cuti_tahun: 0,
+                rm_klm_cuti_tahun: 0,
+
+                jam_klm_cuti_ehsan: 0,
+                rm_klm_cuti_ehsan: 0,
+
+                jam_klm_eskot: 0,
+                rm_klm_eskot: 0,
+
+                jam_klm_tambahan: 0,
+                rm_klm_tambahan: 0,
+
+                jam_klm_kursus: 0,
+                rm_klm_kursus: 0,
+
+                jam_klm_cuti_ganti: 0,
+                rm_klm_cuti_ganti: 0,
+
+                jam_klm_off: 0,
+                rm_klm_off: 0
+            });
+        }
+
+
+        const g = grouped.get(key);
+
+
+        // ------------------------------------------------
+        // JAM / RM
+        // ------------------------------------------------
+
+        g.jam_kerja += num(row.jam_kerja);
+        g.jam_klm += num(row.jam_klm);
+
+        g.rm_klm_hari_biasa += num(row.rm_klm_hari_biasa);
+
+
+        g.rm_hari_offday += num(row.rm_hari_offday);
+        g.jam_offday_bertugas += num(row.jam_offday_bertugas);
+        g.rm_jam_offday += num(row.rm_jam_offday);
+        g.jumlah_offday += num(row.jumlah_offday);
+
+
+        g.rm_hari_cutiam += num(row.rm_hari_cutiam);
+        g.jam_cutiam_bertugas += num(row.jam_cutiam_bertugas);
+        g.rm_jam_cutiam += num(row.rm_jam_cutiam);
+        g.jumlah_cutiam += num(row.jumlah_cutiam);
+
+
+        g.jam_tampungan += num(row.jam_tampungan);
+        g.rm_klm_tampungan += num(row.rm_klm_tampungan);
+
+
+        g.jam_klm_wajib += num(row.jam_klm_wajib);
+        g.rm_klm_wajib += num(row.rm_klm_wajib);
+
+
+        g.jam_klm_mc += num(row.jam_klm_mc);
+        g.rm_klm_mc += num(row.rm_klm_mc);
+
+
+        g.jam_klm_cuti_tahun += num(row.jam_klm_cuti_tahun);
+        g.rm_klm_cuti_tahun += num(row.rm_klm_cuti_tahun);
+
+
+        g.jam_klm_cuti_ehsan += num(row.jam_klm_cuti_ehsan);
+        g.rm_klm_cuti_ehsan += num(row.rm_klm_cuti_ehsan);
+
+
+        g.jam_klm_eskot += num(row.jam_klm_eskot);
+        g.rm_klm_eskot += num(row.rm_klm_eskot);
+
+
+        g.jam_klm_tambahan += num(row.jam_klm_tambahan);
+        g.rm_klm_tambahan += num(row.rm_klm_tambahan);
+
+
+        g.jam_klm_kursus += num(row.jam_klm_kursus);
+        g.rm_klm_kursus += num(row.rm_klm_kursus);
+
+
+        g.jam_klm_cuti_ganti += num(row.jam_klm_cuti_ganti);
+        g.rm_klm_cuti_ganti += num(row.rm_klm_cuti_ganti);
+
+
+        g.jam_klm_off += num(row.jam_klm_off);
+        g.rm_klm_off += num(row.rm_klm_off);
+
+
+        // ------------------------------------------------
+        // HARI OFFDAY
+        // ------------------------------------------------
+
+        if (row.hari_offday_bertugas) {
+
+            String(row.hari_offday_bertugas)
+                .split(",")
+                .map(x => x.trim())
+                .filter(Boolean)
+                .forEach(x => g.hari_offday_bertugas.add(x));
+        }
+
+
+        // ------------------------------------------------
+        // HARI CUTI AM
+        // ------------------------------------------------
+
+        if (row.hari_cutiam_bertugas) {
+
+            String(row.hari_cutiam_bertugas)
+                .split(",")
+                .map(x => x.trim())
+                .filter(Boolean)
+                .forEach(x => g.hari_cutiam_bertugas.add(x));
+        }
+
+    });
+
+
+    const data = Array.from(grouped.values());
+
+
+    console.log("Jumlah anggota selepas GROUP BY no_skb:", data.length);
+    console.log("Data grouped:", data);
+
+
+    // --------------------------------------------------
+    // JUMLAH RM RASMI
+    // --------------------------------------------------
+
+    let jumlahRM = 0;
+
+
+    data.forEach(g => {
+
+        // Jumlah semua komponen RM
+        jumlahRM += g.rm_klm_hari_biasa;
+        jumlahRM += g.rm_hari_offday;
+        jumlahRM += g.rm_jam_offday;
+        jumlahRM += g.rm_hari_cutiam;
+        jumlahRM += g.rm_jam_cutiam;
+        jumlahRM += g.rm_klm_tampungan;
+        jumlahRM += g.rm_klm_wajib;
+        jumlahRM += g.rm_klm_mc;
+        jumlahRM += g.rm_klm_cuti_tahun;
+        jumlahRM += g.rm_klm_cuti_ehsan;
+        jumlahRM += g.rm_klm_eskot;
+        jumlahRM += g.rm_klm_tambahan;
+        jumlahRM += g.rm_klm_kursus;
+        jumlahRM += g.rm_klm_cuti_ganti;
+        jumlahRM += g.rm_klm_off;
+
+    });
+
+
+    // --------------------------------------------------
+    // UPDATE RINGKASAN
+    // --------------------------------------------------
+
+    if (info) {
+        info.textContent =
+            `${bulan || data[0]?.bulan || "-"} / ${tahun || data[0]?.tahun || "-"}`;
+    }
+
+    if (anggotaEl) {
+        anggotaEl.textContent =
+            data.length.toLocaleString("ms-MY");
+    }
+
+    if (rekodEl) {
+        rekodEl.textContent =
+            rows.length.toLocaleString("ms-MY");
+    }
+
+    if (totalEl) {
+        totalEl.textContent = rm(jumlahRM);
+    }
+
+    if (footer) {
+        footer.textContent = rm(jumlahRM);
+    }
+
+
+    // --------------------------------------------------
+    // PAPAR TABLE
+    // --------------------------------------------------
+
+    tbody.innerHTML = "";
+
+
+    data.forEach((g, index) => {
+
+        const hariOff =
+            Array.from(g.hari_offday_bertugas).join(", ");
+
+        const hariCuti =
+            Array.from(g.hari_cutiam_bertugas).join(", ");
+
+
+        const tr = document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>${index + 1}</td>
+
+            <td>${esc(g.bulan)}</td>
+            <td>${esc(g.tahun)}</td>
+
+            <td>${esc(g.kawasan)}</td>
+            <td>${esc(g.unit)}</td>
+            <td>${esc(g.pos)}</td>
+
+            <td>${esc(g.no_skb)}</td>
+
+            <td>${esc(g.nama_anggota)}</td>
+
+            <td>${esc(g.no_anggota)}</td>
+
+            <td>${esc(g.ketua_unit)}</td>
+
+            <td>${esc(g.nama_ketua_pos)}</td>
+
+
+            <td>${g.jam_kerja.toFixed(2)}</td>
+            <td>${g.jam_klm.toFixed(2)}</td>
+
+
+            <td>${rm(g.rm_klm_hari_biasa)}</td>
+
+
+            <td>${esc(hariOff || "-")}</td>
+            <td>${rm(g.rm_hari_offday)}</td>
+            <td>${g.jam_offday_bertugas.toFixed(2)}</td>
+            <td>${rm(g.rm_jam_offday)}</td>
+            <td>${g.jumlah_offday.toFixed(2)}</td>
+
+
+            <td>${esc(hariCuti || "-")}</td>
+            <td>${rm(g.rm_hari_cutiam)}</td>
+            <td>${g.jam_cutiam_bertugas.toFixed(2)}</td>
+            <td>${rm(g.rm_jam_cutiam)}</td>
+            <td>${g.jumlah_cutiam.toFixed(2)}</td>
+
+
+            <td>${g.jam_tampungan.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_tampungan)}</td>
+
+
+            <td>${g.jam_klm_wajib.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_wajib)}</td>
+
+
+            <td>${g.jam_klm_mc.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_mc)}</td>
+
+
+            <td>${g.jam_klm_cuti_tahun.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_cuti_tahun)}</td>
+
+
+            <td>${g.jam_klm_cuti_ehsan.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_cuti_ehsan)}</td>
+
+
+            <td>${g.jam_klm_eskot.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_eskot)}</td>
+
+
+            <td>${g.jam_klm_tambahan.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_tambahan)}</td>
+
+
+            <td>${g.jam_klm_kursus.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_kursus)}</td>
+
+
+            <td>${g.jam_klm_cuti_ganti.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_cuti_ganti)}</td>
+
+
+            <td>${g.jam_klm_off.toFixed(2)}</td>
+            <td>${rm(g.rm_klm_off)}</td>
+
+        `;
+
+
+        tbody.appendChild(tr);
+
+    });
+
+
+    console.log("Modal selesai diisi.");
+    console.log("Jumlah RM:", jumlahRM);
+
+}
+
+    
+
 function tutupModalJumlahRM() {
 
     const modal = document.getElementById("modalJumlahRM");
