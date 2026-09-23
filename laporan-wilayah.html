@@ -2223,9 +2223,480 @@ document.getElementById(
             jumlahRM
         );
 
+
+    
+}
+
+/* =====================================================
+   INFO DOWNLOAD EXCEL
+===================================================== */
+
+const filterBulan =
+    document.getElementById(
+        "filterBulan"
+    );
+
+const filterTahun =
+    document.getElementById(
+        "filterTahun"
+    );
+
+const infoBulan =
+    document.getElementById(
+        "infoExcelBulan"
+    );
+
+const infoTahun =
+    document.getElementById(
+        "infoExcelTahun"
+    );
+
+const infoRekod =
+    document.getElementById(
+        "infoExcelRekod"
+    );
+
+
+if(infoBulan){
+
+    infoBulan.textContent =
+        filterBulan?.value ||
+        "-";
+
 }
 
 
+if(infoTahun){
+
+    infoTahun.textContent =
+        filterTahun?.value ||
+        "-";
+
+}
+
+
+if(infoRekod){
+
+    infoRekod.textContent =
+        rows.length.toLocaleString(
+            "ms-MY"
+        );
+
+}
+
+/* =====================================================
+   DOWNLOAD EXCEL — JADUAL DUTY MENGIKUT BULAN
+===================================================== */
+
+function downloadExcelJadualDuty(){
+
+    /*
+     * DATA YANG DIGUNAKAN:
+     *
+     * semuaDuty
+     *
+     * Ini ialah data yang sudah ditapis
+     * berdasarkan:
+     *
+     * UNIT
+     * POS
+     * BULAN
+     * TAHUN
+     *
+     * Jadi Excel akan sama dengan
+     * laporan yang sedang dipaparkan.
+     */
+
+    const rows =
+        Array.isArray(semuaDuty)
+            ? semuaDuty
+            : [];
+
+
+    if(!rows.length){
+
+        alert(
+            "Tiada rekod jadual_duty untuk bulan yang dipilih."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * BULAN / TAHUN
+     */
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        )?.value ||
+        "Bulan";
+
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        )?.value ||
+        "Tahun";
+
+
+    /*
+     * BINA DATA EXCEL
+     *
+     * Susunan column ikut permintaan.
+     */
+
+    const data =
+        rows.map(row => ({
+
+            "BULAN":
+                row.bulan ?? "",
+
+            "TAHUN":
+                row.tahun ?? "",
+
+
+            "KAWASAN":
+                row.kawasan ?? "",
+
+            "UNIT":
+                row.unit ?? "",
+
+            "POS":
+                row.pos ??
+                row.nama_pos_asal ??
+                "",
+
+
+            "NO SKB":
+                row.no_skb ?? "",
+
+            "NAMA ANGGOTA":
+                row.nama_anggota ?? "",
+
+            "NO ANGGOTA":
+                row.no_anggota ?? "",
+
+
+            "KETUA UNIT":
+                row.ketua_unit ?? "",
+
+            "NAMA KETUA POS":
+                row.nama_ketua_pos ?? "",
+
+
+            "JAM KERJA":
+                row.jam_kerja ?? "",
+
+
+            "JAM KLM":
+                row.jam_klm ?? "",
+
+            "RM KLM HARI BIASA":
+                num(
+                    row.rm_klm_hari_biasa
+                ),
+
+
+            "HARI OFFDAY BERTUGAS":
+                row.hari_offday_bertugas ?? "",
+
+            "RM HARI OFFDAY":
+                num(
+                    row.rm_hari_offday
+                ),
+
+            "JAM OFFDAY BERTUGAS":
+                num(
+                    row.jam_offday_bertugas
+                ),
+
+            "RM JAM OFFDAY":
+                num(
+                    row.rm_jam_offday
+                ),
+
+            "JUMLAH OFFDAY":
+                num(
+                    row.jumlah_offday
+                ),
+
+
+            "HARI CUTIAM BERTUGAS":
+                row.hari_cutiam_bertugas ?? "",
+
+            "RM HARI CUTIAM":
+                num(
+                    row.rm_hari_cutiam
+                ),
+
+            "JAM CUTIAM BERTUGAS":
+                num(
+                    row.jam_cutiam_bertugas
+                ),
+
+            "RM JAM CUTIAM":
+                num(
+                    row.rm_jam_cutiam
+                ),
+
+            "JUMLAH CUTIAM":
+                num(
+                    row.jumlah_cutiam
+                ),
+
+
+            "JAM TAMPUNGAN":
+                num(
+                    row.jam_tampungan
+                ),
+
+            "RM KLM TAMPUNGAN":
+                num(
+                    row.rm_klm_tampungan
+                ),
+
+
+            "JAM KLM WAJIB":
+                num(
+                    row.jam_klm_wajib
+                ),
+
+            "RM KLM WAJIB":
+                num(
+                    row.rm_klm_wajib
+                ),
+
+
+            "JAM KLM MC":
+                num(
+                    row.jam_klm_mc
+                ),
+
+            "RM KLM MC":
+                num(
+                    row.rm_klm_mc
+                ),
+
+
+            "JAM KLM CUTI TAHUN":
+                num(
+                    row.jam_klm_cuti_tahun
+                ),
+
+            "RM KLM CUTI TAHUN":
+                num(
+                    row.rm_klm_cuti_tahun
+                ),
+
+
+            "JAM KLM CUTI EHSAN":
+                num(
+                    row.jam_klm_cuti_ehsan
+                ),
+
+            "RM KLM CUTI EHSAN":
+                num(
+                    row.rm_klm_cuti_ehsan
+                ),
+
+
+            "JAM KLM ESKOT":
+                num(
+                    row.jam_klm_eskot
+                ),
+
+            "RM KLM ESKOT":
+                num(
+                    row.rm_klm_eskot
+                ),
+
+
+            "JAM KLM TAMBAHAN":
+                num(
+                    row.jam_klm_tambahan
+                ),
+
+            "RM KLM TAMBAHAN":
+                num(
+                    row.rm_klm_tambahan
+                ),
+
+
+            "JAM KLM KURSUS":
+                num(
+                    row.jam_klm_kursus
+                ),
+
+            "RM KLM KURSUS":
+                num(
+                    row.rm_klm_kursus
+                ),
+
+
+            "JAM KLM CUTI GANTI":
+                num(
+                    row.jam_klm_cuti_ganti
+                ),
+
+            "RM KLM CUTI GANTI":
+                num(
+                    row.rm_klm_cuti_ganti
+                ),
+
+
+            "JAM KLM OFF":
+                num(
+                    row.jam_klm_off
+                ),
+
+            "RM KLM OFF":
+                num(
+                    row.rm_klm_off
+                )
+
+        }));
+
+
+    /*
+     * WORKSHEET
+     */
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(
+            data
+        );
+
+
+    /*
+     * LEBAR COLUMN
+     */
+
+    worksheet["!cols"] = [
+
+        { wch: 14 }, // BULAN
+        { wch: 10 }, // TAHUN
+
+        { wch: 22 }, // KAWASAN
+        { wch: 22 }, // UNIT
+        { wch: 28 }, // POS
+
+        { wch: 16 }, // NO SKB
+        { wch: 38 }, // NAMA
+        { wch: 18 }, // NO ANGGOTA
+
+        { wch: 30 }, // KETUA UNIT
+        { wch: 30 }, // KETUA POS
+
+        { wch: 15 }, // JAM KERJA
+        { wch: 15 }, // JAM KLM
+        { wch: 20 }, // RM BIASA
+
+        { wch: 24 }, // HARI OFF
+        { wch: 18 }, // RM HARI OFF
+        { wch: 22 }, // JAM OFF
+        { wch: 18 }, // RM JAM OFF
+        { wch: 18 }, // JUMLAH OFF
+
+        { wch: 24 }, // HARI CUTI
+        { wch: 18 }, // RM HARI CUTI
+        { wch: 22 }, // JAM CUTI
+        { wch: 18 }, // RM JAM CUTI
+        { wch: 18 }, // JUMLAH CUTI
+
+        { wch: 18 }, // JAM TAMPUNGAN
+        { wch: 22 }, // RM TAMPUNGAN
+
+        { wch: 18 }, // JAM WAJIB
+        { wch: 18 }, // RM WAJIB
+
+        { wch: 18 }, // JAM MC
+        { wch: 18 }, // RM MC
+
+        { wch: 22 }, // JAM CUTI TAHUN
+        { wch: 22 }, // RM CUTI TAHUN
+
+        { wch: 22 }, // JAM CUTI EHSAN
+        { wch: 22 }, // RM CUTI EHSAN
+
+        { wch: 18 }, // JAM ESKOT
+        { wch: 18 }, // RM ESKOT
+
+        { wch: 22 }, // JAM TAMBAHAN
+        { wch: 22 }, // RM TAMBAHAN
+
+        { wch: 18 }, // JAM KURSUS
+        { wch: 18 }, // RM KURSUS
+
+        { wch: 22 }, // JAM CUTI GANTI
+        { wch: 22 }, // RM CUTI GANTI
+
+        { wch: 18 }, // JAM OFF
+        { wch: 18 }  // RM OFF
+
+    ];
+
+
+    /*
+     * WORKBOOK
+     */
+
+    const workbook =
+        XLSX.utils.book_new();
+
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "jadual_duty"
+    );
+
+
+    /*
+     * NAMA FAIL
+     */
+
+    const namaBulan =
+        String(bulan)
+            .replace(
+                /[\\/:*?"<>|]/g,
+                ""
+            )
+            .replace(
+                /\s+/g,
+                "_"
+            );
+
+
+    const namaTahun =
+        String(tahun)
+            .replace(
+                /[\\/:*?"<>|]/g,
+                ""
+            );
+
+
+    const namaFail =
+        `jadual_duty_${namaBulan}_${namaTahun}.xlsx`;
+
+
+    /*
+     * DOWNLOAD
+     */
+
+    XLSX.writeFile(
+        workbook,
+        namaFail
+    );
+
+}
+
+
+
+
+    
 /* =====================================================
    KAD KLM
 ===================================================== */
@@ -4241,24 +4712,84 @@ Jana Laporan
 </div>
 
 
+
 <div
     class="glass glass-card rounded-2xl p-5"
 >
 
-<div
-    class="text-teal-400 text-sm font-semibold"
->
-    Jumlah RM
+    <div class="flex items-center justify-between">
+
+        <div class="text-teal-400 text-sm font-semibold">
+            Jumlah RM
+        </div>
+
+        <i class="fas fa-file-invoice-dollar text-teal-400"></i>
+
+    </div>
+
+
+    <!-- JUMLAH RM -->
+
+    <div
+        id="cardJumlahRM"
+        class="text-3xl font-bold text-teal-400 mt-2"
+    >
+        RM 0.00
+    </div>
+
+
+    <!-- INFO BULAN -->
+
+    <div
+        class="text-xs text-slate-400 mt-2"
+    >
+
+        <span id="infoExcelBulan">
+            -
+        </span>
+
+        <span class="mx-1">
+            /
+        </span>
+
+        <span id="infoExcelTahun">
+            -
+        </span>
+
+    </div>
+
+
+    <!-- JUMLAH REKOD -->
+
+    <div
+        class="text-xs text-slate-500 mt-1"
+    >
+
+        <span id="infoExcelRekod">
+            0
+        </span>
+
+        rekod jadual_duty
+
+    </div>
+
+
+    <!-- BUTTON DOWNLOAD -->
+
+    <button
+        type="button"
+        onclick="downloadExcelJadualDuty()"
+        class="w-full mt-4 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2"
+    >
+
+        <i class="fas fa-file-excel"></i>
+
+        Download Excel
+
+    </button>
+
 </div>
 
-<div
-    id="cardJumlahRM"
-    class="text-4xl font-bold text-teal-400 mt-2"
->
-    RM 0.00
-</div>
-
-</div>
 
 
 </div>
