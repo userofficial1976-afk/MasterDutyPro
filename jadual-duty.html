@@ -1278,7 +1278,10 @@ function kiraSemuaRM() {
 
       const anggota = semuaAnggota.find(a => String(a.no_skb) === String(noSkb));
       const duty = semuaKodDuty.find(i => normalisasi(i.unit) === normalisasi(unit) && normalisasi(i.kod) === normalisasi(kodDuty));
-      const tempatKerja = semuaKodTempatKerja.find(i => normalisasi(i.kod_tempat_kerja) === normalisasi(kodTempatKerja));
+      const tempatKerja = semuaKodTempatKerja.find(i =>
+  normalisasi(i.unit) === normalisasi(unit) &&
+  normalisasi(i.kod_tempat_kerja) === normalisasi(kodTempatKerja)
+);
 
       if (!anggota || !duty || !tempatKerja) {
         return paparPopup("Data tidak lengkap. Sila semak semula.", "error");
