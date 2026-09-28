@@ -604,7 +604,7 @@ header.glass{
     pasangEventKodDuty();
     pasangEventPengiraanRM();
     pasangEventHariKhas();
-    
+    pasangEventPosTampungan();
     await muatAnggota();
     isiSenaraiPosTampungan();
     await muatKodDuty();
@@ -1004,6 +1004,39 @@ kiraSemuaRM();
     });
   }
 
+function pasangEventPosTampungan() {
+
+  const posTampungan = document.getElementById("posTampungan");
+
+  if (!posTampungan) return;
+
+  posTampungan.addEventListener("change", function () {
+
+    const posAsal = getValue("posAsal");
+    const posTampung = this.value;
+
+    if (
+      posAsal &&
+      posTampung &&
+      normalisasi(posAsal) === normalisasi(posTampung)
+    ) {
+
+      alert("⚠️ Masukkan Nama Pos Tampungan Selain Nama Pos Asal");
+
+      // Kosongkan semula Pos Tampungan
+      this.value = "";
+
+      // Reset jam dan RM tampungan
+      setValue("jamTampung", 0);
+      setValue("rmTampung", "0.00");
+
+      return;
+    }
+
+  });
+}
+
+  
   function pasangEventPengiraanRM() {
     ["hariOffday","jamOffday","hariCutiam","jamCutiam","jamTampung","jamKlm"].forEach(id => {
       const el = document.getElementById(id);
@@ -1270,6 +1303,18 @@ function kiraSemuaRM() {
       const kodDuty = getValue("kodDuty");
       const kodTempatKerja = getValue("kodTempatKerja");
       const unit = getValue("unitPilihan");
+
+      const posAsal = getValue("posAsal");
+      const posTampungan = getValue("posTampungan");
+
+        if (
+          posAsal &&
+            posTampungan &&
+              normalisasi(posAsal) === normalisasi(posTampungan)
+          ) {
+            alert("⚠️ Masukkan Nama Pos Tampungan Selain Nama Pos Asal");
+          return;
+          }
 
       if (!tarikh) return paparPopup("Sila pilih tarikh duty.", "error");
       if (!noSkb) return paparPopup("Sila pilih nama anggota.", "error");
