@@ -405,6 +405,7 @@ async function isiDropdown(){
 
 }
 
+
 function paparSenaraiTampungan(rows){
 
     const tbody =
@@ -416,34 +417,28 @@ function paparSenaraiTampungan(rows){
 
 
     /*
-     * Hanya rekod yang mempunyai
-     * tampungan.
+     * Guna SEMUA rekod yang mempunyai
+     * nilai JAM atau RM tampungan.
+     *
+     * Sama seperti kiraTampungan():
+     * jam_tampungan
+     * rm_klm_tampungan
      */
-
-const data =
-    rows.filter(
-        row =>
-            String(
-                row.pos_tampungan ||
-                ""
-            ).trim() !== ""
-            &&
-            num(
-                row.jam_tampungan
-            ) > 0
-    );
+    const data =
+        rows.filter(row =>
+            num(row.jam_tampungan) !== 0 ||
+            num(row.rm_klm_tampungan) !== 0
+        );
 
 
     /*
      * Gabungkan mengikut:
      *
-     * POS TAMPUNGAN
-     * SKB
+     * POS TAMPUNGAN + SKB
      *
-     * supaya jumlah bulanan
-     * tidak pecah mengikut duty.
+     * supaya satu anggota di satu
+     * pos tampungan menjadi satu baris.
      */
-
     const map =
         new Map();
 
@@ -453,7 +448,7 @@ const data =
         const posTampungan =
             String(
                 row.pos_tampungan ||
-                ""
+                "-"
             ).trim();
 
         const skb =
@@ -493,9 +488,9 @@ const data =
                             ?.gaji_pokok
                         ),
 
-                    jam:0,
+                    jam: 0,
 
-                    rm:0
+                    rm: 0
 
                 }
             );
@@ -619,6 +614,8 @@ const data =
     }
 
 }
+
+
 /* =====================================================
    UTIL
 ===================================================== */
