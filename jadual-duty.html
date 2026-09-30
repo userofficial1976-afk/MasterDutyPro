@@ -1090,19 +1090,47 @@ function kawalKLMIkutJamKlm() {
 
     const el = document.getElementById(id);
 
-    if (el) {
-      el.disabled = !aktif;
+    if (!el) return;
 
-      // Jika Jam KLM = 0, kosongkan pilihan
-      if (!aktif) {
+    // =========================
+    // JAM KLM = 0
+    // =========================
+    if (!aktif) {
+
+      // Kalau input / number / text
+      if (
+        el.tagName === "INPUT" &&
+        el.type !== "checkbox" &&
+        el.type !== "radio"
+      ) {
+        el.value = "0";
+      }
+
+      // Kalau checkbox / radio
+      if (
+        el.type === "checkbox" ||
+        el.type === "radio"
+      ) {
         el.checked = false;
       }
+
+      // Kalau select
+      if (el.tagName === "SELECT") {
+        el.value = "0";
+      }
+
+      el.disabled = true;
+
+    } else {
+
+      // Jam KLM ada nilai
+      el.disabled = false;
+
     }
 
   });
 
 }
-
   
   
   function pasangEventKodDuty() {
