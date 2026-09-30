@@ -10,6 +10,10 @@
 <!-- TAILWIND -->
 <script src="https://cdn.tailwindcss.com"></script>
 
+<!-- SHEETJS EXCEL -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    
 <!-- TAILWIND CUSTOM COLOR -->
 <script>
 tailwind.config = {
@@ -3738,7 +3742,640 @@ function teksMinggu(){
     `;
 }
 
+/* =========================================================
+   EXCEL — FORMAT KLM MINGGUAN
+   RM TIDAK DIBUNDARKAN
+========================================================= */
 
+function jumlahRMUntukMinggu(rows, minggu){
+
+    const rowsMinggu =
+        rowsUntukMinggu(
+            rows,
+            String(minggu)
+        );
+
+    return rowsMinggu.reduce(
+        (jumlah, row) => {
+
+            return jumlah +
+                num(row.rm_klm_seluruh);
+
+        },
+        0
+    );
+}
+
+
+/* =========================================================
+   DOWNLOAD EXCEL
+========================================================= */
+
+async function downloadExcelKLM(){
+
+    try{
+
+        const bulan =
+            Number(
+                document.getElementById(
+                    "filterBulan"
+                ).value
+            );
+
+        const tahun =
+            Number(
+                document.getElementById(
+                    "filterTahun"
+                ).value
+            );
+
+        const unitFilter =
+            normaliseUnit(
+                document.getElementById(
+                    "filterUnit"
+                ).value
+            );
+
+
+        /*
+        =====================================================
+        AMBIL DATA PENUH BULAN
+        =====================================================
+        */
+
+        const PAGE_SIZE = 1000;
+
+        let semuaData = [];
+
+        let from = 0;
+
+
+        while(true){
+
+            const to =
+                from + PAGE_SIZE - 1;
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("jadual_duty")
+                    .select(`
+                        id,
+                        tarikh,
+                        bulan,
+                        tahun,
+                        unit,
+                        rm_klm_seluruh
+                    `)
+                    .eq(
+                        "tahun",
+                        String(tahun)
+                    )
+                    .range(
+                        from,
+                        to
+                    );
+
+
+            if(error){
+                throw error;
+            }
+
+
+            const batch =
+                data || [];
+
+
+            semuaData =
+                semuaData.concat(
+                    batch
+                );
+
+
+            if(
+                batch.length <
+                PAGE_SIZE
+            ){
+                break;
+            }
+
+
+            from += PAGE_SIZE;
+
+        }
+
+
+        /*
+        =====================================================
+        TAPIS BULAN
+        =====================================================
+        */
+
+        let rows =
+            semuaData.filter(row => {
+
+                const date =
+                    parseTarikh(
+                        row.tarikh
+                    );
+
+
+                if(date){
+
+                    return (
+                        date.year === tahun &&
+                        date.month === bulan
+                    );
+                }
+
+
+                const bulanDb =
+                    String(
+                        row.bulan || ""
+                    )
+                    .trim();
+
+
+                return (
+                    bulanDb === String(bulan)
+                    ||
+                    bulanDb.toLowerCase() ===
+                    SENARAI_BULAN[
+                        bulan - 1
+                    ].toLowerCase()
+                );
+
+            });
+
+
+        /*
+        =====================================================
+        FILTER UNIT
+        =====================================================
+        */
+
+        if(unitFilter){
+
+            rows =
+                rows.filter(
+                    row =>
+                        normaliseUnit(
+                            row.unit
+                        ) === unitFilter
+                );
+
+        }
+
+
+        /*
+        =====================================================
+        GROUP UNIT
+        =====================================================
+        */
+
+        const unitMap =
+            new Map();
+
+
+        rows.forEach(row => {
+
+            const unit =
+                normaliseUnit(
+                    row.unit
+                ) ||
+                "TANPA UNIT";
+
+
+            if(
+                !unitMap.has(unit)
+            ){
+
+                unitMap.set(
+                    unit,
+                    {
+                        unit:unit,
+                        minggu1:0,
+                        minggu2:0,
+                        minggu3:0,
+                        minggu4:0
+                    }
+                );
+
+            }
+
+
+            const item =
+                unitMap.get(unit);
+
+
+            const date =
+                parseTarikh(
+                    row.tarikh
+                );
+
+
+            if(!date){
+                return;
+            }
+
+
+            const minggu =
+                tentukanMinggu(
+                    date.day
+                );
+
+
+            const rm =
+                num(
+                    row.rm_klm_seluruh
+                );
+
+
+            /*
+            ==============================================
+            RM DIAMBIL TERUS DARIPADA DATABASE
+            TIADA Math.round()
+            TIADA toFixed(2)
+            ==============================================
+            */
+
+            if(minggu === 1){
+
+                item.minggu1 += rm;
+
+            }
+
+            else if(minggu === 2){
+
+                item.minggu2 += rm;
+
+            }
+
+            else if(minggu === 3){
+
+                item.minggu3 += rm;
+
+            }
+
+            else if(minggu === 4){
+
+                item.minggu4 += rm;
+
+            }
+
+        });
+
+
+        const unitRows =
+            [...unitMap.values()]
+                .sort(
+                    (a,b) =>
+                        a.unit.localeCompare(
+                            b.unit
+                        )
+                );
+
+
+        /*
+        =====================================================
+        BINA DATA EXCEL
+        =====================================================
+        */
+
+        const excelData = [];
+
+
+        unitRows.forEach(
+            (item,index) => {
+
+                excelData.push({
+
+                    "BIL":
+                        index + 1,
+
+                    "WILAYAH KUANTAN":
+                        item.unit,
+
+                    "JUMLAH KLM MINGGU 1 (RM)":
+                        item.minggu1,
+
+                    "JUMLAH KLM MINGGU 2 (RM)":
+                        item.minggu2,
+
+                    "JUMLAH KLM MINGGU 3 (RM)":
+                        item.minggu3,
+
+                    "JUMLAH KLM MINGGU 4 (RM)":
+                        item.minggu4
+
+                });
+
+            }
+        );
+
+
+        /*
+        =====================================================
+        JUMLAH KESELURUHAN
+        =====================================================
+        */
+
+        const jumlahKeseluruhan =
+            unitRows.reduce(
+                (total,item) => {
+
+                    total.minggu1 +=
+                        item.minggu1;
+
+                    total.minggu2 +=
+                        item.minggu2;
+
+                    total.minggu3 +=
+                        item.minggu3;
+
+                    total.minggu4 +=
+                        item.minggu4;
+
+                    return total;
+
+                },
+                {
+                    minggu1:0,
+                    minggu2:0,
+                    minggu3:0,
+                    minggu4:0
+                }
+            );
+
+
+        excelData.push({
+
+            "BIL":
+                "",
+
+            "WILAYAH TERENGGANU":
+                "JUMLAH KESELURUHAN",
+
+            "JUMLAH KLM MINGGU 1 (RM)":
+                jumlahKeseluruhan.minggu1,
+
+            "JUMLAH KLM MINGGU 2 (RM)":
+                jumlahKeseluruhan.minggu2,
+
+            "JUMLAH KLM MINGGU 3 (RM)":
+                jumlahKeseluruhan.minggu3,
+
+            "JUMLAH KLM MINGGU 4 (RM)":
+                jumlahKeseluruhan.minggu4
+
+        });
+
+
+        /*
+        =====================================================
+        BINA WORKBOOK
+        =====================================================
+        */
+
+        const worksheet =
+            XLSX.utils.json_to_sheet(
+                excelData
+            );
+
+
+        /*
+        =====================================================
+        LEBAR COLUMN
+        =====================================================
+        */
+
+        worksheet["!cols"] = [
+
+            {
+                wch:8
+            },
+
+            {
+                wch:28
+            },
+
+            {
+                wch:28
+            },
+
+            {
+                wch:28
+            },
+
+            {
+                wch:28
+            },
+
+            {
+                wch:28
+            }
+
+        ];
+
+
+        /*
+        =====================================================
+        FORMAT RM
+        =====================================================
+
+        PENTING:
+        0.000000 = 6 tempat perpuluhan
+
+        Contoh:
+        80.950000
+        79.680000
+        86.210000
+
+        Nilai TIDAK dibundarkan kepada 2 perpuluhan.
+        */
+
+        const kolumRM = [
+            "C",
+            "D",
+            "E",
+            "F"
+        ];
+
+
+        for(
+            let rowNo = 2;
+            rowNo <= excelData.length + 1;
+            rowNo++
+        ){
+
+            kolumRM.forEach(
+                kolum => {
+
+                    const cell =
+                        worksheet[
+                            `${kolum}${rowNo}`
+                        ];
+
+
+                    if(
+                        cell &&
+                        typeof cell.v ===
+                        "number"
+                    ){
+
+                        cell.t = "n";
+
+                        cell.z =
+                            "0.000000";
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /*
+        =====================================================
+        HEADER STYLE
+        =====================================================
+        */
+
+        const range =
+            XLSX.utils.decode_range(
+                worksheet["!ref"]
+            );
+
+
+        for(
+            let col =
+                range.s.c;
+
+            col <=
+                range.e.c;
+
+            col++
+        ){
+
+            const cellAddress =
+                XLSX.utils.encode_cell({
+                    r:0,
+                    c:col
+                });
+
+
+            const cell =
+                worksheet[
+                    cellAddress
+                ];
+
+
+            if(cell){
+
+                cell.s = {
+
+                    font:{
+                        bold:true
+                    },
+
+                    alignment:{
+                        horizontal:"center",
+                        vertical:"center"
+                    }
+
+                };
+
+            }
+
+        }
+
+
+        /*
+        =====================================================
+        WORKBOOK
+        =====================================================
+        */
+
+        const workbook =
+            XLSX.utils.book_new();
+
+
+        XLSX.utils.book_append_sheet(
+            workbook,
+            worksheet,
+            "KLM Mingguan"
+        );
+
+
+        /*
+        =====================================================
+        NAMA FAIL
+        =====================================================
+        */
+
+        const namaBulan =
+            SENARAI_BULAN[
+                bulan - 1
+            ]
+            .toUpperCase();
+
+
+        const namaUnit =
+            unitFilter
+                ? "_" + unitFilter.replace(
+                    /\s+/g,
+                    "_"
+                )
+                : "";
+
+
+        const namaFail =
+            `KLM_MINGGUAN_${namaBulan}_${tahun}${namaUnit}.xlsx`;
+
+
+        /*
+        =====================================================
+        DOWNLOAD
+        =====================================================
+        */
+
+        XLSX.writeFile(
+            workbook,
+            namaFail
+        );
+
+
+        toast(
+            "Excel berjaya",
+            `${unitRows.length} unit telah dieksport.`
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "RALAT DOWNLOAD EXCEL:",
+            error
+        );
+
+
+        toast(
+            "Ralat Excel",
+            error.message ||
+            "Gagal menghasilkan fail Excel."
+        );
+
+    }
+
+}
+
+
+
+    
 /* =========================================================
    ADMIN
    ========================================================= */
@@ -3787,23 +4424,36 @@ function paparAdmin(rows){
 
             <div class="table-header">
 
-                <div>
+    <div>
 
-                    <div class="table-title">
-                        Ringkasan KLM Mengikut Unit
-                    </div>
+        <div class="table-title">
+            Ringkasan KLM Mengikut Unit
+        </div>
 
-                    <div class="table-subtitle">
-                        ${escapeHtml(teksMinggu())}
-                    </div>
+        <div class="table-subtitle">
+            ${escapeHtml(teksMinggu())}
+        </div>
 
-                </div>
+    </div>
 
-                <div class="table-subtitle">
-                    ${units.length} unit
-                </div>
+    <div class="flex items-center gap-2">
 
-            </div>
+        <div class="table-subtitle">
+            ${units.length} unit
+        </div>
+
+        <button
+            class="btn btn-primary"
+            id="btnDownloadExcel"
+            type="button"
+        >
+            <i class="fas fa-file-excel mr-2"></i>
+            DOWNLOAD EXCEL
+        </button>
+
+    </div>
+
+</div>
 
             <div>
     `;
@@ -4920,6 +5570,26 @@ document.addEventListener(
     "DOMContentLoaded",
     init
 );
+
+/* =====================================================
+   EVENT DOWNLOAD EXCEL
+===================================================== */
+
+const btnExcel =
+    document.getElementById(
+        "btnDownloadExcel"
+    );
+
+if(btnExcel){
+
+    btnExcel.addEventListener(
+        "click",
+        downloadExcelKLM
+    );
+
+}
+
+    
 </script>
 
 </body>
