@@ -923,6 +923,25 @@ else {
     });
   }
 
+document
+  .getElementById("kodTempatKerja")
+  ?.addEventListener("change", function () {
+
+    kawalTampunganIkutJamKlm();
+
+    kiraSemuaRM();
+
+  });
+
+document
+  .getElementById("posAsal")
+  ?.addEventListener("change", function () {
+
+    kawalTampunganIkutJamKlm();
+
+  });
+
+  
   function pasangEventAnggota() {
     const select = document.getElementById("anggota");
     if (!select) return;
@@ -975,27 +994,70 @@ function kawalTampunganIkutJamKlm() {
 
   const posTampungan = document.getElementById("posTampungan");
   const jamTampung = document.getElementById("jamTampung");
+  const kodTempatKerjaSelect = document.getElementById("kodTempatKerja");
 
-  if (!posTampungan || !jamTampung) return;
+  if (!posTampungan || !jamTampung || !kodTempatKerjaSelect) return;
 
   const unit = getValue("unitPilihan");
-  const kod = getValue("kodDuty");
+  const kodDuty = getValue("kodDuty");
+  const kodTempatKerja = getValue("kodTempatKerja");
+  const posAsal = getValue("posAsal");
 
-  const data = semuaKodDuty.find(
+  // ==========================================
+  // 1. SEMAK JAM KLM DALAM KOD WAKTU KERJA
+  // ==========================================
+
+  const dataDuty = semuaKodDuty.find(
     i =>
       normalisasi(i.unit) === normalisasi(unit) &&
-      normalisasi(i.kod) === normalisasi(kod)
+      normalisasi(i.kod) === normalisasi(kodDuty)
   );
 
-  const jamKlmKod = Number(data?.jam_klm || 0);
+  const jamKlmKod = Number(dataDuty?.jam_klm || 0);
 
   const adaKlm = jamKlmKod > 0;
 
-  posTampungan.disabled = !adaKlm;
-  jamTampung.disabled = !adaKlm;
 
-  // Jika Kod Waktu Kerja tiada KLM
-  if (!adaKlm) {
+  // ==========================================
+  // 2. SEMAK KOD TEMPAT KERJA = POS ASAL
+  // ==========================================
+
+  const dataTempatKerja = semuaKodTempatKerja.find(
+    i =>
+      normalisasi(i.unit) === normalisasi(unit) &&
+      normalisasi(i.kod_tempat_kerja) === normalisasi(kodTempatKerja)
+  );
+
+  const namaTempatKerja =
+    normalisasi(dataTempatKerja?.nama_tempat_kerja || "");
+
+  const samaDenganPosAsal =
+    namaTempatKerja !== "" &&
+    normalisasi(posAsal) !== "" &&
+    namaTempatKerja === normalisasi(posAsal);
+
+
+  // ==========================================
+  // 3. TENTUKAN STATUS TAMPUNGAN
+  // ==========================================
+
+  const bolehTampungan =
+    adaKlm && !samaDenganPosAsal;
+
+
+  // ==========================================
+  // 4. ENABLE / DISABLE
+  // ==========================================
+
+  posTampungan.disabled = !bolehTampungan;
+  jamTampung.disabled = !bolehTampungan;
+
+
+  // ==========================================
+  // 5. JIKA TAK BOLEH TAMPUNGAN
+  // ==========================================
+
+  if (!bolehTampungan) {
 
     posTampungan.value = "";
 
@@ -1003,8 +1065,8 @@ function kawalTampunganIkutJamKlm() {
     setValue("rmTampung", "0.00");
 
   }
-}
 
+}
 
 
   
@@ -1207,6 +1269,10 @@ function kiraSemuaRM() {
     return;
   }
 
+
+  
+
+  
   const hariOffday = document.getElementById("hariOffday");
   const hariCutiam = document.getElementById("hariCutiam");
 
@@ -1365,7 +1431,7 @@ function kiraSemuaRM() {
 
       const posAsal = getValue("posAsal");
       const posTampungan = getValue("posTampungan");
-
+      const jamTampung = Number(getValue("jamTampung") || 0);
         if (
           posAsal &&
             posTampungan &&
@@ -1374,7 +1440,22 @@ function kiraSemuaRM() {
             alert("⚠️ Masukkan Nama Pos Tampungan Selain Nama Pos Asal");
           return;
           }
+      // ==========================================
+// WAJIB ISI JAM KLM JIKA POS TAMPUNGAN DIPILIH
+// ==========================================
 
+if (posTampungan && jamTampung <= 0) {
+
+  alert(
+    "⚠️ Sila masukkan Jam KLM Tampungan kerana Pos Tampungan telah dipilih."
+  );
+
+  document.getElementById("jamTampung")?.focus();
+
+  return;
+}
+
+      
       if (!tarikh) return paparPopup("Sila pilih tarikh duty.", "error");
       if (!noSkb) return paparPopup("Sila pilih nama anggota.", "error");
       if (!kodDuty) return paparPopup("Sila pilih Kod Duty.", "error");
