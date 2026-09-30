@@ -418,17 +418,31 @@ header.glass{
           </select>
         </div>
 
-        <div>
-          <label>Pos Tampungan (Pilih Pos jika ada KLM di Pos Tampungan)</label>
-          <select id="posTampungan">
-            <option value="">-- Pilih Pos Tampungan --</option>
-          </select>
-        </div>
+<div>
+  <label>
+    Pos Tampungan
+    <span class="text-xs text-slate-400">
+      (Pilih Pos jika ada KLM di Pos Tampungan)
+    </span>
+  </label>
 
-        <div>
-          <label>Masukkan Jam KLM Tampungan Sahaja</label>
-          <input type="number" id="jamTampung" min="0" step="0.5" value="0">
-        </div>
+  <select id="posTampungan" disabled>
+    <option value="">-- Pilih Pos Tampungan --</option>
+  </select>
+</div>
+
+<div>
+  <label>Masukkan Jam KLM Tampungan Sahaja</label>
+
+  <input
+    type="number"
+    id="jamTampung"
+    min="0"
+    step="0.5"
+    value="0"
+    disabled
+  >
+</div>
 
         <div>
           <label>RM Tampungan</label>
@@ -610,7 +624,7 @@ header.glass{
     await muatKodDuty();
     await muatKodTempatKerja();
     isiSenaraiFilterKetuaUnit();
-
+    kawalTampunganIkutJamKlm();
     // Auto set mengikut peranan
     await applyRoleAccess();
   });
@@ -957,6 +971,43 @@ else {
     });
   }
 
+function kawalTampunganIkutJamKlm() {
+
+  const posTampungan = document.getElementById("posTampungan");
+  const jamTampung = document.getElementById("jamTampung");
+
+  if (!posTampungan || !jamTampung) return;
+
+  const unit = getValue("unitPilihan");
+  const kod = getValue("kodDuty");
+
+  const data = semuaKodDuty.find(
+    i =>
+      normalisasi(i.unit) === normalisasi(unit) &&
+      normalisasi(i.kod) === normalisasi(kod)
+  );
+
+  const jamKlmKod = Number(data?.jam_klm || 0);
+
+  const adaKlm = jamKlmKod > 0;
+
+  posTampungan.disabled = !adaKlm;
+  jamTampung.disabled = !adaKlm;
+
+  // Jika Kod Waktu Kerja tiada KLM
+  if (!adaKlm) {
+
+    posTampungan.value = "";
+
+    setValue("jamTampung", 0);
+    setValue("rmTampung", "0.00");
+
+  }
+}
+
+
+
+  
   function pasangEventKodDuty() {
     const select = document.getElementById("kodDuty");
     if (!select) return;
@@ -964,9 +1015,17 @@ else {
       const unit = getValue("unitPilihan");
       const kod = this.value;
       const data = semuaKodDuty.find(i => normalisasi(i.unit) === normalisasi(unit) && normalisasi(i.kod) === normalisasi(kod));
-      if (!data) { setValue("jamKerja",""); setValue("jamKlm",""); return; }
-jamKlmAsal = Number(data.jam_klm || 0);
+      if (!data) {
 
+  setValue("jamKerja", "");
+  setValue("jamKlm", "");
+
+  kawalTampunganIkutJamKlm();
+
+  return;
+}
+jamKlmAsal = Number(data.jam_klm || 0);
+kawalTampunganIkutJamKlm();
 setValue("jamKerja", data.jam_kerja);
 
 const offday = document.getElementById("hariOffday");
