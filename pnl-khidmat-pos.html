@@ -1,897 +1,905 @@
 <!DOCTYPE html>
 <html lang="ms">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PNL Khidmat Pos - Master Duty Pro</title>
+    <title>PNL Khidmat Pos - Master Duty Pro</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
 
-<script>
-tailwind.config = {
-    theme: {
-        extend: {
-            colors: {
-                teal: {
-                    450: '#2dd4bf',
-                    550: '#14b8a6',
-                    650: '#0d9488',
-                    750: '#0f766e'
+    <!-- Google Font -->
+    https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            450: '#2dd4bf',
+                            550: '#14b8a6',
+                            650: '#0d9488',
+                            750: '#0f766e'
+                        }
+                    },
+                    fontFamily: {
+                        sans: [
+                            'Inter',
+                            'Segoe UI',
+                            'system-ui',
+                            'sans-serif'
+                        ]
+                    }
                 }
-            },
-            fontFamily: {
-                sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif']
+            }
+        };
+    </script>
+
+    <style>
+        body {
+            background: #0b1220;
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(45, 212, 191, 0.12);
+        }
+
+        /* ================================
+           SIDEBAR
+        ================================ */
+
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover {
+            color: #2dd4bf;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(
+                90deg,
+                rgba(20, 184, 166, 0.20),
+                transparent
+            );
+
+            border-left: 3px solid #14b8a6;
+            color: #2dd4bf;
+        }
+
+        /* ================================
+           PNL TABLE
+        ================================ */
+
+        .report-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .report-table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 1120px;
+        }
+
+        .report-table th,
+        .report-table td {
+            border: 1px solid #334155;
+            padding: 7px 9px;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+        .report-table th {
+            background: #1e293b;
+            font-weight: 600;
+        }
+
+        .report-table td {
+            background: rgba(15, 23, 42, 0.45);
+        }
+
+        .sticky-label {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            background: #101a2c !important;
+        }
+
+        .strong-row td {
+            font-weight: 700;
+            background: rgba(20, 184, 166, 0.08);
+        }
+
+        /* ================================
+           MOBILE NAV
+        ================================ */
+
+        .mobile-bottom {
+            display: none;
+        }
+
+        @media (max-width: 1023px) {
+
+            body {
+                padding-bottom: 80px;
+            }
+
+            .mobile-bottom {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+
+                width: 100%;
+                height: 70px;
+
+                background: rgba(15, 23, 42, 0.96);
+                backdrop-filter: blur(20px);
+
+                border-top: 1px solid rgba(45, 212, 191, 0.25);
+
+                box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.4);
+
+                z-index: 9999;
+            }
+
+            .mobile-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                gap: 4px;
+
+                color: #cbd5e1;
+
+                text-decoration: none;
+                font-size: 10px;
+
+                transition: all 0.2s ease;
+            }
+
+            .mobile-nav-item i {
+                font-size: 18px;
+            }
+
+            .mobile-nav-item.active {
+                color: #2dd4bf;
+            }
+
+            .mobile-nav-item:hover {
+                color: #2dd4bf;
+                transform: translateY(-2px);
             }
         }
-    }
-}
-</script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        /* ================================
+           PRINT
+        ================================ */
 
-body {
-    background: #0b1220;
-}
+        @media print {
 
-.glass {
-    background: rgba(15, 23, 42, 0.72);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(45, 212, 191, 0.12);
-}
+            aside,
+            header,
+            .mobile-bottom,
+            .no-print {
+                display: none !important;
+            }
 
-.sidebar-link {
-    transition: all .2s ease;
-}
+            body {
+                background: white !important;
+                color: black !important;
+                padding-bottom: 0 !important;
+            }
 
-.sidebar-link:hover {
-    color: #2dd4bf;
-    background: rgba(255,255,255,.05);
-}
+            main {
+                margin-left: 0 !important;
+            }
 
-.sidebar-link.active {
-    background: linear-gradient(
-        90deg,
-        rgba(20, 184, 166, 0.20),
-        transparent
-    );
+            .glass {
+                background: white !important;
+                border: 1px solid #cccccc !important;
+                color: black !important;
+                box-shadow: none !important;
+            }
 
-    border-left: 3px solid #14b8a6;
-    color: #2dd4bf;
-}
+            .report-table th,
+            .report-table td {
+                color: black !important;
+                border-color: #777777 !important;
+            }
 
-/* ================================
-   PNL TABLE
-================================ */
+            .report-table th,
+            .sticky-label {
+                background: #eeeeee !important;
+            }
+        }
+    </style>
+</head>
 
-.report-scroll {
-    ov*rflow-x: auto;
-    -webkit-overflo*-scrolling: touch;
-}
+<body class="font-sans text-slate-200">
 
-.report-tabl* {
-    border-collapse: collapse;
-*   width: 100%;
-    min-width: 112*px;
-}
+<div class="flex min-h-screen">
 
-.report-table th,
-.report-t*ble td {
-    border: 1px solid #33*155;
-    padding: 7px 9px;
-    whi*e-space: nowrap;
-    font-size: 12*x;
-}
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-.report-table th {
-    backg*ound: #1e293b;
-}
+    <aside
+        class="w-72 glass border-r border-teal-550/10
+               fixed h-full z-40 hidden lg:block overflow-y-auto"
+    >
 
-.sticky-label {
-*   position: sticky;
-    left: 0;
-    z-index: 10;
-    background: #101a2c !important;
-}
+        <div class="p-6 h-full flex flex-col">
 
-.strong-row td {
-    font-weight: 700;
-    background: rgba(20,184,166,.08);
-}
+            <!-- BRAND -->
 
-/* ================================
-   MOBILE NAV
-================================ */
+            <div class="flex items-center gap-3 mb-8">
 
-.mobile-bottom {
-    display: n*ne;
-}
+                <div class="w-12 h-12 flex items-center justify-center">
+                    <img
+                        src="logomdp.png"
+                        alt="Master Duty Pro"
+                        class="w-12 h-12 object-contain"
+                    >
+                </div>
 
-@media(max-width:1023px) {
-*    body {
-        padding-bottom:*80px;
-    }
+                <div>
+                    <h1 class="font-bold text-white text-lg leading-tight">
+                        Master Duty Pro
+                    </h1>
 
-    .mobile-bottom {
-*       display: flex;
-        posi*ion: fixed;
+                    <p class="text-xs text-teal-450">
+                        Wilayah Terengganu
+                    </p>
+                </div>
 
-        left: 0;
-    *   right: 0;
-        bottom: 0;
+            </div>
 
- *      height: 70px;
 
-        backg*ound: rgba(15,23,42,.96);
-        *ackdrop-filter: blur(20px);
+            <!-- USER INFO -->
 
-     *  border-top: 1px solid rgba(45,21*,191,.25);
-
-        z-index: 9999;*
-        justify-content: space-ar*und;
-        align-items: center;
-*   }
-
-    .mobile-nav-item {
-     *  display: flex;
-
-        flex-dir*ction: column;
-        align-items* center;
-
-        gap: 4px;
-
-     *  color: #cbd5e1;
-
-        font-si*e: 10px;
-
-        text-decoration: none;
-
-        transition: all .2s ease;
-    }
-
-    .mobile-nav-item i {
-        font-size: 18px;
-    }
-
-    .mobile-nav-item.active {
-        color: #2dd4bf;
-    }
-
-    .mobile-nav-item:hover {
-        color: #2dd4bf;
-        transform: translateY(-2px);
-    }
-}
-
-/* ================================
-   PRINT
-================================ */
-
-@media print {
-
-    aside*
-    header,
-    .mobile-bottom,
- *  .no-print {
-        display: non* !important;
-    }
-
-    body {
-   *    background: white !important;
-*       color: black !important;
-  * }
-
-    main {
-        margin-left* 0 !important;
-    }
-
-    .glass {*        background: white !importa*t;
-        border: 1px solid #ccc *important;
-        color: black !i*portant;
-        box-shadow: none *important;
-    }
-
-    .report-tabl* th,
-    .report-table td {
-      * color: black !important;
-        *order-color: #777 !important;
-    *
-
-    .report-table th,
-    .stick*-label {
-        background: #eee *important;
-    }
-}
-
-</style>
-</hea*>
-
-<body class="font-sans text-sla*e-200">
-
-<div class="flex min-h-sc*een">
-
-<!-- ======================*==============================
-   * SIDEBAR
-=========================*=========================== -->
-
-<*side
-    class="w-72 glass border-* border-teal-550/10
-           fix*d h-full z-40 hidden lg:block over*low-y-auto"
->
-
-<div class="p-6 h-f*ll flex flex-col">
-
-    <!-- BRAND*-->
-
-    <div class="flex items-ce*ter gap-3 mb-8">
-
-        <div cla*s="w-12 h-12 flex items-center jus*ify-center">
-
-            <img
-   *            src="logomdp.png"
-    *           alt="Master Duty Pro"
- *              class="w-12 h-12 obj*ct-contain"
+            <div
+                class="mb-8 p-3 rounded-xl
+                       bg-white/5 border border-white/10"
             >
 
-       *</div>
+                <p
+                    id="sidebarUserName"
+                    class="text-sm font-semibold text-white truncate"
+                >
+                    -
+                </p>
 
-        <div>
+                <p
+                    id="sidebarUserJawatan"
+                    class="text-xs text-teal-400 mt-1"
+                >
+                    -
+                </p>
 
-           *<h1 class="font-bold text-white te*t-lg">
-                Master Duty*Pro
-            </h1>
+            </div>
 
-           *<p class="text-xs text-teal-450">
-*               Wilayah Terengganu
-*           </p>
+
+            <!-- NAVIGATION -->
+
+            <nav class="space-y-1 flex-1">
+
+                <p
+                    class="text-xs font-semibold text-slate-500
+                           uppercase tracking-wider px-3 mb-3"
+                >
+                    Menu Utama
+                </p>
+
+
+                <a
+                    href="dashboard.html"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-slate-400"
+                >
+                    <i class="fas fa-chart-pie w-5"></i>
+                    Dashboard
+                </a>
+
+
+                <a
+                    href="pengurusan-anggota.html"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-slate-400"
+                >
+                    <i class="fas fa-users w-5"></i>
+                    Pengurusan Anggota
+                </a>
+
+
+                <a
+                    href="kod-duty.html"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-slate-400"
+                >
+                    <i class="fas fa-code w-5"></i>
+                    Kod Waktu Kerja
+                </a>
+
+
+                <a
+                    href="kod-tempat-kerja.html"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-slate-400"
+                >
+                    <i class="fas fa-map-marker-alt w-5"></i>
+                    Kod Tempat Kerja
+                </a>
+
+
+                <a
+                    href="jadual-duty.html"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-slate-400"
+                >
+                    <i class="fas fa-calendar-check w-5"></i>
+                    Pengisian Jadual Tugas
+                </a>
+
+
+                <!-- LAPORAN -->
+
+                <p
+                    class="text-xs font-semibold text-slate-500
+                           uppercase tracking-wider px-3 mt-8 mb-3"
+                >
+                    Laporan
+                </p>
+
+
+                <a
+                    href="laporan-wilayah.html"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-slate-400"
+                >
+                    <i class="fas fa-file-alt w-5"></i>
+                    Laporan Wilayah
+                </a>
+
+
+                <a
+                    href="klm-mingguan.html"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-slate-400"
+                >
+                    <i class="fas fa-users w-5"></i>
+                    KLM Mingguan
+                </a>
+
+
+                <a
+                    href="anggaran-rk02.html"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-slate-400"
+                >
+                    <i class="fas fa-chart-bar w-5"></i>
+                    Anggaran RK02
+                </a>
+
+
+                <a
+                    href="anggaran-rk01.html"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-slate-400"
+                >
+                    <i class="fas fa-chart-line w-5"></i>
+                    Anggaran RK01
+                </a>
+
+
+                <!-- PNL ACTIVE -->
+
+                <a
+                    href="pnl-khidmat-pos.html"
+                    class="sidebar-link active flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium"
+                >
+                    <i class="fas fa-file-invoice-dollar w-5"></i>
+                    PNL Khidmat Pos
+                </a>
+
+
+                <!-- SISTEM -->
+
+                <p
+                    class="text-xs font-semibold text-slate-500
+                           uppercase tracking-wider px-3 mt-8 mb-3"
+                >
+                    Sistem
+                </p>
+
+
+                #
+                    <i class="fas fa-cog w-5"></i>
+                    Tetapan
+                </a>
+
+
+                # return false;"
+                    class="sidebar-link flex items-center gap-3
+                           px-4 py-3 rounded-xl
+                           text-sm font-medium text-red-400"
+                >
+                    <i class="fas fa-sign-out-alt w-5"></i>
+                    Log Keluar
+                </a>
+
+            </nav>
 
         </div>
 
- *  </div>
+    </aside>
 
 
-    <!-- USER -->
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
 
-    *div
-        class="mb-8 p-3 rounde*-xl
-               bg-white/5 bord*r border-white/10"
-    >
-
-        *p
-            id="sidebarUserName"*            class="text-sm font-se*ibold text-white"
-        >
-      *     Shahrin Bin Ali
-        </p>
-*        <p
-            id="sidebar*serJawatan"
-            class="tex*-xs text-teal-400 mt-1"
-        >
-*           Koperal
-        </p>
-
- *  </div>
+    <main class="flex-1 lg:ml-72">
 
 
-    <!-- NAVIGATION -->*
-    <nav class="space-y-1 flex-1"*
+        <!-- TOPBAR -->
 
-        <p
-            class="te*t-xs font-semibold text-slate-500
-*                  uppercase tracki*g-wider px-3 mb-3"
-        >
-     *      Menu Utama
-        </p>
-
-
-  *     <a
-            href="dashboar*.html"
-            class="sidebar-*ink flex items-center gap-3
-      *            px-4 py-3 rounded-xl t*xt-sm text-slate-400"
+        <header
+            class="glass sticky top-0 z-30
+                   border-b border-teal-550/10
+                   px-4 sm:px-6 py-4"
         >
 
- *          <i class="fas fa-chart-p*e w-5"></i>
+            <div class="flex items-center justify-between">
 
-            Dashboard*
-        </a>
+                <div>
 
+                    <h2 class="text-xl font-bold text-white">
+                        PNL Khidmat Pos
+                    </h2>
 
-        <a
-       *    href="pengurusan-anggota.html"*            class="sidebar-link fl*x items-center gap-3
-             *     px-4 py-3 rounded-xl text-sm *ext-slate-400"
-        >
+                    <p class="text-sm text-slate-400">
+                        Laporan untung dan rugi khidmat pos
+                    </p>
 
-        *   <i class="fas fa-users w-5"></i*
+                </div>
 
-            Pengurusan Anggota
 
-*       </a>
+                <div
+                    class="hidden sm:flex items-center gap-2
+                           bg-teal-550/10 text-teal-450
+                           px-4 py-2 rounded-full
+                           text-sm font-medium"
+                >
 
+                    <span
+                        class="w-2 h-2 bg-teal-450
+                               rounded-full animate-pulse"
+                    ></span>
 
-        <a
-         *  href="kod-duty.html"
-           *class="sidebar-link flex items-cen*er gap-3
-                   px-4 p*-3 rounded-xl text-sm text-slate-4*0"
-        >
+                    System Online
 
-            <i class*"fas fa-code w-5"></i>
+                </div>
 
-          * Kod Waktu Kerja
+            </div>
 
-        </a>
+        </header>
 
 
- *      <a
-            href="kod-tem*at-kerja.html"
-            class="*idebar-link flex items-center gap-*
-                   px-4 py-3 roun*ed-xl text-sm text-slate-400"
-    *   >
+        <!-- =================================================
+             PAGE CONTENT
+        ================================================== -->
 
-            <i class="fas fa*map-marker-alt w-5"></i>
+        <div class="p-3 sm:p-6 space-y-6">
 
-        *   Kod Tempat Kerja
 
-        </a>
-*
-        <a
-            href="jadu*l-duty.html"
-            class="si*ebar-link flex items-center gap-3
-*                  px-4 py-3 rounde*-xl text-sm text-slate-400"
-        >
+            <!-- =============================================
+                 PNL HEADER
+            ============================================== -->
 
-            <i class="fas fa-calendar-check w-5"></i>
+            <section class="glass rounded-2xl p-5">
 
-            Pengisian Jadual Tugas
+                <div
+                    class="flex flex-col xl:flex-row
+                           gap-4 xl:items-end xl:justify-between"
+                >
 
-        </a>
+                    <div>
 
+                        <p
+                            class="text-xs font-semibold
+                                   uppercase tracking-wider
+                                   text-teal-400"
+                        >
+                            Laporan Bulanan
+                        </p>
 
-        <!-- LAPORAN -->
+                        <h3 class="text-xl font-bold text-white mt-1">
+                            PNL KHIDMAT POS
+                        </h3>
 
-        <p
-            class="text-xs font-semibold text-slate-500
-                   uppercase tracking-wider px-3 mt-8 mb-3"
-        >
-            Laporan
-        </p>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Pejabat FGVSSSB Wilayah Terengganu
+                        </p>
 
+                    </div>
 
-        <a
-            href="laporan-wilayah.html"
-            class="sidebar-link flex items-center gap-3
-                   px-4 py-3 rounded-xl text-sm text-slate-400"
-        >
 
-            <i class="fas fa-file-alt w-5"></i>
+                    <!-- FILTER DUMMY -->
 
-            Laporan Wilayah
+                    <div class="grid grid-cols-2 sm:flex gap-2 no-print">
 
-        </a>
+                        <button
+                            type="button"
+                            class="px-4 py-2 rounded-xl
+                                   bg-white/5
+                                   border border-white/10
+                                   text-sm"
+                        >
+                            OGS
+                        </button>
 
 
-        <a
-            href="klm-mingguan.html"
-            class="sidebar-link flex items-center gap-3
-                   px-4 py-3 rounded-xl text-sm text-slate-400"
-        >
+                        <button
+                            type="button"
+                            class="px-4 py-2 rounded-xl
+                                   bg-white/5
+                                   border border-white/10
+                                   text-sm"
+                        >
+                            2026
+                        </button>
 
-            <i class="fas fa-users w-5"></i>
 
-            KLM Mingguan
+                        <button
+                            type="button"
+                            class="px-4 py-2 rounded-xl
+                                   bg-teal-600
+                                   hover:bg-teal-500
+                                   text-white
+                                   font-semibold text-sm
+                                   transition"
+                        >
+                            Jana PNL
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="window.print()"
+                            class="px-4 py-2 rounded-xl
+                                   bg-teal-500/10
+                                   border border-teal-500/30
+                                   text-teal-300
+                                   text-sm"
+                        >
+                            <i class="fas fa-print mr-2"></i>
+                            Cetak
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFO CARDS -->
+
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-5">
+
+                    <div
+                        class="rounded-xl p-4
+                               bg-teal-500/10
+                               border border-teal-500/20"
+                    >
+                        <p class="text-xs text-slate-400">
+                            Bilangan Anggota
+                        </p>
 
-        </a>
+                        <p class="text-xl font-bold text-teal-300 mt-1">
+                            4
+                        </p>
+                    </div>
 
 
-        <a
-            href="anggaran-rk02.html"
-            class="sidebar-link flex items-center gap-3
-                   px-4 py-3 rounded-xl text-sm text-slate-400"
-        >
+                    <div
+                        class="rounded-xl p-4
+                               bg-cyan-500/10
+                               border border-cyan-500/20"
+                    >
+                        <p class="text-xs text-slate-400">
+                            Atur Tugas
+                        </p>
 
-            <i class="fas fa-chart-bar w-5"></i>
+                        <p class="text-xl font-bold text-cyan-300 mt-1">
+                            4 X 8 Jam
+                        </p>
+                    </div>
 
-            Anggaran RK02
 
-        </a>
+                    <div
+                        class="rounded-xl p-4
+                               bg-amber-500/10
+                               border border-amber-500/20"
+                    >
+                        <p class="text-xs text-slate-400">
+                            Tempoh
+                        </p>
 
+                        <p class="text-xl font-bold text-amber-300 mt-1">
+                            31 Hari
+                        </p>
+                    </div>
 
-        <a
-            href="anggaran-rk01.html"
-            class="sidebar-link flex items-center gap-3
-                   px-4 py-3 rounded-xl text-sm text-slate-400"
-        >
 
-            <i class="fas fa-chart-line w-5"></i>
+                    <div
+                        class="rounded-xl p-4
+                               bg-rose-500/10
+                               border border-rose-500/20"
+                    >
+                        <p class="text-xs text-slate-400">
+                            Untung / Rugi
+                        </p>
 
-            Anggaran RK01
+                        <p class="text-xl font-bold text-rose-300 mt-1">
+                            (RM 17,365.60)
+                        </p>
+                    </div>
 
-        </a>
+                </div>
 
+            </section>
 
-        <!-- PNL ACTIVE -->
 
-        pnl-khidmat-pos.html
+            <!-- =============================================
+                 PENDAPATAN
+            ============================================== -->
 
-            <i class="fas fa-file-invoice-dollar w-5"></i>
+            <section class="glass rounded-2xl p-5">
 
-            PNL Khidmat Pos
+                <h3 class="font-semibold text-white mb-4">
+                    Pendapatan
+                </h3>
 
-        </a>
+                <div class="report-scroll">
 
+                    <table
+                        class="report-table"
+                        style="min-width: 700px;"
+                    >
 
-        <!-- SISTEM -->
+                        <thead>
 
-        <p
-            class="text-xs font-semibold text-slate-500
-                   uppercase tracking-wider px-3 mt-8 mb-3"
-        >
-            Sistem
-        </p>
+                            <tr>
+                                <th class="text-left">
+                                    Keterangan
+                                </th>
 
+                                <th>
+                                    Jam / KM
+                                </th>
 
-        #
+                                <th>
+                                    Kadar
+                                </th>
 
-            <i class="fas fa-cog w-5"></i>
+                                <th>
+                                    Jumlah (RM)
+                                </th>
+                            </tr>
 
-            Tetapan
+                        </thead>
 
-        </a>
+                        <tbody id="pendapatan"></tbody>
 
+                    </table>
 
-        #"
-            class="sidebar-link flex items-center gap-3
-                   px-4 py-3 text-sm text-red-400"
-        >
+                </div>
 
-            <i class="fas fa-sign-out-alt w-5"></i>
+            </section>
 
-            Log Keluar
 
-        </a>
+            <!-- =============================================
+                 PERBELANJAAN ANGGOTA
+            ============================================== -->
 
-    </nav>
+            <section class="glass rounded-2xl p-5">
 
-</div>
-</aside>
+                <div
+                    class="flex flex-col sm:flex-row
+                           sm:items-center
+                           sm:justify-between
+                           gap-2 mb-4"
+                >
 
+                    <h3 class="font-semibold text-white">
+                        Perbelanjaan Anggota
+                    </h3>
 
-<!-- =====================================================
-     MAIN
-===================================================== -->
+                    <span class="text-xs text-slate-500">
+                        Seret jadual ke kiri / kanan pada telefon
+                    </span>
 
-<main class="flex-1 lg:ml-72">
+                </div>
 
+                <div class="report-scroll rounded-xl">
 
-<!-- TOP HEADER -->
+                    <table
+                        class="report-table"
+                        id="tblPerbelanjaan"
+                    ></table>
 
-<header
-    class="glass sticky top-0 z-30
-           border-b border-teal-550/10
-           px-4 sm:px-6 py-4"
->
+                </div>
 
-<div class="flex justify-between items-center">
+            </section>
 
-    <div>
 
-        <h2 class="text-xl font-bold text-white">
-            PNL Khidmat Pos
-        </h2>
+            <!-- =============================================
+                 KERJA LEBIH MASA
+            ============================================== -->
 
-        <p class="text-sm text-slate-400">
-            Laporan untung dan rugi khidmat pos
-        </p>
+            <section class="glass rounded-2xl p-5">
 
-    </div>
+                <h3 class="font-semibold text-white mb-4">
+                    Kerja Lebih Masa
+                </h3>
 
+                <div class="report-scroll">
 
-    <div
-        class="hidden sm:flex items-center gap-2
-               bg-teal-550/10 text-teal-450
-               px-4 py-2 rounded-full text-sm"
-    >
+                    <table
+                        class="report-table"
+                        id="tblKlm"
+                    ></table>
 
-        <span
-            class="w-2 h-2 bg-teal-450
-                   rounded-full animate-pulse"
-        ></span>
+                </div>
 
-        System Online
+            </section>
 
-    </div>
 
-</div>
+            <!-- =============================================
+                 PURATA
+            ============================================== -->
 
-</header>
+            <div class="grid sm:grid-cols-3 gap-3">
 
 
-<!-- =====================================================
-     CONTENT
-===================================================== -->
+                <div
+                    class="rounded-2xl p-4
+                           bg-teal-500/10
+                           border border-teal-500/20"
+                >
 
-<div class="p-3 sm:p-6 space-y-6">
+                    <p class="text-xs text-slate-400">
+                        Purata Pendapatan Sejam (RM)
+                    </p>
 
+                    <p class="text-xl font-bold text-teal-300 mt-1">
+                        0.00
+                    </p>
 
-<!-- =====================================================
-     HEADER PNL
-===================================================== -->
+                </div>
 
-<section class="glass rounded-2xl p-5">
 
-<div
-    class="flex flex-col xl:flex-row
-           gap-4 xl:items-end xl:justify-between"
->
+                <div
+                    class="rounded-2xl p-4
+                           bg-orange-500/10
+                           border border-orange-500/20"
+                >
 
-    <div>
+                    <p class="text-xs text-slate-400">
+                        Purata Perbelanjaan Sejam (RM)
+                    </p>
 
-        <p
-            class="text-xs font-semibold
-                   uppercase tracking-wider text-teal-400"
-        >
-            Laporan Bulanan
-        </p>
+                    <p class="text-xl font-bold text-orange-300 mt-1">
+                        0.00
+                    </p>
 
-        <h3 class="text-xl font-bold text-white mt-1">
-            PNL KHIDMAT POS
-        </h3>
+                </div>
 
-        <p class="text-sm text-slate-400 mt-1">
-            Pejabat FGVSSSB Wilayah Terengganu
-        </p>
 
-    </div>
+                <div
+                    class="rounded-2xl p-4
+                           bg-rose-500/10
+                           border border-rose-500/20"
+                >
 
+                    <p class="text-xs text-slate-400">
+                        Purata Untung Sejam (RM)
+                    </p>
 
-    <!-- FILTER DUMMY -->
+                    <p class="text-xl font-bold text-rose-300 mt-1">
+                        0.00
+                    </p>
 
-    <div class="grid grid-cols-2 sm:flex gap-2 no-print">
+                </div>
 
-        <button
-            class="px-4 py-2 rounded-xl
-                   bg-white/5 border border-white/10 text-sm"
-        >
-            OGS
-        </button>
+            </div>
 
 
-        <button
-            class="px-4 py-2 rounded-xl
-                   bg-white/5 border border-white/10 text-sm"
-        >
-            2026
-        </button>
+            <!-- =============================================
+                 JUMLAH 1 BULAN
+            ============================================== -->
 
+            <div
+                class="rounded-2xl
+                       border border-rose-500/25
+                       bg-rose-500/10
+                       p-5
+                       flex flex-col sm:flex-row
+                       gap-3
+                       sm:justify-between
+                       sm:items-center"
+            >
 
-        <button
-            class="px-4 py-2 rounded-xl
-                   bg-teal-600 text-white
-                   font-semibold text-sm"
-        >
-            Jana PNL
-        </button>
+                <div>
 
+                    <p
+                        class="text-xs uppercase
+                               tracking-widest
+                               text-slate-400"
+                    >
+                        1 Bulan (RM)
+                    </p>
 
-        <button
-            onclick="window.print()"
-            class="px-4 py-2 rounded-xl
-                   bg-teal-500/10
-                   border border-teal-500/30
-                   text-teal-300 text-sm"
-        >
+                    <p class="font-semibold text-white">
+                        Jumlah Untung / Rugi Bulanan
+                    </p>
 
-            <i class="fas fa-print mr-2"></i>
+                </div>
 
-            Cetak
+                <p
+                    class="text-xl sm:text-2xl
+                           font-bold text-rose-300"
+                >
+                    (17,365.60)
+                </p>
 
-        </button>
+            </div>
 
-    </div>
 
-</div>
+            <!-- FOOTER -->
 
+            <footer class="text-center text-slate-500 text-sm py-5">
 
-<!-- INFORMATION CARDS -->
+                Master Duty Pro — Wilayah Terengganu
 
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-5">
+                <br>
 
-    <div
-        class="rounded-xl p-4
-               bg-teal-500/10 border border-teal-500/20"
-    >
+                © 2026 • Operational Duty Management System
 
-        <p class="text-xs text-slate-400">
-            Bilangan Anggota
-        </p>
+            </footer>
 
-        <p class="text-xl font-bold text-teal-300">
-            4
-        </p>
+        </div>
 
-    </div>
-
-
-    <div
-        class="rounded-xl p-4
-               bg-cyan-500/10 border border-cyan-500/20"
-    >
-
-        <p class="text-xs text-slate-400">
-            Atur Tugas
-        </p>
-
-        <p class="text-xl font-bold text-cyan-300">
-            4 X 8 Jam
-        </p>
-
-    </div>
-
-
-    <div
-        class="rounded-xl p-4
-               bg-amber-500/10 border border-amber-500/20"
-    >
-
-        <p class="text-xs text-slate-400">
-            Tempoh
-        </p>
-
-        <p class="text-xl font-bold text-amber-300">
-            31 Hari
-        </p>
-
-    </div>
-
-
-    <div
-        class="rounded-xl p-4
-               bg-rose-500/10 border border-rose-500/20"
-    >
-
-        <p class="text-xs text-slate-400">
-            Untung / Rugi
-        </p>
-
-        <p class="text-xl font-bold text-rose-300">
-            (RM 17,365.60)
-        </p>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     PENDAPATAN
-===================================================== -->
-
-<section class="glass rounded-2xl p-5">
-
-<h3 class="font-semibold text-white mb-4">
-    Pendapatan
-</h3>
-
-
-<div class="report-scroll">
-
-<table
-    class="report-table"
-    style="min-width:700px"
->
-
-<thead>
-
-<tr>
-
-    <th class="text-left">
-        Keterangan
-    </th>
-
-    <th>
-        Jam / KM
-    </th>
-
-    <th>
-        Kadar
-    </th>
-
-    <th>
-        Jumlah (RM)
-    </th>
-
-</tr>
-
-</thead>
-
-
-<tbody id="pendapatan">
-
-</tbody>
-
-</table>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     PERBELANJAAN ANGGOTA
-===================================================== -->
-
-<section class="glass rounded-2xl p-5">
-
-<div class="flex justify-between mb-4">
-
-    <h3 class="font-semibold text-white">
-        Perbelanjaan Anggota
-    </h3>
-
-    <span class="text-xs text-slate-500">
-        Seret kiri/kanan pada telefon
-    </span>
-
-</div>
-
-
-<div class="report-scroll rounded-xl">
-
-<table
-    class="report-table"
-    id="tblPerbelanjaan"
->
-</table>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     KERJA LEBIH MASA
-===================================================== -->
-
-<section class="glass rounded-2xl p-5">
-
-<h3 class="font-semibold text-white mb-4">
-    Kerja Lebih Masa
-</h3>
-
-
-<div class="report-scroll">
-
-<table
-    class="report-table"
-    id="tblKlm"
->
-</table>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     PURATA
-===================================================== -->
-
-<div class="grid sm:grid-cols-3 gap-3">
-
-
-<div
-    class="rounded-2xl p-4
-           bg-teal-500/10 border border-teal-500/20"
->
-
-    <p class="text-xs text-slate-400">
-        Purata Pendapatan Sejam (RM)
-    </p>
-
-    <p class="text-xl font-bold text-teal-300">
-        0.00
-    </p>
-
-</div>
-
-
-<div
-    class="rounded-2xl p-4
-           bg-orange-500/10 border border-orange-500/20"
->
-
-    <p class="text-xs text-slate-400">
-        Purata Perbelanjaan Sejam (RM)
-    </p>
-
-    <p class="text-xl font-bold text-orange-300">
-        0.00
-    </p>
-
-</div>
-
-
-<div
-    class="rounded-2xl p-4
-           bg-rose-500/10 border border-rose-500/20"
->
-
-    <p class="text-xs text-slate-400">
-        Purata Untung Sejam (RM)
-    </p>
-
-    <p class="text-xl font-bold text-rose-300">
-        0.00
-    </p>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     1 BULAN
-===================================================== -->
-
-<div
-    class="rounded-2xl
-           border border-rose-500/25
-           bg-rose-500/10
-           p-5
-           flex justify-between items-center"
->
-
-    <div>
-
-        <p
-            class="text-xs uppercase tracking-widest
-                   text-slate-400"
-        >
-            1 Bulan (RM)
-        </p>
-
-        <p class="font-semibold text-white">
-            Jumlah Untung / Rugi Bulanan
-        </p>
-
-    </div>
-
-
-    <p
-        class="text-xl sm:text-2xl
-               font-bold text-rose-300"
-    >
-        (17,365.60)
-    </p>
-
-</div>
-
-
-<!-- FOOTER -->
-
-<footer
-    class="text-center
-           text-slate-500 text-sm py-5"
->
-
-    Master Duty Pro — Wilayah Terengganu
-
-    <br>
-
-    © 2026 • Operational Duty Management System
-
-</footer>
-
-
-</div>
-
-</main>
+    </main>
 
 </div>
 
@@ -902,86 +910,58 @@ body {
 
 <nav class="mobile-bottom">
 
-
-<a
-    href="dashboardkpku.html"
-    class="mobile-nav-item"
->
-
-    <i class="fas fa-chart-pie"></i>
-
-    <span>
-        Dash
-    </span>
-
-</a>
+    <a
+        href="dashboardkpku.html"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-chart-pie"></i>
+        <span>Dash</span>
+    </a>
 
 
-<a
-    href="jadual-duty.html"
-    class="mobile-nav-item"
->
-
-    <i class="fas fa-calendar-check"></i>
-
-    <span>
-        Duty
-    </span>
-
-</a>
+    <a
+        href="jadual-duty.html"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-calendar-check"></i>
+        <span>Duty</span>
+    </a>
 
 
-<a
-    href="klm-mingguan.html"
-    class="mobile-nav-item"
->
-
-    <i class="fas fa-file-alt"></i>
-
-    <span>
-        Weekly
-    </span>
-
-</a>
+    <a
+        href="klm-mingguan.html"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-file-alt"></i>
+        <span>Weekly</span>
+    </a>
 
 
-<a
-    href="anggaran-rk01.html"
-    class="mobile-nav-item"
->
-
-    <i class="fas fa-chart-line"></i>
-
-    <span>
-        RK01
-    </span>
-
-</a>
+    <a
+        href="anggaran-rk01.html"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-chart-line"></i>
+        <span>RK01</span>
+    </a>
 
 
-<a
-    href="anggaran-rk02.html"
-    class="mobile-nav-item"
->
-
-    <i class="fas fa-chart-bar"></i>
-
-    <span>
-        RK02
-    </span>
-
-</a>
+    <a
+        href="anggaran-rk02.html"
+        class="mobile-nav-item"
+    >
+        <i class="fas fa-chart-bar"></i>
+        <span>RK02</span>
+    </a>
 
 
-pnl-khidmat-pos.html
-
-    <i class="fas fa-file-invoice-dollar"></i>
-
-    <span>
-        PNL
-    </span>
-
-</a>
+    <a
+        href="pnl-khidmat-pos.html"
+        class="mobile-nav-item active"
+    >
+        <i class="fas fa-file-invoice-dollar"></i>
+        <span>PNL</span>
+    </a>
 
 </nav>
 
@@ -989,163 +969,246 @@ pnl-khidmat-pos.html
 <script>
 
 /* =====================================================
+   USER
+===================================================== */
+
+let currentUser = null;
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    bacaPengguna();
+
+    paparMaklumatPengguna();
+
+    janaPendapatan();
+
+    janaPerbelanjaan();
+
+    janaKlm();
+
+});
+
+
+function bacaPengguna() {
+
+    try {
+
+        const data = localStorage.getItem("mdp_user");
+
+        if (data) {
+            currentUser = JSON.parse(data);
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Ralat membaca maklumat pengguna:",
+            error
+        );
+
+    }
+
+}
+
+
+function paparMaklumatPengguna() {
+
+    if (!currentUser) {
+        return;
+    }
+
+    const nama =
+        currentUser.name ||
+        currentUser.nama ||
+        currentUser.noSkb ||
+        "-";
+
+    const jawatan =
+        currentUser.jawatan ||
+        currentUser.pangkat ||
+        "-";
+
+
+    const namaElement =
+        document.getElementById(
+            "sidebarUserName"
+        );
+
+    const jawatanElement =
+        document.getElementById(
+            "sidebarUserJawatan"
+        );
+
+
+    if (namaElement) {
+        namaElement.textContent = nama;
+    }
+
+    if (jawatanElement) {
+        jawatanElement.textContent = jawatan;
+    }
+
+}
+
+
+/* =====================================================
    DUMMY DATA ANGGOTA
 ===================================================== */
 
 const members = [
 
-{
-    skb: 'INSP 202',
-    no: '7300559',
-    nama: 'NAZRIE',
+    {
+        skb: 'INSP 202',
+        no: '7300559',
+        nama: 'NAZRIE',
 
-    gaji: '3,100.00',
-    eis: '7.43',
-    kwsp: '496.00',
-    perkeso: '74.30',
+        gaji: '3,100.00',
+        eis: '7.43',
+        kwsp: '496.00',
+        perkeso: '74.30',
 
-    a: '3,670.30',
+        a: '3,670.30',
 
-    klm: '-',
-    b: '-',
+        klm: '-',
+        b: '-',
 
-    dobi: '55.00',
-    risiko: '100.00',
-    rumah: '150.00',
-    insentif: '310.00',
-    pemandu: '-',
-    hadir: '-',
-    k9: '-',
+        dobi: '55.00',
+        risiko: '100.00',
+        rumah: '150.00',
+        insentif: '310.00',
+        pemandu: '-',
+        hadir: '-',
+        k9: '-',
 
-    c: '615.00',
+        c: '615.00',
 
-    ac: '4,285.30',
+        ac: '4,285.30',
 
-    perubatan: '-',
-    tuntutan: '-',
-    subsidi: '-',
+        perubatan: '-',
+        tuntutan: '-',
+        subsidi: '-',
 
-    d: '-',
+        d: '-',
 
-    jumlah: '4,285.30'
-},
-
-
-{
-    skb: 'Sjn 10283',
-    no: '2500275',
-    nama: 'SULAZMI',
-
-    gaji: '3,615.00',
-    eis: '8.54',
-    kwsp: '578.40',
-    perkeso: '85.40',
-
-    a: '4,278.80',
-
-    klm: '-',
-    b: '-',
-
-    dobi: '55.00',
-    risiko: '100.00',
-    rumah: '150.00',
-    insentif: '350.00',
-    pemandu: '-',
-    hadir: '-',
-    k9: '-',
-
-    c: '655.00',
-
-    ac: '4,933.80',
-
-    perubatan: '-',
-    tuntutan: '-',
-    subsidi: '-',
-
-    d: '-',
-
-    jumlah: '4,933.80'
-},
+        jumlah: '4,285.30'
+    },
 
 
-{
-    skb: 'Kpl 11484',
-    no: '2503552',
-    nama: 'SHAHRIN',
+    {
+        skb: 'Sjn 10283',
+        no: '2500275',
+        nama: 'SULAZMI',
 
-    gaji: '2,860.00',
-    eis: '6.90',
-    kwsp: '551.64',
-    perkeso: '80.78',
+        gaji: '3,615.00',
+        eis: '8.54',
+        kwsp: '578.40',
+        perkeso: '85.40',
 
-    a: '3,492.42',
+        a: '4,278.80',
 
-    klm: '587.77',
-    b: '587.77',
+        klm: '-',
+        b: '-',
 
-    dobi: '55.00',
-    risiko: '100.00',
-    rumah: '150.00',
-    insentif: '286.00',
-    pemandu: '-',
-    hadir: '-',
-    k9: '-',
+        dobi: '55.00',
+        risiko: '100.00',
+        rumah: '150.00',
+        insentif: '350.00',
+        pemandu: '-',
+        hadir: '-',
+        k9: '-',
 
-    c: '591.00',
+        c: '655.00',
 
-    ac: '4,083.42',
+        ac: '4,933.80',
 
-    perubatan: '81.00',
-    tuntutan: '-',
-    subsidi: '-',
+        perubatan: '-',
+        tuntutan: '-',
+        subsidi: '-',
 
-    d: '81.00',
+        d: '-',
 
-    jumlah: '4,752.19'
-},
+        jumlah: '4,933.80'
+    },
 
 
-{
-    skb: 'Kpl 12038',
-    no: '2504118',
-    nama: 'FARAHIAH',
+    {
+        skb: 'Kpl 11484',
+        no: '2503552',
+        nama: 'SHAHRIN',
 
-    gaji: '2,405.00',
-    eis: '5.90',
-    kwsp: '384.80',
-    perkeso: '59.01',
+        gaji: '2,860.00',
+        eis: '6.90',
+        kwsp: '551.64',
+        perkeso: '80.78',
 
-    a: '2,848.81',
+        a: '3,492.42',
 
-    klm: '-',
-    b: '-',
+        klm: '587.77',
+        b: '587.77',
 
-    dobi: '55.00',
-    risiko: '100.00',
-    rumah: '150.00',
-    insentif: '240.50',
-    pemandu: '-',
-    hadir: '-',
-    k9: '-',
+        dobi: '55.00',
+        risiko: '100.00',
+        rumah: '150.00',
+        insentif: '286.00',
+        pemandu: '-',
+        hadir: '-',
+        k9: '-',
 
-    c: '545.50',
+        c: '591.00',
 
-    ac: '3,394.31',
+        ac: '4,083.42',
 
-    perubatan: '-',
-    tuntutan: '-',
-    subsidi: '-',
+        perubatan: '81.00',
+        tuntutan: '-',
+        subsidi: '-',
 
-    d: '-',
+        d: '81.00',
 
-    jumlah: '3,394.31'
-}
+        jumlah: '4,752.19'
+    },
+
+
+    {
+        skb: 'Kpl 12038',
+        no: '2504118',
+        nama: 'FARAHIAH',
+
+        gaji: '2,405.00',
+        eis: '5.90',
+        kwsp: '384.80',
+        perkeso: '59.01',
+
+        a: '2,848.81',
+
+        klm: '-',
+        b: '-',
+
+        dobi: '55.00',
+        risiko: '100.00',
+        rumah: '150.00',
+        insentif: '240.50',
+        pemandu: '-',
+        hadir: '-',
+        k9: '-',
+
+        c: '545.50',
+
+        ac: '3,394.31',
+
+        perubatan: '-',
+        tuntutan: '-',
+        subsidi: '-',
+
+        d: '-',
+
+        jumlah: '3,394.31'
+    }
 
 ];
 
 
 /* =====================================================
-   TAMBAH SLOT ANGGOTA SEHINGGA 8
+   TAMBAH SLOT HINGGA 8 ANGGOTA
 ===================================================== */
 
 while (members.length < 8) {
@@ -1192,7 +1255,7 @@ while (members.length < 8) {
 
 
 /* =====================================================
-   JUMLAH
+   JUMLAH DUMMY
 ===================================================== */
 
 const totals = {
@@ -1243,7 +1306,7 @@ const totals = {
 
 
 /* =====================================================
-   PENDAPATAN
+   DATA PENDAPATAN
 ===================================================== */
 
 const income = [
@@ -1293,83 +1356,95 @@ const income = [
 ];
 
 
-document.getElementById('pendapatan').innerHTML =
+/* =====================================================
+   JANA PENDAPATAN
+===================================================== */
 
-income.map(row => {
+function janaPendapatan() {
 
-    return `
+    const tbody =
+        document.getElementById(
+            "pendapatan"
+        );
 
-        <tr>
+    if (!tbody) {
+        return;
+    }
 
-            ${row.map((value, index) => `
 
-                <td class="${index ? 'text-right' : ''}">
+    tbody.innerHTML =
 
-                    ${value}
+        income.map(item => {
 
-                </td>
+            return `
+                <tr>
 
-            `).join('')}
+                    <td>
+                        ${item[0]}
+                    </td>
+
+                    <td class="text-right">
+                        ${item[1]}
+                    </td>
+
+                    <td class="text-right">
+                        ${item[2]}
+                    </td>
+
+                    <td class="text-right">
+                        ${item[3]}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join('')
+
+        +
+
+        `
+        <tr class="strong-row">
+
+            <td colspan="3">
+                Jumlah Besar Pendapatan
+            </td>
+
+            <td class="text-right text-teal-300">
+                0.00
+            </td>
 
         </tr>
+        `;
 
-    `;
-
-}).join('')
-
-+
-
-`
-
-<tr class="strong-row">
-
-    <td colspan="3">
-
-        Jumlah Besar Pendapatan
-
-    </td>
-
-    <td class="text-right text-teal-300">
-
-        0.00
-
-    </td>
-
-</tr>
-
-`;
+}
 
 
 /* =====================================================
-   FUNCTION ROW
+   PERBELANJAAN ROW
 ===================================================== */
 
-function row(label, key, strong = false) {
+function perbelanjaanRow(
+    label,
+    key,
+    strong = false
+) {
 
     return `
 
         <tr class="${strong ? 'strong-row' : ''}">
 
             <td class="sticky-label">
-
                 ${label}
-
             </td>
 
             ${members.map(member => `
-
                 <td class="text-right">
-
                     ${member[key]}
-
                 </td>
-
             `).join('')}
 
             <td class="text-right text-teal-300 font-semibold">
-
                 ${totals[key]}
-
             </td>
 
         </tr>
@@ -1380,7 +1455,7 @@ function row(label, key, strong = false) {
 
 
 /* =====================================================
-   INFO ANGGOTA
+   INFO ROW
 ===================================================== */
 
 function infoRow(label, key) {
@@ -1390,19 +1465,13 @@ function infoRow(label, key) {
         <tr>
 
             <th class="sticky-label text-left">
-
                 ${label}
-
             </th>
 
             ${members.map(member => `
-
                 <th>
-
                     ${member[key]}
-
                 </th>
-
             `).join('')}
 
             <th></th>
@@ -1415,190 +1484,251 @@ function infoRow(label, key) {
 
 
 /* =====================================================
-   PERBELANJAAN ANGGOTA
+   JANA PERBELANJAAN
 ===================================================== */
 
-document.getElementById('tblPerbelanjaan').innerHTML = `
+function janaPerbelanjaan() {
 
-<thead>
+    const table =
+        document.getElementById(
+            "tblPerbelanjaan"
+        );
 
-<tr>
+    if (!table) {
+        return;
+    }
 
-    <th class="sticky-label text-left">
 
-        Anggota
+    table.innerHTML = `
 
-    </th>
+        <thead>
 
-    ${members.map((member, index) => `
+            <tr>
 
-        <th>
+                <th class="sticky-label text-left">
+                    Anggota
+                </th>
 
-            ${index + 1}
+                ${members.map((member, index) => `
+                    <th>
+                        ${index + 1}
+                    </th>
+                `).join('')}
 
-        </th>
+                <th>
+                    Jumlah
+                </th>
 
-    `).join('')}
+            </tr>
 
-    <th>
 
-        Jumlah
+            ${infoRow(
+                'No. SKB',
+                'skb'
+            )}
 
-    </th>
 
-</tr>
+            ${infoRow(
+                'No Anggota',
+                'no'
+            )}
 
 
-${infoRow('No. SKB', 'skb')}
+            ${infoRow(
+                'Nama',
+                'nama'
+            )}
 
-${infoRow('No Anggota', 'no')}
+        </thead>
 
-${infoRow('Nama', 'nama')}
 
-</thead>
+        <tbody>
 
 
-<tbody>
+            <tr>
 
+                <td
+                    colspan="10"
+                    class="bg-teal-800/30
+                           text-teal-200
+                           font-bold"
+                >
+                    Perbelanjaan
+                </td>
 
-<tr>
+            </tr>
 
-    <td
-        colspan="10"
-        class="bg-teal-800/30
-               text-teal-200
-               font-bold"
-    >
 
-        Perbelanjaan
+            ${perbelanjaanRow(
+                'Gaji Pokok',
+                'gaji'
+            )}
 
-    </td>
 
-</tr>
+            ${perbelanjaanRow(
+                'EIS / SIP (M)',
+                'eis'
+            )}
 
 
-${row('Gaji Pokok', 'gaji')}
+            ${perbelanjaanRow(
+                'K.W.S.P ( M )',
+                'kwsp'
+            )}
 
-${row('EIS / SIP (M)', 'eis')}
 
-${row('K.W.S.P ( M )', 'kwsp')}
+            ${perbelanjaanRow(
+                'Perkeso ( M )',
+                'perkeso'
+            )}
 
-${row('Perkeso ( M )', 'perkeso')}
 
+            ${perbelanjaanRow(
+                'JUMLAH A',
+                'a',
+                true
+            )}
 
-${row('JUMLAH A', 'a', true)}
 
+            ${perbelanjaanRow(
+                'Kerja Lebih Masa',
+                'klm'
+            )}
 
-${row('Kerja Lebih Masa', 'klm')}
 
+            ${perbelanjaanRow(
+                'JUMLAH B',
+                'b',
+                true
+            )}
 
-${row('JUMLAH B', 'b', true)}
 
+            <tr>
 
-<tr>
+                <td
+                    colspan="10"
+                    class="bg-teal-800/30
+                           text-teal-200
+                           font-bold"
+                >
+                    Pelbagai Elaun
+                </td>
 
-    <td
-        colspan="10"
-        class="bg-teal-800/30
-               text-teal-200
-               font-bold"
-    >
+            </tr>
 
-        Pelbagai Elaun
 
-    </td>
+            ${perbelanjaanRow(
+                'Dobi',
+                'dobi'
+            )}
 
-</tr>
 
+            ${perbelanjaanRow(
+                'Risiko',
+                'risiko'
+            )}
 
-${row('Dobi', 'dobi')}
 
-${row('Risiko', 'risiko')}
+            ${perbelanjaanRow(
+                'Rumah',
+                'rumah'
+            )}
 
-${row('Rumah', 'rumah')}
 
-${row('Insentif Projek', 'insentif')}
+            ${perbelanjaanRow(
+                'Insentif Projek',
+                'insentif'
+            )}
 
-${row('Pemandu', 'pemandu')}
 
-${row('Elaun Kehadiran', 'hadir')}
+            ${perbelanjaanRow(
+                'Pemandu',
+                'pemandu'
+            )}
 
-${row('Handler K9', 'k9')}
 
+            ${perbelanjaanRow(
+                'Elaun Kehadiran',
+                'hadir'
+            )}
 
-${row(
-    'JUMLAH PELBAGAI ELAUN C',
-    'c',
-    true
-)}
 
+            ${perbelanjaanRow(
+                'Handler K9',
+                'k9'
+            )}
 
-${row(
-    'JUMLAH A + PELBAGAI ELAUN',
-    'ac',
-    true
-)}
 
+            ${perbelanjaanRow(
+                'JUMLAH PELBAGAI ELAUN C',
+                'c',
+                true
+            )}
 
-${row(
-    'Perubatan',
-    'perubatan'
-)}
 
+            ${perbelanjaanRow(
+                'JUMLAH A + PELBAGAI ELAUN',
+                'ac',
+                true
+            )}
 
-${row(
-    'Tuntutan',
-    'tuntutan'
-)}
 
+            ${perbelanjaanRow(
+                'Perubatan',
+                'perubatan'
+            )}
 
-${row(
-    'Subsidi Perumahan',
-    'subsidi'
-)}
 
+            ${perbelanjaanRow(
+                'Tuntutan',
+                'tuntutan'
+            )}
 
-${row(
-    'JUMLAH D',
-    'd',
-    true
-)}
 
+            ${perbelanjaanRow(
+                'Subsidi Perumahan',
+                'subsidi'
+            )}
 
-${row(
-    'Jumlah Perbelanjaan',
-    'jumlah',
-    true
-)}
 
+            ${perbelanjaanRow(
+                'JUMLAH D',
+                'd',
+                true
+            )}
 
-<tr class="bg-rose-500/10 font-bold">
 
-    <td colspan="9">
+            ${perbelanjaanRow(
+                'Jumlah Perbelanjaan',
+                'jumlah',
+                true
+            )}
 
-        Jumlah Besar Untung / Rugi
 
-    </td>
+            <tr class="bg-rose-500/10 font-bold">
 
-    <td class="text-right text-rose-300">
+                <td colspan="9">
+                    Jumlah Besar Untung / Rugi
+                </td>
 
-        (17,365.60)
+                <td class="text-right text-rose-300">
+                    (17,365.60)
+                </td>
 
-    </td>
+            </tr>
 
-</tr>
+        </tbody>
 
+    `;
 
-</tbody>
-
-`;
+}
 
 
 /* =====================================================
-   KERJA LEBIH MASA
+   KLM
 ===================================================== */
 
-const klm = [
+const klmData = [
 
     [
         'Jumlah Jam KLM Hari Biasa',
@@ -1692,55 +1822,84 @@ const klm = [
 ];
 
 
-document.getElementById('tblKlm').innerHTML =
+/* =====================================================
+   JANA KLM
+===================================================== */
 
-'<tbody>'
+function janaKlm() {
 
-+
+    const table =
+        document.getElementById(
+            "tblKlm"
+        );
 
-klm.map((row, index) => {
+    if (!table) {
+        return;
+    }
 
-    return `
 
-        <tr
-            class="${index === 5 ? 'strong-row' : ''}"
-        >
+    table.innerHTML = `
 
-            <td class="sticky-label font-medium">
+        <thead>
 
-                ${row[0]}
+            <tr>
 
-            </td>
+                <th class="sticky-label text-left">
+                    Keterangan
+                </th>
 
-            ${row[1].map(value => `
+                ${members.map((member, index) => `
+                    <th>
+                        ${index + 1}
+                    </th>
+                `).join('')}
 
-                <td class="text-right">
+                <th>
+                    Jumlah
+                </th>
 
-                    ${value}
+            </tr>
 
-                </td>
+        </thead>
+
+
+        <tbody>
+
+            ${klmData.map((item, index) => `
+
+                <tr
+                    class="${index === klmData.length - 1
+                        ? 'strong-row'
+                        : ''}"
+                >
+
+                    <td class="sticky-label font-medium">
+                        ${item[0]}
+                    </td>
+
+                    ${item[1].map(value => `
+                        <td class="text-right">
+                            ${value}
+                        </td>
+                    `).join('')}
+
+                    <td
+                        class="text-right
+                               text-teal-300
+                               font-semibold"
+                    >
+                        ${item[2]}
+                    </td>
+
+                </tr>
 
             `).join('')}
 
-            <td
-                class="text-right
-                       text-teal-300
-                       font-semibold"
-            >
-
-                ${row[2]}
-
-            </td>
-
-        </tr>
+        </tbody>
 
     `;
 
-}).join('')
-
-+
-
-'</tbody>';
+}
 
 
 /* =====================================================
@@ -1749,9 +1908,12 @@ klm.map((row, index) => {
 
 function logKeluar() {
 
-    localStorage.removeItem("mdp_user");
+    localStorage.removeItem(
+        "mdp_user"
+    );
 
-    window.location.href = "login.html";
+    window.location.href =
+        "login.html";
 
 }
 
