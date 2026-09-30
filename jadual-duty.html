@@ -1069,6 +1069,41 @@ function kawalTampunganIkutJamKlm() {
 }
 
 
+function kawalKLMIkutJamKlm() {
+
+  const jamKlm = Number(getValue("jamKlm") || 0);
+
+  const ids = [
+    "klmLatihanDwiBulanan",
+    "klmWajib",
+    "klmCutiSakit",
+    "klmCutiTahun",
+    "klmCutiEhsan",
+    "klmKursus",
+    "klmCutiGanti",
+    "klmKawalanTambahan"
+  ];
+
+  const aktif = jamKlm > 0;
+
+  ids.forEach(id => {
+
+    const el = document.getElementById(id);
+
+    if (el) {
+      el.disabled = !aktif;
+
+      // Jika Jam KLM = 0, kosongkan pilihan
+      if (!aktif) {
+        el.checked = false;
+      }
+    }
+
+  });
+
+}
+
+  
   
   function pasangEventKodDuty() {
     const select = document.getElementById("kodDuty");
@@ -1106,9 +1141,9 @@ if (offday.checked) {
 } else {
 
   setValue("jamKlm", jamKlmAsal);
-
+  
 }
-
+kawalKLMIkutJamKlm();
 kiraSemuaRM();
     });
   }
