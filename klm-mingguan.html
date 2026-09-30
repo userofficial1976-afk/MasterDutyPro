@@ -4442,14 +4442,15 @@ function paparAdmin(rows){
             ${units.length} unit
         </div>
 
-        <button
-            class="btn btn-primary"
-            id="btnDownloadExcel"
-            type="button"
-        >
-            <i class="fas fa-file-excel mr-2"></i>
-            DOWNLOAD EXCEL
-        </button>
+<button
+    id="btnDownloadExcel"
+    type="button"
+    onclick="downloadExcelKLM()"
+    class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold flex items-center gap-2"
+>
+    <i class="fa-solid fa-file-excel"></i>
+    DOWNLOAD EXCEL
+</button>
 
     </div>
 
@@ -5571,23 +5572,7 @@ document.addEventListener(
     init
 );
 
-/* =====================================================
-   EVENT DOWNLOAD EXCEL
-===================================================== */
 
-const btnExcel =
-    document.getElementById(
-        "btnDownloadExcel"
-    );
-
-if(btnExcel){
-
-    btnExcel.addEventListener(
-        "click",
-        downloadExcelKLM
-    );
-
-}
 
     
 </script>
