@@ -49,7 +49,7 @@
             background: #0b1220;
         }
 
-        /* ================================
+/* ================================
    FONT PAGE CONTENT
    SIDEBAR TIDAK TERLIBAT
 ================================ */
@@ -60,62 +60,67 @@ main {
     line-height: 1.6;
 }
 
-/* Tajuk utama page */
+/* Tajuk dalam page */
 main h1,
 main h2,
 main h3,
-main *4,
+main h4,
 main h5,
 main h6 {
-    font-wei*ht: 500 !important;
+    font-weight: 400 !important;
     letter-spacing: 0.01em;
 }
 
-/* Teks biasa */
+/* Semua teks biasa */
 main p,
 main span,
 main button,
-*ain label {
-    font-weight: 400 *important;
+main label {
+    font-weight: 400 !important;
 }
 
-/* Tajuk PNL */
+/* Tajuk atas */
 main h2 {
     font-size: 20px;
-}*
+    line-height: 1.4;
+}
+
+/* Tajuk setiap bahagian */
 main h3 {
-    font*size: 17px;
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+/* Buang bold Tailwind dalam main */
+main .font-bold,
+main .font-semibold,
+main .font-medium {
+    font-weight: 400 !important;
 }
 
 /* Jadual */
 main .report-table th,
 main .report-table td {
-    font-size: 13px;*    font-weight: 400 !important;
+    font-size: 13px;
+    font-weight: 400 !important;
     line-height: 1.5;
     padding: 9px 10px;
 }
 
 /* Header jadual */
 main .report-table th {
-    font-weight: 500 !important;
+    font-weight: 400 !important;
 }
 
 /* Baris jumlah */
 main .strong-row td {
-    font-weight: 500 !important;
+    font-weight: 400 !important;
 }
 
-/* Semua class Tailwind font-semibold/font-bold
-   dalam page diturunkan supaya tidak terlalu tebal */
-main .font-bold,
-main .font-semibold {
-    font-weight: 500 !important;
-}
-
-/* Nombor dan nilai kewangan */
+/* Nilai besar */
 main .text-xl,
 main .text-2xl {
-    font-weight: 500 !important;
+    font-weight: 400 !important;
 }
 
 /* Teks kecil */
@@ -126,7 +131,6 @@ main .text-xs {
 main .text-sm {
     line-height: 1.6;
 }
-        
 
         .glass {
             background: rgba(15, 23, 42, 0.72);
@@ -213,7 +217,7 @@ main .text-sm {
 }
 
 /* Nama anggota */
-#tblPerbelanjaan thead tr:nth-ch*ld(4) th:not(:first-child) {
+#tblPerbelanjaan thead tr:nth-child(4) th:not(:first-child) {
     font-size: 11px;
 }
         
@@ -228,7 +232,7 @@ main .text-sm {
 
 .report-table th {
     background: #1e293b;
-    font-weight: 500;
+    font-weight: 400;
 }
 
         .report-table td {
@@ -243,7 +247,7 @@ main .text-sm {
         }
 
 .strong-row td {
-    font-weight: 500;
+    font-weight: 400;
     background: rgba(20, 184, 166, 0.08);
 }
 
