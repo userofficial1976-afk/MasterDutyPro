@@ -88,12 +88,61 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        .report-table {
-            border-collapse: collapse;
-            width: 100%;
-            min-width: 1120px;
-        }
+.report-table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 1150px;
+}
 
+/* KHAS UNTUK PERBELANJAAN ANGGOTA */
+#tblPerbelanjaan {
+    table-layout: fixed;
+    width: 1150px;
+    min-width: 1150px;
+}
+
+/* Kolum Keterangan */
+#tblPerbelanjaan th:first-child,
+#tblPerbelanjaan td:first-child {
+    width: 190px;
+    min-width: 190px;
+    max-width: 190px;
+}
+
+/* Kolum Anggota 1 - 8 */
+#tblPerbelanjaan th:nth-child(n+2):nth-child(-n+9),
+#tblPerbelanjaan td:nth-child(n+2):nth-child(-n+9) {
+    width: 105px;
+    min-width: 105px;
+    max-width: 105px;
+}
+
+/* Kolum Jumlah */
+#tblPerbelanjaan th:nth-child(10),
+#tblPerbelanjaan td:nth-child(10) {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+}
+
+/* Pastikan nombor tersusun kemas */
+#tblPerbelanjaan td:not(:first-child) {
+    text-align: right;
+}
+
+/* Header anggota di tengah */
+#tblPerbelanjaan thead th:not(:first-child) {
+    text-align: center;
+}
+
+/* Nama anggota */
+#tblPerbelanjaan thead tr:nth-child(4) th:not(:first-child) {
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+        
         .report-table th,
         .report-table td {
             border: 1px solid #334155;
@@ -1500,7 +1549,22 @@ function janaPerbelanjaan() {
 
 
     table.innerHTML = `
+            <colgroup>
+    <col style="width:190px">
 
+    <col style="width:105px">
+    <col style="width:105px">
+    <col style="width:105px">
+    <col style="width:105px">
+    <col style="width:105px">
+    <col style="width:105px">
+    <col style="width:105px">
+    <col style="width:105px">
+
+    <col style="width:120px">
+</colgroup>
+
+            
         <thead>
 
             <tr>
