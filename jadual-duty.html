@@ -1097,7 +1097,6 @@ function kawalKLMIkutJamKlm() {
     // =========================
     if (!aktif) {
 
-      // Kalau input / number / text
       if (
         el.tagName === "INPUT" &&
         el.type !== "checkbox" &&
@@ -1106,7 +1105,6 @@ function kawalKLMIkutJamKlm() {
         el.value = "0";
       }
 
-      // Kalau checkbox / radio
       if (
         el.type === "checkbox" ||
         el.type === "radio"
@@ -1114,24 +1112,66 @@ function kawalKLMIkutJamKlm() {
         el.checked = false;
       }
 
-      // Kalau select
       if (el.tagName === "SELECT") {
         el.value = "0";
       }
 
       el.disabled = true;
 
-    } else {
+      return;
+    }
 
-      // Jam KLM ada nilai
-      el.disabled = false;
+    // =========================
+    // JAM KLM ADA NILAI
+    // =========================
+    el.disabled = false;
 
+    const nilai = Number(el.value || 0);
+
+    // =========================
+    // PUNCA KLM > JAM KLM
+    // =========================
+    if (nilai > jamKlm) {
+
+      alert(
+        "AMARAN!\n\n" +
+        "Punca KLM tidak boleh melebihi Jam KLM.\n\n" +
+        "Jam KLM: " + jamKlm + " jam\n" +
+        "Nilai dimasukkan: " + nilai + " jam"
+      );
+
+      el.value = "";
+
+      setTimeout(() => {
+        el.focus();
+      }, 100);
     }
 
   });
 
 }
-  
+
+[
+  "klmOffday",
+  "klmWajib",
+  "klmMc",
+  "klmCutiTahun",
+  "klmCutiEhsan",
+  "klmKursus",
+  "klmCutiGanti",
+  "klmKawalanTambahan"
+].forEach(id => {
+
+  const el = document.getElementById(id);
+
+  if (!el) return;
+
+  el.addEventListener("change", function() {
+    kawalKLMIkutJamKlm();
+  });
+
+});
+
   
   function pasangEventKodDuty() {
     const select = document.getElementById("kodDuty");
