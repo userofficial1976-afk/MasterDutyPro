@@ -49,6 +49,85 @@
             background: #0b1220;
         }
 
+        /* ================================
+   FONT PAGE CONTENT
+   SIDEBAR TIDAK TERLIBAT
+================================ */
+
+main {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* Tajuk utama page */
+main h1,
+main h2,
+main h3,
+main *4,
+main h5,
+main h6 {
+    font-wei*ht: 500 !important;
+    letter-spacing: 0.01em;
+}
+
+/* Teks biasa */
+main p,
+main span,
+main button,
+*ain label {
+    font-weight: 400 *important;
+}
+
+/* Tajuk PNL */
+main h2 {
+    font-size: 20px;
+}*
+main h3 {
+    font*size: 17px;
+}
+
+/* Jadual */
+main .report-table th,
+main .report-table td {
+    font-size: 13px;*    font-weight: 400 !important;
+    line-height: 1.5;
+    padding: 9px 10px;
+}
+
+/* Header jadual */
+main .report-table th {
+    font-weight: 500 !important;
+}
+
+/* Baris jumlah */
+main .strong-row td {
+    font-weight: 500 !important;
+}
+
+/* Semua class Tailwind font-semibold/font-bold
+   dalam page diturunkan supaya tidak terlalu tebal */
+main .font-bold,
+main .font-semibold {
+    font-weight: 500 !important;
+}
+
+/* Nombor dan nilai kewangan */
+main .text-xl,
+main .text-2xl {
+    font-weight: 500 !important;
+}
+
+/* Teks kecil */
+main .text-xs {
+    line-height: 1.5;
+}
+
+main .text-sm {
+    line-height: 1.6;
+}
+        
+
         .glass {
             background: rgba(15, 23, 42, 0.72);
             backdrop-filter: blur(16px);
@@ -138,18 +217,19 @@
     font-size: 11px;
 }
         
-        .report-table th,
-        .report-table td {
-            border: 1px solid #334155;
-            padding: 7px 9px;
-            white-space: nowrap;
-            font-size: 12px;
-        }
+.report-table th,
+.report-table td {
+    border: 1px solid #334155;
+    padding: 9px 10px;
+    white-space: nowrap;
+    font-size: 13px;
+    line-height: 1.5;
+}
 
-        .report-table th {
-            background: #1e293b;
-            font-weight: 600;
-        }
+.report-table th {
+    background: #1e293b;
+    font-weight: 500;
+}
 
         .report-table td {
             background: rgba(15, 23, 42, 0.45);
@@ -162,10 +242,10 @@
             background: #101a2c !important;
         }
 
-        .strong-row td {
-            font-weight: 700;
-            background: rgba(20, 184, 166, 0.08);
-        }
+.strong-row td {
+    font-weight: 500;
+    background: rgba(20, 184, 166, 0.08);
+}
 
         /* ================================
            MOBILE NAV
