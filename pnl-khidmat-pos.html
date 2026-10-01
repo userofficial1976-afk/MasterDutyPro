@@ -94,38 +94,29 @@
     min-width: 1150px;
 }
 
-/* KHAS UNTUK PERBELANJAAN ANGGOTA */
+/* ================================
+   PERBELANJAAN ANGGOTA
+================================ */
+
 #tblPerbelanjaan {
     table-layout: fixed;
-    width: 1150px;
-    min-width: 1150px;
+    width: 100%;
+    min-width: 0 !important;
 }
 
-/* Kolum Keterangan */
+/* KOLUM 1 = 15% */
 #tblPerbelanjaan th:first-child,
 #tblPerbelanjaan td:first-child {
-    width: 190px;
-    min-width: 190px;
-    max-width: 190px;
+    width: 15%;
 }
 
-/* Kolum Anggota 1 - 8 */
-#tblPerbelanjaan th:nth-child(n+2):nth-child(-n+9),
-#tblPerbelanjaan td:nth-child(n+2):nth-child(-n+9) {
-    width: 105px;
-    min-width: 105px;
-    max-width: 105px;
+/* KOLUM 2 HINGGA 10 = 9.444444444444444% */
+#tblPerbelanjaan th:nth-child(n+2):nth-child(-n+10),
+#tblPerbelanjaan td:nth-child(n+2):nth-child(-n+10) {
+    width: 9.444444444444444%;
 }
 
-/* Kolum Jumlah */
-#tblPerbelanjaan th:nth-child(10),
-#tblPerbelanjaan td:nth-child(10) {
-    width: 120px;
-    min-width: 120px;
-    max-width: 120px;
-}
-
-/* Pastikan nombor tersusun kemas */
+/* Nombor di sebelah kanan */
 #tblPerbelanjaan td:not(:first-child) {
     text-align: right;
 }
@@ -135,13 +126,17 @@
     text-align: center;
 }
 
-/* Nama anggota */
-#tblPerbelanjaan thead tr:nth-child(4) th:not(:first-child) {
-    font-size: 11px;
+/* Pastikan kandungan tidak mengubah saiz kolum */
+#tblPerbelanjaan th,
+#tblPerbelanjaan td {
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
+/* Nama anggota */
+#tblPerbelanjaan thead tr:nth-ch*ld(4) th:not(:first-child) {
+    font-size: 11px;
+}
         
         .report-table th,
         .report-table td {
@@ -1549,19 +1544,19 @@ function janaPerbelanjaan() {
 
 
     table.innerHTML = `
-            <colgroup>
-    <col style="width:190px">
+<colgroup>
+    <col style="width:15%">
 
-    <col style="width:105px">
-    <col style="width:105px">
-    <col style="width:105px">
-    <col style="width:105px">
-    <col style="width:105px">
-    <col style="width:105px">
-    <col style="width:105px">
-    <col style="width:105px">
+    <col style="width:9.444444444444444%">
+    <col style="width:9.444444444444444%">
+    <col style="width:9.444444444444444%">
+    <col style="width:9.444444444444444%">
+    <col style="width:9.444444444444444%">
+    <col style="width:9.444444444444444%">
+    <col style="width:9.444444444444444%">
+    <col style="width:9.444444444444444%">
 
-    <col style="width:120px">
+    <col style="width:9.444444444444444%">
 </colgroup>
 
             
