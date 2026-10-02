@@ -1911,7 +1911,232 @@ main select:focus {
 }
     
 
+/* =====================================================
+   WARNA RK01 - PAPARAN SCREEN SAHAJA
+   PRINT / PDF ASAL TIDAK DIUBAH
+===================================================== */
 
+@media screen {
+
+    /* =================================================
+       KAWASAN UTAMA SEBELAH KANAN SIDEBAR
+    ================================================= */
+
+    main {
+        background: #111827 !important;
+        color: #e5e7eb;
+    }
+
+    main > div {
+        background: #111827;
+    }
+
+
+    /* =================================================
+       KOTAK FILTER
+    ================================================= */
+
+    main .glass.rounded-2xl.no-print {
+        background: #1e293b !important;
+        border: 1px solid #334155 !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.20);
+    }
+
+    main .glass.rounded-2xl.no-print label {
+        color: #cbd5e1 !important;
+    }
+
+
+    /* =================================================
+       DROPDOWN
+    ================================================= */
+
+    main select {
+        background: #0f172a !important;
+        color: #f8fafc !important;
+        border: 1px solid #475569 !important;
+    }
+
+    main select:hover {
+        border-color: #64748b !important;
+    }
+
+    main select:focus {
+        border-color: #2dd4bf !important;
+        outline: none !important;
+        box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.15);
+    }
+
+
+    /* =================================================
+       LAPORAN RK01
+    ================================================= */
+
+    .print-area {
+        background: #f8fafc !important;
+        color: #111827 !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    }
+
+
+    /* =================================================
+       TAJUK LAPORAN
+    ================================================= */
+
+    .print-area .report-title-main {
+        color: #0f172a !important;
+    }
+
+    .print-area .report-title-sub {
+        color: #0f766e !important;
+    }
+
+    .print-area .report-info {
+        color: #1e293b !important;
+    }
+
+    .print-area .report-info b {
+        color: #0f172a !important;
+    }
+
+    .print-area .rk01-box {
+        color: #0f172a !important;
+        font-weight: 700;
+    }
+
+
+    /* =================================================
+       TABLE RK01
+    ================================================= */
+
+    .rk01-table {
+        background: #ffffff !important;
+        color: #0f172a !important;
+    }
+
+    .rk01-table th,
+    .rk01-table td {
+        color: #0f172a !important;
+        border-color: #64748b !important;
+    }
+
+
+    /* =================================================
+       HEADER NAMA / NO SKB
+    ================================================= */
+
+    .rk01-table thead th {
+        background: #dbeafe !important;
+        color: #0f172a !important;
+        border-color: #64748b !important;
+    }
+
+
+    /* =================================================
+       CELL DATA
+    ================================================= */
+
+    .rk01-table tbody td {
+        background: #ffffff !important;
+        color: #111827 !important;
+    }
+
+
+    /* =================================================
+       TARIKH
+    ================================================= */
+
+    .rk01-table tbody th[rowspan="4"] {
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+    }
+
+
+    /* =================================================
+       WK / TK
+    ================================================= */
+
+    .rk01-table tbody th:not([rowspan]) {
+        background: #ccfbf1 !important;
+        color: #134e4a !important;
+    }
+
+
+    /* =================================================
+       FOOTER RK01
+    ================================================= */
+
+    .rk01-footer-grid {
+        color: #111827 !important;
+    }
+
+    .rk01-footer-grid .footer-box {
+        background: #ffffff !important;
+        color: #111827 !important;
+    }
+
+    .rk01-footer-grid .footer-box td {
+        background: #ffffff !important;
+        color: #111827 !important;
+        border-color: #64748b !important;
+    }
+
+
+    /* =================================================
+       PETUNJUK
+    ================================================= */
+
+    .rk01-footer-grid .petunjuk-box th {
+        background: #ccfbf1 !important;
+        color: #134e4a !important;
+        border-color: #64748b !important;
+    }
+
+
+    /* =================================================
+       WAKTU KERJA
+    ================================================= */
+
+    .rk01-footer-grid .waktu-box th {
+        background: #dbeafe !important;
+        color: #1e3a8a !important;
+        border-color: #64748b !important;
+    }
+
+
+    /* =================================================
+       TEMPAT KERJA
+    ================================================= */
+
+    .rk01-footer-grid .tempat-box th {
+        background: #fef3c7 !important;
+        color: #78350f !important;
+        border-color: #64748b !important;
+    }
+
+
+    /* =================================================
+       JUMLAH JAM
+    ================================================= */
+
+    .rk01-footer-grid .jumlah-box th {
+        background: #e0e7ff !important;
+        color: #312e81 !important;
+        border-color: #64748b !important;
+    }
+
+
+    /* =================================================
+       PENGESAHAN
+    ================================================= */
+
+    .rk01-footer-grid .pengesahan-box td {
+        background: #f8fafc !important;
+        color: #111827 !important;
+    }
+
+}
     
 </style>
 </head>
