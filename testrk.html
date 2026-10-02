@@ -1739,176 +1739,7 @@ grid-template-columns:
 }
 
 
-/* =====================================================
-   RK01 - WARNA KAWASAN UTAMA
-   Sidebar dikekalkan
-===================================================== */
 
-/* Background keseluruhan sebelah kanan */
-main {
-    background: #111827;
-    color: #e5e7eb;
-}
-
-/* Kawasan selepas header */
-main > .p-6 {
-    background: #111827;
-}
-
-/* Filter box */
-main .glass.rounded-2xl.no-print {
-    background: #1f2937;
-    border: 1px solid #374151;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
-}
-
-/* Label UNIT, POS, BULAN, TAHUN, MINGGU */
-main .glass.rounded-2xl.no-print label {
-    color: #cbd5e1 !important;
-}
-
-/* Dropdown */
-main select {
-    background: #0f172a;
-    color: #f8fafc;
-    border: 1px solid #475569;
-}
-
-/* Bila hover/focus dropdown */
-main select:focus {
-    border-color: #2dd4bf;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.12);
-}
-
-/* =====================================================
-   KAWASAN LAPORAN RK01
-===================================================== */
-
-.print-area {
-    background: #f8fafc !important;
-    color: #111827 !important;
-
-    border: 1px solid #cbd5e1 !important;
-
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.22);
-}
-
-/* Tajuk utama */
-.print-area .report-title-main {
-    color: #111827 !important;
-}
-
-/* Sub tajuk */
-.print-area .report-title-sub {
-    color: #0f766e !important;
-}
-
-/* Maklumat Bulan/Tahun/Minggu/Pos */
-.print-area .report-info {
-    color: #1f2937 !important;
-}
-
-/* BORANG RK-01 */
-.print-area .rk01-box {
-    color: #0f172a;
-    font-weight: 700;
-}
-
-/* =====================================================
-   TABLE RK01 - LEBIH SENANG DIBACA
-===================================================== */
-
-.rk01-table {
-    background: #ffffff !important;
-    color: #111827 !important;
-}
-
-/* Semua cell */
-.rk01-table th,
-.rk01-table td {
-    color: #111827 !important;
-    border-color: #64748b !important;
-}
-
-/* Header utama */
-.rk01-table thead th {
-    background: #dbeafe !important;
-    color: #0f172a !important;
-}
-
-/* Cell data */
-.rk01-table tbody td {
-    background: #ffffff !important;
-}
-
-/* Kolum tarikh */
-.rk01-table tbody th[rowspan="4"] {
-    background: #e2e8f0 !important;
-    color: #0f172a !important;
-}
-
-/* WK / TK */
-.rk01-table tbody th:not([rowspan]) {
-    background: #ccfbf1 !important;
-    color: #134e4a !important;
-}
-
-/* =====================================================
-   FOOTER RK01
-===================================================== */
-
-.rk01-footer-grid {
-    color: #111827 !important;
-}
-
-.rk01-footer-grid .footer-box {
-    background: #ffffff !important;
-    color: #111827 !important;
-}
-
-.rk01-footer-grid .footer-box th {
-    background: #dbeafe !important;
-    color: #0f172a !important;
-}
-
-.rk01-footer-grid .footer-box td {
-    background: #ffffff !important;
-    color: #111827 !important;
-}
-
-/* PETUNJUK */
-.rk01-footer-grid .petunjuk-box th {
-    background: #ccfbf1 !important;
-    color: #134e4a !important;
-}
-
-/* WAKTU KERJA */
-.rk01-footer-grid .waktu-box th {
-    background: #dbeafe !important;
-    color: #1e3a8a !important;
-}
-
-/* TEMPAT KERJA */
-.rk01-footer-grid .tempat-box th {
-    background: #fef3c7 !important;
-    color: #78350f !important;
-}
-
-/* JUMLAH JAM */
-.rk01-footer-grid .jumlah-box th {
-    background: #e0e7ff !important;
-    color: #312e81 !important;
-}
-
-/* =====================================================
-   STATUS LAPORAN
-===================================================== */
-
-#statusLaporan {
-    color: #cbd5e1;
-}
     
 
 /* =====================================================
@@ -2131,9 +1962,18 @@ main select:focus {
        PENGESAHAN
     ================================================= */
 
-    .rk01-footer-grid .pengesahan-box td {
+       .rk01-footer-grid .pengesahan-box td {
         background: #f8fafc !important;
         color: #111827 !important;
+    }
+
+
+    /* =================================================
+       STATUS LAPORAN
+    ================================================= */
+
+    #statusLaporan {
+        color: #cbd5e1;
     }
 
 }
