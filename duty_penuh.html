@@ -1796,39 +1796,87 @@ function dapatkanHari(tarikh) {
         String(tarikh).trim();
 
 
-    // 2026-09-01
-    // 2026/09/01
-    let match =
-        value.match(
-            /^(\d{4})\d{1,2}\d{1,2}$/
-        );
+    // ==========================================
+    // FORMAT: YYYY-MM-DD
+    // CONTOH: 2026-09-01
+    // ==========================================
 
-    if (match) {
+    if (
+        /^\d{4}-\d{2}-\d{2}$/.test(value)
+    ) {
+
+        const bahagian =
+            value.split("-");
 
         return Number(
-            match[3]
+            bahagian[2]
         );
 
     }
 
 
-    // 01/09/2026
-    // 01-09-2026
-    match =
-        value.match(
-            /^(\d{1,2})\d{1,2}\d{4}$/
-        );
+    // ==========================================
+    // FORMAT: YYYY/MM/DD
+    // CONTOH: 2026/09/01
+    // ==========================================
 
-    if (match) {
+    if (
+        /^\d{4}\/\d{2}\/\d{2}$/.test(value)
+    ) {
+
+        const bahagian =
+            value.split("/");
 
         return Number(
-            match[1]
+            bahagian[2]
         );
 
     }
 
 
-    // Jika cuma 01 hingga 31
+    // ==========================================
+    // FORMAT: DD/MM/YYYY
+    // CONTOH: 01/09/2026
+    // ==========================================
+
+    if (
+        /^\d{2}\/\d{2}\/\d{4}$/.test(value)
+    ) {
+
+        const bahagian =
+            value.split("/");
+
+        return Number(
+            bahagian[0]
+        );
+
+    }
+
+
+    // ==========================================
+    // FORMAT: DD-MM-YYYY
+    // CONTOH: 01-09-2026
+    // ==========================================
+
+    if (
+        /^\d{2}-\d{2}-\d{4}$/.test(value)
+    ) {
+
+        const bahagian =
+            value.split("-");
+
+        return Number(
+            bahagian[0]
+        );
+
+    }
+
+
+    // ==========================================
+    // JIKA CUMA SIMPAN HARI
+    // CONTOH: 01 / 1 / 30
+    // ==========================================
+
     if (
         /^\d{1,2}$/.test(value)
     ) {
@@ -1840,17 +1888,19 @@ function dapatkanHari(tarikh) {
             hari >= 1 &&
             hari <= 31
         ) {
-
             return hari;
-
         }
 
     }
 
 
+    console.warn(
+        "Format tarikh tidak dikenali:",
+        value
+    );
+
     return null;
 }
-
 /* ============================================================
    JUMLAH HARI BULAN
 ============================================================ */
