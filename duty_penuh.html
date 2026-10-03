@@ -1798,20 +1798,87 @@ function resetData() {
 ============================================================ */
 
 
-function dapatkanHari(
-    tarikh
-) {
-
+function dapatkanHari(tarikh) {
 
     if (
         tarikh === null ||
         tarikh === undefined
     ) {
-
         return null;
+    }
+
+    const value =
+    String(tarikh).trim();
+
+
+    // ==========================================
+    // FORMAT DATABASE:
+    // 2026-10-01
+    // 2026/10/01
+    // ==========================================
+
+    let match =
+    value.match(
+        /^(\d{4})\d{1,2}\d{1,2}$/
+    );
+
+    if (match) {
+
+        return Number(
+            match[3]
+        );
 
     }
 
+
+    // ==========================================
+    // FORMAT:
+    // 01/10/2026
+    // 01-10-2026
+    // ==========================================
+
+    match =
+    value.match(
+        /^(\d{1,2})\d{1,2}\d{4}$/
+    );
+
+    if (match) {
+
+        return Number(
+            match[1]
+        );
+
+    }
+
+
+    // ==========================================
+    // JIKA TARIKH CUMA:
+    // 01
+    // 02
+    // 03
+    // ==========================================
+
+    if (
+        /^\d{1,2}$/.test(value)
+    ) {
+
+        const hari =
+        Number(value);
+
+        if (
+            hari >= 1 &&
+            hari <= 31
+        ) {
+
+            return hari;
+
+        }
+
+    }
+
+
+    return null;
+}
 
 
     const value =
@@ -2414,13 +2481,13 @@ function groupDataIkutSkb(
                 */
 
 
-                anggota.rekodHari[
-                    hari
-                ] =
-                rekod;
+if (!anggota.rekodHari[hari]) {
 
+    anggota.jumlahRekod++;
 
-                anggota.jumlahRekod++;
+}
+
+anggota.rekodHari[hari] = rekod;
 
             }
 
