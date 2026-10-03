@@ -2015,15 +2015,55 @@ async function ambilDataBulanan() {
 
 
 
-    try {
+try {
 
 
-        let semuaData = [];
+    let semuaData = [];
 
-        let dari = 0;
+    let dari = 0;
 
-        const saizPage =
-        1000;
+    const saizPage = 1000;
+
+
+    /* =====================================================
+       BINA JULAT TARIKH BERDASARKAN TAHUN + BULAN
+    ====================================================== */
+
+    const nomborBulan =
+    BULAN_NOMBOR[bulan];
+
+
+    const jumlahHari =
+    new Date(
+        Number(tahun),
+        nomborBulan,
+        0
+    ).getDate();
+
+
+    const bulan2Digit =
+    String(
+        nomborBulan
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+    const tarikhMula =
+    `${tahun}-${bulan2Digit}-01`;
+
+
+    const tarikhAkhir =
+    `${tahun}-${bulan2Digit}-${String(jumlahHari).padStart(2, "0")}`;
+
+
+    console.log(
+        "Tarikh Export:",
+        tarikhMula,
+        "hingga",
+        tarikhAkhir
+    );
 
 
 
@@ -2089,24 +2129,24 @@ async function ambilDataBulanan() {
                 pos
 
             `)
-            .eq(
-                "tahun",
-                String(tahun)
-            )
-            .eq(
-                "bulan",
-                bulan
-            )
-            .order(
-                "id",
-                {
-                    ascending: true
-                }
-            )
-            .range(
-                dari,
-                sampai
-            );
+            .gte(
+    "tarikh",
+    tarikhMula
+)
+.lte(
+    "tarikh",
+    tarikhAkhir
+)
+.order(
+    "tarikh",
+    {
+        ascending: true
+    }
+)
+.range(
+    dari,
+    sampai
+);
 
 
 
