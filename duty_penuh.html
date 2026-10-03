@@ -2756,56 +2756,27 @@ async function exportExcel() {
         ===================================================== */
 
 
-        const header = [
+const header = [
+    "No. SKB",
+    "No. Anggota",
+    "Nama"
+];
 
-            "No. SKB",
+for (let hari = 1; hari <= jumlahHari; hari++) {
 
-            "No. Anggota",
+    const h = String(hari).padStart(2, "0");
 
-            "Nama"
+    header.push(
+        `wk${h}`,
+        `tk${h}`,
+        `Jam_klm${h}`,
+        `hari_off${h}`,
+        `jam_off${h}`,
+        `hari_am${h}`,
+        `jam_am${h}`
+    );
 
-        ];
-
-
-
-        for (
-            let hari = 1;
-            hari <= jumlahHari;
-            hari++
-        ) {
-
-
-            const h =
-            String(
-                hari
-            )
-            .padStart(
-                2,
-                "0"
-            );
-
-
-
-            header.push(
-
-                `wk${h}`,
-
-                `tk${h}`,
-
-                `Jam_klm${h}`,
-
-                `hari_off${h}`,
-
-                `jam_off${h}`,
-
-                `hari_am${h}`,
-
-                `jam_am${h}`
-
-            );
-
-        }
-
+}
 
 
         /*
