@@ -13,28 +13,71 @@
     <title>Export Excel / PDF — Master Duty Pro</title>
 
 
-    <!-- TAILWIND -->
-    <script src="https://cdn.tailwindcss.com"></script>
+<!-- TAILWIND -->
+<script src="https://cdn.tailwindcss.com"></script>
 
 
-    <!-- FONT AWESOME -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    >
+<!-- FONT AWESOME -->
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
 
 
-    <!-- SUPABASE -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-    <!-- SHEETJS -->
-    https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.jsscript>
+<!-- SHEETJS -->
+https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.jsscript>
 
 
-    <!-- INTER -->
-    https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap
+<!-- INTER -->
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+>
 
+
+<script>
+
+    tailwind.config = {
+
+        theme: {
+
+            extend: {
+
+                colors: {
+
+                    teal: {
+
+                        450: "#2dd4bf",
+                        550: "#14b8a6",
+                        650: "#0d9488",
+                        750: "#0f766e"
+
+                    }
+
+                },
+
+                fontFamily: {
+
+                    sans: [
+                        "Inter",
+                        "Segoe UI",
+                        "system-ui",
+                        "sans-serif"
+                    ]
+
+                }
+
+            }
+
+        }
+
+    };
+
+</script>
 
     <script>
 
