@@ -1229,32 +1229,16 @@
                     "
                 >
 
-                    <table class="preview-table">
+<table
+    id="previewTable"
+    class="preview-table"
+>
 
+    <thead id="previewHead"></thead>
 
-                        <thead>
+    <tbody id="previewBody"></tbody>
 
-                        <tr>
-
-                            <th>#</th>
-
-                            <th>No. SKB</th>
-
-                            <th>No. Anggota</th>
-
-                            <th>Nama</th>
-
-                            <th>Jumlah Tarikh</th>
-
-                        </tr>
-
-                        </thead>
-
-
-                        <tbody id="previewBody"></tbody>
-
-
-                    </table>
+</table>
 
                 </div>
 
@@ -2423,98 +2407,121 @@ anggota.rekodHari[hari] = rekod;
 
 async function paparData() {
 
-
     const btn =
-    document.getElementById(
-        "btnPapar"
-    );
+        document.getElementById("btnPapar");
 
-
-    btn.disabled =
-    true;
-
-
+    btn.disabled = true;
 
     try {
 
-
         const data =
-        await ambilDataBulanan();
-
-
+            await ambilDataBulanan();
 
         if (!data) {
-
             return;
-
         }
-
 
 
         const tahun =
-        document.getElementById(
-            "tahun"
-        ).value;
-
+            document.getElementById("tahun").value;
 
         const bulan =
-        document.getElementById(
-            "bulan"
-        ).value;
+            document.getElementById("bulan").value;
 
 
-
-        /*
-            PASTIKAN GROUP ADA
-        */
-
-
-        if (
-            dataAnggotaGrouped.length === 0
-        ) {
-
+        if (dataAnggotaGrouped.length === 0) {
 
             dataAnggotaGrouped =
-            groupDataIkutSkb(
-                data
-            );
+                groupDataIkutSkb(data);
 
         }
 
 
+        const jumlahHari =
+            jumlahHariBulan(
+                tahun,
+                bulan
+            );
+
+
+        // ==========================================
+        // HEADER PREVIEW
+        // SAMA SEPERTI EXCEL
+        // ==========================================
+
+        const previewHead =
+            document.getElementById("previewHead");
+
+
+        let headerHTML = `
+            <tr>
+
+                <th>No. SKB</th>
+
+                <th>No. Anggota</th>
+
+                <th>Nama</th>
+        `;
+
+
+        for (
+            let hari = 1;
+            hari <= jumlahHari;
+            hari++
+        ) {
+
+            const h =
+                String(hari).padStart(2, "0");
+
+
+            headerHTML += `
+                <th>wk${h}</th>
+
+                <th>tk${h}</th>
+
+                <th>Jam_klm${h}</th>
+
+                <th>hari_off${h}</th>
+
+                <th>jam_off${h}</th>
+
+                <th>hari_am${h}</th>
+
+                <th>jam_am${h}</th>
+            `;
+
+        }
+
+
+        headerHTML += `
+            </tr>
+        `;
+
+
+        previewHead.innerHTML =
+            headerHTML;
+
+
+        // ==========================================
+        // BODY PREVIEW
+        // 1 SKB = 1 ROW
+        // ==========================================
 
         const tbody =
-        document.getElementById(
-            "previewBody"
-        );
+            document.getElementById("previewBody");
 
 
-        tbody.innerHTML =
-        "";
-
+        tbody.innerHTML = "";
 
 
         dataAnggotaGrouped.forEach(
-
-            function (
-                anggota,
-                index
-            ) {
-
+            function (anggota) {
 
                 const tr =
-                document.createElement(
-                    "tr"
-                );
+                    document.createElement("tr");
 
 
-
-                tr.innerHTML = `
-
-                    <td>
-                        ${index + 1}
-                    </td>
-
+                let rowHTML = `
                     <td>
                         ${anggota.no_skb ?? ""}
                     </td>
@@ -2526,99 +2533,150 @@ async function paparData() {
                     <td class="nama">
                         ${anggota.nama_anggota ?? ""}
                     </td>
-
-                    <td>
-                        ${anggota.jumlahRekod}
-                    </td>
-
                 `;
 
 
+                // ==================================
+                // TARIKH 01 HINGGA AKHIR BULAN
+                // ==================================
 
-                tbody.appendChild(
-                    tr
-                );
+                for (
+                    let hari = 1;
+                    hari <= jumlahHari;
+                    hari++
+                ) {
+
+                    const rekod =
+                        anggota.rekodHari[hari];
+
+
+                    if (rekod) {
+
+                        rowHTML += `
+                            <td>
+                                ${rekod.kod_duty ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.kod_tempat_kerja ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.jam_klm ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.hari_offday_bertugas ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.jam_offday_bertugas ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.hari_cutiam_bertugas ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.jam_cutiam_bertugas ?? ""}
+                            </td>
+                        `;
+
+                    } else {
+
+                        rowHTML += `
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        `;
+
+                    }
+
+                }
+
+
+                tr.innerHTML =
+                    rowHTML;
+
+
+                tbody.appendChild(tr);
 
             }
-
         );
 
 
+        // ==========================================
+        // INFO PAPARAN
+        // ==========================================
 
         document.getElementById(
             "previewInfo"
         ).textContent =
-
-        `${bulan} ${tahun} • ${dataAnggotaGrouped.length} anggota`;
-
+            `${bulan} ${tahun} • ${dataAnggotaGrouped.length} anggota • 1 SKB = 1 row`;
 
 
         document.getElementById(
             "summarySkb"
         ).textContent =
-
-        dataAnggotaGrouped.length;
-
+            dataAnggotaGrouped.length;
 
 
         document.getElementById(
             "summaryBulan"
         ).textContent =
-
-        bulan;
-
+            bulan;
 
 
         document.getElementById(
             "summaryTahun"
         ).textContent =
-
-        tahun;
-
+            tahun;
 
 
         document
-        .getElementById(
-            "summaryCard"
-        )
-        .classList.remove(
-            "hidden"
-        );
-
+            .getElementById("summaryCard")
+            .classList.remove("hidden");
 
 
         document
-        .getElementById(
-            "previewCard"
-        )
-        .classList.remove(
-            "hidden"
-        );
-
+            .getElementById("previewCard")
+            .classList.remove("hidden");
 
 
         setStatus(
-
-            `${dataAnggotaGrouped.length} SKB berjaya dipaparkan.`,
-
+            `${dataAnggotaGrouped.length} SKB berjaya dipaparkan dalam format 1 SKB = 1 row.`,
             "success"
-
         );
 
+    }
+
+    catch (err) {
+
+        console.error(
+            "Papar Data Error:",
+            err
+        );
+
+
+        setStatus(
+            "Gagal memaparkan data: " +
+            err.message,
+            "error"
+        );
 
     }
 
     finally {
 
-
-        btn.disabled =
-        false;
+        btn.disabled = false;
 
     }
 
 }
-
-
 
 /* ============================================================
    EXPORT EXCEL
