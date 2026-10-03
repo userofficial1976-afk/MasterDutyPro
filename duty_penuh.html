@@ -1,254 +1,992 @@
 <!DOCTYPE html>
 <html lang="ms">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Export Jadual Duty</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Export Excel / PDF — Master Duty Pro
+    </title>
+
+
+    <!-- =========================================================
+         TAILWIND
+    ========================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- =========================================================
+         FONT AWESOME
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
 
     <!-- =========================================================
          SUPABASE
     ========================================================== -->
-    https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
     <!-- =========================================================
-         SHEETJS - EXCEL
+         SHEETJS / XLSX
     ========================================================== -->
+
     https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.jsscript>
+
 
     <!-- =========================================================
          FONT
     ========================================================== -->
-    https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap
+
+    https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap
+
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+
+                        teal: {
+
+                            450: "#2dd4bf",
+                            550: "#14b8a6",
+                            650: "#0d9488",
+                            750: "#0f766e"
+
+                        }
+
+                    },
+
+                    fontFamily: {
+
+                        sans: [
+                            "Inter",
+                            "Segoe UI",
+                            "system-ui",
+                            "sans-serif"
+                        ]
+
+                    }
+
+                }
+
+            }
+
+        };
+
+    </script>
+
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
 
         body {
-            margin: 0;
-            padding: 0;
-            background: #f4f6f8;
-            font-family: "Inter", sans-serif;
-            color: #1f2937;
+
+            background: #0b1220;
+
         }
 
-        .page {
-            min-height: 100vh;
-            padding: 40px 20px;
+
+        .glass {
+
+            background: rgba(15, 23, 42, 0.7);
+
+            backdrop-filter: blur(16px);
+
+            border: 1px solid rgba(45, 212, 191, 0.12);
+
         }
 
-        .container {
-            max-width: 850px;
-            margin: 0 auto;
+
+        .sidebar-link.active {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(20, 184, 166, 0.2),
+                    transparent
+                );
+
+            border-left: 3px solid #14b8a6;
+
+            color: #2dd4bf;
+
         }
 
-        .card {
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 14px;
-            padding: 28px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+
+        .sidebar-link {
+
+            transition: all .2s ease;
+
         }
 
-        .title {
-            margin: 0 0 5px 0;
-            font-size: 22px;
-            font-weight: 600;
-            color: #111827;
+
+        .sidebar-link:hover {
+
+            color: #2dd4bf;
+
+            background: rgba(255, 255, 255, 0.05);
+
         }
 
-        .subtitle {
-            margin: 0 0 28px 0;
-            font-size: 14px;
-            color: #6b7280;
+
+        .mobile-bottom {
+
+            display: none;
+
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .form-group label {
-            font-size: 13px;
-            font-weight: 500;
-            color: #374151;
-        }
 
         .form-control {
+
             width: 100%;
-            height: 44px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            padding: 0 12px;
-            background: #ffffff;
-            color: #111827;
-            font-family: inherit;
-            font-size: 14px;
+
+            background: #0f172a;
+
+            border: 1px solid #334155;
+
+            border-radius: 12px;
+
+            padding: 12px 14px;
+
+            color: #ffffff;
+
             outline: none;
+
+            transition: all .2s ease;
+
         }
+
 
         .form-control:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+
+            border-color: #14b8a6;
+
+            box-shadow:
+                0 0 0 3px rgba(20, 184, 166, .12);
+
         }
 
-        .actions {
-            margin-top: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
 
-        .btn {
-            border: 0;
-            border-radius: 8px;
-            height: 44px;
-            padding: 0 22px;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-        }
+        .form-control option {
 
-        .btn-download {
-            background: #166534;
+            background: #0f172a;
+
             color: #ffffff;
+
         }
 
-        .btn-download:hover {
-            background: #14532d;
+
+        .action-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            padding: 12px 18px;
+
+            border-radius: 12px;
+
+            font-size: 14px;
+
+            font-weight: 500;
+
+            transition: all .2s ease;
+
         }
 
-        .btn-download:disabled {
-            background: #9ca3af;
+
+        .action-btn:disabled {
+
+            opacity: .5;
+
             cursor: not-allowed;
+
         }
 
-        .status {
-            margin-top: 18px;
-            min-height: 21px;
+
+        .preview-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
             font-size: 13px;
+
         }
 
-        .status-info {
-            color: #1d4ed8;
+
+        .preview-table th {
+
+            background: #1e293b;
+
+            color: #e2e8f0;
+
+            padding: 10px;
+
+            border: 1px solid #334155;
+
+            white-space: nowrap;
+
+            text-align: center;
+
         }
+
+
+        .preview-table td {
+
+            padding: 9px;
+
+            border: 1px solid #334155;
+
+            color: #cbd5e1;
+
+        }
+
+
+        .preview-table tbody tr:hover {
+
+            background: rgba(45, 212, 191, .05);
+
+        }
+
 
         .status-success {
-            color: #15803d;
+
+            color: #34d399;
+
         }
+
 
         .status-error {
-            color: #dc2626;
+
+            color: #f87171;
+
         }
 
-        .info-box {
-            margin-top: 28px;
-            padding: 16px;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 13px;
-            line-height: 1.7;
-            color: #4b5563;
+
+        .status-info {
+
+            color: #22d3ee;
+
         }
 
-        @media (max-width: 700px) {
-            .page {
-                padding: 20px 12px;
+
+        .status-warning {
+
+            color: #fbbf24;
+
+        }
+
+
+        @media (max-width: 1023px) {
+
+            body {
+
+                padding-bottom: 80px;
+
             }
 
-            .card {
-                padding: 20px;
-            }
 
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
+            .mobile-bottom {
 
-            .btn {
+                position: fixed;
+
+                bottom: 0;
+
+                left: 0;
+
+                right: 0;
+
+                height: 70px;
+
+                background: #0f172a;
+
+                border-top:
+                    1px solid rgba(45, 212, 191, .2);
+
+                display: flex;
+
+                justify-content: space-evenly;
+
+                align-items: center;
+
+                z-index: 99999;
+
                 width: 100%;
+
+                overflow: hidden;
+
             }
+
+
+            .mobile-nav-item {
+
+                flex: 1;
+
+                display: flex;
+
+                flex-direction: column;
+
+                align-items: center;
+
+                justify-content: center;
+
+                color: #94a3b8;
+
+                font-size: 11px;
+
+                gap: 4px;
+
+                text-decoration: none;
+
+            }
+
+
+            .mobile-nav-item.active {
+
+                color: #2dd4bf;
+
+            }
+
+
+            .mobile-nav-item i {
+
+                font-size: 20px;
+
+                width: 20px;
+
+                text-align: center;
+
+            }
+
         }
+
     </style>
+
 </head>
 
-<body>
 
-<div class="page">
+<body class="font-sans text-slate-200">
 
-    <div class="container">
 
-        <div class="card">
+<div class="flex min-h-screen">
 
-            <h1 class="title">Export Jadual Duty</h1>
 
-            <p class="subtitle">
-                Pilih tahun, bulan dan No. SKB untuk download jadual duty dalam format Excel.
-            </p>
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
 
-            <div class="form-grid">
+    <aside
+        class="
+            w-72
+            glass
+            border-r
+            border-teal-550/10
+            fixed
+            h-full
+            z-40
+            hidden
+            lg:block
+            overflow-y-auto
+        "
+    >
 
-                <!-- =========================
-                     TAHUN
-                ========================== -->
-                <div class="form-group">
-                    <label for="exportTahun">Tahun</label>
+        <div class="p-6 h-full flex flex-col">
 
-                    <select id="exportTahun" class="form-control">
-                        <option value="">Pilih Tahun</option>
-                    </select>
+
+            <!-- BRAND -->
+
+            <div class="flex items-center gap-3 mb-8">
+
+                <div
+                    class="
+                        w-12
+                        h-12
+                        flex
+                        items-center
+                        justify-center
+                    "
+                >
+
+                    <img
+                        src="logomdp.png"
+                        alt="Master Duty Pro"
+                        class="w-12 h-12 object-contain"
+                    >
+
                 </div>
 
 
-                <!-- =========================
-                     BULAN
-                ========================== -->
-                <div class="form-group">
-                    <label for="exportBulan">Bulan</label>
+                <div>
 
-                    <select id="exportBulan" class="form-control">
+                    <h1
+                        class="
+                            font-bold
+                            text-white
+                            text-lg
+                            leading-tight
+                        "
+                    >
+                        Master Duty Pro
+                    </h1>
 
-                        <option value="">Pilih Bulan</option>
+                    <p class="text-xs text-teal-450">
+                        Wilayah Terengganu
+                    </p>
 
-                        <option value="JANUARI">Januari</option>
-                        <option value="FEBRUARI">Februari</option>
-                        <option value="MAC">Mac</option>
-                        <option value="APRIL">April</option>
-                        <option value="MEI">Mei</option>
-                        <option value="JUN">Jun</option>
-                        <option value="JULAI">Julai</option>
-                        <option value="OGOS">Ogos</option>
-                        <option value="SEPTEMBER">September</option>
-                        <option value="OKTOBER">Oktober</option>
-                        <option value="NOVEMBER">November</option>
-                        <option value="DISEMBER">Disember</option>
+                </div>
 
-                    </select>
+            </div>
+
+
+            <!-- USER -->
+
+            <div
+                class="
+                    mb-8
+                    p-3
+                    rounded-xl
+                    bg-white/5
+                    border
+                    border-white/10
+                "
+            >
+
+                <p
+                    id="sidebarNamaPengguna"
+                    class="
+                        text-sm
+                        font-semibold
+                        text-white
+                        truncate
+                    "
+                >
+                    -
+                </p>
+
+                <p
+                    id="sidebarJawatanPengguna"
+                    class="
+                        text-xs
+                        text-teal-400
+                        mt-1
+                    "
+                >
+                    -
+                </p>
+
+            </div>
+
+
+
+            <!-- NAVIGATION -->
+
+            <nav class="space-y-1 flex-1">
+
+
+                <p
+                    class="
+                        text-xs
+                        font-semibold
+                        text-slate-500
+                        uppercase
+                        tracking-wider
+                        px-3
+                        mb-3
+                    "
+                >
+                    Menu Utama
+                </p>
+
+
+                <a
+                    href="dashboardkpku.html"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        text-slate-400
+                    "
+                >
+
+                    <i class="fas fa-chart-pie w-5"></i>
+
+                    Dashboard
+
+                </a>
+
+
+                <a
+                    href="kod-duty.html"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        text-slate-400
+                    "
+                >
+
+                    <i class="fas fa-code w-5"></i>
+
+                    Kod Waktu Kerja
+
+                </a>
+
+
+                <a
+                    href="kod-tempat-kerja.html"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        text-slate-400
+                    "
+                >
+
+                    <i class="fas fa-map-marker-alt w-5"></i>
+
+                    Kod Tempat Kerja
+
+                </a>
+
+
+                <a
+                    href="jadual-duty.html"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        text-slate-400
+                    "
+                >
+
+                    <i class="fas fa-calendar-check w-5"></i>
+
+                    Pengisian Jadual Tugas
+
+                </a>
+
+
+
+                <p
+                    class="
+                        text-xs
+                        font-semibold
+                        text-slate-500
+                        uppercase
+                        tracking-wider
+                        px-3
+                        mt-8
+                        mb-3
+                    "
+                >
+                    Laporan
+                </p>
+
+
+                export-excel.html
+
+                    <i class="fas fa-file-export w-5"></i>
+
+                    Export Excel / PDF
+
+                </a>
+
+
+                <a
+                    href="klm-mingguan.html"
+                    id="menu-klm"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        text-slate-400
+                    "
+                >
+
+                    <i class="fas fa-users w-5"></i>
+
+                    KLM Mingguan
+
+                </a>
+
+
+                <a
+                    href="anggaran-rk02.html"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        text-slate-400
+                    "
+                >
+
+                    <i class="fas fa-chart-bar w-5"></i>
+
+                    Anggaran RK02
+
+                </a>
+
+
+                <a
+                    href="anggaran-rk01.html"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        text-slate-400
+                    "
+                >
+
+                    <i class="fas fa-chart-line w-5"></i>
+
+                    Anggaran RK01
+
+                </a>
+
+
+
+                <p
+                    class="
+                        text-xs
+                        font-semibold
+                        text-slate-500
+                        uppercase
+                        tracking-wider
+                        px-3
+                        mt-8
+                        mb-3
+                    "
+                >
+                    Sistem
+                </p>
+
+
+                #
+
+                    <i class="fas fa-cog w-5"></i>
+
+                    Tetapan
+
+                </a>
+
+
+                # return false;"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        text-red-400
+                        mt-4
+                    "
+                >
+
+                    <i class="fas fa-sign-out-alt w-5"></i>
+
+                    Log Keluar
+
+                </a>
+
+
+            </nav>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
+
+    <main class="flex-1 lg:ml-72">
+
+
+        <!-- TOPBAR -->
+
+        <header
+            class="
+                glass
+                sticky
+                top-0
+                z-30
+                border-b
+                border-teal-550/10
+                px-6
+                py-4
+            "
+        >
+
+            <div
+                class="
+                    flex
+                    items-center
+                    justify-between
+                    gap-4
+                "
+            >
+
+
+                <div>
+
+                    <h2
+                        class="
+                            text-xl
+                            font-bold
+                            text-white
+                        "
+                    >
+                        Export Jadual Duty
+                    </h2>
+
+                    <p class="text-sm text-slate-400">
+
+                        Excel & PDF
+                        •
+                        <span id="currentDate"></span>
+
+                    </p>
+
                 </div>
 
 
-                <!-- =========================
-                     SKB
-                ========================== -->
-                <div class="form-group">
+                <div class="flex items-center gap-4">
 
-                    <label for="exportSkb">No. SKB</label>
 
-                    <input
-                        type="number"
-                        id="exportSkb"
-                        class="form-control"
-                        placeholder="Masukkan No. SKB"
+                    <div
+                        class="
+                            hidden
+                            sm:flex
+                            items-center
+                            gap-2
+                            bg-teal-550/10
+                            text-teal-450
+                            px-4
+                            py-2
+                            rounded-full
+                            text-sm
+                            font-medium
+                        "
+                    >
+
+                        <span
+                            class="
+                                w-2
+                                h-2
+                                bg-teal-450
+                                rounded-full
+                                animate-pulse
+                            "
+                        ></span>
+
+                        System Online
+
+                    </div>
+
+
+                    <div class="flex items-center gap-3">
+
+                        <div class="text-right hidden sm:block">
+
+                            <p
+                                class="text-sm font-medium text-white"
+                                id="userName"
+                            >
+                                -
+                            </p>
+
+                            <p
+                                class="text-xs text-slate-400"
+                                id="userJawatan"
+                            >
+                                -
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            id="userAvatar"
+                            class="
+                                w-10
+                                h-10
+                                rounded-full
+                                bg-gradient-to-br
+                                from-teal-450
+                                to-teal-750
+                                flex
+                                items-center
+                                justify-center
+                                font-bold
+                                text-white
+                            "
+                        >
+                            A
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =====================================================
+             CONTENT
+        ====================================================== -->
+
+        <div class="p-4 md:p-6 space-y-6">
+
+
+            <!-- HERO -->
+
+            <div
+                class="
+                    relative
+                    overflow-hidden
+                    rounded-3xl
+                    bg-gradient-to-r
+                    from-teal-700
+                    via-teal-600
+                    to-teal-500
+                    p-6
+                    md:p-8
+                "
+            >
+
+                <div class="relative z-10">
+
+                    <h2
+                        class="
+                            text-2xl
+                            md:text-3xl
+                            font-bold
+                            text-white
+                        "
+                    >
+                        Export Jadual Duty
+                    </h2>
+
+
+                    <p
+                        class="
+                            mt-2
+                            text-sm
+                            md:text-base
+                            text-teal-100
+                        "
+                    >
+                        Pilih Tahun, Bulan dan No. SKB untuk
+                        mendapatkan rekod jadual anggota.
+                    </p>
+
+
+                    <p
+                        class="
+                            mt-3
+                            text-sm
+                            text-white/80
+                        "
+                    >
+                        Format Excel:
+                        1 SKB = 1 row sahaja.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="
+                        absolute
+                        right-4
+                        bottom-2
+                        opacity-20
+                    "
+                >
+
+                    <img
+                        src="logomdp.png"
+                        alt="Logo"
+                        class="
+                            w-40
+                            h-40
+                            md:w-48
+                            md:h-48
+                            object-contain
+                        "
                     >
 
                 </div>
@@ -256,397 +994,1122 @@
             </div>
 
 
-            <div class="actions">
 
-                <button
-                    type="button"
-                    id="btnDownloadExcel"
-                    class="btn btn-download"
-                    onclick="downloadExcelDuty()"
+            <!-- =================================================
+                 FILTER
+            ================================================== -->
+
+            <div class="glass rounded-2xl p-5 md:p-6">
+
+
+                <div class="mb-6">
+
+                    <h3
+                        class="
+                            text-lg
+                            font-semibold
+                            text-white
+                        "
+                    >
+                        Pilihan Export
+                    </h3>
+
+                    <p
+                        class="
+                            text-sm
+                            text-slate-400
+                            mt-1
+                        "
+                    >
+                        Tarikh akan diambil secara automatik
+                        berdasarkan bulan dan SKB.
+                    </p>
+
+                </div>
+
+
+
+                <div
+                    class="
+                        grid
+                        grid-cols-1
+                        md:grid-cols-3
+                        gap-4
+                    "
                 >
-                    Download Excel
-                </button>
+
+
+                    <!-- TAHUN -->
+
+                    <div>
+
+                        <label
+                            for="tahun"
+                            class="
+                                block
+                                text-sm
+                                text-slate-300
+                                mb-2
+                            "
+                        >
+                            Tahun
+                        </label>
+
+
+                        <select
+                            id="tahun"
+                            class="form-control"
+                        >
+
+                            <option value="">
+                                Pilih Tahun
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- BULAN -->
+
+                    <div>
+
+                        <label
+                            for="bulan"
+                            class="
+                                block
+                                text-sm
+                                text-slate-300
+                                mb-2
+                            "
+                        >
+                            Bulan
+                        </label>
+
+
+                        <select
+                            id="bulan"
+                            class="form-control"
+                        >
+
+                            <option value="">
+                                Pilih Bulan
+                            </option>
+
+                            <option value="JANUARI">
+                                Januari
+                            </option>
+
+                            <option value="FEBRUARI">
+                                Februari
+                            </option>
+
+                            <option value="MAC">
+                                Mac
+                            </option>
+
+                            <option value="APRIL">
+                                April
+                            </option>
+
+                            <option value="MEI">
+                                Mei
+                            </option>
+
+                            <option value="JUN">
+                                Jun
+                            </option>
+
+                            <option value="JULAI">
+                                Julai
+                            </option>
+
+                            <option value="OGOS">
+                                Ogos
+                            </option>
+
+                            <option value="SEPTEMBER">
+                                September
+                            </option>
+
+                            <option value="OKTOBER">
+                                Oktober
+                            </option>
+
+                            <option value="NOVEMBER">
+                                November
+                            </option>
+
+                            <option value="DISEMBER">
+                                Disember
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- SKB -->
+
+                    <div>
+
+                        <label
+                            for="skb"
+                            class="
+                                block
+                                text-sm
+                                text-slate-300
+                                mb-2
+                            "
+                        >
+                            No. SKB
+                        </label>
+
+
+                        <select
+                            id="skb"
+                            class="form-control"
+                        >
+
+                            <option value="">
+                                Pilih Tahun & Bulan Dahulu
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- BUTTON -->
+
+                <div
+                    class="
+                        flex
+                        flex-col
+                        md:flex-row
+                        gap-3
+                        mt-6
+                    "
+                >
+
+
+                    <button
+                        type="button"
+                        id="btnPapar"
+                        onclick="paparData()"
+                        class="
+                            action-btn
+                            bg-cyan-600
+                            hover:bg-cyan-500
+                            text-white
+                        "
+                    >
+
+                        <i class="fas fa-search"></i>
+
+                        Papar Data
+
+                    </button>
+
+
+
+                    <button
+                        type="button"
+                        id="btnExcel"
+                        onclick="exportExcel()"
+                        class="
+                            action-btn
+                            bg-emerald-600
+                            hover:bg-emerald-500
+                            text-white
+                        "
+                    >
+
+                        <i class="fas fa-file-excel"></i>
+
+                        Download Excel
+
+                    </button>
+
+
+
+                    <button
+                        type="button"
+                        id="btnPDF"
+                        onclick="cetakPDF()"
+                        class="
+                            action-btn
+                            bg-red-600
+                            hover:bg-red-500
+                            text-white
+                        "
+                    >
+
+                        <i class="fas fa-file-pdf"></i>
+
+                        Cetak / Simpan PDF
+
+                    </button>
+
+
+                </div>
+
+
+
+                <div
+                    id="statusExport"
+                    class="
+                        mt-4
+                        text-sm
+                        min-h-[20px]
+                        text-slate-400
+                    "
+                ></div>
+
 
             </div>
 
 
-            <div id="exportStatus" class="status"></div>
+
+            <!-- =================================================
+                 PREVIEW
+            ================================================== -->
+
+            <div
+                id="previewCard"
+                class="
+                    glass
+                    rounded-2xl
+                    p-5
+                    md:p-6
+                    hidden
+                "
+            >
 
 
-            <div class="info-box">
+                <div
+                    class="
+                        flex
+                        flex-col
+                        md:flex-row
+                        md:items-center
+                        md:justify-between
+                        gap-3
+                        mb-5
+                    "
+                >
 
-                <strong>Format:</strong><br>
 
-                1 SKB = 1 row sahaja.<br>
+                    <div>
 
-                Semua tarikh dalam bulan yang dipilih akan disusun ke kanan
-                bermula daripada 01 sehingga tarikh terakhir bulan.
+                        <h3
+                            class="
+                                text-lg
+                                font-semibold
+                                text-white
+                            "
+                        >
+                            Preview Jadual Duty
+                        </h3>
+
+                        <p
+                            id="previewInfo"
+                            class="
+                                text-sm
+                                text-slate-400
+                                mt-1
+                            "
+                        >
+                            -
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        id="jumlahRekod"
+                        class="
+                            text-sm
+                            text-teal-400
+                        "
+                    >
+                        0 rekod
+                    </div>
+
+
+                </div>
+
+
+
+                <div
+                    class="
+                        overflow-x-auto
+                        rounded-xl
+                        border
+                        border-slate-700
+                    "
+                >
+
+                    <table class="preview-table">
+
+
+                        <thead>
+
+                        <tr>
+
+                            <th>Tarikh</th>
+
+                            <th>WK</th>
+
+                            <th>TK</th>
+
+                            <th>Jam KLM</th>
+
+                            <th>Hari Off</th>
+
+                            <th>Jam Off</th>
+
+                            <th>Hari Am</th>
+
+                            <th>Jam Am</th>
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody id="previewBody">
+
+                        </tbody>
+
+
+                    </table>
+
+                </div>
+
 
             </div>
+
 
         </div>
 
-    </div>
+
+    </main>
+
 
 </div>
 
 
+
+<!-- =============================================================
+     MOBILE NAV
+============================================================== -->
+
+<nav class="mobile-bottom">
+
+
+    <a
+        href="dashboardkpku.html"
+        class="mobile-nav-item"
+    >
+
+        <i class="fas fa-home"></i>
+
+        <span>
+            Dash
+        </span>
+
+    </a>
+
+
+
+    <a
+        href="jadual-duty.html"
+        class="mobile-nav-item"
+    >
+
+        <i class="fas fa-calendar-check"></i>
+
+        <span>
+            Duty
+        </span>
+
+    </a>
+
+
+
+    <a
+        href="klm-mingguan.html"
+        id="mobile-menu-klm"
+        class="mobile-nav-item"
+    >
+
+        <i class="fas fa-file-alt"></i>
+
+        <span>
+            Weekly
+        </span>
+
+    </a>
+
+
+
+    export-excel.html
+
+        <i class="fas fa-file-export"></i>
+
+        <span>
+            Export
+        </span>
+
+    </a>
+
+
+
+    # return false;"
+        class="mobile-nav-item"
+    >
+
+        <i class="fas fa-sign-out-alt"></i>
+
+        <span>
+            Logout
+        </span>
+
+    </a>
+
+
+</nav>
+
+
+
 <script>
 
-/* ================================================================
+
+/* =============================================================
    SUPABASE
-================================================================ */
-
-/*
-    GANTIKAN 2 NILAI DI BAWAH DENGAN PROJECT TUAN
-*/
-
-const SUPABASE_URL = "MASUKKAN_SUPABASE_URL";
-const SUPABASE_ANON_KEY = "MASUKKAN_SUPABASE_ANON_KEY";
+============================================================== */
 
 
-const supabaseClient = window.supabase.createClient(
+const SUPABASE_URL =
+"https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+
+const SUPABASE_KEY =
+"sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+
+const supabaseClient =
+window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_ANON_KEY
+    SUPABASE_KEY
 );
 
 
-/* ================================================================
-   BULAN
-================================================================ */
 
-const BULAN_MAP = {
+/* =============================================================
+   USER LOGIN
+============================================================== */
+
+
+const currentUser =
+JSON.parse(
+    localStorage.getItem("mdp_user") || "{}"
+);
+
+
+if (
+    !currentUser ||
+    Object.keys(currentUser).length === 0
+) {
+
+    location.href = "login.html";
+
+}
+
+
+const jawatan =
+String(
+    currentUser.jawatan || ""
+)
+.toUpperCase();
+
+
+
+/* =============================================================
+   AKSES
+============================================================== */
+
+
+if (
+    !jawatan.includes("KETUA UNIT") &&
+    !jawatan.includes("KETUA POS")
+) {
+
+    alert(
+        "Akses terhad kepada Ketua Unit dan Ketua Pos sahaja"
+    );
+
+    location.href = "login.html";
+
+}
+
+
+
+/* =============================================================
+   USER INFO
+============================================================== */
+
+
+const namaLogin =
+currentUser.name ||
+currentUser.nama ||
+"-";
+
+
+document.getElementById(
+    "sidebarNamaPengguna"
+).textContent =
+namaLogin;
+
+
+document.getElementById(
+    "sidebarJawatanPengguna"
+).textContent =
+currentUser.jawatan || "-";
+
+
+document.getElementById(
+    "userName"
+).textContent =
+namaLogin;
+
+
+document.getElementById(
+    "userJawatan"
+).textContent =
+currentUser.jawatan || "-";
+
+
+document.getElementById(
+    "userAvatar"
+).textContent =
+namaLogin
+.charAt(0)
+.toUpperCase();
+
+
+
+/* =============================================================
+   DATE
+============================================================== */
+
+
+document.getElementById(
+    "currentDate"
+).textContent =
+new Date().toLocaleDateString(
+    "ms-MY",
+    {
+
+        weekday: "long",
+
+        day: "2-digit",
+
+        month: "long",
+
+        year: "numeric"
+
+    }
+);
+
+
+
+/* =============================================================
+   KETUA POS MENU
+============================================================== */
+
+
+if (
+    jawatan.includes("KETUA POS")
+) {
+
+    const menuKlm =
+    document.getElementById(
+        "menu-klm"
+    );
+
+
+    const mobileKlm =
+    document.getElementById(
+        "mobile-menu-klm"
+    );
+
+
+    const menuTetapan =
+    document.getElementById(
+        "menu-tetapan"
+    );
+
+
+    if (menuKlm) {
+
+        menuKlm.style.display =
+        "none";
+
+    }
+
+
+    if (mobileKlm) {
+
+        mobileKlm.style.display =
+        "none";
+
+    }
+
+
+    if (menuTetapan) {
+
+        menuTetapan.style.display =
+        "none";
+
+    }
+
+}
+
+
+
+/* =============================================================
+   LOGOUT
+============================================================== */
+
+
+function logout() {
+
+    localStorage.removeItem(
+        "mdp_user"
+    );
+
+    location.href =
+    "login.html";
+
+}
+
+
+
+/* =============================================================
+   FILTER AKSES
+============================================================== */
+
+
+function tapis(query) {
+
+
+    if (
+        jawatan.includes("KETUA UNIT")
+    ) {
+
+        query =
+        query.eq(
+            "unit",
+            currentUser.unit
+        );
+
+    }
+
+
+    if (
+        jawatan.includes("KETUA POS")
+    ) {
+
+        query =
+        query.eq(
+            "pos",
+            currentUser.pos
+        );
+
+    }
+
+
+    return query;
+
+}
+
+
+
+/* =============================================================
+   BULAN
+============================================================== */
+
+
+const BULAN_NOMBOR = {
 
     JANUARI: 1,
+
     FEBRUARI: 2,
+
     MAC: 3,
+
     APRIL: 4,
+
     MEI: 5,
+
     JUN: 6,
+
     JULAI: 7,
+
     OGOS: 8,
+
     SEPTEMBER: 9,
+
     OKTOBER: 10,
+
     NOVEMBER: 11,
+
     DISEMBER: 12
 
 };
 
 
-/* ================================================================
+
+/* =============================================================
+   CACHE
+============================================================== */
+
+
+let dataExportSemasa = [];
+
+
+
+/* =============================================================
+   STATUS
+============================================================== */
+
+
+function setStatus(
+    mesej,
+    jenis = ""
+) {
+
+
+    const el =
+    document.getElementById(
+        "statusExport"
+    );
+
+
+    el.textContent =
+    mesej;
+
+
+    el.className =
+    "mt-4 text-sm min-h-[20px]";
+
+
+    if (
+        jenis === "success"
+    ) {
+
+        el.classList.add(
+            "status-success"
+        );
+
+    }
+
+
+    else if (
+        jenis === "error"
+    ) {
+
+        el.classList.add(
+            "status-error"
+        );
+
+    }
+
+
+    else if (
+        jenis === "info"
+    ) {
+
+        el.classList.add(
+            "status-info"
+        );
+
+    }
+
+
+    else if (
+        jenis === "warning"
+    ) {
+
+        el.classList.add(
+            "status-warning"
+        );
+
+    }
+
+
+    else {
+
+        el.classList.add(
+            "text-slate-400"
+        );
+
+    }
+
+}
+
+
+
+/* =============================================================
    LOAD TAHUN
-================================================================ */
+============================================================== */
+
 
 function loadTahun() {
 
-    const select = document.getElementById("exportTahun");
 
-    const tahunSekarang = new Date().getFullYear();
+    const select =
+    document.getElementById(
+        "tahun"
+    );
+
+
+    const tahunSemasa =
+    new Date().getFullYear();
+
+
+    select.innerHTML =
+    '<option value="">Pilih Tahun</option>';
+
 
     for (
-        let tahun = tahunSekarang + 1;
-        tahun >= tahunSekarang - 5;
+        let tahun = tahunSemasa + 1;
+        tahun >= tahunSemasa - 6;
         tahun--
     ) {
 
-        const option = document.createElement("option");
 
-        option.value = String(tahun);
-        option.textContent = tahun;
+        const option =
+        document.createElement(
+            "option"
+        );
 
-        if (tahun === tahunSekarang) {
-            option.selected = true;
+
+        option.value =
+        String(tahun);
+
+
+        option.textContent =
+        tahun;
+
+
+        if (
+            tahun === tahunSemasa
+        ) {
+
+            option.selected =
+            true;
+
         }
 
-        select.appendChild(option);
+
+        select.appendChild(
+            option
+        );
+
     }
-}
-
-
-/* ================================================================
-   STATUS
-================================================================ */
-
-function setExportStatus(message, type = "") {
-
-    const status = document.getElementById("exportStatus");
-
-    status.textContent = message;
-
-    status.className = "status";
-
-    if (type) {
-        status.classList.add("status-" + type);
-    }
-}
-
-
-/* ================================================================
-   NORMALIZE BULAN DATABASE
-================================================================ */
-
-function normalizeBulan(value) {
-
-    return String(value ?? "")
-        .trim()
-        .toUpperCase();
 
 }
 
 
-/* ================================================================
-   AMBIL HARI DARIPADA TARIKH
 
-   SUPPORT:
-   01/10/2026
-   01-10-2026
-   2026-10-01
-   2026/10/01
-================================================================ */
-
-function dapatkanHari(tarikh) {
-
-    if (!tarikh) {
-        return null;
-    }
+/* =============================================================
+   RESET SKB
+============================================================== */
 
 
-    const value = String(tarikh).trim();
+function resetSkb() {
 
 
-    // YYYY-MM-DD atau YYYY/MM/DD
-
-    let match = value.match(
-        /^(\d{4})\d{1,2}\d{1,2}/
+    const select =
+    document.getElementById(
+        "skb"
     );
 
-    if (match) {
 
-        return Number(match[3]);
+    select.innerHTML = `
+        <option value="">
+            Pilih Tahun & Bulan Dahulu
+        </option>
+    `;
 
-    }
+
+    dataExportSemasa = [];
 
 
-    // DD/MM/YYYY atau DD-MM-YYYY
-
-    match = value.match(
-        /^(\d{1,2})\d{1,2}\d{4}/
+    document
+    .getElementById(
+        "previewCard"
+    )
+    .classList.add(
+        "hidden"
     );
 
-    if (match) {
-
-        return Number(match[1]);
-
-    }
-
-
-    // Jika tarikh cuma disimpan sebagai nombor hari
-
-    if (/^\d{1,2}$/.test(value)) {
-
-        const hari = Number(value);
-
-        if (hari >= 1 && hari <= 31) {
-            return hari;
-        }
-
-    }
-
-
-    return null;
 }
 
 
-/* ================================================================
-   DOWNLOAD EXCEL
-================================================================ */
 
-async function downloadExcelDuty() {
+/* =============================================================
+   LOAD SKB
 
-    const btn = document.getElementById("btnDownloadExcel");
-
-
-    const tahun = document
-        .getElementById("exportTahun")
-        .value;
+   Mengambil SKB berdasarkan:
+   TAHUN
+   BULAN
+   UNIT / POS USER
+============================================================== */
 
 
-    const bulan = document
-        .getElementById("exportBulan")
-        .value;
+async function loadSkb() {
 
 
-    const noSkb = document
-        .getElementById("exportSkb")
-        .value
-        .trim();
+    const tahun =
+    document.getElementById(
+        "tahun"
+    ).value;
 
 
-    /* ============================================================
-       VALIDATION
-    ============================================================ */
+    const bulan =
+    document.getElementById(
+        "bulan"
+    ).value;
 
-    if (!tahun) {
 
-        setExportStatus(
-            "Sila pilih Tahun.",
-            "error"
-        );
+    const select =
+    document.getElementById(
+        "skb"
+    );
+
+
+    dataExportSemasa = [];
+
+
+    document
+    .getElementById(
+        "previewCard"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    if (
+        !tahun ||
+        !bulan
+    ) {
+
+        resetSkb();
 
         return;
+
     }
 
 
-    if (!bulan) {
-
-        setExportStatus(
-            "Sila pilih Bulan.",
-            "error"
-        );
-
-        return;
-    }
+    setStatus(
+        "Sedang memuatkan senarai SKB...",
+        "info"
+    );
 
 
-    if (!noSkb) {
-
-        setExportStatus(
-            "Sila masukkan No. SKB.",
-            "error"
-        );
-
-        return;
-    }
+    select.innerHTML = `
+        <option value="">
+            Sedang memuatkan...
+        </option>
+    `;
 
 
     try {
 
-        btn.disabled = true;
 
-        btn.textContent = "Sedang Download...";
-
-
-        setExportStatus(
-            "Sedang mengambil rekod jadual duty...",
-            "info"
+        let query =
+        supabaseClient
+        .from("jadual_duty")
+        .select(`
+            no_skb,
+            no_anggota,
+            nama_anggota,
+            unit,
+            pos
+        `)
+        .eq(
+            "tahun",
+            String(tahun)
+        )
+        .eq(
+            "bulan",
+            bulan
         );
 
 
-        /* ========================================================
-           AMBIL DATA JADUAL_DUTY
-        ======================================================== */
+        query =
+        tapis(query);
 
-        const { data, error } = await supabaseClient
-            .from("jadual_duty")
-            .select(`
-                id,
-                tarikh,
-                bulan,
-                tahun,
-                no_skb,
-                no_anggota,
-                nama_anggota,
-                kod_duty,
-                kod_tempat_kerja,
-                jam_klm,
-                hari_offday_bertugas,
-                jam_offday_bertugas,
-                hari_cutiam_bertugas,
-                jam_cutiam_bertugas
-            `)
-            .eq("no_skb", Number(noSkb))
-            .eq("tahun", String(tahun));
+
+        const {
+            data,
+            error
+        } =
+        await query;
 
 
         if (error) {
 
-            console.error(
-                "Supabase Error:",
-                error
-            );
-
-            throw new Error(
-                error.message
-            );
+            throw error;
 
         }
 
 
-        /* ========================================================
-           FILTER BULAN
-           
-           Dibuat di JavaScript supaya tidak bermasalah kalau
-           database simpan Oktober / OKTOBER / oktober.
-        ======================================================== */
 
-        const rekodBulan = (data || []).filter(
-            function (r) {
-
-                return normalizeBulan(r.bulan) ===
-                       normalizeBulan(bulan);
-
-            }
-        );
+        const unik =
+        new Map();
 
 
-        if (rekodBulan.length === 0) {
 
-            setExportStatus(
-                "Tiada rekod dijumpai untuk SKB " +
-                noSkb +
-                " bagi " +
-                bulan +
-                " " +
-                tahun +
-                ".",
-                "error"
-            );
-
-            return;
-        }
-
-
-        /* ========================================================
-           JUMLAH HARI BULAN
-        ======================================================== */
-
-        const nomborBulan = BULAN_MAP[bulan];
-
-
-        const jumlahHari = new Date(
-            Number(tahun),
-            nomborBulan,
-            0
-        ).getDate();
-
-
-        /* ========================================================
-           SUSUN REKOD MENGIKUT HARI
-        ======================================================== */
-
-        const rekodIkutHari = {};
-
-
-        rekodBulan.forEach(
+        (data || []).forEach(
             function (rekod) {
 
-                const hari = dapatkanHari(
-                    rekod.tarikh
+
+                if (
+                    rekod.no_skb === null ||
+                    rekod.no_skb === undefined
+                ) {
+
+                    return;
+
+                }
+
+
+                const key =
+                String(
+                    rekod.no_skb
                 );
 
 
                 if (
-                    hari &&
-                    hari >= 1 &&
-                    hari <= jumlahHari
+                    !unik.has(key)
                 ) {
 
-                    /*
-                        SATU TARIKH =
-                        SATU DATA UNTUK SKB TERSEBUT
-                    */
-
-                    rekodIkutHari[hari] = rekod;
+                    unik.set(
+                        key,
+                        rekod
+                    );
 
                 }
 
@@ -654,35 +2117,856 @@ async function downloadExcelDuty() {
         );
 
 
-        /* ========================================================
-           DATA ASAS ANGGOTA
-        ======================================================== */
 
-        const anggota = rekodBulan[0];
+        const senarai =
+        Array.from(
+            unik.values()
+        );
 
 
-        /* ========================================================
-           HEADER EXCEL
+        senarai.sort(
+            function (a, b) {
 
-           1:
-           wk01
-           tk01
-           Jam_klm01
-           hari_off01
-           jam_off01
-           hari_am01
-           jam_am01
 
-           dan seterusnya...
-        ======================================================== */
+                const namaA =
+                String(
+                    a.nama_anggota || ""
+                );
+
+
+                const namaB =
+                String(
+                    b.nama_anggota || ""
+                );
+
+
+                return namaA.localeCompare(
+                    namaB,
+                    "ms"
+                );
+
+            }
+        );
+
+
+
+        select.innerHTML = `
+            <option value="">
+                Pilih No. SKB
+            </option>
+        `;
+
+
+
+        senarai.forEach(
+            function (anggota) {
+
+
+                const option =
+                document.createElement(
+                    "option"
+                );
+
+
+                option.value =
+                anggota.no_skb;
+
+
+                option.textContent =
+                `${anggota.no_skb} - ${anggota.nama_anggota || "-"}`;
+
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+
+        if (
+            senarai.length === 0
+        ) {
+
+            setStatus(
+                "Tiada SKB ditemui untuk bulan dan tahun tersebut.",
+                "warning"
+            );
+
+        }
+
+        else {
+
+            setStatus(
+                `${senarai.length} SKB ditemui.`,
+                "success"
+            );
+
+        }
+
+
+    }
+
+    catch (err) {
+
+
+        console.error(
+            "Load SKB Error:",
+            err
+        );
+
+
+        select.innerHTML = `
+            <option value="">
+                Gagal Memuatkan SKB
+            </option>
+        `;
+
+
+        setStatus(
+            "Gagal memuatkan senarai SKB: " +
+            err.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+
+/* =============================================================
+   AMBIL HARI DARIPADA TARIKH
+============================================================== */
+
+
+function dapatkanHari(
+    tarikh
+) {
+
+
+    if (
+        tarikh === null ||
+        tarikh === undefined
+    ) {
+
+        return null;
+
+    }
+
+
+    const value =
+    String(
+        tarikh
+    ).trim();
+
+
+
+    /*
+        FORMAT:
+
+        YYYY-MM-DD
+        YYYY/MM/DD
+    */
+
+
+    let match =
+    value.match(
+        /^(\d{4})\d{1,2}\d{1,2}/
+    );
+
+
+    if (match) {
+
+        return Number(
+            match[3]
+        );
+
+    }
+
+
+
+    /*
+        FORMAT:
+
+        DD-MM-YYYY
+        DD/MM/YYYY
+    */
+
+
+    match =
+    value.match(
+        /^(\d{1,2})\d{1,2}\d{4}/
+    );
+
+
+    if (match) {
+
+        return Number(
+            match[1]
+        );
+
+    }
+
+
+
+    /*
+        JIKA DATABASE CUMA SIMPAN
+        01
+        02
+        03
+        DLL
+    */
+
+
+    if (
+        /^\d{1,2}$/.test(
+            value
+        )
+    ) {
+
+
+        const hari =
+        Number(
+            value
+        );
+
+
+        if (
+            hari >= 1 &&
+            hari <= 31
+        ) {
+
+            return hari;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+
+/* =============================================================
+   AMBIL DATA SKB
+============================================================== */
+
+
+async function ambilDataSkb() {
+
+
+    const tahun =
+    document.getElementById(
+        "tahun"
+    ).value;
+
+
+    const bulan =
+    document.getElementById(
+        "bulan"
+    ).value;
+
+
+    const noSkb =
+    document.getElementById(
+        "skb"
+    ).value;
+
+
+
+    if (!tahun) {
+
+        setStatus(
+            "Sila pilih Tahun.",
+            "warning"
+        );
+
+        return null;
+
+    }
+
+
+    if (!bulan) {
+
+        setStatus(
+            "Sila pilih Bulan.",
+            "warning"
+        );
+
+        return null;
+
+    }
+
+
+    if (!noSkb) {
+
+        setStatus(
+            "Sila pilih No. SKB.",
+            "warning"
+        );
+
+        return null;
+
+    }
+
+
+
+    setStatus(
+        "Sedang mengambil data jadual duty...",
+        "info"
+    );
+
+
+
+    try {
+
+
+        let query =
+        supabaseClient
+        .from(
+            "jadual_duty"
+        )
+        .select(`
+
+            id,
+
+            tarikh,
+
+            bulan,
+
+            tahun,
+
+            no_skb,
+
+            no_anggota,
+
+            nama_anggota,
+
+            kod_duty,
+
+            kod_tempat_kerja,
+
+            jam_klm,
+
+            hari_offday_bertugas,
+
+            jam_offday_bertugas,
+
+            hari_cutiam_bertugas,
+
+            jam_cutiam_bertugas,
+
+            unit,
+
+            pos
+
+        `)
+        .eq(
+            "no_skb",
+            Number(noSkb)
+        )
+        .eq(
+            "tahun",
+            String(tahun)
+        )
+        .eq(
+            "bulan",
+            bulan
+        )
+        .order(
+            "id",
+            {
+                ascending: true
+            }
+        );
+
+
+
+        query =
+        tapis(query);
+
+
+
+        const {
+            data,
+            error
+        } =
+        await query;
+
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            dataExportSemasa =
+            [];
+
+
+            setStatus(
+                "Tiada rekod jadual duty ditemui untuk SKB tersebut.",
+                "warning"
+            );
+
+
+            return null;
+
+        }
+
+
+
+        dataExportSemasa =
+        data;
+
+
+        return data;
+
+
+    }
+
+    catch (err) {
+
+
+        console.error(
+            "Ambil Data Error:",
+            err
+        );
+
+
+        setStatus(
+            "Gagal mengambil data: " +
+            err.message,
+            "error"
+        );
+
+
+        return null;
+
+    }
+
+}
+
+
+
+/* =============================================================
+   SUSUN REKOD IKUT HARI
+============================================================== */
+
+
+function susunIkutHari(
+    data
+) {
+
+
+    const hasil = {};
+
+
+    data.forEach(
+        function (rekod) {
+
+
+            const hari =
+            dapatkanHari(
+                rekod.tarikh
+            );
+
+
+            if (
+                hari !== null &&
+                hari >= 1 &&
+                hari <= 31
+            ) {
+
+
+                /*
+                    1 SKB
+                    1 TARIKH
+                    1 REKOD
+                */
+
+
+                hasil[hari] =
+                rekod;
+
+            }
+
+        }
+    );
+
+
+    return hasil;
+
+}
+
+
+
+/* =============================================================
+   JUMLAH HARI DALAM BULAN
+============================================================== */
+
+
+function dapatkanJumlahHari(
+    tahun,
+    bulan
+) {
+
+
+    const nomborBulan =
+    BULAN_NOMBOR[
+        bulan
+    ];
+
+
+    return new Date(
+        Number(tahun),
+        nomborBulan,
+        0
+    ).getDate();
+
+}
+
+
+
+/* =============================================================
+   PREVIEW
+============================================================== */
+
+
+async function paparData() {
+
+
+    const data =
+    await ambilDataSkb();
+
+
+    if (!data) {
+
+        return;
+
+    }
+
+
+
+    const tahun =
+    document.getElementById(
+        "tahun"
+    ).value;
+
+
+    const bulan =
+    document.getElementById(
+        "bulan"
+    ).value;
+
+
+
+    const anggota =
+    data[0];
+
+
+    const rekodHari =
+    susunIkutHari(
+        data
+    );
+
+
+    const jumlahHari =
+    dapatkanJumlahHari(
+        tahun,
+        bulan
+    );
+
+
+
+    document.getElementById(
+        "previewInfo"
+    ).textContent =
+
+        `No. SKB: ${anggota.no_skb} | ` +
+
+        `No. Anggota: ${anggota.no_anggota || "-"} | ` +
+
+        `Nama: ${anggota.nama_anggota || "-"} | ` +
+
+        `${bulan} ${tahun}`;
+
+
+
+    const tbody =
+    document.getElementById(
+        "previewBody"
+    );
+
+
+    tbody.innerHTML =
+    "";
+
+
+
+    let bilanganRekod =
+    0;
+
+
+
+    for (
+        let hari = 1;
+        hari <= jumlahHari;
+        hari++
+    ) {
+
+
+        const rekod =
+        rekodHari[
+            hari
+        ];
+
+
+        if (rekod) {
+
+            bilanganRekod++;
+
+        }
+
+
+
+        const tr =
+        document.createElement(
+            "tr"
+        );
+
+
+
+        tr.innerHTML = `
+
+            <td class="text-center">
+
+                ${String(hari).padStart(2, "0")}
+
+            </td>
+
+
+            <td class="text-center">
+
+                ${rekod?.kod_duty ?? ""}
+
+            </td>
+
+
+            <td class="text-center">
+
+                ${rekod?.kod_tempat_kerja ?? ""}
+
+            </td>
+
+
+            <td class="text-center">
+
+                ${rekod?.jam_klm ?? ""}
+
+            </td>
+
+
+            <td class="text-center">
+
+                ${rekod?.hari_offday_bertugas ?? ""}
+
+            </td>
+
+
+            <td class="text-center">
+
+                ${rekod?.jam_offday_bertugas ?? ""}
+
+            </td>
+
+
+            <td class="text-center">
+
+                ${rekod?.hari_cutiam_bertugas ?? ""}
+
+            </td>
+
+
+            <td class="text-center">
+
+                ${rekod?.jam_cutiam_bertugas ?? ""}
+
+            </td>
+
+        `;
+
+
+
+        tbody.appendChild(
+            tr
+        );
+
+    }
+
+
+
+    document.getElementById(
+        "jumlahRekod"
+    ).textContent =
+    `${bilanganRekod} rekod tarikh`;
+
+
+
+    document
+    .getElementById(
+        "previewCard"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+
+
+    setStatus(
+        "Data berjaya dipaparkan.",
+        "success"
+    );
+
+}
+
+
+
+/* =============================================================
+   EXPORT EXCEL
+
+   STRUKTUR:
+
+   No. SKB
+   No. Anggota
+   Nama
+
+   wk01
+   tk01
+   Jam_klm01
+   hari_off01
+   jam_off01
+   hari_am01
+   jam_am01
+
+   wk02
+   ...
+
+   SEMUA DALAM 1 ROW SKB
+============================================================== */
+
+
+async function exportExcel() {
+
+
+    const btn =
+    document.getElementById(
+        "btnExcel"
+    );
+
+
+    btn.disabled =
+    true;
+
+
+
+    try {
+
+
+        let data =
+        dataExportSemasa;
+
+
+
+        const pilihanSkb =
+        document.getElementById(
+            "skb"
+        ).value;
+
+
+
+        if (
+            !data.length ||
+            String(data[0]?.no_skb) !==
+            String(pilihanSkb)
+        ) {
+
+
+            data =
+            await ambilDataSkb();
+
+        }
+
+
+
+        if (!data) {
+
+            return;
+
+        }
+
+
+
+        const tahun =
+        document.getElementById(
+            "tahun"
+        ).value;
+
+
+        const bulan =
+        document.getElementById(
+            "bulan"
+        ).value;
+
+
+
+        const anggota =
+        data[0];
+
+
+
+        const rekodHari =
+        susunIkutHari(
+            data
+        );
+
+
+
+        const jumlahHari =
+        dapatkanJumlahHari(
+            tahun,
+            bulan
+        );
+
+
+
+        /* =====================================================
+           HEADER
+        ====================================================== */
+
 
         const header = [
 
             "No. SKB",
+
             "No. Anggota",
+
             "Nama"
 
         ];
+
 
 
         for (
@@ -691,34 +2975,43 @@ async function downloadExcelDuty() {
             hari++
         ) {
 
-            const h = String(hari)
-                .padStart(2, "0");
+
+            const h =
+            String(
+                hari
+            ).padStart(
+                2,
+                "0"
+            );
+
 
 
             header.push(
 
-                "wk" + h,
+                `wk${h}`,
 
-                "tk" + h,
+                `tk${h}`,
 
-                "Jam_klm" + h,
+                `Jam_klm${h}`,
 
-                "hari_off" + h,
+                `hari_off${h}`,
 
-                "jam_off" + h,
+                `jam_off${h}`,
 
-                "hari_am" + h,
+                `hari_am${h}`,
 
-                "jam_am" + h
+                `jam_am${h}`
 
             );
 
         }
 
 
-        /* ========================================================
-           SATU ROW SAHAJA BAGI SATU SKB
-        ======================================================== */
+
+        /* =====================================================
+           SATU ROW SKB
+        ====================================================== */
+
 
         const row = [
 
@@ -731,9 +3024,6 @@ async function downloadExcelDuty() {
         ];
 
 
-        /* ========================================================
-           MASUKKAN DATA TARIKH KE ROW YANG SAMA
-        ======================================================== */
 
         for (
             let hari = 1;
@@ -741,61 +3031,102 @@ async function downloadExcelDuty() {
             hari++
         ) {
 
-            const rekod = rekodIkutHari[hari];
+
+            const rekod =
+            rekodHari[
+                hari
+            ];
+
 
 
             if (rekod) {
 
+
                 row.push(
 
-                    // wkXX
+
+                    /*
+                        wkXX
+                    */
+
                     rekod.kod_duty ?? "",
 
 
-                    // tkXX
+                    /*
+                        tkXX
+                    */
+
                     rekod.kod_tempat_kerja ?? "",
 
 
-                    // Jam_klmXX
+                    /*
+                        Jam_klmXX
+                    */
+
                     rekod.jam_klm ?? "",
 
 
-                    // hari_offXX
+                    /*
+                        hari_offXX
+                    */
+
                     rekod.hari_offday_bertugas ?? "",
 
 
-                    // jam_offXX
+                    /*
+                        jam_offXX
+                    */
+
                     rekod.jam_offday_bertugas ?? "",
 
 
-                    // hari_amXX
+                    /*
+                        hari_amXX
+                    */
+
                     rekod.hari_cutiam_bertugas ?? "",
 
 
-                    // jam_amXX
+                    /*
+                        jam_amXX
+                    */
+
                     rekod.jam_cutiam_bertugas ?? ""
 
                 );
+
 
             }
 
             else {
 
-                /*
-                    TARIKH TIADA REKOD
 
-                    Kekalkan 7 column kosong.
-                    TIDAK TAMBAH ROW BARU.
+                /*
+                    TIADA DATA TARIKH
+
+                    MASIH KEKALKAN
+                    7 COLUMN KOSONG
+
+                    JANGAN CIPTA ROW BARU
                 */
 
+
                 row.push(
+
                     "",
+
                     "",
+
                     "",
+
                     "",
+
                     "",
+
                     "",
+
                     ""
+
                 );
 
             }
@@ -803,40 +3134,51 @@ async function downloadExcelDuty() {
         }
 
 
-        /* ========================================================
-           EXCEL
+
+        /* =====================================================
+           CREATE SHEET
 
            ROW 1 = HEADER
-           ROW 2 = SATU SKB
+           ROW 2 = SKB
 
-           HANYA SATU ROW DATA.
-        ======================================================== */
-
-        const excelData = [
-
-            header,
-            row
-
-        ];
+           JUMLAH ROW DATA = 1
+        ====================================================== */
 
 
         const worksheet =
-            XLSX.utils.aoa_to_sheet(
-                excelData
-            );
+        XLSX.utils.aoa_to_sheet(
+            [
+
+                header,
+
+                row
+
+            ]
+        );
 
 
-        /* ========================================================
-           LEBAR COLUMN
-        ======================================================== */
+
+        /* =====================================================
+           COLUMN WIDTH
+        ====================================================== */
+
 
         const columnWidths = [
 
-            { wch: 14 },     // No. SKB
-            { wch: 16 },     // No. Anggota
-            { wch: 30 }      // Nama
+            {
+                wch: 13
+            },
+
+            {
+                wch: 15
+            },
+
+            {
+                wch: 30
+            }
 
         ];
+
 
 
         for (
@@ -845,43 +3187,79 @@ async function downloadExcelDuty() {
             hari++
         ) {
 
+
             columnWidths.push(
 
-                { wch: 9 },      // wk
-                { wch: 9 },      // tk
-                { wch: 12 },     // KLM
-                { wch: 12 },     // hari off
-                { wch: 12 },     // jam off
-                { wch: 12 },     // hari am
-                { wch: 12 }      // jam am
+                {
+                    wch: 9
+                },
+
+                {
+                    wch: 9
+                },
+
+                {
+                    wch: 11
+                },
+
+                {
+                    wch: 11
+                },
+
+                {
+                    wch: 11
+                },
+
+                {
+                    wch: 11
+                },
+
+                {
+                    wch: 11
+                }
 
             );
 
         }
 
 
-        worksheet["!cols"] = columnWidths;
+
+        worksheet["!cols"] =
+        columnWidths;
 
 
-        /* ========================================================
-           AUTOFILTER
-        ======================================================== */
 
-        if (worksheet["!ref"]) {
+        /* =====================================================
+           AUTO FILTER
+        ====================================================== */
 
-            worksheet["!autofilter"] = {
-                ref: worksheet["!ref"]
+
+        if (
+            worksheet["!ref"]
+        ) {
+
+
+            worksheet[
+                "!autofilter"
+            ] = {
+
+                ref:
+                worksheet["!ref"]
+
             };
 
         }
 
 
-        /* ========================================================
+
+        /* =====================================================
            WORKBOOK
-        ======================================================== */
+        ====================================================== */
+
 
         const workbook =
-            XLSX.utils.book_new();
+        XLSX.utils.book_new();
+
 
 
         XLSX.utils.book_append_sheet(
@@ -895,36 +3273,36 @@ async function downloadExcelDuty() {
         );
 
 
-        /* ========================================================
-           NAMA FAIL
-        ======================================================== */
+
+        /* =====================================================
+           FILE NAME
+        ====================================================== */
+
 
         const namaFail =
 
-            "Jadual_Duty_SKB_" +
-            noSkb +
-            "_" +
-            bulan +
-            "_" +
-            tahun +
-            ".xlsx";
+        `Jadual_Duty_SKB_${anggota.no_skb}_${bulan}_${tahun}.xlsx`;
 
 
-        /* ========================================================
+
+        /* =====================================================
            DOWNLOAD
-        ======================================================== */
+        ====================================================== */
+
 
         XLSX.writeFile(
+
             workbook,
+
             namaFail
+
         );
 
 
-        setExportStatus(
 
-            "Excel SKB " +
-            noSkb +
-            " berjaya didownload.",
+        setStatus(
+
+            `Excel SKB ${anggota.no_skb} berjaya didownload.`,
 
             "success"
 
@@ -935,13 +3313,14 @@ async function downloadExcelDuty() {
 
     catch (err) {
 
+
         console.error(
-            "Export Error:",
+            "Excel Error:",
             err
         );
 
 
-        setExportStatus(
+        setStatus(
 
             "Gagal menghasilkan Excel: " +
             err.message,
@@ -950,34 +3329,765 @@ async function downloadExcelDuty() {
 
         );
 
+
     }
 
     finally {
 
-        btn.disabled = false;
 
-        btn.textContent =
-            "Download Excel";
+        btn.disabled =
+        false;
 
     }
 
 }
 
 
-/* ================================================================
-   START PAGE
-================================================================ */
+
+/* =============================================================
+   CETAK / PDF
+
+   PDF TIDAK PAKSA 217 COLUMN DALAM SATU BARIS.
+
+   PDF AKAN PAPAR:
+   01
+   02
+   03
+   ...
+   SECARA MENEGAK SUPAYA BOLEH DIBACA.
+============================================================== */
+
+
+async function cetakPDF() {
+
+
+    const btn =
+    document.getElementById(
+        "btnPDF"
+    );
+
+
+    btn.disabled =
+    true;
+
+
+
+    try {
+
+
+        let data =
+        dataExportSemasa;
+
+
+
+        const pilihanSkb =
+        document.getElementById(
+            "skb"
+        ).value;
+
+
+
+        if (
+            !data.length ||
+            String(data[0]?.no_skb) !==
+            String(pilihanSkb)
+        ) {
+
+
+            data =
+            await ambilDataSkb();
+
+        }
+
+
+
+        if (!data) {
+
+            return;
+
+        }
+
+
+
+        const tahun =
+        document.getElementById(
+            "tahun"
+        ).value;
+
+
+        const bulan =
+        document.getElementById(
+            "bulan"
+        ).value;
+
+
+
+        const anggota =
+        data[0];
+
+
+
+        const rekodHari =
+        susunIkutHari(
+            data
+        );
+
+
+
+        const jumlahHari =
+        dapatkanJumlahHari(
+            tahun,
+            bulan
+        );
+
+
+
+        let rowsHTML =
+        "";
+
+
+
+        for (
+            let hari = 1;
+            hari <= jumlahHari;
+            hari++
+        ) {
+
+
+            const rekod =
+            rekodHari[
+                hari
+            ] || {};
+
+
+
+            rowsHTML += `
+
+                <tr>
+
+                    <td>
+                        ${String(hari).padStart(2, "0")}
+                    </td>
+
+                    <td>
+                        ${rekod.kod_duty ?? ""}
+                    </td>
+
+                    <td>
+                        ${rekod.kod_tempat_kerja ?? ""}
+                    </td>
+
+                    <td>
+                        ${rekod.jam_klm ?? ""}
+                    </td>
+
+                    <td>
+                        ${rekod.hari_offday_bertugas ?? ""}
+                    </td>
+
+                    <td>
+                        ${rekod.jam_offday_bertugas ?? ""}
+                    </td>
+
+                    <td>
+                        ${rekod.hari_cutiam_bertugas ?? ""}
+                    </td>
+
+                    <td>
+                        ${rekod.jam_cutiam_bertugas ?? ""}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+
+
+        /* =====================================================
+           BUKA PRINT WINDOW
+        ====================================================== */
+
+
+        const printWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+
+
+        if (!printWindow) {
+
+
+            alert(
+                "Popup disekat oleh browser. Sila benarkan popup untuk mencetak PDF."
+            );
+
+
+            return;
+
+        }
+
+
+
+        printWindow.document.write(`
+
+<!DOCTYPE html>
+
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+Jadual Duty SKB ${anggota.no_skb}
+</title>
+
+
+<style>
+
+
+@page {
+
+    size: A4 landscape;
+
+    margin: 10mm;
+
+}
+
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: #111827;
+
+    background: white;
+
+}
+
+
+.header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom:
+        2px solid #0f766e;
+
+    padding-bottom: 10px;
+
+    margin-bottom: 14px;
+
+}
+
+
+.title {
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #0f766e;
+
+    margin: 0;
+
+}
+
+
+.subtitle {
+
+    font-size: 12px;
+
+    color: #64748b;
+
+    margin-top: 4px;
+
+}
+
+
+.info {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+
+}
+
+
+.info-item {
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius: 6px;
+
+    padding: 8px 10px;
+
+}
+
+
+.info-label {
+
+    font-size: 9px;
+
+    color: #64748b;
+
+    text-transform: uppercase;
+
+    margin-bottom: 3px;
+
+}
+
+
+.info-value {
+
+    font-size: 12px;
+
+    color: #111827;
+
+}
+
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 9px;
+
+}
+
+
+thead {
+
+    display:
+        table-header-group;
+
+}
+
+
+th {
+
+    background: #0f766e;
+
+    color: white;
+
+    font-weight: 600;
+
+    padding: 6px 4px;
+
+    text-align: center;
+
+    border:
+        1px solid #0f766e;
+
+}
+
+
+td {
+
+    padding: 5px 4px;
+
+    text-align: center;
+
+    border:
+        1px solid #cbd5e1;
+
+}
+
+
+tbody tr:nth-child(even) {
+
+    background: #f8fafc;
+
+}
+
+
+.footer {
+
+    margin-top: 10px;
+
+    font-size: 9px;
+
+    color: #64748b;
+
+    text-align: right;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <div>
+
+        <div class="title">
+
+            JADUAL DUTY
+
+        </div>
+
+
+        <div class="subtitle">
+
+            Master Duty Pro • Wilayah Terengganu
+
+        </div>
+
+    </div>
+
+
+    <div
+        style="
+            font-size:13px;
+            font-weight:600;
+            color:#0f766e;
+        "
+    >
+
+        ${bulan} ${tahun}
+
+    </div>
+
+</div>
+
+
+
+<div class="info">
+
+
+    <div class="info-item">
+
+        <div class="info-label">
+
+            No. SKB
+
+        </div>
+
+        <div class="info-value">
+
+            ${anggota.no_skb ?? "-"}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="info-item">
+
+        <div class="info-label">
+
+            No. Anggota
+
+        </div>
+
+        <div class="info-value">
+
+            ${anggota.no_anggota ?? "-"}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="info-item">
+
+        <div class="info-label">
+
+            Nama
+
+        </div>
+
+        <div class="info-value">
+
+            ${anggota.nama_anggota ?? "-"}
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+    <th>
+        Tarikh
+    </th>
+
+    <th>
+        WK
+    </th>
+
+    <th>
+        TK
+    </th>
+
+    <th>
+        Jam KLM
+    </th>
+
+    <th>
+        Hari Off
+    </th>
+
+    <th>
+        Jam Off
+    </th>
+
+    <th>
+        Hari Am
+    </th>
+
+    <th>
+        Jam Am
+    </th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+${rowsHTML}
+
+</tbody>
+
+
+</table>
+
+
+
+<div class="footer">
+
+    Dicetak melalui Master Duty Pro
+
+</div>
+
+
+
+<script>
+
+window.onload =
+function () {
+
+    setTimeout(
+        function () {
+
+            window.print();
+
+        },
+        300
+    );
+
+};
+
+<\/script>
+
+
+</body>
+
+</html>
+
+        `);
+
+
+
+        printWindow.document.close();
+
+
+
+        setStatus(
+
+            "Paparan cetakan PDF telah dibuka.",
+
+            "success"
+
+        );
+
+
+    }
+
+    catch (err) {
+
+
+        console.error(
+            "PDF Error:",
+            err
+        );
+
+
+        setStatus(
+
+            "Gagal menyediakan PDF: " +
+            err.message,
+
+            "error"
+
+        );
+
+
+    }
+
+    finally {
+
+
+        btn.disabled =
+        false;
+
+    }
+
+}
+
+
+
+/* =============================================================
+   EVENT TAHUN
+============================================================== */
+
+
+document.getElementById(
+    "tahun"
+)
+.addEventListener(
+    "change",
+    function () {
+
+        loadSkb();
+
+    }
+);
+
+
+
+/* =============================================================
+   EVENT BULAN
+============================================================== */
+
+
+document.getElementById(
+    "bulan"
+)
+.addEventListener(
+    "change",
+    function () {
+
+        loadSkb();
+
+    }
+);
+
+
+
+/* =============================================================
+   BILA SKB TUKAR
+============================================================== */
+
+
+document.getElementById(
+    "skb"
+)
+.addEventListener(
+    "change",
+    function () {
+
+
+        dataExportSemasa =
+        [];
+
+
+        document
+        .getElementById(
+            "previewCard"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+        if (
+            this.value
+        ) {
+
+            setStatus(
+                "SKB dipilih. Klik Papar Data, Download Excel atau Cetak PDF.",
+                "info"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =============================================================
+   START
+============================================================== */
+
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
+
         loadTahun();
+
+
+        setStatus(
+            "Pilih Tahun dan Bulan untuk memuatkan senarai SKB."
+        );
+
 
     }
 );
 
+
 </script>
 
+
 </body>
+
 </html>
