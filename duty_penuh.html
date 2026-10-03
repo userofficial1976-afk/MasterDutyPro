@@ -1786,55 +1786,49 @@ function dapatkanHari(tarikh) {
 
     if (
         tarikh === null ||
-        tarikh === undefined
+        tarikh === undefined ||
+        tarikh === ""
     ) {
-
         return null;
     }
-
 
     const value =
         String(tarikh).trim();
 
 
-    // 2026-10-01
-    // 2026/10/01
-
+    // 2026-09-01
+    // 2026/09/01
     let match =
         value.match(
             /^(\d{4})\d{1,2}\d{1,2}$/
         );
-
 
     if (match) {
 
         return Number(
             match[3]
         );
+
     }
 
 
-    // 01/10/2026
-    // 01-10-2026
-
+    // 01/09/2026
+    // 01-09-2026
     match =
         value.match(
             /^(\d{1,2})\d{1,2}\d{4}$/
         );
-
 
     if (match) {
 
         return Number(
             match[1]
         );
+
     }
 
 
-    // 01
-    // 02
-    // 31
-
+    // Jika cuma 01 hingga 31
     if (
         /^\d{1,2}$/.test(value)
     ) {
@@ -1842,14 +1836,15 @@ function dapatkanHari(tarikh) {
         const hari =
             Number(value);
 
-
         if (
             hari >= 1 &&
             hari <= 31
         ) {
 
             return hari;
+
         }
+
     }
 
 
@@ -2319,7 +2314,18 @@ function groupDataIkutSkb(
                 rekod.tarikh
             );
 
-
+console.log(
+    "SKB:",
+    rekod.no_skb,
+    "Tarikh:",
+    rekod.tarikh,
+    "Hari:",
+    hari,
+    "WK:",
+    rekod.kod_duty,
+    "TK:",
+    rekod.kod_tempat_kerja
+);
 
             if (
 
