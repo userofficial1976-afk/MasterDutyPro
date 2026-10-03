@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Export Jadual Duty</title>
+
+    <!-- =========================================================
+         SUPABASE
+    ========================================================== -->
+    https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2script>
+
+    <!-- =========================================================
+         SHEETJS - EXCEL
+    ========================================================== -->
+    https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.jsscript>
+
+    <!-- =========================================================
+         FONT
+    ========================================================== -->
+    https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f4f6f8;
+            font-family: "Inter", sans-serif;
+            color: #1f2937;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+        }
+
+        .title {
+            margin: 0 0 5px 0;
+            font-size: 22px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .subtitle {
+            margin: 0 0 28px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 0 12px;
+            background: #ffffff;
+            color: #111827;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        .actions {
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 8px;
+            height: 44px;
+            padding: 0 22px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-download {
+            background: #166534;
+            color: #ffffff;
+        }
+
+        .btn-download:hover {
+            background: #14532d;
+        }
+
+        .btn-download:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 18px;
+            min-height: 21px;
+            font-size: 13px;
+        }
+
+        .status-info {
+            color: #1d4ed8;
+        }
+
+        .status-success {
+            color: #15803d;
+        }
+
+        .status-error {
+            color: #dc2626;
+        }
+
+        .info-box {
+            margin-top: 28px;
+            padding: 16px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #4b5563;
+        }
+
+        @media (max-width: 700px) {
+            .page {
+                padding: 20px 12px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="container">
+
+        <div class="card">
+
+            <h1 class="title">Export Jadual Duty</h1>
+
+            <p class="subtitle">
+                Pilih tahun, bulan dan No. SKB untuk download jadual duty dalam format Excel.
+            </p>
+
+            <div class="form-grid">
+
+                <!-- =========================
+                     TAHUN
+                ========================== -->
+                <div class="form-group">
+                    <label for="exportTahun">Tahun</label>
+
+                    <select id="exportTahun" class="form-control">
+                        <option value="">Pilih Tahun</option>
+                    </select>
+                </div>
+
+
+                <!-- =========================
+                     BULAN
+                ========================== -->
+                <div class="form-group">
+                    <label for="exportBulan">Bulan</label>
+
+                    <select id="exportBulan" class="form-control">
+
+                        <option value="">Pilih Bulan</option>
+
+                        <option value="JANUARI">Januari</option>
+                        <option value="FEBRUARI">Februari</option>
+                        <option value="MAC">Mac</option>
+                        <option value="APRIL">April</option>
+                        <option value="MEI">Mei</option>
+                        <option value="JUN">Jun</option>
+                        <option value="JULAI">Julai</option>
+                        <option value="OGOS">Ogos</option>
+                        <option value="SEPTEMBER">September</option>
+                        <option value="OKTOBER">Oktober</option>
+                        <option value="NOVEMBER">November</option>
+                        <option value="DISEMBER">Disember</option>
+
+                    </select>
+                </div>
+
+
+                <!-- =========================
+                     SKB
+                ========================== -->
+                <div class="form-group">
+
+                    <label for="exportSkb">No. SKB</label>
+
+                    <input
+                        type="number"
+                        id="exportSkb"
+                        class="form-control"
+                        placeholder="Masukkan No. SKB"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    type="button"
+                    id="btnDownloadExcel"
+                    class="btn btn-download"
+                    onclick="downloadExcelDuty()"
+                >
+                    Download Excel
+                </button>
+
+            </div>
+
+
+            <div id="exportStatus" class="status"></div>
+
+
+            <div class="info-box">
+
+                <strong>Format:</strong><br>
+
+                1 SKB = 1 row sahaja.<br>
+
+                Semua tarikh dalam bulan yang dipilih akan disusun ke kanan
+                bermula daripada 01 sehingga tarikh terakhir bulan.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ================================================================
+   SUPABASE
+================================================================ */
+
+/*
+    GANTIKAN 2 NILAI DI BAWAH DENGAN PROJECT TUAN
+*/
+
+const SUPABASE_URL = "MASUKKAN_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "MASUKKAN_SUPABASE_ANON_KEY";
+
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+
+/* ================================================================
+   BULAN
+================================================================ */
+
+const BULAN_MAP = {
+
+    JANUARI: 1,
+    FEBRUARI: 2,
+    MAC: 3,
+    APRIL: 4,
+    MEI: 5,
+    JUN: 6,
+    JULAI: 7,
+    OGOS: 8,
+    SEPTEMBER: 9,
+    OKTOBER: 10,
+    NOVEMBER: 11,
+    DISEMBER: 12
+
+};
+
+
+/* ================================================================
+   LOAD TAHUN
+================================================================ */
+
+function loadTahun() {
+
+    const select = document.getElementById("exportTahun");
+
+    const tahunSekarang = new Date().getFullYear();
+
+    for (
+        let tahun = tahunSekarang + 1;
+        tahun >= tahunSekarang - 5;
+        tahun--
+    ) {
+
+        const option = document.createElement("option");
+
+        option.value = String(tahun);
+        option.textContent = tahun;
+
+        if (tahun === tahunSekarang) {
+            option.selected = true;
+        }
+
+        select.appendChild(option);
+    }
+}
+
+
+/* ================================================================
+   STATUS
+================================================================ */
+
+function setExportStatus(message, type = "") {
+
+    const status = document.getElementById("exportStatus");
+
+    status.textContent = message;
+
+    status.className = "status";
+
+    if (type) {
+        status.classList.add("status-" + type);
+    }
+}
+
+
+/* ================================================================
+   NORMALIZE BULAN DATABASE
+================================================================ */
+
+function normalizeBulan(value) {
+
+    return String(value ?? "")
+        .trim()
+        .toUpperCase();
+
+}
+
+
+/* ================================================================
+   AMBIL HARI DARIPADA TARIKH
+
+   SUPPORT:
+   01/10/2026
+   01-10-2026
+   2026-10-01
+   2026/10/01
+================================================================ */
+
+function dapatkanHari(tarikh) {
+
+    if (!tarikh) {
+        return null;
+    }
+
+
+    const value = String(tarikh).trim();
+
+
+    // YYYY-MM-DD atau YYYY/MM/DD
+
+    let match = value.match(
+        /^(\d{4})\d{1,2}\d{1,2}/
+    );
+
+    if (match) {
+
+        return Number(match[3]);
+
+    }
+
+
+    // DD/MM/YYYY atau DD-MM-YYYY
+
+    match = value.match(
+        /^(\d{1,2})\d{1,2}\d{4}/
+    );
+
+    if (match) {
+
+        return Number(match[1]);
+
+    }
+
+
+    // Jika tarikh cuma disimpan sebagai nombor hari
+
+    if (/^\d{1,2}$/.test(value)) {
+
+        const hari = Number(value);
+
+        if (hari >= 1 && hari <= 31) {
+            return hari;
+        }
+
+    }
+
+
+    return null;
+}
+
+
+/* ================================================================
+   DOWNLOAD EXCEL
+================================================================ */
+
+async function downloadExcelDuty() {
+
+    const btn = document.getElementById("btnDownloadExcel");
+
+
+    const tahun = document
+        .getElementById("exportTahun")
+        .value;
+
+
+    const bulan = document
+        .getElementById("exportBulan")
+        .value;
+
+
+    const noSkb = document
+        .getElementById("exportSkb")
+        .value
+        .trim();
+
+
+    /* ============================================================
+       VALIDATION
+    ============================================================ */
+
+    if (!tahun) {
+
+        setExportStatus(
+            "Sila pilih Tahun.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!bulan) {
+
+        setExportStatus(
+            "Sila pilih Bulan.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!noSkb) {
+
+        setExportStatus(
+            "Sila masukkan No. SKB.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        btn.disabled = true;
+
+        btn.textContent = "Sedang Download...";
+
+
+        setExportStatus(
+            "Sedang mengambil rekod jadual duty...",
+            "info"
+        );
+
+
+        /* ========================================================
+           AMBIL DATA JADUAL_DUTY
+        ======================================================== */
+
+        const { data, error } = await supabaseClient
+            .from("jadual_duty")
+            .select(`
+                id,
+                tarikh,
+                bulan,
+                tahun,
+                no_skb,
+                no_anggota,
+                nama_anggota,
+                kod_duty,
+                kod_tempat_kerja,
+                jam_klm,
+                hari_offday_bertugas,
+                jam_offday_bertugas,
+                hari_cutiam_bertugas,
+                jam_cutiam_bertugas
+            `)
+            .eq("no_skb", Number(noSkb))
+            .eq("tahun", String(tahun));
+
+
+        if (error) {
+
+            console.error(
+                "Supabase Error:",
+                error
+            );
+
+            throw new Error(
+                error.message
+            );
+
+        }
+
+
+        /* ========================================================
+           FILTER BULAN
+           
+           Dibuat di JavaScript supaya tidak bermasalah kalau
+           database simpan Oktober / OKTOBER / oktober.
+        ======================================================== */
+
+        const rekodBulan = (data || []).filter(
+            function (r) {
+
+                return normalizeBulan(r.bulan) ===
+                       normalizeBulan(bulan);
+
+            }
+        );
+
+
+        if (rekodBulan.length === 0) {
+
+            setExportStatus(
+                "Tiada rekod dijumpai untuk SKB " +
+                noSkb +
+                " bagi " +
+                bulan +
+                " " +
+                tahun +
+                ".",
+                "error"
+            );
+
+            return;
+        }
+
+
+        /* ========================================================
+           JUMLAH HARI BULAN
+        ======================================================== */
+
+        const nomborBulan = BULAN_MAP[bulan];
+
+
+        const jumlahHari = new Date(
+            Number(tahun),
+            nomborBulan,
+            0
+        ).getDate();
+
+
+        /* ========================================================
+           SUSUN REKOD MENGIKUT HARI
+        ======================================================== */
+
+        const rekodIkutHari = {};
+
+
+        rekodBulan.forEach(
+            function (rekod) {
+
+                const hari = dapatkanHari(
+                    rekod.tarikh
+                );
+
+
+                if (
+                    hari &&
+                    hari >= 1 &&
+                    hari <= jumlahHari
+                ) {
+
+                    /*
+                        SATU TARIKH =
+                        SATU DATA UNTUK SKB TERSEBUT
+                    */
+
+                    rekodIkutHari[hari] = rekod;
+
+                }
+
+            }
+        );
+
+
+        /* ========================================================
+           DATA ASAS ANGGOTA
+        ======================================================== */
+
+        const anggota = rekodBulan[0];
+
+
+        /* ========================================================
+           HEADER EXCEL
+
+           1:
+           wk01
+           tk01
+           Jam_klm01
+           hari_off01
+           jam_off01
+           hari_am01
+           jam_am01
+
+           dan seterusnya...
+        ======================================================== */
+
+        const header = [
+
+            "No. SKB",
+            "No. Anggota",
+            "Nama"
+
+        ];
+
+
+        for (
+            let hari = 1;
+            hari <= jumlahHari;
+            hari++
+        ) {
+
+            const h = String(hari)
+                .padStart(2, "0");
+
+
+            header.push(
+
+                "wk" + h,
+
+                "tk" + h,
+
+                "Jam_klm" + h,
+
+                "hari_off" + h,
+
+                "jam_off" + h,
+
+                "hari_am" + h,
+
+                "jam_am" + h
+
+            );
+
+        }
+
+
+        /* ========================================================
+           SATU ROW SAHAJA BAGI SATU SKB
+        ======================================================== */
+
+        const row = [
+
+            anggota.no_skb ?? "",
+
+            anggota.no_anggota ?? "",
+
+            anggota.nama_anggota ?? ""
+
+        ];
+
+
+        /* ========================================================
+           MASUKKAN DATA TARIKH KE ROW YANG SAMA
+        ======================================================== */
+
+        for (
+            let hari = 1;
+            hari <= jumlahHari;
+            hari++
+        ) {
+
+            const rekod = rekodIkutHari[hari];
+
+
+            if (rekod) {
+
+                row.push(
+
+                    // wkXX
+                    rekod.kod_duty ?? "",
+
+
+                    // tkXX
+                    rekod.kod_tempat_kerja ?? "",
+
+
+                    // Jam_klmXX
+                    rekod.jam_klm ?? "",
+
+
+                    // hari_offXX
+                    rekod.hari_offday_bertugas ?? "",
+
+
+                    // jam_offXX
+                    rekod.jam_offday_bertugas ?? "",
+
+
+                    // hari_amXX
+                    rekod.hari_cutiam_bertugas ?? "",
+
+
+                    // jam_amXX
+                    rekod.jam_cutiam_bertugas ?? ""
+
+                );
+
+            }
+
+            else {
+
+                /*
+                    TARIKH TIADA REKOD
+
+                    Kekalkan 7 column kosong.
+                    TIDAK TAMBAH ROW BARU.
+                */
+
+                row.push(
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                );
+
+            }
+
+        }
+
+
+        /* ========================================================
+           EXCEL
+
+           ROW 1 = HEADER
+           ROW 2 = SATU SKB
+
+           HANYA SATU ROW DATA.
+        ======================================================== */
+
+        const excelData = [
+
+            header,
+            row
+
+        ];
+
+
+        const worksheet =
+            XLSX.utils.aoa_to_sheet(
+                excelData
+            );
+
+
+        /* ========================================================
+           LEBAR COLUMN
+        ======================================================== */
+
+        const columnWidths = [
+
+            { wch: 14 },     // No. SKB
+            { wch: 16 },     // No. Anggota
+            { wch: 30 }      // Nama
+
+        ];
+
+
+        for (
+            let hari = 1;
+            hari <= jumlahHari;
+            hari++
+        ) {
+
+            columnWidths.push(
+
+                { wch: 9 },      // wk
+                { wch: 9 },      // tk
+                { wch: 12 },     // KLM
+                { wch: 12 },     // hari off
+                { wch: 12 },     // jam off
+                { wch: 12 },     // hari am
+                { wch: 12 }      // jam am
+
+            );
+
+        }
+
+
+        worksheet["!cols"] = columnWidths;
+
+
+        /* ========================================================
+           AUTOFILTER
+        ======================================================== */
+
+        if (worksheet["!ref"]) {
+
+            worksheet["!autofilter"] = {
+                ref: worksheet["!ref"]
+            };
+
+        }
+
+
+        /* ========================================================
+           WORKBOOK
+        ======================================================== */
+
+        const workbook =
+            XLSX.utils.book_new();
+
+
+        XLSX.utils.book_append_sheet(
+
+            workbook,
+
+            worksheet,
+
+            "Jadual Duty"
+
+        );
+
+
+        /* ========================================================
+           NAMA FAIL
+        ======================================================== */
+
+        const namaFail =
+
+            "Jadual_Duty_SKB_" +
+            noSkb +
+            "_" +
+            bulan +
+            "_" +
+            tahun +
+            ".xlsx";
+
+
+        /* ========================================================
+           DOWNLOAD
+        ======================================================== */
+
+        XLSX.writeFile(
+            workbook,
+            namaFail
+        );
+
+
+        setExportStatus(
+
+            "Excel SKB " +
+            noSkb +
+            " berjaya didownload.",
+
+            "success"
+
+        );
+
+
+    }
+
+    catch (err) {
+
+        console.error(
+            "Export Error:",
+            err
+        );
+
+
+        setExportStatus(
+
+            "Gagal menghasilkan Excel: " +
+            err.message,
+
+            "error"
+
+        );
+
+    }
+
+    finally {
+
+        btn.disabled = false;
+
+        btn.textContent =
+            "Download Excel";
+
+    }
+
+}
+
+
+/* ================================================================
+   START PAGE
+================================================================ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadTahun();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
