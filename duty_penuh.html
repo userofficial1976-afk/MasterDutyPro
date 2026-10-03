@@ -1804,150 +1804,59 @@ function dapatkanHari(tarikh) {
         tarikh === null ||
         tarikh === undefined
     ) {
+
         return null;
     }
 
+
     const value =
-    String(tarikh).trim();
+        String(tarikh).trim();
 
 
-    // ==========================================
-    // FORMAT DATABASE:
     // 2026-10-01
     // 2026/10/01
-    // ==========================================
 
     let match =
-    value.match(
-        /^(\d{4})\d{1,2}\d{1,2}$/
-    );
+        value.match(
+            /^(\d{4})\d{1,2}\d{1,2}$/
+        );
+
 
     if (match) {
 
         return Number(
             match[3]
         );
-
     }
 
 
-    // ==========================================
-    // FORMAT:
     // 01/10/2026
     // 01-10-2026
-    // ==========================================
 
     match =
-    value.match(
-        /^(\d{1,2})\d{1,2}\d{4}$/
-    );
+        value.match(
+            /^(\d{1,2})\d{1,2}\d{4}$/
+        );
+
 
     if (match) {
 
         return Number(
             match[1]
         );
-
     }
 
 
-    // ==========================================
-    // JIKA TARIKH CUMA:
     // 01
     // 02
-    // 03
-    // ==========================================
+    // 31
 
     if (
         /^\d{1,2}$/.test(value)
     ) {
 
         const hari =
-        Number(value);
-
-        if (
-            hari >= 1 &&
-            hari <= 31
-        ) {
-
-            return hari;
-
-        }
-
-    }
-
-
-    return null;
-}
-
-
-    const value =
-    String(
-        tarikh
-    ).trim();
-
-
-
-    /*
-        YYYY-MM-DD
-        YYYY/MM/DD
-    */
-
-
-    let match =
-    value.match(
-        /^(\d{4})\d{1,2}\d{1,2}/
-    );
-
-
-    if (match) {
-
-        return Number(
-            match[3]
-        );
-
-    }
-
-
-
-    /*
-        DD/MM/YYYY
-        DD-MM-YYYY
-    */
-
-
-    match =
-    value.match(
-        /^(\d{1,2})\d{1,2}\d{4}/
-    );
-
-
-    if (match) {
-
-        return Number(
-            match[1]
-        );
-
-    }
-
-
-
-    /*
-        CUMA HARI
-    */
-
-
-    if (
-        /^\d{1,2}$/.test(
-            value
-        )
-    ) {
-
-
-        const hari =
-        Number(
-            value
-        );
+            Number(value);
 
 
         if (
@@ -1956,17 +1865,12 @@ function dapatkanHari(tarikh) {
         ) {
 
             return hari;
-
         }
-
     }
 
 
     return null;
-
 }
-
-
 
 /* ============================================================
    JUMLAH HARI BULAN
@@ -2008,71 +1912,47 @@ function jumlahHariBulan(
 
 async function ambilDataBulanan() {
 
-
     const tahun =
-    document.getElementById(
-        "tahun"
-    ).value;
-
+        document.getElementById("tahun").value;
 
     const bulan =
-    document.getElementById(
-        "bulan"
-    ).value;
-
+        document.getElementById("bulan").value;
 
 
     if (!tahun) {
-
 
         setStatus(
             "Sila pilih Tahun.",
             "warning"
         );
 
-
         return null;
-
     }
 
 
-
     if (!bulan) {
-
 
         setStatus(
             "Sila pilih Bulan.",
             "warning"
         );
 
-
         return null;
-
     }
 
 
-
-    /*
-        JIKA CACHE MASIH BULAN YANG SAMA
-    */
-
+    // ============================================
+    // GUNA CACHE JIKA BULAN MASIH SAMA
+    // ============================================
 
     if (
-
         dataBulanan.length > 0 &&
-
-        filterTerakhir.tahun ===
-        tahun &&
-
-        filterTerakhir.bulan ===
-        bulan
-
+        filterTerakhir.tahun === tahun &&
+        filterTerakhir.bulan === bulan
     ) {
 
         return dataBulanan;
-
     }
-
 
 
     setStatus(
@@ -2081,153 +1961,138 @@ async function ambilDataBulanan() {
     );
 
 
+    try {
 
-try {
+        // ============================================
+        // TENTUKAN BULAN
+        // ============================================
 
-
-    let semuaData = [];
-
-    let dari = 0;
-
-    const saizPage = 1000;
-
-
-    /* =====================================================
-       BINA JULAT TARIKH BERDASARKAN TAHUN + BULAN
-    ====================================================== */
-
-    const nomborBulan =
-    BULAN_NOMBOR[bulan];
+        const nomborBulan =
+            BULAN_NOMBOR[bulan];
 
 
-    const jumlahHari =
-    new Date(
-        Number(tahun),
-        nomborBulan,
-        0
-    ).getDate();
+        if (!nomborBulan) {
+
+            setStatus(
+                "Bulan tidak sah.",
+                "error"
+            );
+
+            return null;
+        }
 
 
-    const bulan2Digit =
-    String(
-        nomborBulan
-    ).padStart(
-        2,
-        "0"
-    );
+        // ============================================
+        // JUMLAH HARI BULAN
+        // ============================================
+
+        const jumlahHari =
+            new Date(
+                Number(tahun),
+                nomborBulan,
+                0
+            ).getDate();
 
 
-    const tarikhMula =
-    `${tahun}-${bulan2Digit}-01`;
+        const bulan2Digit =
+            String(nomborBulan)
+            .padStart(2, "0");
 
 
-    const tarikhAkhir =
-    `${tahun}-${bulan2Digit}-${String(jumlahHari).padStart(2, "0")}`;
+        // ============================================
+        // JULAT TARIKH
+        // ============================================
+
+        const tarikhMula =
+            `${tahun}-${bulan2Digit}-01`;
 
 
-    console.log(
-        "Tarikh Export:",
-        tarikhMula,
-        "hingga",
-        tarikhAkhir
-    );
+        const tarikhAkhir =
+            `${tahun}-${bulan2Digit}-${String(jumlahHari).padStart(2, "0")}`;
 
 
+        console.log(
+            "Tarikh Export:",
+            tarikhMula,
+            "hingga",
+            tarikhAkhir
+        );
 
-        /*
-            SUPABASE DEFAULT BOLEH ADA HAD ROW.
 
-            JADI KITA AMBIL SECARA BATCH
-            1000 REKOD SETIAP KALI.
-        */
+        // ============================================
+        // AMBIL SEMUA DATA SECARA BATCH
+        // ============================================
+
+        let semuaData = [];
+
+        let dari = 0;
+
+        const saizPage = 1000;
 
 
         while (true) {
 
-
             const sampai =
-            dari +
-            saizPage -
-            1;
-
+                dari + saizPage - 1;
 
 
             const {
                 data,
                 error
             } =
-
             await supabaseClient
-            .from(
-                "jadual_duty"
-            )
-            .select(`
-
-                id,
-
-                tarikh,
-
-                bulan,
-
-                tahun,
-
-                no_skb,
-
-                no_anggota,
-
-                nama_anggota,
-
-                kod_duty,
-
-                kod_tempat_kerja,
-
-                jam_klm,
-
-                hari_offday_bertugas,
-
-                jam_offday_bertugas,
-
-                hari_cutiam_bertugas,
-
-                jam_cutiam_bertugas,
-
-                unit,
-
-                pos
-
-            `)
-            .gte(
-    "tarikh",
-    tarikhMula
-)
-.lte(
-    "tarikh",
-    tarikhAkhir
-)
-.order(
-    "tarikh",
-    {
-        ascending: true
-    }
-)
-.range(
-    dari,
-    sampai
-);
-
+                .from("jadual_duty")
+                .select(`
+                    id,
+                    tarikh,
+                    bulan,
+                    tahun,
+                    no_skb,
+                    no_anggota,
+                    nama_anggota,
+                    kod_duty,
+                    kod_tempat_kerja,
+                    jam_klm,
+                    hari_offday_bertugas,
+                    jam_offday_bertugas,
+                    hari_cutiam_bertugas,
+                    jam_cutiam_bertugas,
+                    unit,
+                    pos
+                `)
+                .gte(
+                    "tarikh",
+                    tarikhMula
+                )
+                .lte(
+                    "tarikh",
+                    tarikhAkhir
+                )
+                .order(
+                    "tarikh",
+                    {
+                        ascending: true
+                    }
+                )
+                .range(
+                    dari,
+                    sampai
+                );
 
 
             if (error) {
 
-                throw error;
+                console.error(
+                    "Supabase Error:",
+                    error
+                );
 
+                throw error;
             }
 
 
-
             const batch =
-            data || [];
-
+                data || [];
 
 
             semuaData.push(
@@ -2235,83 +2100,99 @@ try {
             );
 
 
+            console.log(
+                "Batch:",
+                batch.length,
+                "Jumlah:",
+                semuaData.length
+            );
+
 
             if (
-                batch.length <
-                saizPage
+                batch.length < saizPage
             ) {
 
                 break;
-
             }
 
 
-
-            dari +=
-            saizPage;
-
+            dari += saizPage;
         }
 
 
+        // ============================================
+        // TIADA DATA
+        // ============================================
 
         if (
             semuaData.length === 0
         ) {
 
+            dataBulanan = [];
 
-            dataBulanan =
-            [];
-
-
-            dataAnggotaGrouped =
-            [];
+            dataAnggotaGrouped = [];
 
 
             setStatus(
-                "Tiada rekod ditemui untuk bulan dan tahun tersebut.",
+                `Tiada rekod ditemui dari ${tarikhMula} hingga ${tarikhAkhir}.`,
                 "warning"
             );
 
 
             return null;
-
         }
 
 
+        // ============================================
+        // SIMPAN DATA
+        // ============================================
 
         dataBulanan =
-        semuaData;
-
+            semuaData;
 
 
         filterTerakhir = {
 
-            tahun:
+            tahun: tahun,
 
-            tahun,
-
-            bulan:
-
-            bulan
+            bulan: bulan
 
         };
 
 
+        // ============================================
+        // GROUP 1 SKB = 1 ANGGOTA
+        // ============================================
 
         dataAnggotaGrouped =
-        groupDataIkutSkb(
-            semuaData
+            groupDataIkutSkb(
+                semuaData
+            );
+
+
+        console.log(
+            "Jumlah Rekod:",
+            semuaData.length
         );
 
+
+        console.log(
+            "Jumlah SKB:",
+            dataAnggotaGrouped.length
+        );
+
+
+        setStatus(
+            `${dataAnggotaGrouped.length} anggota ditemui daripada ${semuaData.length} rekod jadual.`,
+            "success"
+        );
 
 
         return semuaData;
 
-
     }
 
     catch (err) {
-
 
         console.error(
             "Ambil Data Error:",
@@ -2320,22 +2201,15 @@ try {
 
 
         setStatus(
-
             "Gagal mengambil data: " +
             err.message,
-
             "error"
-
         );
 
 
         return null;
-
     }
-
 }
-
-
 
 /* ============================================================
    GROUP SEMUA DATA IKUT NO SKB
