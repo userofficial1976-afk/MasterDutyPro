@@ -10,46 +10,29 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        Export Excel / PDF — Master Duty Pro
-    </title>
+    <title>Export Excel / PDF — Master Duty Pro</title>
 
 
-    <!-- =========================================================
-         TAILWIND
-    ========================================================== -->
-
+    <!-- TAILWIND -->
     <script src="https://cdn.tailwindcss.com"></script>
 
 
-    <!-- =========================================================
-         FONT AWESOME
-    ========================================================== -->
-
+    <!-- FONT AWESOME -->
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     >
 
 
-    <!-- =========================================================
-         SUPABASE
-    ========================================================== -->
-
+    <!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-    <!-- =========================================================
-         SHEETJS / XLSX
-    ========================================================== -->
-
+    <!-- SHEETJS -->
     https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.jsscript>
 
 
-    <!-- =========================================================
-         FONT
-    ========================================================== -->
-
+    <!-- INTER -->
     https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap
 
 
@@ -66,8 +49,11 @@
                         teal: {
 
                             450: "#2dd4bf",
+
                             550: "#14b8a6",
+
                             650: "#0d9488",
+
                             750: "#0f766e"
 
                         }
@@ -114,25 +100,9 @@
         }
 
 
-        .sidebar-link.active {
-
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(20, 184, 166, 0.2),
-                    transparent
-                );
-
-            border-left: 3px solid #14b8a6;
-
-            color: #2dd4bf;
-
-        }
-
-
         .sidebar-link {
 
-            transition: all .2s ease;
+            transition: all 0.2s ease;
 
         }
 
@@ -141,14 +111,23 @@
 
             color: #2dd4bf;
 
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.05);
 
         }
 
 
-        .mobile-bottom {
+        .sidebar-link.active {
 
-            display: none;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(20,184,166,0.2),
+                    transparent
+                );
+
+            border-left: 3px solid #14b8a6;
+
+            color: #2dd4bf;
 
         }
 
@@ -165,11 +144,9 @@
 
             padding: 12px 14px;
 
-            color: #ffffff;
+            color: white;
 
             outline: none;
-
-            transition: all .2s ease;
 
         }
 
@@ -179,7 +156,7 @@
             border-color: #14b8a6;
 
             box-shadow:
-                0 0 0 3px rgba(20, 184, 166, .12);
+                0 0 0 3px rgba(20,184,166,.12);
 
         }
 
@@ -188,7 +165,7 @@
 
             background: #0f172a;
 
-            color: #ffffff;
+            color: white;
 
         }
 
@@ -231,7 +208,7 @@
 
             border-collapse: collapse;
 
-            font-size: 13px;
+            font-size: 12px;
 
         }
 
@@ -248,25 +225,36 @@
 
             white-space: nowrap;
 
-            text-align: center;
-
         }
 
 
         .preview-table td {
 
-            padding: 9px;
+            padding: 8px;
 
             border: 1px solid #334155;
 
             color: #cbd5e1;
+
+            white-space: nowrap;
+
+            text-align: center;
+
+        }
+
+
+        .preview-table td.nama {
+
+            text-align: left;
+
+            min-width: 220px;
 
         }
 
 
         .preview-table tbody tr:hover {
 
-            background: rgba(45, 212, 191, .05);
+            background: rgba(45,212,191,.05);
 
         }
 
@@ -299,6 +287,13 @@
         }
 
 
+        .mobile-bottom {
+
+            display: none;
+
+        }
+
+
         @media (max-width: 1023px) {
 
             body {
@@ -323,7 +318,7 @@
                 background: #0f172a;
 
                 border-top:
-                    1px solid rgba(45, 212, 191, .2);
+                    1px solid rgba(45,212,191,.2);
 
                 display: flex;
 
@@ -332,10 +327,6 @@
                 align-items: center;
 
                 z-index: 99999;
-
-                width: 100%;
-
-                overflow: hidden;
 
             }
 
@@ -373,10 +364,6 @@
             .mobile-nav-item i {
 
                 font-size: 20px;
-
-                width: 20px;
-
-                text-align: center;
 
             }
 
@@ -419,15 +406,7 @@
 
             <div class="flex items-center gap-3 mb-8">
 
-                <div
-                    class="
-                        w-12
-                        h-12
-                        flex
-                        items-center
-                        justify-center
-                    "
-                >
+                <div class="w-12 h-12 flex items-center justify-center">
 
                     <img
                         src="logomdp.png"
@@ -440,14 +419,7 @@
 
                 <div>
 
-                    <h1
-                        class="
-                            font-bold
-                            text-white
-                            text-lg
-                            leading-tight
-                        "
-                    >
+                    <h1 class="font-bold text-white text-lg leading-tight">
                         Master Duty Pro
                     </h1>
 
@@ -460,7 +432,8 @@
             </div>
 
 
-            <!-- USER -->
+
+            <!-- USER INFO -->
 
             <div
                 class="
@@ -475,23 +448,15 @@
 
                 <p
                     id="sidebarNamaPengguna"
-                    class="
-                        text-sm
-                        font-semibold
-                        text-white
-                        truncate
-                    "
+                    class="text-sm font-semibold text-white truncate"
                 >
                     -
                 </p>
 
+
                 <p
                     id="sidebarJawatanPengguna"
-                    class="
-                        text-xs
-                        text-teal-400
-                        mt-1
-                    "
+                    class="text-xs text-teal-400 mt-1"
                 >
                     -
                 </p>
@@ -500,7 +465,7 @@
 
 
 
-            <!-- NAVIGATION -->
+            <!-- NAV -->
 
             <nav class="space-y-1 flex-1">
 
@@ -640,7 +605,6 @@
 
                 <a
                     href="klm-mingguan.html"
-                    id="menu-klm"
                     class="
                         sidebar-link
                         flex
@@ -787,37 +751,25 @@
             "
         >
 
-            <div
-                class="
-                    flex
-                    items-center
-                    justify-between
-                    gap-4
-                "
-            >
+            <div class="flex items-center justify-between">
 
 
                 <div>
 
-                    <h2
-                        class="
-                            text-xl
-                            font-bold
-                            text-white
-                        "
-                    >
+                    <h2 class="text-xl font-bold text-white">
                         Export Jadual Duty
                     </h2>
 
                     <p class="text-sm text-slate-400">
 
-                        Excel & PDF
+                        Excel / PDF
                         •
                         <span id="currentDate"></span>
 
                     </p>
 
                 </div>
+
 
 
                 <div class="flex items-center gap-4">
@@ -854,20 +806,21 @@
                     </div>
 
 
+
                     <div class="flex items-center gap-3">
 
                         <div class="text-right hidden sm:block">
 
                             <p
-                                class="text-sm font-medium text-white"
                                 id="userName"
+                                class="text-sm font-medium text-white"
                             >
                                 -
                             </p>
 
                             <p
-                                class="text-xs text-slate-400"
                                 id="userJawatan"
+                                class="text-xs text-slate-400"
                             >
                                 -
                             </p>
@@ -904,9 +857,7 @@
 
 
 
-        <!-- =====================================================
-             CONTENT
-        ====================================================== -->
+        <!-- CONTENT -->
 
         <div class="p-4 md:p-6 space-y-6">
 
@@ -929,64 +880,36 @@
 
                 <div class="relative z-10">
 
-                    <h2
-                        class="
-                            text-2xl
-                            md:text-3xl
-                            font-bold
-                            text-white
-                        "
-                    >
-                        Export Jadual Duty
+                    <h2 class="text-2xl md:text-3xl font-bold text-white">
+
+                        Export Semua Anggota
+
                     </h2>
 
 
-                    <p
-                        class="
-                            mt-2
-                            text-sm
-                            md:text-base
-                            text-teal-100
-                        "
-                    >
-                        Pilih Tahun, Bulan dan No. SKB untuk
-                        mendapatkan rekod jadual anggota.
+                    <p class="mt-2 text-teal-100">
+
+                        Pilih Tahun dan Bulan untuk memaparkan semua
+                        anggota yang mempunyai rekod jadual duty.
+
                     </p>
 
 
-                    <p
-                        class="
-                            mt-3
-                            text-sm
-                            text-white/80
-                        "
-                    >
-                        Format Excel:
-                        1 SKB = 1 row sahaja.
+                    <p class="mt-3 text-sm text-white/80">
+
+                        1 SKB = 1 row dalam Excel.
+
                     </p>
 
                 </div>
 
 
-                <div
-                    class="
-                        absolute
-                        right-4
-                        bottom-2
-                        opacity-20
-                    "
-                >
+                <div class="absolute right-4 bottom-2 opacity-20">
 
                     <img
                         src="logomdp.png"
                         alt="Logo"
-                        class="
-                            w-40
-                            h-40
-                            md:w-48
-                            md:h-48
-                            object-contain
-                        "
+                        class="w-40 h-40 md:w-48 md:h-48 object-contain"
                     >
 
                 </div>
@@ -995,34 +918,25 @@
 
 
 
-            <!-- =================================================
-                 FILTER
-            ================================================== -->
+            <!-- FILTER -->
 
             <div class="glass rounded-2xl p-5 md:p-6">
 
 
-                <div class="mb-6">
+                <div class="mb-5">
 
-                    <h3
-                        class="
-                            text-lg
-                            font-semibold
-                            text-white
-                        "
-                    >
-                        Pilihan Export
+                    <h3 class="text-lg font-semibold text-white">
+
+                        Pilihan Laporan
+
                     </h3>
 
-                    <p
-                        class="
-                            text-sm
-                            text-slate-400
-                            mt-1
-                        "
-                    >
-                        Tarikh akan diambil secara automatik
-                        berdasarkan bulan dan SKB.
+
+                    <p class="text-sm text-slate-400 mt-1">
+
+                        Semua SKB bagi bulan yang dipilih akan
+                        dipaparkan secara automatik.
+
                     </p>
 
                 </div>
@@ -1033,7 +947,7 @@
                     class="
                         grid
                         grid-cols-1
-                        md:grid-cols-3
+                        md:grid-cols-2
                         gap-4
                     "
                 >
@@ -1045,12 +959,7 @@
 
                         <label
                             for="tahun"
-                            class="
-                                block
-                                text-sm
-                                text-slate-300
-                                mb-2
-                            "
+                            class="block text-sm text-slate-300 mb-2"
                         >
                             Tahun
                         </label>
@@ -1077,12 +986,7 @@
 
                         <label
                             for="bulan"
-                            class="
-                                block
-                                text-sm
-                                text-slate-300
-                                mb-2
-                            "
+                            class="block text-sm text-slate-300 mb-2"
                         >
                             Bulan
                         </label>
@@ -1097,85 +1001,29 @@
                                 Pilih Bulan
                             </option>
 
-                            <option value="JANUARI">
-                                Januari
-                            </option>
+                            <option value="JANUARI">Januari</option>
 
-                            <option value="FEBRUARI">
-                                Februari
-                            </option>
+                            <option value="FEBRUARI">Februari</option>
 
-                            <option value="MAC">
-                                Mac
-                            </option>
+                            <option value="MAC">Mac</option>
 
-                            <option value="APRIL">
-                                April
-                            </option>
+                            <option value="APRIL">April</option>
 
-                            <option value="MEI">
-                                Mei
-                            </option>
+                            <option value="MEI">Mei</option>
 
-                            <option value="JUN">
-                                Jun
-                            </option>
+                            <option value="JUN">Jun</option>
 
-                            <option value="JULAI">
-                                Julai
-                            </option>
+                            <option value="JULAI">Julai</option>
 
-                            <option value="OGOS">
-                                Ogos
-                            </option>
+                            <option value="OGOS">Ogos</option>
 
-                            <option value="SEPTEMBER">
-                                September
-                            </option>
+                            <option value="SEPTEMBER">September</option>
 
-                            <option value="OKTOBER">
-                                Oktober
-                            </option>
+                            <option value="OKTOBER">Oktober</option>
 
-                            <option value="NOVEMBER">
-                                November
-                            </option>
+                            <option value="NOVEMBER">November</option>
 
-                            <option value="DISEMBER">
-                                Disember
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-
-                    <!-- SKB -->
-
-                    <div>
-
-                        <label
-                            for="skb"
-                            class="
-                                block
-                                text-sm
-                                text-slate-300
-                                mb-2
-                            "
-                        >
-                            No. SKB
-                        </label>
-
-
-                        <select
-                            id="skb"
-                            class="form-control"
-                        >
-
-                            <option value="">
-                                Pilih Tahun & Bulan Dahulu
-                            </option>
+                            <option value="DISEMBER">Disember</option>
 
                         </select>
 
@@ -1192,7 +1040,7 @@
                     class="
                         flex
                         flex-col
-                        md:flex-row
+                        sm:flex-row
                         gap-3
                         mt-6
                     "
@@ -1213,7 +1061,7 @@
 
                         <i class="fas fa-search"></i>
 
-                        Papar Data
+                        Papar Semua Anggota
 
                     </button>
 
@@ -1264,12 +1112,7 @@
 
                 <div
                     id="statusExport"
-                    class="
-                        mt-4
-                        text-sm
-                        min-h-[20px]
-                        text-slate-400
-                    "
+                    class="mt-4 text-sm min-h-[20px] text-slate-400"
                 ></div>
 
 
@@ -1277,9 +1120,73 @@
 
 
 
-            <!-- =================================================
-                 PREVIEW
-            ================================================== -->
+            <!-- SUMMARY -->
+
+            <div
+                id="summaryCard"
+                class="
+                    hidden
+                    grid
+                    grid-cols-1
+                    sm:grid-cols-3
+                    gap-4
+                "
+            >
+
+
+                <div class="glass rounded-2xl p-5">
+
+                    <div class="text-sm text-slate-400">
+                        Jumlah SKB
+                    </div>
+
+                    <div
+                        id="summarySkb"
+                        class="text-3xl text-teal-400 mt-2"
+                    >
+                        0
+                    </div>
+
+                </div>
+
+
+                <div class="glass rounded-2xl p-5">
+
+                    <div class="text-sm text-slate-400">
+                        Bulan
+                    </div>
+
+                    <div
+                        id="summaryBulan"
+                        class="text-xl text-white mt-2"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="glass rounded-2xl p-5">
+
+                    <div class="text-sm text-slate-400">
+                        Tahun
+                    </div>
+
+                    <div
+                        id="summaryTahun"
+                        class="text-xl text-white mt-2"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- PREVIEW -->
 
             <div
                 id="previewCard"
@@ -1293,55 +1200,21 @@
             >
 
 
-                <div
-                    class="
-                        flex
-                        flex-col
-                        md:flex-row
-                        md:items-center
-                        md:justify-between
-                        gap-3
-                        mb-5
-                    "
-                >
+                <div class="mb-5">
+
+                    <h3 class="text-lg font-semibold text-white">
+
+                        Senarai Anggota
+
+                    </h3>
 
 
-                    <div>
-
-                        <h3
-                            class="
-                                text-lg
-                                font-semibold
-                                text-white
-                            "
-                        >
-                            Preview Jadual Duty
-                        </h3>
-
-                        <p
-                            id="previewInfo"
-                            class="
-                                text-sm
-                                text-slate-400
-                                mt-1
-                            "
-                        >
-                            -
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        id="jumlahRekod"
-                        class="
-                            text-sm
-                            text-teal-400
-                        "
+                    <p
+                        id="previewInfo"
+                        class="text-sm text-slate-400 mt-1"
                     >
-                        0 rekod
-                    </div>
-
+                        -
+                    </p>
 
                 </div>
 
@@ -1363,30 +1236,22 @@
 
                         <tr>
 
-                            <th>Tarikh</th>
+                            <th>#</th>
 
-                            <th>WK</th>
+                            <th>No. SKB</th>
 
-                            <th>TK</th>
+                            <th>No. Anggota</th>
 
-                            <th>Jam KLM</th>
+                            <th>Nama</th>
 
-                            <th>Hari Off</th>
-
-                            <th>Jam Off</th>
-
-                            <th>Hari Am</th>
-
-                            <th>Jam Am</th>
+                            <th>Jumlah Tarikh</th>
 
                         </tr>
 
                         </thead>
 
 
-                        <tbody id="previewBody">
-
-                        </tbody>
+                        <tbody id="previewBody"></tbody>
 
 
                     </table>
@@ -1407,9 +1272,7 @@
 
 
 
-<!-- =============================================================
-     MOBILE NAV
-============================================================== -->
+<!-- MOBILE NAV -->
 
 <nav class="mobile-bottom">
 
@@ -1421,12 +1284,9 @@
 
         <i class="fas fa-home"></i>
 
-        <span>
-            Dash
-        </span>
+        <span>Dash</span>
 
     </a>
-
 
 
     <a
@@ -1436,40 +1296,30 @@
 
         <i class="fas fa-calendar-check"></i>
 
-        <span>
-            Duty
-        </span>
+        <span>Duty</span>
 
     </a>
 
 
-
     <a
         href="klm-mingguan.html"
-        id="mobile-menu-klm"
         class="mobile-nav-item"
     >
 
         <i class="fas fa-file-alt"></i>
 
-        <span>
-            Weekly
-        </span>
+        <span>Weekly</span>
 
     </a>
-
 
 
     export-excel.html
 
         <i class="fas fa-file-export"></i>
 
-        <span>
-            Export
-        </span>
+        <span>Export</span>
 
     </a>
-
 
 
     # return false;"
@@ -1478,9 +1328,7 @@
 
         <i class="fas fa-sign-out-alt"></i>
 
-        <span>
-            Logout
-        </span>
+        <span>Logout</span>
 
     </a>
 
@@ -1492,9 +1340,9 @@
 <script>
 
 
-/* =============================================================
+/* ============================================================
    SUPABASE
-============================================================== */
+============================================================ */
 
 
 const SUPABASE_URL =
@@ -1513,9 +1361,9 @@ window.supabase.createClient(
 
 
 
-/* =============================================================
-   USER LOGIN
-============================================================== */
+/* ============================================================
+   LOGIN USER
+============================================================ */
 
 
 const currentUser =
@@ -1524,53 +1372,84 @@ JSON.parse(
 );
 
 
+
 if (
     !currentUser ||
     Object.keys(currentUser).length === 0
 ) {
 
-    location.href = "login.html";
+    location.href =
+    "login.html";
 
 }
 
 
-const jawatan =
+
+/* ============================================================
+   SEMAK AKSES
+
+   HANYA:
+   PTW
+   PPOW
+   POW
+   ADMIN
+============================================================ */
+
+
+const jawatanLogin =
 String(
     currentUser.jawatan || ""
 )
+.trim()
 .toUpperCase();
 
 
 
-/* =============================================================
-   AKSES
-============================================================== */
+const aksesDibenarkan = [
+
+    "PTW",
+
+    "PPOW",
+
+    "POW",
+
+    "ADMIN"
+
+];
+
 
 
 if (
-    !jawatan.includes("KETUA UNIT") &&
-    !jawatan.includes("KETUA POS")
+    !aksesDibenarkan.includes(
+        jawatanLogin
+    )
 ) {
 
     alert(
-        "Akses terhad kepada Ketua Unit dan Ketua Pos sahaja"
+        "Akses halaman Export Excel / PDF hanya untuk PTW, PPOW, POW dan Admin."
     );
 
-    location.href = "login.html";
+
+    location.href =
+    "dashboardkpku.html";
 
 }
 
 
 
-/* =============================================================
+/* ============================================================
    USER INFO
-============================================================== */
+============================================================ */
 
 
 const namaLogin =
+
 currentUser.name ||
+
 currentUser.nama ||
+
 "-";
+
 
 
 document.getElementById(
@@ -1579,10 +1458,12 @@ document.getElementById(
 namaLogin;
 
 
+
 document.getElementById(
     "sidebarJawatanPengguna"
 ).textContent =
 currentUser.jawatan || "-";
+
 
 
 document.getElementById(
@@ -1591,29 +1472,33 @@ document.getElementById(
 namaLogin;
 
 
+
 document.getElementById(
     "userJawatan"
 ).textContent =
 currentUser.jawatan || "-";
 
 
+
 document.getElementById(
     "userAvatar"
 ).textContent =
+
 namaLogin
 .charAt(0)
 .toUpperCase();
 
 
 
-/* =============================================================
+/* ============================================================
    DATE
-============================================================== */
+============================================================ */
 
 
 document.getElementById(
     "currentDate"
 ).textContent =
+
 new Date().toLocaleDateString(
     "ms-MY",
     {
@@ -1631,70 +1516,18 @@ new Date().toLocaleDateString(
 
 
 
-/* =============================================================
-   KETUA POS MENU
-============================================================== */
-
-
-if (
-    jawatan.includes("KETUA POS")
-) {
-
-    const menuKlm =
-    document.getElementById(
-        "menu-klm"
-    );
-
-
-    const mobileKlm =
-    document.getElementById(
-        "mobile-menu-klm"
-    );
-
-
-    const menuTetapan =
-    document.getElementById(
-        "menu-tetapan"
-    );
-
-
-    if (menuKlm) {
-
-        menuKlm.style.display =
-        "none";
-
-    }
-
-
-    if (mobileKlm) {
-
-        mobileKlm.style.display =
-        "none";
-
-    }
-
-
-    if (menuTetapan) {
-
-        menuTetapan.style.display =
-        "none";
-
-    }
-
-}
-
-
-
-/* =============================================================
+/* ============================================================
    LOGOUT
-============================================================== */
+============================================================ */
 
 
 function logout() {
 
+
     localStorage.removeItem(
         "mdp_user"
     );
+
 
     location.href =
     "login.html";
@@ -1703,49 +1536,9 @@ function logout() {
 
 
 
-/* =============================================================
-   FILTER AKSES
-============================================================== */
-
-
-function tapis(query) {
-
-
-    if (
-        jawatan.includes("KETUA UNIT")
-    ) {
-
-        query =
-        query.eq(
-            "unit",
-            currentUser.unit
-        );
-
-    }
-
-
-    if (
-        jawatan.includes("KETUA POS")
-    ) {
-
-        query =
-        query.eq(
-            "pos",
-            currentUser.pos
-        );
-
-    }
-
-
-    return query;
-
-}
-
-
-
-/* =============================================================
+/* ============================================================
    BULAN
-============================================================== */
+============================================================ */
 
 
 const BULAN_NOMBOR = {
@@ -1778,18 +1571,28 @@ const BULAN_NOMBOR = {
 
 
 
-/* =============================================================
-   CACHE
-============================================================== */
+/* ============================================================
+   CACHE DATA
+============================================================ */
 
 
-let dataExportSemasa = [];
+let dataBulanan = [];
+
+let dataAnggotaGrouped = [];
+
+let filterTerakhir = {
+
+    tahun: "",
+
+    bulan: ""
+
+};
 
 
 
-/* =============================================================
+/* ============================================================
    STATUS
-============================================================== */
+============================================================ */
 
 
 function setStatus(
@@ -1868,9 +1671,9 @@ function setStatus(
 
 
 
-/* =============================================================
+/* ============================================================
    LOAD TAHUN
-============================================================== */
+============================================================ */
 
 
 function loadTahun() {
@@ -1886,8 +1689,13 @@ function loadTahun() {
     new Date().getFullYear();
 
 
-    select.innerHTML =
-    '<option value="">Pilih Tahun</option>';
+
+    select.innerHTML = `
+        <option value="">
+            Pilih Tahun
+        </option>
+    `;
+
 
 
     for (
@@ -1931,74 +1739,29 @@ function loadTahun() {
 
 
 
-/* =============================================================
-   RESET SKB
-============================================================== */
+/* ============================================================
+   RESET CACHE JIKA BULAN / TAHUN BERUBAH
+============================================================ */
 
 
-function resetSkb() {
+function resetData() {
 
 
-    const select =
-    document.getElementById(
-        "skb"
-    );
+    dataBulanan =
+    [];
 
 
-    select.innerHTML = `
-        <option value="">
-            Pilih Tahun & Bulan Dahulu
-        </option>
-    `;
+    dataAnggotaGrouped =
+    [];
 
 
-    dataExportSemasa = [];
+    filterTerakhir = {
 
+        tahun: "",
 
-    document
-    .getElementById(
-        "previewCard"
-    )
-    .classList.add(
-        "hidden"
-    );
+        bulan: ""
 
-}
-
-
-
-/* =============================================================
-   LOAD SKB
-
-   Mengambil SKB berdasarkan:
-   TAHUN
-   BULAN
-   UNIT / POS USER
-============================================================== */
-
-
-async function loadSkb() {
-
-
-    const tahun =
-    document.getElementById(
-        "tahun"
-    ).value;
-
-
-    const bulan =
-    document.getElementById(
-        "bulan"
-    ).value;
-
-
-    const select =
-    document.getElementById(
-        "skb"
-    );
-
-
-    dataExportSemasa = [];
+    };
 
 
     document
@@ -2010,235 +1773,29 @@ async function loadSkb() {
     );
 
 
-    if (
-        !tahun ||
-        !bulan
-    ) {
-
-        resetSkb();
-
-        return;
-
-    }
-
-
-    setStatus(
-        "Sedang memuatkan senarai SKB...",
-        "info"
+    document
+    .getElementById(
+        "summaryCard"
+    )
+    .classList.add(
+        "hidden"
     );
-
-
-    select.innerHTML = `
-        <option value="">
-            Sedang memuatkan...
-        </option>
-    `;
-
-
-    try {
-
-
-        let query =
-        supabaseClient
-        .from("jadual_duty")
-        .select(`
-            no_skb,
-            no_anggota,
-            nama_anggota,
-            unit,
-            pos
-        `)
-        .eq(
-            "tahun",
-            String(tahun)
-        )
-        .eq(
-            "bulan",
-            bulan
-        );
-
-
-        query =
-        tapis(query);
-
-
-        const {
-            data,
-            error
-        } =
-        await query;
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-
-        const unik =
-        new Map();
-
-
-
-        (data || []).forEach(
-            function (rekod) {
-
-
-                if (
-                    rekod.no_skb === null ||
-                    rekod.no_skb === undefined
-                ) {
-
-                    return;
-
-                }
-
-
-                const key =
-                String(
-                    rekod.no_skb
-                );
-
-
-                if (
-                    !unik.has(key)
-                ) {
-
-                    unik.set(
-                        key,
-                        rekod
-                    );
-
-                }
-
-            }
-        );
-
-
-
-        const senarai =
-        Array.from(
-            unik.values()
-        );
-
-
-        senarai.sort(
-            function (a, b) {
-
-
-                const namaA =
-                String(
-                    a.nama_anggota || ""
-                );
-
-
-                const namaB =
-                String(
-                    b.nama_anggota || ""
-                );
-
-
-                return namaA.localeCompare(
-                    namaB,
-                    "ms"
-                );
-
-            }
-        );
-
-
-
-        select.innerHTML = `
-            <option value="">
-                Pilih No. SKB
-            </option>
-        `;
-
-
-
-        senarai.forEach(
-            function (anggota) {
-
-
-                const option =
-                document.createElement(
-                    "option"
-                );
-
-
-                option.value =
-                anggota.no_skb;
-
-
-                option.textContent =
-                `${anggota.no_skb} - ${anggota.nama_anggota || "-"}`;
-
-
-                select.appendChild(
-                    option
-                );
-
-            }
-        );
-
-
-
-        if (
-            senarai.length === 0
-        ) {
-
-            setStatus(
-                "Tiada SKB ditemui untuk bulan dan tahun tersebut.",
-                "warning"
-            );
-
-        }
-
-        else {
-
-            setStatus(
-                `${senarai.length} SKB ditemui.`,
-                "success"
-            );
-
-        }
-
-
-    }
-
-    catch (err) {
-
-
-        console.error(
-            "Load SKB Error:",
-            err
-        );
-
-
-        select.innerHTML = `
-            <option value="">
-                Gagal Memuatkan SKB
-            </option>
-        `;
-
-
-        setStatus(
-            "Gagal memuatkan senarai SKB: " +
-            err.message,
-            "error"
-        );
-
-    }
 
 }
 
 
 
-/* =============================================================
-   AMBIL HARI DARIPADA TARIKH
-============================================================== */
+/* ============================================================
+   PARSE TARIKH
+
+   SUPPORT:
+
+   2026-10-01
+   2026/10/01
+   01/10/2026
+   01-10-2026
+   01
+============================================================ */
 
 
 function dapatkanHari(
@@ -2256,6 +1813,7 @@ function dapatkanHari(
     }
 
 
+
     const value =
     String(
         tarikh
@@ -2264,8 +1822,6 @@ function dapatkanHari(
 
 
     /*
-        FORMAT:
-
         YYYY-MM-DD
         YYYY/MM/DD
     */
@@ -2288,10 +1844,8 @@ function dapatkanHari(
 
 
     /*
-        FORMAT:
-
-        DD-MM-YYYY
         DD/MM/YYYY
+        DD-MM-YYYY
     */
 
 
@@ -2312,11 +1866,7 @@ function dapatkanHari(
 
 
     /*
-        JIKA DATABASE CUMA SIMPAN
-        01
-        02
-        03
-        DLL
+        CUMA HARI
     */
 
 
@@ -2351,12 +1901,45 @@ function dapatkanHari(
 
 
 
-/* =============================================================
-   AMBIL DATA SKB
-============================================================== */
+/* ============================================================
+   JUMLAH HARI BULAN
+============================================================ */
 
 
-async function ambilDataSkb() {
+function jumlahHariBulan(
+    tahun,
+    bulan
+) {
+
+
+    const nomborBulan =
+    BULAN_NOMBOR[
+        bulan
+    ];
+
+
+    return new Date(
+
+        Number(tahun),
+
+        nomborBulan,
+
+        0
+
+    ).getDate();
+
+}
+
+
+
+/* ============================================================
+   AMBIL SEMUA DATA BULAN
+
+   TIADA FILTER SKB.
+============================================================ */
+
+
+async function ambilDataBulanan() {
 
 
     const tahun =
@@ -2371,52 +1954,62 @@ async function ambilDataSkb() {
     ).value;
 
 
-    const noSkb =
-    document.getElementById(
-        "skb"
-    ).value;
-
-
 
     if (!tahun) {
+
 
         setStatus(
             "Sila pilih Tahun.",
             "warning"
         );
 
+
         return null;
 
     }
 
 
+
     if (!bulan) {
+
 
         setStatus(
             "Sila pilih Bulan.",
             "warning"
         );
 
+
         return null;
 
     }
 
 
-    if (!noSkb) {
 
-        setStatus(
-            "Sila pilih No. SKB.",
-            "warning"
-        );
+    /*
+        JIKA CACHE MASIH BULAN YANG SAMA
+    */
 
-        return null;
+
+    if (
+
+        dataBulanan.length > 0 &&
+
+        filterTerakhir.tahun ===
+        tahun &&
+
+        filterTerakhir.bulan ===
+        bulan
+
+    ) {
+
+        return dataBulanan;
 
     }
 
 
 
     setStatus(
-        "Sedang mengambil data jadual duty...",
+        "Sedang mengambil semua data anggota...",
         "info"
     );
 
@@ -2425,99 +2018,150 @@ async function ambilDataSkb() {
     try {
 
 
-        let query =
-        supabaseClient
-        .from(
-            "jadual_duty"
-        )
-        .select(`
+        let semuaData = [];
 
-            id,
+        let dari = 0;
 
-            tarikh,
+        const saizPage =
+        1000;
 
-            bulan,
 
-            tahun,
 
-            no_skb,
+        /*
+            SUPABASE DEFAULT BOLEH ADA HAD ROW.
 
-            no_anggota,
+            JADI KITA AMBIL SECARA BATCH
+            1000 REKOD SETIAP KALI.
+        */
 
-            nama_anggota,
 
-            kod_duty,
+        while (true) {
 
-            kod_tempat_kerja,
 
-            jam_klm,
+            const sampai =
+            dari +
+            saizPage -
+            1;
 
-            hari_offday_bertugas,
 
-            jam_offday_bertugas,
 
-            hari_cutiam_bertugas,
+            const {
+                data,
+                error
+            } =
 
-            jam_cutiam_bertugas,
+            await supabaseClient
+            .from(
+                "jadual_duty"
+            )
+            .select(`
 
-            unit,
+                id,
 
-            pos
+                tarikh,
 
-        `)
-        .eq(
-            "no_skb",
-            Number(noSkb)
-        )
-        .eq(
-            "tahun",
-            String(tahun)
-        )
-        .eq(
-            "bulan",
-            bulan
-        )
-        .order(
-            "id",
-            {
-                ascending: true
+                bulan,
+
+                tahun,
+
+                no_skb,
+
+                no_anggota,
+
+                nama_anggota,
+
+                kod_duty,
+
+                kod_tempat_kerja,
+
+                jam_klm,
+
+                hari_offday_bertugas,
+
+                jam_offday_bertugas,
+
+                hari_cutiam_bertugas,
+
+                jam_cutiam_bertugas,
+
+                unit,
+
+                pos
+
+            `)
+            .eq(
+                "tahun",
+                String(tahun)
+            )
+            .eq(
+                "bulan",
+                bulan
+            )
+            .order(
+                "id",
+                {
+                    ascending: true
+                }
+            )
+            .range(
+                dari,
+                sampai
+            );
+
+
+
+            if (error) {
+
+                throw error;
+
             }
-        );
 
 
 
-        query =
-        tapis(query);
+            const batch =
+            data || [];
 
 
 
-        const {
-            data,
-            error
-        } =
-        await query;
+            semuaData.push(
+                ...batch
+            );
 
 
 
-        if (error) {
+            if (
+                batch.length <
+                saizPage
+            ) {
 
-            throw error;
+                break;
+
+            }
+
+
+
+            dari +=
+            saizPage;
 
         }
 
 
 
         if (
-            !data ||
-            data.length === 0
+            semuaData.length === 0
         ) {
 
-            dataExportSemasa =
+
+            dataBulanan =
+            [];
+
+
+            dataAnggotaGrouped =
             [];
 
 
             setStatus(
-                "Tiada rekod jadual duty ditemui untuk SKB tersebut.",
+                "Tiada rekod ditemui untuk bulan dan tahun tersebut.",
                 "warning"
             );
 
@@ -2528,11 +2172,33 @@ async function ambilDataSkb() {
 
 
 
-        dataExportSemasa =
-        data;
+        dataBulanan =
+        semuaData;
 
 
-        return data;
+
+        filterTerakhir = {
+
+            tahun:
+
+            tahun,
+
+            bulan:
+
+            bulan
+
+        };
+
+
+
+        dataAnggotaGrouped =
+        groupDataIkutSkb(
+            semuaData
+        );
+
+
+
+        return semuaData;
 
 
     }
@@ -2547,9 +2213,12 @@ async function ambilDataSkb() {
 
 
         setStatus(
+
             "Gagal mengambil data: " +
             err.message,
+
             "error"
+
         );
 
 
@@ -2561,21 +2230,123 @@ async function ambilDataSkb() {
 
 
 
-/* =============================================================
-   SUSUN REKOD IKUT HARI
-============================================================== */
+/* ============================================================
+   GROUP SEMUA DATA IKUT NO SKB
+
+   1 SKB = 1 OBJEK
+============================================================ */
 
 
-function susunIkutHari(
+function groupDataIkutSkb(
     data
 ) {
 
 
-    const hasil = {};
+    const map =
+    new Map();
+
 
 
     data.forEach(
         function (rekod) {
+
+
+            if (
+
+                rekod.no_skb === null ||
+
+                rekod.no_skb === undefined
+
+            ) {
+
+                return;
+
+            }
+
+
+
+            const key =
+            String(
+                rekod.no_skb
+            );
+
+
+
+            if (
+                !map.has(
+                    key
+                )
+            ) {
+
+
+                map.set(
+                    key,
+                    {
+
+                        no_skb:
+                            rekod.no_skb,
+
+                        no_anggota:
+                            rekod.no_anggota || "",
+
+                        nama_anggota:
+                            rekod.nama_anggota || "",
+
+                        unit:
+                            rekod.unit || "",
+
+                        pos:
+                            rekod.pos || "",
+
+                        rekodHari:
+                            {},
+
+                        jumlahRekod:
+                            0
+
+                    }
+                );
+
+            }
+
+
+
+            const anggota =
+            map.get(
+                key
+            );
+
+
+
+            /*
+                Jika field maklumat anggota
+                yang pertama kosong,
+                gunakan rekod lain yang ada.
+            */
+
+
+            if (
+                !anggota.no_anggota &&
+                rekod.no_anggota
+            ) {
+
+                anggota.no_anggota =
+                rekod.no_anggota;
+
+            }
+
+
+
+            if (
+                !anggota.nama_anggota &&
+                rekod.nama_anggota
+            ) {
+
+                anggota.nama_anggota =
+                rekod.nama_anggota;
+
+            }
+
 
 
             const hari =
@@ -2584,22 +2355,32 @@ function susunIkutHari(
             );
 
 
+
             if (
+
                 hari !== null &&
+
                 hari >= 1 &&
+
                 hari <= 31
+
             ) {
 
 
                 /*
                     1 SKB
                     1 TARIKH
-                    1 REKOD
+                    1 SET DATA
                 */
 
 
-                hasil[hari] =
+                anggota.rekodHari[
+                    hari
+                ] =
                 rekod;
+
+
+                anggota.jumlahRekod++;
 
             }
 
@@ -2607,273 +2388,64 @@ function susunIkutHari(
     );
 
 
-    return hasil;
+
+    const senarai =
+    Array.from(
+        map.values()
+    );
+
+
+
+    /*
+        SUSUN IKUT NAMA
+    */
+
+
+    senarai.sort(
+
+        function (a, b) {
+
+
+            const namaA =
+            String(
+                a.nama_anggota || ""
+            );
+
+
+            const namaB =
+            String(
+                b.nama_anggota || ""
+            );
+
+
+            return namaA.localeCompare(
+                namaB,
+                "ms"
+            );
+
+        }
+
+    );
+
+
+
+    return senarai;
 
 }
 
 
 
-/* =============================================================
-   JUMLAH HARI DALAM BULAN
-============================================================== */
-
-
-function dapatkanJumlahHari(
-    tahun,
-    bulan
-) {
-
-
-    const nomborBulan =
-    BULAN_NOMBOR[
-        bulan
-    ];
-
-
-    return new Date(
-        Number(tahun),
-        nomborBulan,
-        0
-    ).getDate();
-
-}
-
-
-
-/* =============================================================
-   PREVIEW
-============================================================== */
+/* ============================================================
+   PAPAR SEMUA ANGGOTA
+============================================================ */
 
 
 async function paparData() {
 
 
-    const data =
-    await ambilDataSkb();
-
-
-    if (!data) {
-
-        return;
-
-    }
-
-
-
-    const tahun =
-    document.getElementById(
-        "tahun"
-    ).value;
-
-
-    const bulan =
-    document.getElementById(
-        "bulan"
-    ).value;
-
-
-
-    const anggota =
-    data[0];
-
-
-    const rekodHari =
-    susunIkutHari(
-        data
-    );
-
-
-    const jumlahHari =
-    dapatkanJumlahHari(
-        tahun,
-        bulan
-    );
-
-
-
-    document.getElementById(
-        "previewInfo"
-    ).textContent =
-
-        `No. SKB: ${anggota.no_skb} | ` +
-
-        `No. Anggota: ${anggota.no_anggota || "-"} | ` +
-
-        `Nama: ${anggota.nama_anggota || "-"} | ` +
-
-        `${bulan} ${tahun}`;
-
-
-
-    const tbody =
-    document.getElementById(
-        "previewBody"
-    );
-
-
-    tbody.innerHTML =
-    "";
-
-
-
-    let bilanganRekod =
-    0;
-
-
-
-    for (
-        let hari = 1;
-        hari <= jumlahHari;
-        hari++
-    ) {
-
-
-        const rekod =
-        rekodHari[
-            hari
-        ];
-
-
-        if (rekod) {
-
-            bilanganRekod++;
-
-        }
-
-
-
-        const tr =
-        document.createElement(
-            "tr"
-        );
-
-
-
-        tr.innerHTML = `
-
-            <td class="text-center">
-
-                ${String(hari).padStart(2, "0")}
-
-            </td>
-
-
-            <td class="text-center">
-
-                ${rekod?.kod_duty ?? ""}
-
-            </td>
-
-
-            <td class="text-center">
-
-                ${rekod?.kod_tempat_kerja ?? ""}
-
-            </td>
-
-
-            <td class="text-center">
-
-                ${rekod?.jam_klm ?? ""}
-
-            </td>
-
-
-            <td class="text-center">
-
-                ${rekod?.hari_offday_bertugas ?? ""}
-
-            </td>
-
-
-            <td class="text-center">
-
-                ${rekod?.jam_offday_bertugas ?? ""}
-
-            </td>
-
-
-            <td class="text-center">
-
-                ${rekod?.hari_cutiam_bertugas ?? ""}
-
-            </td>
-
-
-            <td class="text-center">
-
-                ${rekod?.jam_cutiam_bertugas ?? ""}
-
-            </td>
-
-        `;
-
-
-
-        tbody.appendChild(
-            tr
-        );
-
-    }
-
-
-
-    document.getElementById(
-        "jumlahRekod"
-    ).textContent =
-    `${bilanganRekod} rekod tarikh`;
-
-
-
-    document
-    .getElementById(
-        "previewCard"
-    )
-    .classList.remove(
-        "hidden"
-    );
-
-
-
-    setStatus(
-        "Data berjaya dipaparkan.",
-        "success"
-    );
-
-}
-
-
-
-/* =============================================================
-   EXPORT EXCEL
-
-   STRUKTUR:
-
-   No. SKB
-   No. Anggota
-   Nama
-
-   wk01
-   tk01
-   Jam_klm01
-   hari_off01
-   jam_off01
-   hari_am01
-   jam_am01
-
-   wk02
-   ...
-
-   SEMUA DALAM 1 ROW SKB
-============================================================== */
-
-
-async function exportExcel() {
-
-
     const btn =
     document.getElementById(
-        "btnExcel"
+        "btnPapar"
     );
 
 
@@ -2885,29 +2457,8 @@ async function exportExcel() {
     try {
 
 
-        let data =
-        dataExportSemasa;
-
-
-
-        const pilihanSkb =
-        document.getElementById(
-            "skb"
-        ).value;
-
-
-
-        if (
-            !data.length ||
-            String(data[0]?.no_skb) !==
-            String(pilihanSkb)
-        ) {
-
-
-            data =
-            await ambilDataSkb();
-
-        }
+        const data =
+        await ambilDataBulanan();
 
 
 
@@ -2932,29 +2483,237 @@ async function exportExcel() {
 
 
 
-        const anggota =
-        data[0];
+        /*
+            PASTIKAN GROUP ADA
+        */
+
+
+        if (
+            dataAnggotaGrouped.length === 0
+        ) {
+
+
+            dataAnggotaGrouped =
+            groupDataIkutSkb(
+                data
+            );
+
+        }
 
 
 
-        const rekodHari =
-        susunIkutHari(
-            data
+        const tbody =
+        document.getElementById(
+            "previewBody"
+        );
+
+
+        tbody.innerHTML =
+        "";
+
+
+
+        dataAnggotaGrouped.forEach(
+
+            function (
+                anggota,
+                index
+            ) {
+
+
+                const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+
+                tr.innerHTML = `
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+                        ${anggota.no_skb ?? ""}
+                    </td>
+
+                    <td>
+                        ${anggota.no_anggota ?? ""}
+                    </td>
+
+                    <td class="nama">
+                        ${anggota.nama_anggota ?? ""}
+                    </td>
+
+                    <td>
+                        ${anggota.jumlahRekod}
+                    </td>
+
+                `;
+
+
+
+                tbody.appendChild(
+                    tr
+                );
+
+            }
+
         );
 
 
 
+        document.getElementById(
+            "previewInfo"
+        ).textContent =
+
+        `${bulan} ${tahun} • ${dataAnggotaGrouped.length} anggota`;
+
+
+
+        document.getElementById(
+            "summarySkb"
+        ).textContent =
+
+        dataAnggotaGrouped.length;
+
+
+
+        document.getElementById(
+            "summaryBulan"
+        ).textContent =
+
+        bulan;
+
+
+
+        document.getElementById(
+            "summaryTahun"
+        ).textContent =
+
+        tahun;
+
+
+
+        document
+        .getElementById(
+            "summaryCard"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+
+        document
+        .getElementById(
+            "previewCard"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+
+        setStatus(
+
+            `${dataAnggotaGrouped.length} SKB berjaya dipaparkan.`,
+
+            "success"
+
+        );
+
+
+    }
+
+    finally {
+
+
+        btn.disabled =
+        false;
+
+    }
+
+}
+
+
+
+/* ============================================================
+   EXPORT EXCEL
+
+   1 SKB = 1 ROW
+============================================================ */
+
+
+async function exportExcel() {
+
+
+    const btn =
+    document.getElementById(
+        "btnExcel"
+    );
+
+
+    btn.disabled =
+    true;
+
+
+
+    try {
+
+
+        const data =
+        await ambilDataBulanan();
+
+
+
+        if (!data) {
+
+            return;
+
+        }
+
+
+
+        if (
+            dataAnggotaGrouped.length === 0
+        ) {
+
+
+            dataAnggotaGrouped =
+            groupDataIkutSkb(
+                data
+            );
+
+        }
+
+
+
+        const tahun =
+        document.getElementById(
+            "tahun"
+        ).value;
+
+
+        const bulan =
+        document.getElementById(
+            "bulan"
+        ).value;
+
+
+
         const jumlahHari =
-        dapatkanJumlahHari(
+        jumlahHariBulan(
             tahun,
             bulan
         );
 
 
 
-        /* =====================================================
+        /* ====================================================
            HEADER
-        ====================================================== */
+        ===================================================== */
 
 
         const header = [
@@ -2979,7 +2738,8 @@ async function exportExcel() {
             const h =
             String(
                 hari
-            ).padStart(
+            )
+            .padStart(
                 2,
                 "0"
             );
@@ -3008,159 +2768,183 @@ async function exportExcel() {
 
 
 
-        /* =====================================================
-           SATU ROW SKB
-        ====================================================== */
+        /*
+            SEMUA ROW EXCEL
+
+            ROW 1 = HEADER
+
+            ROW 2 = SKB PERTAMA
+
+            ROW 3 = SKB KEDUA
+
+            DAN SETERUSNYA
+        */
 
 
-        const row = [
+        const excelData = [
 
-            anggota.no_skb ?? "",
-
-            anggota.no_anggota ?? "",
-
-            anggota.nama_anggota ?? ""
+            header
 
         ];
 
 
 
-        for (
-            let hari = 1;
-            hari <= jumlahHari;
-            hari++
-        ) {
+        /* ====================================================
+           SETIAP SKB = SATU ROW
+        ===================================================== */
 
 
-            const rekod =
-            rekodHari[
-                hari
-            ];
+        dataAnggotaGrouped.forEach(
+
+            function (
+                anggota
+            ) {
+
+
+                const row = [
+
+                    anggota.no_skb ?? "",
+
+                    anggota.no_anggota ?? "",
+
+                    anggota.nama_anggota ?? ""
+
+                ];
 
 
 
-            if (rekod) {
+                for (
+                    let hari = 1;
+                    hari <= jumlahHari;
+                    hari++
+                ) {
 
 
-                row.push(
+                    const rekod =
+                    anggota.rekodHari[
+                        hari
+                    ];
 
 
-                    /*
-                        wkXX
-                    */
 
-                    rekod.kod_duty ?? "",
+                    if (rekod) {
 
 
-                    /*
-                        tkXX
-                    */
-
-                    rekod.kod_tempat_kerja ?? "",
+                        row.push(
 
 
-                    /*
-                        Jam_klmXX
-                    */
+                            /*
+                                wkXX
+                            */
 
-                    rekod.jam_klm ?? "",
-
-
-                    /*
-                        hari_offXX
-                    */
-
-                    rekod.hari_offday_bertugas ?? "",
+                            rekod.kod_duty ?? "",
 
 
-                    /*
-                        jam_offXX
-                    */
+                            /*
+                                tkXX
+                            */
 
-                    rekod.jam_offday_bertugas ?? "",
-
-
-                    /*
-                        hari_amXX
-                    */
-
-                    rekod.hari_cutiam_bertugas ?? "",
+                            rekod.kod_tempat_kerja ?? "",
 
 
-                    /*
-                        jam_amXX
-                    */
+                            /*
+                                Jam_klmXX
+                            */
 
-                    rekod.jam_cutiam_bertugas ?? ""
+                            rekod.jam_klm ?? "",
 
+
+                            /*
+                                hari_offXX
+                            */
+
+                            rekod.hari_offday_bertugas ?? "",
+
+
+                            /*
+                                jam_offXX
+                            */
+
+                            rekod.jam_offday_bertugas ?? "",
+
+
+                            /*
+                                hari_amXX
+                            */
+
+                            rekod.hari_cutiam_bertugas ?? "",
+
+
+                            /*
+                                jam_amXX
+                            */
+
+                            rekod.jam_cutiam_bertugas ?? ""
+
+                        );
+
+                    }
+
+
+                    else {
+
+
+                        /*
+                            TIADA REKOD TARIKH
+
+                            KEKALKAN 7 SEL KOSONG
+                        */
+
+
+                        row.push(
+
+                            "",
+
+                            "",
+
+                            "",
+
+                            "",
+
+                            "",
+
+                            "",
+
+                            ""
+
+                        );
+
+                    }
+
+                }
+
+
+
+                excelData.push(
+                    row
                 );
-
 
             }
 
-            else {
-
-
-                /*
-                    TIADA DATA TARIKH
-
-                    MASIH KEKALKAN
-                    7 COLUMN KOSONG
-
-                    JANGAN CIPTA ROW BARU
-                */
-
-
-                row.push(
-
-                    "",
-
-                    "",
-
-                    "",
-
-                    "",
-
-                    "",
-
-                    "",
-
-                    ""
-
-                );
-
-            }
-
-        }
-
-
-
-        /* =====================================================
-           CREATE SHEET
-
-           ROW 1 = HEADER
-           ROW 2 = SKB
-
-           JUMLAH ROW DATA = 1
-        ====================================================== */
-
-
-        const worksheet =
-        XLSX.utils.aoa_to_sheet(
-            [
-
-                header,
-
-                row
-
-            ]
         );
 
 
 
-        /* =====================================================
+        /* ====================================================
+           CREATE WORKSHEET
+        ===================================================== */
+
+
+        const worksheet =
+        XLSX.utils.aoa_to_sheet(
+            excelData
+        );
+
+
+
+        /* ====================================================
            COLUMN WIDTH
-        ====================================================== */
+        ===================================================== */
 
 
         const columnWidths = [
@@ -3224,14 +3008,16 @@ async function exportExcel() {
 
 
 
-        worksheet["!cols"] =
+        worksheet[
+            "!cols"
+        ] =
         columnWidths;
 
 
 
-        /* =====================================================
+        /* ====================================================
            AUTO FILTER
-        ====================================================== */
+        ===================================================== */
 
 
         if (
@@ -3252,9 +3038,9 @@ async function exportExcel() {
 
 
 
-        /* =====================================================
+        /* ====================================================
            WORKBOOK
-        ====================================================== */
+        ===================================================== */
 
 
         const workbook =
@@ -3274,20 +3060,15 @@ async function exportExcel() {
 
 
 
-        /* =====================================================
-           FILE NAME
-        ====================================================== */
+        /* ====================================================
+           DOWNLOAD
+        ===================================================== */
 
 
         const namaFail =
 
-        `Jadual_Duty_SKB_${anggota.no_skb}_${bulan}_${tahun}.xlsx`;
+        `Jadual_Duty_${bulan}_${tahun}.xlsx`;
 
-
-
-        /* =====================================================
-           DOWNLOAD
-        ====================================================== */
 
 
         XLSX.writeFile(
@@ -3302,7 +3083,7 @@ async function exportExcel() {
 
         setStatus(
 
-            `Excel SKB ${anggota.no_skb} berjaya didownload.`,
+            `Excel berjaya didownload. ${dataAnggotaGrouped.length} SKB dimasukkan.`,
 
             "success"
 
@@ -3344,18 +3125,13 @@ async function exportExcel() {
 
 
 
-/* =============================================================
-   CETAK / PDF
+/* ============================================================
+   CETAK / SIMPAN PDF
 
-   PDF TIDAK PAKSA 217 COLUMN DALAM SATU BARIS.
-
-   PDF AKAN PAPAR:
-   01
-   02
-   03
-   ...
-   SECARA MENEGAK SUPAYA BOLEH DIBACA.
-============================================================== */
+   PDF:
+   SEMUA ANGGOTA
+   SETIAP ANGGOTA ADA JADUAL 01 - AKHIR BULAN
+============================================================ */
 
 
 async function cetakPDF() {
@@ -3375,35 +3151,28 @@ async function cetakPDF() {
     try {
 
 
-        let data =
-        dataExportSemasa;
-
-
-
-        const pilihanSkb =
-        document.getElementById(
-            "skb"
-        ).value;
-
-
-
-        if (
-            !data.length ||
-            String(data[0]?.no_skb) !==
-            String(pilihanSkb)
-        ) {
-
-
-            data =
-            await ambilDataSkb();
-
-        }
+        const data =
+        await ambilDataBulanan();
 
 
 
         if (!data) {
 
             return;
+
+        }
+
+
+
+        if (
+            dataAnggotaGrouped.length === 0
+        ) {
+
+
+            dataAnggotaGrouped =
+            groupDataIkutSkb(
+                data
+            );
 
         }
 
@@ -3422,92 +3191,164 @@ async function cetakPDF() {
 
 
 
-        const anggota =
-        data[0];
-
-
-
-        const rekodHari =
-        susunIkutHari(
-            data
-        );
-
-
-
         const jumlahHari =
-        dapatkanJumlahHari(
+        jumlahHariBulan(
             tahun,
             bulan
         );
 
 
 
-        let rowsHTML =
+        let semuaAnggotaHTML =
         "";
 
 
 
-        for (
-            let hari = 1;
-            hari <= jumlahHari;
-            hari++
-        ) {
+        dataAnggotaGrouped.forEach(
+
+            function (
+                anggota,
+                index
+            ) {
 
 
-            const rekod =
-            rekodHari[
-                hari
-            ] || {};
-
-
-
-            rowsHTML += `
-
-                <tr>
-
-                    <td>
-                        ${String(hari).padStart(2, "0")}
-                    </td>
-
-                    <td>
-                        ${rekod.kod_duty ?? ""}
-                    </td>
-
-                    <td>
-                        ${rekod.kod_tempat_kerja ?? ""}
-                    </td>
-
-                    <td>
-                        ${rekod.jam_klm ?? ""}
-                    </td>
-
-                    <td>
-                        ${rekod.hari_offday_bertugas ?? ""}
-                    </td>
-
-                    <td>
-                        ${rekod.jam_offday_bertugas ?? ""}
-                    </td>
-
-                    <td>
-                        ${rekod.hari_cutiam_bertugas ?? ""}
-                    </td>
-
-                    <td>
-                        ${rekod.jam_cutiam_bertugas ?? ""}
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
+                let rows =
+                "";
 
 
 
-        /* =====================================================
-           BUKA PRINT WINDOW
-        ====================================================== */
+                for (
+                    let hari = 1;
+                    hari <= jumlahHari;
+                    hari++
+                ) {
+
+
+                    const rekod =
+                    anggota.rekodHari[
+                        hari
+                    ] || {};
+
+
+
+                    rows += `
+
+                        <tr>
+
+                            <td>
+                                ${String(hari).padStart(2, "0")}
+                            </td>
+
+                            <td>
+                                ${rekod.kod_duty ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.kod_tempat_kerja ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.jam_klm ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.hari_offday_bertugas ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.jam_offday_bertugas ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.hari_cutiam_bertugas ?? ""}
+                            </td>
+
+                            <td>
+                                ${rekod.jam_cutiam_bertugas ?? ""}
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+
+
+
+                semuaAnggotaHTML += `
+
+                    <section class="anggota">
+
+                        <div class="anggota-header">
+
+                            <div>
+
+                                <div class="nama">
+
+                                    ${anggota.nama_anggota || "-"}
+
+                                </div>
+
+                                <div class="meta">
+
+                                    No. SKB:
+                                    ${anggota.no_skb || "-"}
+
+                                    &nbsp; | &nbsp;
+
+                                    No. Anggota:
+                                    ${anggota.no_anggota || "-"}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <table>
+
+                            <thead>
+
+                            <tr>
+
+                                <th>Tarikh</th>
+
+                                <th>WK</th>
+
+                                <th>TK</th>
+
+                                <th>Jam KLM</th>
+
+                                <th>Hari Off</th>
+
+                                <th>Jam Off</th>
+
+                                <th>Hari Am</th>
+
+                                <th>Jam Am</th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                ${rows}
+
+                            </tbody>
+
+                        </table>
+
+                    </section>
+
+                `;
+
+            }
+
+        );
+
 
 
         const printWindow =
@@ -3518,11 +3359,13 @@ async function cetakPDF() {
 
 
 
-        if (!printWindow) {
+        if (
+            !printWindow
+        ) {
 
 
             alert(
-                "Popup disekat oleh browser. Sila benarkan popup untuk mencetak PDF."
+                "Popup disekat oleh browser. Sila benarkan popup untuk menggunakan fungsi Cetak PDF."
             );
 
 
@@ -3543,7 +3386,7 @@ async function cetakPDF() {
 <meta charset="UTF-8">
 
 <title>
-Jadual Duty SKB ${anggota.no_skb}
+Jadual Duty ${bulan} ${tahun}
 </title>
 
 
@@ -3554,7 +3397,7 @@ Jadual Duty SKB ${anggota.no_skb}
 
     size: A4 landscape;
 
-    margin: 10mm;
+    margin: 8mm;
 
 }
 
@@ -3582,13 +3425,7 @@ body {
 }
 
 
-.header {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
+.report-header {
 
     border-bottom:
         2px solid #0f766e;
@@ -3600,74 +3437,65 @@ body {
 }
 
 
-.title {
+.report-title {
 
-    font-size: 20px;
+    font-size: 19px;
 
-    font-weight: 700;
+    font-weight: bold;
 
     color: #0f766e;
 
-    margin: 0;
-
 }
 
 
-.subtitle {
-
-    font-size: 12px;
-
-    color: #64748b;
+.report-subtitle {
 
     margin-top: 4px;
 
-}
-
-
-.info {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 8px;
-
-    margin-bottom: 14px;
-
-}
-
-
-.info-item {
-
-    border:
-        1px solid #cbd5e1;
-
-    border-radius: 6px;
-
-    padding: 8px 10px;
-
-}
-
-
-.info-label {
-
-    font-size: 9px;
+    font-size: 11px;
 
     color: #64748b;
 
-    text-transform: uppercase;
+}
 
-    margin-bottom: 3px;
+
+.anggota {
+
+    page-break-after: always;
 
 }
 
 
-.info-value {
+.anggota:last-child {
 
-    font-size: 12px;
+    page-break-after: auto;
 
-    color: #111827;
+}
+
+
+.anggota-header {
+
+    margin-bottom: 8px;
+
+}
+
+
+.nama {
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+}
+
+
+.meta {
+
+    margin-top: 3px;
+
+    font-size: 10px;
+
+    color: #475569;
 
 }
 
@@ -3678,45 +3506,42 @@ table {
 
     border-collapse: collapse;
 
-    font-size: 9px;
+    table-layout: fixed;
+
+    font-size: 8px;
 
 }
 
 
 thead {
 
-    display:
-        table-header-group;
+    display: table-header-group;
 
 }
 
 
 th {
 
+    padding: 4px 3px;
+
     background: #0f766e;
 
     color: white;
 
-    font-weight: 600;
-
-    padding: 6px 4px;
+    border: 1px solid #0f766e;
 
     text-align: center;
-
-    border:
-        1px solid #0f766e;
 
 }
 
 
 td {
 
-    padding: 5px 4px;
+    border: 1px solid #cbd5e1;
+
+    padding: 3px;
 
     text-align: center;
-
-    border:
-        1px solid #cbd5e1;
 
 }
 
@@ -3728,11 +3553,11 @@ tbody tr:nth-child(even) {
 }
 
 
-.footer {
+.print-footer {
 
-    margin-top: 10px;
+    margin-top: 8px;
 
-    font-size: 9px;
+    font-size: 8px;
 
     color: #64748b;
 
@@ -3749,35 +3574,22 @@ tbody tr:nth-child(even) {
 <body>
 
 
-<div class="header">
+<div class="report-header">
 
-    <div>
+    <div class="report-title">
 
-        <div class="title">
-
-            JADUAL DUTY
-
-        </div>
-
-
-        <div class="subtitle">
-
-            Master Duty Pro • Wilayah Terengganu
-
-        </div>
+        JADUAL DUTY
 
     </div>
 
 
-    <div
-        style="
-            font-size:13px;
-            font-weight:600;
-            color:#0f766e;
-        "
-    >
+    <div class="report-subtitle">
 
         ${bulan} ${tahun}
+        •
+        Jumlah ${dataAnggotaGrouped.length} SKB
+        •
+        Master Duty Pro
 
     </div>
 
@@ -3785,122 +3597,11 @@ tbody tr:nth-child(even) {
 
 
 
-<div class="info">
-
-
-    <div class="info-item">
-
-        <div class="info-label">
-
-            No. SKB
-
-        </div>
-
-        <div class="info-value">
-
-            ${anggota.no_skb ?? "-"}
-
-        </div>
-
-    </div>
+${semuaAnggotaHTML}
 
 
 
-    <div class="info-item">
-
-        <div class="info-label">
-
-            No. Anggota
-
-        </div>
-
-        <div class="info-value">
-
-            ${anggota.no_anggota ?? "-"}
-
-        </div>
-
-    </div>
-
-
-
-    <div class="info-item">
-
-        <div class="info-label">
-
-            Nama
-
-        </div>
-
-        <div class="info-value">
-
-            ${anggota.nama_anggota ?? "-"}
-
-        </div>
-
-    </div>
-
-
-</div>
-
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-    <th>
-        Tarikh
-    </th>
-
-    <th>
-        WK
-    </th>
-
-    <th>
-        TK
-    </th>
-
-    <th>
-        Jam KLM
-    </th>
-
-    <th>
-        Hari Off
-    </th>
-
-    <th>
-        Jam Off
-    </th>
-
-    <th>
-        Hari Am
-    </th>
-
-    <th>
-        Jam Am
-    </th>
-
-</tr>
-
-</thead>
-
-
-<tbody>
-
-${rowsHTML}
-
-</tbody>
-
-
-</table>
-
-
-
-<div class="footer">
+<div class="print-footer">
 
     Dicetak melalui Master Duty Pro
 
@@ -3913,13 +3614,17 @@ ${rowsHTML}
 window.onload =
 function () {
 
+
     setTimeout(
+
         function () {
 
             window.print();
 
         },
-        300
+
+        400
+
     );
 
 };
@@ -3941,7 +3646,7 @@ function () {
 
         setStatus(
 
-            "Paparan cetakan PDF telah dibuka.",
+            `Paparan PDF untuk ${dataAnggotaGrouped.length} SKB telah dibuka.`,
 
             "success"
 
@@ -3983,9 +3688,9 @@ function () {
 
 
 
-/* =============================================================
-   EVENT TAHUN
-============================================================== */
+/* ============================================================
+   EVENT FILTER
+============================================================ */
 
 
 document.getElementById(
@@ -3995,16 +3700,17 @@ document.getElementById(
     "change",
     function () {
 
-        loadSkb();
+
+        resetData();
+
+
+        setStatus(
+            "Pilih Bulan kemudian klik Papar Semua Anggota."
+        );
 
     }
 );
 
-
-
-/* =============================================================
-   EVENT BULAN
-============================================================== */
 
 
 document.getElementById(
@@ -4014,45 +3720,17 @@ document.getElementById(
     "change",
     function () {
 
-        loadSkb();
 
-    }
-);
-
-
-
-/* =============================================================
-   BILA SKB TUKAR
-============================================================== */
-
-
-document.getElementById(
-    "skb"
-)
-.addEventListener(
-    "change",
-    function () {
-
-
-        dataExportSemasa =
-        [];
-
-
-        document
-        .getElementById(
-            "previewCard"
-        )
-        .classList.add(
-            "hidden"
-        );
+        resetData();
 
 
         if (
             this.value
         ) {
 
+
             setStatus(
-                "SKB dipilih. Klik Papar Data, Download Excel atau Cetak PDF.",
+                "Klik Papar Semua Anggota untuk melihat data.",
                 "info"
             );
 
@@ -4063,9 +3741,9 @@ document.getElementById(
 
 
 
-/* =============================================================
+/* ============================================================
    START
-============================================================== */
+============================================================ */
 
 
 document.addEventListener(
@@ -4077,7 +3755,7 @@ document.addEventListener(
 
 
         setStatus(
-            "Pilih Tahun dan Bulan untuk memuatkan senarai SKB."
+            "Pilih Tahun dan Bulan."
         );
 
 
