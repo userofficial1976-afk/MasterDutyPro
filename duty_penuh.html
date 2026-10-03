@@ -29,7 +29,10 @@
 
 
 <!-- SHEETJS -->
-<script type="text/javascript" src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script
+    type="text/javascript"
+    src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"
+></script>
 
 
 <!-- INTER -->
@@ -40,6 +43,12 @@
 
 
 <script>
+
+    console.log(
+        "SheetJS status:",
+        typeof window.XLSX
+    );
+
 
     tailwind.config = {
 
@@ -78,50 +87,6 @@
     };
 
 </script>
-
-    <script>
-
-        tailwind.config = {
-
-            theme: {
-
-                extend: {
-
-                    colors: {
-
-                        teal: {
-
-                            450: "#2dd4bf",
-
-                            550: "#14b8a6",
-
-                            650: "#0d9488",
-
-                            750: "#0f766e"
-
-                        }
-
-                    },
-
-                    fontFamily: {
-
-                        sans: [
-                            "Inter",
-                            "Segoe UI",
-                            "system-ui",
-                            "sans-serif"
-                        ]
-
-                    }
-
-                }
-
-            }
-
-        };
-
-    </script>
-
 
     <style>
 
