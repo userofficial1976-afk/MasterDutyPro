@@ -6040,6 +6040,10 @@ async function muatKodDutyFooter(){
     dataKodDuty = [];
 
 
+    /* =================================================
+       QUERY KOD DUTY
+    ================================================= */
+
     let query =
         supabaseClient
             .from("kod_duty")
@@ -6059,6 +6063,10 @@ async function muatKodDutyFooter(){
                 "Aktif"
             );
 
+
+    /* =================================================
+       IKUT UNIT RK01
+    ================================================= */
 
     if(filter.unit){
 
@@ -6080,6 +6088,10 @@ async function muatKodDutyFooter(){
         );
 
 
+    /* =================================================
+       AMBIL DATA SUPABASE
+    ================================================= */
+
     const {
         data,
         error
@@ -6099,17 +6111,130 @@ async function muatKodDutyFooter(){
     }
 
 
+    /* =================================================
+       SENARAI SEMUA KOD
+    ================================================= */
+
+    const semuaKod =
+        (data || []).map(item =>
+            String(
+                item.kod || ""
+            ).trim()
+        );
+
+
+    /* =================================================
+       KOD TUNGGAL
+
+       Contoh:
+       A
+       B
+       C
+       D
+       E
+       G
+       H2
+    ================================================= */
+
+    const kodTunggal =
+        new Set(
+            semuaKod.filter(kod =>
+                kod &&
+                !kod.includes("/")
+            )
+        );
+
+
+    /* =================================================
+       TAPIS KOD GABUNGAN
+
+       A/C
+       A sudah ada
+       C sudah ada
+       = TAK PAPAR
+
+       I/C
+       I tiada
+       C ada
+       = PAPAR
+
+       F/H/O
+       jika F / H / O belum semuanya ada secara tunggal
+       = PAPAR
+    ================================================= */
+
     dataKodDuty =
-        data || [];
+        (data || []).filter(item => {
+
+            const kod =
+                String(
+                    item.kod || ""
+                ).trim();
+
+
+            if(!kod){
+
+                return false;
+
+            }
+
+
+            /* KOD TUNGGAL SENTIASA PAPAR */
+
+            if(!kod.includes("/")){
+
+                return true;
+
+            }
+
+
+            /* PECAHKAN KOD GABUNGAN */
+
+            const bahagianKod =
+                kod
+                    .split("/")
+                    .map(k =>
+                        k.trim()
+                    )
+                    .filter(Boolean);
+
+
+            /* SEMAK SEMUA KOMPONEN SUDAH ADA ATAU TIDAK */
+
+            const semuaSudahAda =
+                bahagianKod.every(kodAsas =>
+                    kodTunggal.has(
+                        kodAsas
+                    )
+                );
+
+
+            /*
+            Jika semua sudah ada:
+            A/C -> A ada + C ada
+            return false
+
+            Jika ada yang belum ada:
+            I/C -> I tiada + C ada
+            return true
+            */
+
+            return !semuaSudahAda;
+
+        });
 
 
     console.log(
-        "KOD DUTY WAKTU KERJA:",
+        "KOD DUTY ASAL:",
+        data
+    );
+
+    console.log(
+        "KOD DUTY FOOTER RK01:",
         dataKodDuty
     );
 
 }
-
 
 function paparKodDutyFooter(){
 
