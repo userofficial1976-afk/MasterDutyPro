@@ -2003,8 +2003,10 @@ grid-template-columns:
 }
 
 /* =====================================================
-   FINAL PRINT OVERRIDE
-   A4 LANDSCAPE - MAKSIMUMKAN RUANG CETAK
+   FINAL PRINT OVERRIDE RK01
+   A4 LANDSCAPE
+   58 KOLUM:
+   2 KOLUM UTAMA + 8 ANGGOTA x 7 KOLUM
 ===================================================== */
 
 @media print {
@@ -2017,8 +2019,15 @@ grid-template-columns:
     html,
     body {
         width: 100% !important;
+        max-width: 100% !important;
+
         margin: 0 !important;
         padding: 0 !important;
+
+        overflow: visible !important;
+
+        background: #fff !important;
+        color: #000 !important;
     }
 
     main,
@@ -2027,29 +2036,119 @@ grid-template-columns:
     .rk01-table-wrapper {
         width: 100% !important;
         max-width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: visible !important;
+    }
+
+
+    /* =================================================
+       TABLE UTAMA
+    ================================================= */
+
+    .rk01-table {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        table-layout: fixed !important;
+
+        border-collapse: collapse !important;
+        border-spacing: 0 !important;
+
         margin: 0 !important;
         padding: 0 !important;
     }
 
-    .rk01-table {
-        width: 291mm !important;
-        min-width: 291mm !important;
-        max-width: 291mm !important;
 
-        margin: 0 !important;
+    /* =================================================
+       RESET WIDTH LAMA PADA TH / TD
 
-        table-layout: fixed !important;
-        border-collapse: collapse !important;
+       PENTING:
+       BIAR COLGROUP YANG KAWAL WIDTH
+    ================================================= */
+
+    .rk01-table th,
+    .rk01-table td {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+
+        box-sizing: border-box !important;
+
+        padding: 1px !important;
     }
 
-    .rk01-footer-grid {
-        width: 291mm !important;
-        min-width: 291mm !important;
-        max-width: 291mm !important;
 
-        margin-left: 0 !important;
-        margin-right: 0 !important;
+    /* =================================================
+       COLGROUP
+
+       KOLUM 1 = TARIKH
+       KOLUM 2 = WK / TK
+    ================================================= */
+
+    .rk01-table col:nth-child(1),
+    .rk01-table col:nth-child(2) {
+        width: 5mm !important;
     }
+
+
+    /* =================================================
+       BAKI 56 KOLUM ANGGOTA
+
+       291mm - 10mm = 281mm
+       281 / 56 = lebih kurang 5.017mm
+    ================================================= */
+
+    .rk01-table col:nth-child(n+3) {
+        width: 5.017mm !important;
+    }
+
+
+    /* =================================================
+       TARIKH
+
+       OVERRIDE RULE 7mm YANG LAMA
+    ================================================= */
+
+    .rk01-table tbody th[rowspan="4"] {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+
+        height: 14px !important;
+    }
+
+
+    /* =================================================
+       ROW NORMAL
+    ================================================= */
+
+    .rk01-table th,
+    .rk01-table td {
+        height: 14px !important;
+        min-height: 14px !important;
+
+        font-family: "Arial Narrow", Arial, sans-serif !important;
+        font-size: 7px !important;
+
+        line-height: 1 !important;
+
+        text-align: center !important;
+        vertical-align: middle !important;
+
+        white-space: nowrap !important;
+
+        border: 0.5pt solid #000 !important;
+    }
+
+
+    /* =================================================
+       TANDA TANGAN
+    ================================================= */
 
     .rk01-table .row-tandatangan th,
     .rk01-table .row-tandatangan td {
@@ -2058,8 +2157,23 @@ grid-template-columns:
         max-height: none !important;
     }
 
+
+    /* =================================================
+       FOOTER
+    ================================================= */
+
+    .rk01-footer-grid {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        margin: 2mm 0 0 0 !important;
+        padding: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
 }
-    
 </style>
 </head>
 
@@ -5120,7 +5234,20 @@ function janaMatrixRK01() {
 
 let html = `
 
+<colgroup>
 
+    <!-- KOLUM 1 : TARIKH -->
+    <col style="width:5mm">
+
+    <!-- KOLUM 2 : WK / TK -->
+    <col style="width:5mm">
+
+    <!-- 8 ANGGOTA × 7 KOLUM = 56 KOLUM -->
+    ${Array.from({ length: 56 }, () => `
+        <col style="width:5mm">
+    `).join("")}
+
+</colgroup>
 
 <thead>
 
