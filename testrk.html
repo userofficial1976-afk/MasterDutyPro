@@ -2494,7 +2494,10 @@ grid-template-columns:
 
     <thead>
         <tr>
-            <th>JUMLAH JAM SEHINGGA KINI : </th><th>0</th>
+            <th>
+    JUMLAH JAM SEHINGGA KINI :
+    <span id="jumlahJamKLMSehinggaKini">0</span> JAM
+</th>
         </tr>
     </thead>
 
@@ -5154,12 +5157,24 @@ if(mingguDipilih){
 const mingguSemasa =
     mingguPapar[0] || [];
 
-    let tarikhSehinggaKini = [];
+let tarikhSehinggaKini = [];
 
 if(mingguDipilih){
 
     const idx =
         parseInt(mingguDipilih) - 1;
+
+    /*
+    ===============================================
+    JUMLAH TERKUMPUL
+
+    Minggu 1 = M1
+    Minggu 2 = M1 + M2
+    Minggu 3 = M1 + M2 + M3
+    Minggu 4 = M1 + M2 + M3 + M4
+    Minggu 5 = M1 + M2 + M3 + M4 + M5
+    ===============================================
+    */
 
     for(let i = 0; i <= idx; i++){
 
@@ -5180,6 +5195,16 @@ else{
         senaraiTarikh;
 
 }
+
+
+/* ===============================================
+   PAPAR JUMLAH KLM TERKUMPUL
+=============================================== */
+
+kemaskiniJumlahJamKLMSehinggaKini(
+    anggota8,
+    tarikhSehinggaKini
+);
 mingguPapar.forEach((minggu, index) => {
 
 
@@ -5407,6 +5432,45 @@ table.innerHTML = html;
 
 }
 
+function kemaskiniJumlahJamKLMSehinggaKini(
+    anggota8,
+    tarikhSehinggaKini
+){
+
+    let jumlahKLM = 0;
+
+    anggota8.forEach(anggota => {
+
+        if(!anggota.no_skb){
+            return;
+        }
+
+        const jumlah =
+            kiraJumlahAnggota(
+                anggota.no_skb,
+                tarikhSehinggaKini
+            );
+
+        jumlahKLM += nombor(jumlah.klm);
+
+    });
+
+
+    const el =
+        document.getElementById(
+            "jumlahJamKLMSehinggaKini"
+        );
+
+    if(el){
+
+        el.textContent =
+            formatNombor(jumlahKLM);
+
+    }
+
+}
+
+    
 
 function kosongkanLaporanRK01(){
 
