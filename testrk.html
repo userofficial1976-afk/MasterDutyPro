@@ -199,7 +199,9 @@ button{
     min-height:18px;
 }
 
-
+.rk01-table td b {
+    font-weight: 700 !important;
+}
 
 
     
@@ -5456,9 +5458,11 @@ console.log(
 
         
         return `
-            <td>
-                ${rekod?.kod_duty || ""}
-            </td>
+<td>
+    ${rekod?.kod_duty
+        ? `<b>${escapeHtml(rekod.kod_duty)}</b>`
+        : ""}
+</td>
 
             <td colspan="6">
                 Kerja Lebih Masa
@@ -5509,11 +5513,15 @@ console.log(
             );
 
 return `
-    <td>${rekod?.kod_tempat_kerja || ""}</td>
+    <td>
+        ${rekod?.kod_tempat_kerja
+            ? `<b>${escapeHtml(rekod.kod_tempat_kerja)}</b>`
+            : ""}
+    </td>
 
     <td>
         ${nombor(rekod?.jam_klm) !== 0
-            ? formatNombor(rekod.jam_klm)
+            ? `<b>${formatNombor(rekod.jam_klm)}</b>`
             : ""}
     </td>
 
@@ -5521,25 +5529,25 @@ return `
 
     <td>
         ${nombor(rekod?.hari_offday_bertugas) !== 0
-            ? formatNombor(rekod.hari_offday_bertugas)
+            ? `<b>${formatNombor(rekod.hari_offday_bertugas)}</b>`
             : ""}
     </td>
 
     <td>
         ${nombor(rekod?.jam_offday_bertugas) !== 0
-            ? formatNombor(rekod.jam_offday_bertugas)
+            ? `<b>${formatNombor(rekod.jam_offday_bertugas)}</b>`
             : ""}
     </td>
 
     <td>
         ${nombor(rekod?.hari_cutiam_bertugas) !== 0
-            ? formatNombor(rekod.hari_cutiam_bertugas)
+            ? `<b>${formatNombor(rekod.hari_cutiam_bertugas)}</b>`
             : ""}
     </td>
 
     <td>
         ${nombor(rekod?.jam_cutiam_bertugas) !== 0
-            ? formatNombor(rekod.jam_cutiam_bertugas)
+            ? `<b>${formatNombor(rekod.jam_cutiam_bertugas)}</b>`
             : ""}
     </td>
 `;
