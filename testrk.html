@@ -5610,15 +5610,21 @@ const j =
         mingguSemasa
     );
 
-        return `
-            <td></td>
-            <td>${formatNombor(j.klm)}</td>
-            <td></td>
-            <td>${formatNombor(j.offHari)}</td>
-            <td>${formatNombor(j.offJam)}</td>
-            <td>${formatNombor(j.phHari)}</td>
-            <td>${formatNombor(j.phJam)}</td>
-        `;
+return `
+    <td></td>
+
+    <td>${j.klm !== 0 ? formatNombor(j.klm) : ""}</td>
+
+    <td></td>
+
+    <td>${j.offHari !== 0 ? formatNombor(j.offHari) : ""}</td>
+
+    <td>${j.offJam !== 0 ? formatNombor(j.offJam) : ""}</td>
+
+    <td>${j.phHari !== 0 ? formatNombor(j.phHari) : ""}</td>
+
+    <td>${j.phJam !== 0 ? formatNombor(j.phJam) : ""}</td>
+`;
 
     }).join("")}
 
@@ -5638,15 +5644,21 @@ const j =
         tarikhSehinggaKini
     );
 
-        return `
-            <td></td>
-            <td>${formatNombor(j.klm)}</td>
-            <td></td>
-            <td>${formatNombor(j.offHari)}</td>
-            <td>${formatNombor(j.offJam)}</td>
-            <td>${formatNombor(j.phHari)}</td>
-            <td>${formatNombor(j.phJam)}</td>
-        `;
+return `
+    <td></td>
+
+    <td>${j.klm !== 0 ? formatNombor(j.klm) : ""}</td>
+
+    <td></td>
+
+    <td>${j.offHari !== 0 ? formatNombor(j.offHari) : ""}</td>
+
+    <td>${j.offJam !== 0 ? formatNombor(j.offJam) : ""}</td>
+
+    <td>${j.phHari !== 0 ? formatNombor(j.phHari) : ""}</td>
+
+    <td>${j.phJam !== 0 ? formatNombor(j.phJam) : ""}</td>
+`;
 
     }).join("")}
 
