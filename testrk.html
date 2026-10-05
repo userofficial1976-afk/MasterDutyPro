@@ -2674,7 +2674,7 @@ grid-template-columns:
 
 
 <!-- WAKTU KERJA -->
-<table class="footer-box waktu-box">
+<table id="tableWaktuKerja" class="footer-box waktu-box">
 
     <colgroup>
         <col style="width:10%;">
@@ -2849,7 +2849,7 @@ let dataAnggota = [];
 let dataDuty = [];
 
 let anggotaLaporan = [];
-
+let dataKodDuty = [];
 let SENARAI_BULAN = [
     "Januari",
     "Februari",
@@ -6032,7 +6032,173 @@ function paparStatus(
 
 }
 
+async function muatKodDutyFooter(){
 
+    const filter =
+        dapatkanFilter();
+
+    dataKodDuty = [];
+
+
+    let query =
+        supabaseClient
+            .from("kod_duty")
+            .select(`
+                kod,
+                waktu_tugasan,
+                jam_kerja,
+                status,
+                unit
+            `)
+            .gt(
+                "jam_kerja",
+                0
+            )
+            .ilike(
+                "status",
+                "Aktif"
+            );
+
+
+    if(filter.unit){
+
+        query =
+            query.eq(
+                "unit",
+                filter.unit
+            );
+
+    }
+
+
+    query =
+        query.order(
+            "kod",
+            {
+                ascending: true
+            }
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await query;
+
+
+    if(error){
+
+        console.error(
+            "RALAT MUAT KOD DUTY:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    dataKodDuty =
+        data || [];
+
+
+    console.log(
+        "KOD DUTY WAKTU KERJA:",
+        dataKodDuty
+    );
+
+}
+
+
+function paparKodDutyFooter(){
+
+    const table =
+        document.getElementById(
+            "tableWaktuKerja"
+        );
+
+    if(!table){
+        return;
+    }
+
+
+    let rows = "";
+
+
+    dataKodDuty.forEach(item => {
+
+        const kod =
+            escapeHtml(
+                item.kod || ""
+            );
+
+        const waktuTugasan =
+            escapeHtml(
+                item.waktu_tugasan || ""
+            );
+
+
+        rows += `
+            <tr>
+                <td>${kod}</td>
+                <td>${waktuTugasan}</td>
+            </tr>
+        `;
+
+    });
+
+
+    /* =================================================
+       KEKALKAN MINIMUM 9 BARIS FOOTER
+    ================================================= */
+
+    const minimumRow = 9;
+
+    const baki =
+        Math.max(
+            0,
+            minimumRow - dataKodDuty.length
+        );
+
+
+    for(let i = 0; i < baki; i++){
+
+        rows += `
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        `;
+
+    }
+
+
+    table.innerHTML = `
+
+        <colgroup>
+            <col style="width:10%;">
+            <col style="width:90%;">
+        </colgroup>
+
+        <thead>
+            <tr>
+                <th colspan="2">
+                    WAKTU KERJA
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            ${rows}
+        </tbody>
+
+    `;
+
+}
+
+
+    
 /* =====================================================
    JANA LAPORAN UTAMA
 ===================================================== */
@@ -6094,8 +6260,16 @@ return;
         /* =============================================
            LOAD DUTY
         ============================================= */
+await muatDataDuty();
 
-        await muatDataDuty();
+
+/* =============================================
+   LOAD KOD WAKTU KERJA
+============================================= */
+
+await muatKodDutyFooter();
+
+paparKodDutyFooter();
 
 
         /* =============================================
