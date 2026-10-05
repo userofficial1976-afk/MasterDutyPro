@@ -6487,6 +6487,10 @@ async function muatKodTempatKerjaFooter(){
     dataKodTempatKerja = [];
 
 
+    /* =================================================
+       QUERY SUPABASE
+    ================================================= */
+
     let query =
         supabaseClient
             .from("kod_tempat_kerja")
@@ -6503,7 +6507,7 @@ async function muatKodTempatKerjaFooter(){
 
 
     /* =================================================
-       IKUT UNIT YANG DIPILIH
+       IKUT UNIT
     ================================================= */
 
     if(filter.unit){
@@ -6525,6 +6529,10 @@ async function muatKodTempatKerjaFooter(){
             }
         );
 
+
+    /* =================================================
+       AMBIL DATA
+    ================================================= */
 
     const {
         data,
@@ -6563,131 +6571,132 @@ async function muatKodTempatKerjaFooter(){
 
 
     /* =================================================
-       TAPIS DATA
+       TAPIS KOD YANG TAK MAHU PAPAR
     ================================================= */
 
-/* =================================================
-   TAPIS KOD YANG TAK MAHU PAPAR DAHULU
-================================================= */
+    const dataBersih =
+        (data || []).filter(item => {
 
-const dataBersih =
-    (data || []).filter(item => {
-
-        const kod =
-            String(
-                item.kod_tempat_kerja || ""
-            )
-            .trim()
-            .toUpperCase();
-
-        if(!kod){
-            return false;
-        }
-
-        if(kodTidakPapar.has(kod)){
-            return false;
-        }
-
-        return true;
-
-    });
-
-
-/* =================================================
-   DAPATKAN KOD TUNGGAL YANG MEMANG WUJUD
-================================================= */
-
-const kodTunggal =
-    ne* Set(
-        dataBersih
-            .map(item =>
+            const kod =
                 String(
                     item.kod_tempat_kerja || ""
                 )
                 .trim()
-                .toUpperCase()
-            )
-            .filter(kod =>
-                kod &&
-                !kod.includes("/")
-            )
-    );
+                .toUpperCase();
 
 
-/* =================================================
-   TAPIS KOD COMBINE
-
-   W/X
-   - W ada
-   - X ada
-   = TAK PAPAR
-
-   W/Z
-   - W ada
-   - Z tiada
-   = PAPAR
-
-   W/X/Y
-   - W ada
-   - X ada
-   - Y ada
-   = TAK PAPAR
-================================================= */
-
-dataKodTempatKerja =
-    dataBersih.filter(item => {
-
-        const kod =
-            String(
-                item.kod_tempat_kerja || ""
-            )
-            .trim()
-            .toUpperCase();
+            if(!kod){
+                return false;
+            }
 
 
-        /* KOD TUNGGAL SENTIASA PAPAR */
+            if(kodTidakPapar.has(kod)){
+                return false;
+            }
 
-        if(!kod.includes("/")){
+
             return true;
-        }
+
+        });
 
 
-        /* PECAHKAN KOD COMBINE */
+    /* =================================================
+       CARI KOD TUNGGAL
 
-        const bahagianKod =
-            kod
-                .split("/")
-                .map(k =>
-                    k.trim()
+       Contoh:
+       W
+       X
+       Y
+       Z
+    ================================================= */
+
+    const kodTunggal =
+        new Set(
+            dataBersih
+                .map(item =>
+                    String(
+                        item.kod_tempat_kerja || ""
+                    )
+                    .trim()
+                    .toUpperCase()
                 )
-                .filter(Boolean);
+                .filter(kod =>
+                    kod &&
+                    !kod.includes("/")
+                )
+        );
 
 
-        /* SEMAK SEMUA KOD SUDAH WUJUD SENDIRI */
+    /* =================================================
+       TAPIS KOD COMBINE
 
-        const semuaSudahAda =
-            bahagianKod.every(kodAsas =>
-                kodTunggal.has(kodAsas)
-            );
+       W/X
+       W ada + X ada
+       = TAK PAPAR
+
+       W/Z
+       jika Z tak wujud sendiri
+       = PAPAR
+    ================================================= */
+
+    dataKodTempatKerja =
+        dataBersih.filter(item => {
+
+            const kod =
+                String(
+                    item.kod_tempat_kerja || ""
+                )
+                .trim()
+                .toUpperCase();
 
 
-        /*
-           Semua sudah ada sendiri
-           = TAK PERLU PAPAR combine
+            /* =========================================
+               KOD TUNGGAL
+            ========================================= */
 
-           Ada sekurang-kurangnya satu belum ada
-           = PAPAR combine
-        */
+            if(!kod.includes("/")){
 
-        return !semuaSudahAda;
+                return true;
 
-    });
+            }
 
 
-console.log(
-    "KOD TEMPAT KERJA SELEPAS TAPIS:",
-    dataKodTempatKerja
-);
+            /* =========================================
+               PECAHKAN KOD COMBINE
+            ========================================= */
+
+            const bahagianKod =
+                kod
+                    .split("/")
+                    .map(k =>
+                        k.trim()
+                    )
+                    .filter(Boolean);
+
+
+            /* =========================================
+               SEMAK SEMUA KOMPONEN SUDAH ADA
+            ========================================= */
+
+            const semuaSudahAda =
+                bahagianKod.every(kodAsas =>
+                    kodTunggal.has(
+                        kodAsas
+                    )
+                );
+
+
+            /*
+               SEMUA ADA SENDIRI
+               -> TAK PAPAR COMBINE
+
+               ADA YANG BELUM ADA
+               -> PAPAR COMBINE
+            */
+
+            return !semuaSudahAda;
+
+        });
 
 
     console.log(
@@ -6696,7 +6705,7 @@ console.log(
     );
 
     console.log(
-        "KOD TEMPAT KERJA RK01:",
+        "KOD TEMPAT KERJA SELEPAS TAPIS:",
         dataKodTempatKerja
     );
 
