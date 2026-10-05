@@ -6566,30 +6566,128 @@ async function muatKodTempatKerjaFooter(){
        TAPIS DATA
     ================================================= */
 
-    dataKodTempatKerja =
-        (data || []).filter(item => {
+/* =================================================
+   TAPIS KOD YANG TAK MAHU PAPAR DAHULU
+================================================= */
 
-            const kod =
+const dataBersih =
+    (data || []).filter(item => {
+
+        const kod =
+            String(
+                item.kod_tempat_kerja || ""
+            )
+            .trim()
+            .toUpperCase();
+
+        if(!kod){
+            return false;
+        }
+
+        if(kodTidakPapar.has(kod)){
+            return false;
+        }
+
+        return true;
+
+    });
+
+
+/* =================================================
+   DAPATKAN KOD TUNGGAL YANG MEMANG WUJUD
+================================================= */
+
+const kodTunggal =
+    ne* Set(
+        dataBersih
+            .map(item =>
                 String(
                     item.kod_tempat_kerja || ""
                 )
                 .trim()
-                .toUpperCase();
+                .toUpperCase()
+            )
+            .filter(kod =>
+                kod &&
+                !kod.includes("/")
+            )
+    );
 
 
-            if(!kod){
-                return false;
-            }
+/* =================================================
+   TAPIS KOD COMBINE
+
+   W/X
+   - W ada
+   - X ada
+   = TAK PAPAR
+
+   W/Z
+   - W ada
+   - Z tiada
+   = PAPAR
+
+   W/X/Y
+   - W ada
+   - X ada
+   - Y ada
+   = TAK PAPAR
+================================================= */
+
+dataKodTempatKerja =
+    dataBersih.filter(item => {
+
+        const kod =
+            String(
+                item.kod_tempat_kerja || ""
+            )
+            .trim()
+            .toUpperCase();
 
 
-            if(kodTidakPapar.has(kod)){
-                return false;
-            }
+        /* KOD TUNGGAL SENTIASA PAPAR */
 
-
+        if(!kod.includes("/")){
             return true;
+        }
 
-        });
+
+        /* PECAHKAN KOD COMBINE */
+
+        const bahagianKod =
+            kod
+                .split("/")
+                .map(k =>
+                    k.trim()
+                )
+                .filter(Boolean);
+
+
+        /* SEMAK SEMUA KOD SUDAH WUJUD SENDIRI */
+
+        const semuaSudahAda =
+            bahagianKod.every(kodAsas =>
+                kodTunggal.has(kodAsas)
+            );
+
+
+        /*
+           Semua sudah ada sendiri
+           = TAK PERLU PAPAR combine
+
+           Ada sekurang-kurangnya satu belum ada
+           = PAPAR combine
+        */
+
+        return !semuaSudahAda;
+
+    });
+
+
+console.log(
+    "KOD TEMPAT KERJA SELEPAS TAPIS:",
+    dataKodTempatKerja
+);
 
 
     console.log(
