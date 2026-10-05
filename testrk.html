@@ -2219,6 +2219,43 @@ grid-template-columns:
     
     
 }
+
+/* =====================================================
+   LEBIHAN KOD DUTY
+   RUANGAN UNTUK CATATAN
+===================================================== */
+
+.lebihan-kod-duty {
+    margin-top: 4px;
+    text-align: left;
+    font-size: 7px;
+    line-height: 1.2;
+}
+
+.lebihan-kod-duty-item {
+    display: block;
+    white-space: nowrap;
+}
+
+ @media print {
+
+    .lebihan-kod-duty {
+        margin-top: 1mm !important;
+        text-align: left !important;
+
+        font-family: Arial, sans-serif !important;
+        font-size: 6.5pt !important;
+        line-height: 1.15 !important;
+
+        color: #000 !important;
+    }
+
+    .lebihan-kod-duty-item {
+        display: block !important;
+        white-space: nowrap !important;
+    }
+
+}   
 </style>
 </head>
 
@@ -2744,12 +2781,13 @@ grid-template-columns:
 
     <tbody>
 
-        <tr>
-            <td>
-                Ruangan Untuk Catatan
-            </td>
+<tr>
+    <td>
+        Ruangan Untuk Catatan
+        <div id="lebihanKodDuty" class="lebihan-kod-duty"></div>
+    </td>
+</tr>
 
-        </tr>
 
         <tr>
             <td class="jumlah-ruang-catatan"></td>
@@ -6243,20 +6281,51 @@ function paparKodDutyFooter(){
             "tableWaktuKerja"
         );
 
+    const ruangLebihan =
+        document.getElementById(
+            "lebihanKodDuty"
+        );
+
+
     if(!table){
         return;
     }
 
 
+    /* =================================================
+       MAKSIMUM 9 ROW DALAM WAKTU KERJA
+    ================================================= */
+
+    const maksimumRow = 9;
+
+
+    const kodUtama =
+        dataKodDuty.slice(
+            0,
+            maksimumRow
+        );
+
+
+    const kodLebihan =
+        dataKodDuty.slice(
+            maksimumRow
+        );
+
+
+    /* =================================================
+       BINA 9 ROW WAKTU KERJA
+    ================================================= */
+
     let rows = "";
 
 
-    dataKodDuty.forEach(item => {
+    kodUtama.forEach(item => {
 
         const kod =
             escapeHtml(
                 item.kod || ""
             );
+
 
         const waktuTugasan =
             escapeHtml(
@@ -6275,19 +6344,20 @@ function paparKodDutyFooter(){
 
 
     /* =================================================
-       KEKALKAN MINIMUM 9 BARIS FOOTER
+       JIKA KURANG 9
+       TAMBAH ROW KOSONG SAMPAI CUKUP 9
     ================================================= */
 
-    const minimumRow = 9;
-
-    const baki =
-        Math.max(
-            0,
-            minimumRow - dataKodDuty.length
-        );
+    const bakiRow =
+        maksimumRow -
+        kodUtama.length;
 
 
-    for(let i = 0; i < baki; i++){
+    for(
+        let i = 0;
+        i < bakiRow;
+        i++
+    ){
 
         rows += `
             <tr>
@@ -6299,6 +6369,10 @@ function paparKodDutyFooter(){
     }
 
 
+    /* =================================================
+       PAPAR TABLE WAKTU KERJA
+    ================================================= */
+
     table.innerHTML = `
 
         <colgroup>
@@ -6307,11 +6381,13 @@ function paparKodDutyFooter(){
         </colgroup>
 
         <thead>
+
             <tr>
                 <th colspan="2">
                     WAKTU KERJA
                 </th>
             </tr>
+
         </thead>
 
         <tbody>
@@ -6320,8 +6396,55 @@ function paparKodDutyFooter(){
 
     `;
 
-}
 
+    /* =================================================
+       LEBIHAN KOD DUTY
+       PAPAR DALAM RUANGAN UNTUK CATATAN
+
+       CONTOH:
+       K - 0800-0900
+       L - 0900-1000
+    ================================================= */
+
+    if(ruangLebihan){
+
+        if(kodLebihan.length === 0){
+
+            ruangLebihan.innerHTML = "";
+
+            return;
+
+        }
+
+
+        ruangLebihan.innerHTML =
+            kodLebihan
+                .map(item => {
+
+                    const kod =
+                        escapeHtml(
+                            item.kod || ""
+                        );
+
+
+                    const waktu =
+                        escapeHtml(
+                            item.waktu_tugasan || ""
+                        );
+
+
+                    return `
+                        <div class="lebihan-kod-duty-item">
+                            ${kod} - ${waktu}
+                        </div>
+                    `;
+
+                })
+                .join("");
+
+    }
+
+}
 
     
 /* =====================================================
