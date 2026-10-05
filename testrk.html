@@ -1248,6 +1248,19 @@ main {
     }
 
 
+
+@media print {
+
+    .rk01-table .row-tandatangan th,
+    .rk01-table .row-tandatangan td {
+        height: 80px !important;
+        min-height: 80px !important;
+        max-height: none !important;
+    }
+
+}
+
+    
     /* ---------------------------------------------
        SEMUA FOOTER TABLE
     --------------------------------------------- */
@@ -1977,6 +1990,19 @@ grid-template-columns:
     }
 
 }
+
+/* =====================================================
+   ROW TANDA TANGAN RK01
+===================================================== */
+
+.rk01-table .row-tandatangan th,
+.rk01-table .row-tandatangan td {
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: none !important;
+}
+
+
     
 </style>
 </head>
@@ -5408,21 +5434,14 @@ const j =
     }).join("")}
 
 </tr>
-<tr>
+<tr class="row-tandatangan">
 
     <th colspan="2">
-    
         TANDA<br>TANGAN
-        
     </th>
 
     ${anggota8.map(() => `
-        <td colspan="7"
-            style="
-                height:60px;
-                min-height:45px;
-            ">
-        </td>
+        <td colspan="7"></td>
     `).join("")}
 
 </tr>
