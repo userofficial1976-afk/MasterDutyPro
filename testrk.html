@@ -273,7 +273,7 @@ button{
 
     @page {
         size: A4 landscape;
-        margin: 7mm;
+        margin: 3mm;
     }
 
 
@@ -428,24 +428,24 @@ button{
        = 283mm ruang cetak
     ===================================================== */
 
-    .rk01-table {
-        display: table !important;
+.rk01-table {
+    display: table !important;
 
-        width: 283mm !important;
-        min-width: 283mm !important;
-        max-width: 283mm !important;
+    width: 291mm !important;
+    min-width: 291mm !important;
+    max-width: 291mm !important;
 
-        table-layout: fixed !important;
+    table-layout: fixed !important;
 
-        border-collapse: collapse !important;
-        border-spacing: 0 !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
 
-        margin: 0 !important;
-        padding: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 
-        background: #fff !important;
-        color: #000 !important;
-    }
+    background: #fff !important;
+    color: #000 !important;
+}
 
     /* =====================================================
        33 COLUMN STRUCTURE
@@ -2002,7 +2002,63 @@ grid-template-columns:
     max-height: none !important;
 }
 
+/* =====================================================
+   FINAL PRINT OVERRIDE
+   A4 LANDSCAPE - MAKSIMUMKAN RUANG CETAK
+===================================================== */
 
+@media print {
+
+    @page {
+        size: A4 landscape;
+        margin: 3mm;
+    }
+
+    html,
+    body {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    main,
+    main > div,
+    .print-area,
+    .rk01-table-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .rk01-table {
+        width: 291mm !important;
+        min-width: 291mm !important;
+        max-width: 291mm !important;
+
+        margin: 0 !important;
+
+        table-layout: fixed !important;
+        border-collapse: collapse !important;
+    }
+
+    .rk01-footer-grid {
+        width: 291mm !important;
+        min-width: 291mm !important;
+        max-width: 291mm !important;
+
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .rk01-table .row-tandatangan th,
+    .rk01-table .row-tandatangan td {
+        height: 50px !important;
+        min-height: 50px !important;
+        max-height: none !important;
+    }
+
+}
     
 </style>
 </head>
