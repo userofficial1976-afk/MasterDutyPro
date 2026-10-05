@@ -5508,15 +5508,41 @@ console.log(
                 item.iso
             );
 
-        return `
-            <td>${rekod?.kod_tempat_kerja || ""}</td>
-            <td>${rekod?.jam_klm || ""}</td>
-            <td></td>
-            <td>${rekod?.hari_offday_bertugas || ""}</td>
-            <td>${rekod?.jam_offday_bertugas || ""}</td>
-            <td>${rekod?.hari_cutiam_bertugas || ""}</td>
-            <td>${rekod?.jam_cutiam_bertugas || ""}</td>
-        `;
+return `
+    <td>${rekod?.kod_tempat_kerja || ""}</td>
+
+    <td>
+        ${nombor(rekod?.jam_klm) !== 0
+            ? formatNombor(rekod.jam_klm)
+            : ""}
+    </td>
+
+    <td></td>
+
+    <td>
+        ${nombor(rekod?.hari_offday_bertugas) !== 0
+            ? formatNombor(rekod.hari_offday_bertugas)
+            : ""}
+    </td>
+
+    <td>
+        ${nombor(rekod?.jam_offday_bertugas) !== 0
+            ? formatNombor(rekod.jam_offday_bertugas)
+            : ""}
+    </td>
+
+    <td>
+        ${nombor(rekod?.hari_cutiam_bertugas) !== 0
+            ? formatNombor(rekod.hari_cutiam_bertugas)
+            : ""}
+    </td>
+
+    <td>
+        ${nombor(rekod?.jam_cutiam_bertugas) !== 0
+            ? formatNombor(rekod.jam_cutiam_bertugas)
+            : ""}
+    </td>
+`;
 
     }).join("")}
 </tr>
