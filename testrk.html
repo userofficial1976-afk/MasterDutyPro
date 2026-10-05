@@ -3112,7 +3112,7 @@ function binaMingguBulanan(){
     const tahun =
         document.getElementById("filterTahun").value;
 
-    const minggu =
+   const minggu =
     document.getElementById(
         "filterMinggu"
     )?.value || "";
@@ -3169,51 +3169,52 @@ if(infoMinggu){
 ================================================= */
 
 const noBulan =
-    nomborBulan*bulan);
+    nomborBulan(bulan);
 
 
 if(
     noBulan &&
-    t*hun &&
+    tahun &&
     minggu
 ){
 
-    const se*araiTarikh =
-        binaTarikhBul*nan(
+    const senaraiTarikh =
+        binaTarikhBulanan(
             parseInt(tahun),
-*           noBulan
+            noBulan
         );
 
 
-  * const mingguList = [];
+    const mingguList = [];
+
 
     for(
-*       let i = 0;
-        i < sena*aiTarikh.length;
+        let i = 0;
+        i < senaraiTarikh.length;
         i += 7
-  * ){
+    ){
 
         mingguList.push(
-    *       senaraiTarikh.slice(
-      *         i,
+            senaraiTarikh.slice(
+                i,
                 i + 7
-*           )
+            )
         );
 
     }
 
 
- *  const mingguDipilih =
-        mi*gguList[
+    const mingguDipilih =
+        mingguList[
             parseInt(minggu) - 1
         ] || [];
 
 
-    cons* tarikhPertama =
-        mingguDip*lih[0];
+    const tarikhPertama =
+        mingguDipilih[0];
 
 
-    const tarikhTerakhir*=
+    const tarikhTerakhir =
         mingguDipilih[
             mingguDipilih.length - 1
         ];
@@ -3221,36 +3222,35 @@ if(
 
     if(infoDari){
 
-        in*oDari.textContent =
-            ta*ikhPertama
-                ? tarik*Pertama.tarikh
-                : "*";
+        infoDari.textContent =
+            tarikhPertama
+                ? tarikhPertama.tarikh
+                : "-";
 
     }
 
 
     if(infoHingga){
 
- *      infoHingga.textContent =
-   *        tarikhTerakhir
-           *    ? tarikhTerakhir.tarikh
-      *         : "-";
+        infoHingga.textContent =
+            tarikhTerakhir
+                ? tarikhTerakhir.tarikh
+                : "-";
 
     }
 
 }
 else{
 
- *  if(infoDari){
-        infoDari.t*xtContent = "-";
+    if(infoDari){
+        infoDari.textContent = "-";
     }
 
-    if(inf*Hingga){
-        infoHingga.textCo*tent = "-";
+    if(infoHingga){
+        infoHingga.textContent = "-";
     }
 
 }
-    
 
     const select =
         document.getElementById("filterMinggu");
