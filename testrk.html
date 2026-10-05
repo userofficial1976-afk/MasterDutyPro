@@ -2779,35 +2779,48 @@ grid-template-columns:
         </tr>
     </thead>
 
-    <tbody>
+<tbody id="tbodyRuanganCatatan">
 
-<tr>
-    <td>
-        Ruangan Untuk Catatan
-        <div id="lebihanKodDuty" class="lebihan-kod-duty"></div>
-    </td>
-</tr>
+    <tr>
+        <td>
+            Ruangan Untuk Catatan
+        </td>
+    </tr>
 
+    <tr>
+        <td class="jumlah-ruang-catatan"></td>
+    </tr>
 
-        <tr>
-            <td class="jumlah-ruang-catatan"></td>
-        </tr>
-        <tr>
-            <td class="jumlah-ruang-catatan"></td>
-        </tr>        <tr>
-            <td class="jumlah-ruang-catatan"></td>
-        </tr>        <tr>
-            <td class="jumlah-ruang-catatan"></td>
-        </tr>        <tr>
-            <td class="jumlah-ruang-catatan"></td>
-        </tr>        <tr>
-            <td class="jumlah-ruang-catatan"></td>
-        </tr>        <tr>
-            <td class="jumlah-ruang-catatan"></td>
-        </tr>        <tr>
-            <td class="jumlah-ruang-catatan"></td>
-        </tr>
-    </tbody>
+    <tr>
+        <td class="jumlah-ruang-catatan"></td>
+    </tr>
+
+    <tr>
+        <td class="jumlah-ruang-catatan"></td>
+    </tr>
+
+    <tr>
+        <td class="jumlah-ruang-catatan"></td>
+    </tr>
+
+    <tr>
+        <td class="jumlah-ruang-catatan"></td>
+    </tr>
+
+    <tr>
+        <td class="jumlah-ruang-catatan"></td>
+    </tr>
+
+    <tr>
+        <td class="jumlah-ruang-catatan"></td>
+    </tr>
+
+    <tr>
+        <td class="jumlah-ruang-catatan"></td>
+    </tr>
+
+</tbody>
+
 
 </table>
 
@@ -6281,11 +6294,10 @@ function paparKodDutyFooter(){
             "tableWaktuKerja"
         );
 
-    const ruangLebihan =
+    const tbodyCatatan =
         document.getElementById(
-            "lebihanKodDuty"
+            "tbodyRuanganCatatan"
         );
-
 
     if(!table){
         return;
@@ -6293,7 +6305,7 @@ function paparKodDutyFooter(){
 
 
     /* =================================================
-       MAKSIMUM 9 ROW DALAM WAKTU KERJA
+       MAKSIMUM 9 KOD DALAM WAKTU KERJA
     ================================================= */
 
     const maksimumRow = 9;
@@ -6313,7 +6325,7 @@ function paparKodDutyFooter(){
 
 
     /* =================================================
-       BINA 9 ROW WAKTU KERJA
+       BINA WAKTU KERJA
     ================================================= */
 
     let rows = "";
@@ -6326,8 +6338,7 @@ function paparKodDutyFooter(){
                 item.kod || ""
             );
 
-
-        const waktuTugasan =
+        const waktu =
             escapeHtml(
                 item.waktu_tugasan || ""
             );
@@ -6336,7 +6347,7 @@ function paparKodDutyFooter(){
         rows += `
             <tr>
                 <td>${kod}</td>
-                <td>${waktuTugasan}</td>
+                <td>${waktu}</td>
             </tr>
         `;
 
@@ -6344,20 +6355,16 @@ function paparKodDutyFooter(){
 
 
     /* =================================================
-       JIKA KURANG 9
-       TAMBAH ROW KOSONG SAMPAI CUKUP 9
+       JIKA KURANG 9 KOD
+       TAMBAH ROW KOSONG
     ================================================= */
 
-    const bakiRow =
+    const baki =
         maksimumRow -
         kodUtama.length;
 
 
-    for(
-        let i = 0;
-        i < bakiRow;
-        i++
-    ){
+    for(let i = 0; i < baki; i++){
 
         rows += `
             <tr>
@@ -6370,7 +6377,7 @@ function paparKodDutyFooter(){
 
 
     /* =================================================
-       PAPAR TABLE WAKTU KERJA
+       MASUKKAN KE TABLE WAKTU KERJA
     ================================================= */
 
     table.innerHTML = `
@@ -6381,13 +6388,11 @@ function paparKodDutyFooter(){
         </colgroup>
 
         <thead>
-
             <tr>
                 <th colspan="2">
                     WAKTU KERJA
                 </th>
             </tr>
-
         </thead>
 
         <tbody>
@@ -6399,53 +6404,78 @@ function paparKodDutyFooter(){
 
     /* =================================================
        LEBIHAN KOD DUTY
-       PAPAR DALAM RUANGAN UNTUK CATATAN
-
-       CONTOH:
-       K - 0800-0900
-       L - 0900-1000
+       SATU KOD = SATU ROW
     ================================================= */
 
-    if(ruangLebihan){
+    if(tbodyCatatan){
 
-        if(kodLebihan.length === 0){
+        let htmlCatatan = `
 
-            ruangLebihan.innerHTML = "";
+            <tr>
+                <td>
+                    Ruangan Untuk Catatan
+                </td>
+            </tr>
 
-            return;
+        `;
+
+
+        kodLebihan.forEach(item => {
+
+            const kod =
+                escapeHtml(
+                    item.kod || ""
+                );
+
+            const waktu =
+                escapeHtml(
+                    item.waktu_tugasan || ""
+                );
+
+
+            htmlCatatan += `
+                <tr>
+                    <td class="jumlah-ruang-catatan kod-duty-lebihan">
+                        ${kod} - ${waktu}
+                    </td>
+                </tr>
+            `;
+
+        });
+
+
+        /* =============================================
+           CUKUPKAN JUMLAH CATATAN JADI 8 ROW
+        ============================================= */
+
+        const maksimumRowCatatan = 8;
+
+
+        const bakiRow =
+            Math.max(
+                0,
+                maksimumRowCatatan -
+                kodLebihan.length
+            );
+
+
+        for(let i = 0; i < bakiRow; i++){
+
+            htmlCatatan += `
+                <tr>
+                    <td class="jumlah-ruang-catatan"></td>
+                </tr>
+            `;
 
         }
 
 
-        ruangLebihan.innerHTML =
-            kodLebihan
-                .map(item => {
-
-                    const kod =
-                        escapeHtml(
-                            item.kod || ""
-                        );
-
-
-                    const waktu =
-                        escapeHtml(
-                            item.waktu_tugasan || ""
-                        );
-
-
-                    return `
-                        <div class="lebihan-kod-duty-item">
-                            ${kod} - ${waktu}
-                        </div>
-                    `;
-
-                })
-                .join("");
+        tbodyCatatan.innerHTML =
+            htmlCatatan;
 
     }
 
 }
-
     
 /* =====================================================
    JANA LAPORAN UTAMA
