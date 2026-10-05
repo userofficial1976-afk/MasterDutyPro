@@ -2167,7 +2167,22 @@ grid-template-columns:
         max-height: none !important;
     }
 
+/* =================================================
+   BORDER TANDA TANGAN IKUT TABLE UTAMA
+================================================= */
 
+.rk01-table .row-tandatangan th,
+.rk01-table .row-tandatangan td {
+    box-sizing: border-box !important;
+}
+
+.rk01-table .row-tandatangan th:first-child {
+    border-left: 0.5pt solid #000 !important;
+}
+
+.rk01-table .row-tandatangan td:last-child {
+    border-right: 0.5pt solid #000 !important;
+}
     /* =================================================
        FOOTER
     ================================================= */
@@ -2199,6 +2214,9 @@ grid-template-columns:
     border-left: 0.5pt solid #000 !important;
 }
 
+
+
+    
     
 }
 </style>
