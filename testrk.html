@@ -6055,7 +6055,117 @@ function kemaskiniInfoLaporan(){
             "filterTahun"
         ).value;
 
+    /* =================================================
+   MINGGU / DARI / HINGGA
+================================================= */
 
+const mingguDipilih =
+    document.getElementById("filterMinggu")?.value || "";
+
+const infoMinggu =
+    document.getElementById("infoMinggu");
+
+const infoDari =
+    document.getElementById("infoDari");
+
+const infoHingga =
+    document.getElementById("infoHingga");
+
+
+/* =================================================
+   PAPAR MINGGU
+================================================= */
+
+if(infoMinggu){
+
+    infoMinggu.textContent =
+        mingguDipilih
+            ? mingguDipilih
+            : "-";
+
+}
+
+
+/* =================================================
+   TARIKH MINGGU
+================================================= */
+
+if(mingguDipilih){
+
+    const bulanNo =
+        nomborBulan(bulan);
+
+    const semuaTarikh =
+        binaTarikhBulanan(
+            parseInt(tahun),
+            bulanNo
+        );
+
+    const senaraiMinggu = [];
+
+
+    for(
+        let i = 0;
+        i < semuaTarikh.length;
+        i += 7
+    ){
+
+        senaraiMinggu.push(
+            semuaTarikh.slice(
+                i,
+                i + 7
+            )
+        );
+
+    }
+
+
+    const dataMinggu =
+        senaraiMinggu[
+            parseInt(mingguDipilih) - 1
+        ] || [];
+
+
+    const tarikhDari =
+        dataMinggu[0];
+
+    const tarikhHingga =
+        dataMinggu[
+            dataMinggu.length - 1
+        ];
+
+
+    if(infoDari){
+
+        infoDari.textContent =
+            tarikhDari
+                ? tarikhDari.tarikh
+                : "-";
+
+    }
+
+
+    if(infoHingga){
+
+        infoHingga.textContent =
+            tarikhHingga
+                ? tarikhHingga.tarikh
+                : "-";
+
+    }
+
+}
+else{
+
+    if(infoDari){
+        infoDari.textContent = "-";
+    }
+
+    if(infoHingga){
+        infoHingga.textContent = "-";
+    }
+
+}
     /* =================================================
        POS
     ================================================= */
