@@ -3168,21 +3168,20 @@ if(infoMinggu){
    DARI / HINGGA IKUT MINGGU DIPILIH
 ================================================= */
 
-const noBulan =
-    nomborBulan(bulan);
+
 
 
 if(
-    noBulan &&
+    nomborBulan(bulan) &&
     tahun &&
     minggu
 ){
 
-    const senaraiTarikh =
-        binaTarikhBulanan(
-            parseInt(tahun),
-            noBulan
-        );
+const senaraiTarikh =
+    binaTarikhBulanan(
+        parseInt(tahun),
+        nomborBulan(bulan)
+    );
 
 
     const mingguList = [];
