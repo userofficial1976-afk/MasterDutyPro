@@ -2627,40 +2627,39 @@ grid-template-columns:
 
 
 
-    <span>
-        <b>BULAN :</b>
-        
-    </span>
+   <span>
+    <b>BULAN :</b>
+    <span id="infoBulan">-</span>
+</span>
 
-    <span>
-        <b>TAHUN :</b>
-        
-    </span>
+<span>
+    <b>TAHUN :</b>
+    <span id="infoTahun">-</span>
+</span>
 
-    <span>
-        <b>MINGGU :</b>
-        
-    </span>
+<span>
+    <b>MINGGU :</b>
+    <span id="infoMinggu">-</span>
+</span>
 
-    <span>
-        <b>DARI :</b>
-        
-    </span>
+<span>
+    <b>DARI :</b>
+    <span id="infoDari">-</span>
+</span>
 
-    <span>
-        <b>HINGGA :</b>
-        
-    </span>
+<span>
+    <b>HINGGA :</b>
+    <span id="infoHingga">-</span>
+</span>
 
-    <span>
-        <b>NAMA POS :</b>
-        <span id="namaPos">-</span>
-    </span>
+<span>
+    <b>NAMA POS :</b>
+    <span id="namaPos">-</span>
+</span>
 
-    <span class="rk01-box">
-        BORANG RK-01
-    </span>
-
+<span class="rk01-box">
+    BORANG RK-01
+</span>
 </div>
 
 
@@ -3112,6 +3111,146 @@ function binaMingguBulanan(){
 
     const tahun =
         document.getElementById("filterTahun").value;
+
+    const minggu =
+    document.getElementById(
+        "filterMinggu"
+    )?.value || "";
+
+
+const infoBulan =
+    document.getElementById(
+        "infoBulan"
+    );
+
+const infoTahun =
+    document.getElementById(
+        "infoTahun"
+    );
+
+const infoMinggu =
+    document.getElementById(
+        "infoMinggu"
+    );
+
+const infoDari =
+    document.getElementById(
+        "infoDari"
+    );
+
+const infoHingga =
+    document.getElementById(
+        "infoHingga"
+    );
+
+
+/* =================================================
+   BULAN / TAHUN / MINGGU
+================================================= */
+
+if(infoBulan){
+    infoBulan.textContent = bulan;
+}
+
+if(infoTahun){
+    infoTahun.textContent = tahun;
+}
+
+if(infoMinggu){
+    infoMinggu.textContent =
+        minggu
+            ? minggu
+            : "-";
+}
+
+
+/* =================================================
+   DARI / HINGGA IKUT MINGGU DIPILIH
+================================================= */
+
+const noBulan =
+    nomborBulan*bulan);
+
+
+if(
+    noBulan &&
+    t*hun &&
+    minggu
+){
+
+    const se*araiTarikh =
+        binaTarikhBul*nan(
+            parseInt(tahun),
+*           noBulan
+        );
+
+
+  * const mingguList = [];
+
+    for(
+*       let i = 0;
+        i < sena*aiTarikh.length;
+        i += 7
+  * ){
+
+        mingguList.push(
+    *       senaraiTarikh.slice(
+      *         i,
+                i + 7
+*           )
+        );
+
+    }
+
+
+ *  const mingguDipilih =
+        mi*gguList[
+            parseInt(minggu) - 1
+        ] || [];
+
+
+    cons* tarikhPertama =
+        mingguDip*lih[0];
+
+
+    const tarikhTerakhir*=
+        mingguDipilih[
+            mingguDipilih.length - 1
+        ];
+
+
+    if(infoDari){
+
+        in*oDari.textContent =
+            ta*ikhPertama
+                ? tarik*Pertama.tarikh
+                : "*";
+
+    }
+
+
+    if(infoHingga){
+
+ *      infoHingga.textContent =
+   *        tarikhTerakhir
+           *    ? tarikhTerakhir.tarikh
+      *         : "-";
+
+    }
+
+}
+else{
+
+ *  if(infoDari){
+        infoDari.t*xtContent = "-";
+    }
+
+    if(inf*Hingga){
+        infoHingga.textCo*tent = "-";
+    }
+
+}
+    
 
     const select =
         document.getElementById("filterMinggu");
