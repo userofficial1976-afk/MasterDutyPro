@@ -2740,7 +2740,7 @@ grid-template-columns:
 
 
 <!-- TEMPAT KERJA -->
-<table class="footer-box tempat-box">
+<table id="tableTempatKerja" class="footer-box tempat-box">
 
     <colgroup>
         <col style="width:10%;">
@@ -2901,6 +2901,8 @@ let dataDuty = [];
 
 let anggotaLaporan = [];
 let dataKodDuty = [];
+let dataKodTempatKerja = [];
+    
 let SENARAI_BULAN = [
     "Januari",
     "Februari",
@@ -6476,6 +6478,237 @@ function paparKodDutyFooter(){
     }
 
 }
+
+async function muatKodTempatKerjaFooter(){
+
+    const filter =
+        dapatkanFilter();
+
+    dataKodTempatKerja = [];
+
+
+    let query =
+        supabaseClient
+            .from("kod_tempat_kerja")
+            .select(`
+                kod_tempat_kerja,
+                nama_tempat_kerja,
+                status,
+                unit
+            `)
+            .ilike(
+                "status",
+                "Aktif"
+            );
+
+
+    /* =================================================
+       IKUT UNIT YANG DIPILIH
+    ================================================= */
+
+    if(filter.unit){
+
+        query =
+            query.eq(
+                "unit",
+                filter.unit
+            );
+
+    }
+
+
+    query =
+        query.order(
+            "kod_tempat_kerja",
+            {
+                ascending: true
+            }
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await query;
+
+
+    if(error){
+
+        console.error(
+            "RALAT MUAT KOD TEMPAT KERJA:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    /* =================================================
+       KOD YANG TAK MAHU PAPAR
+    ================================================= */
+
+    const kodTidakPapar =
+        new Set([
+            "OFF",
+            "MC",
+            "CA",
+            "CT",
+            "CG",
+            "CE",
+            "CTR",
+            "GR"
+        ]);
+
+
+    /* =================================================
+       TAPIS DATA
+    ================================================= */
+
+    dataKodTempatKerja =
+        (data || []).filter(item => {
+
+            const kod =
+                String(
+                    item.kod_tempat_kerja || ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+            if(!kod){
+                return false;
+            }
+
+
+            if(kodTidakPapar.has(kod)){
+                return false;
+            }
+
+
+            return true;
+
+        });
+
+
+    console.log(
+        "KOD TEMPAT KERJA ASAL:",
+        data
+    );
+
+    console.log(
+        "KOD TEMPAT KERJA RK01:",
+        dataKodTempatKerja
+    );
+
+}
+
+function paparKodTempatKerjaFooter(){
+
+    const table =
+        document.getElementById(
+            "tableTempatKerja"
+        );
+
+    if(!table){
+        return;
+    }
+
+
+    /* =================================================
+       MAKSIMUM 9 ROW TEMPAT KERJA
+    ================================================= */
+
+    const maksimumRow = 9;
+
+    const kodUtama =
+        dataKodTempatKerja.slice(
+            0,
+            maksimumRow
+        );
+
+
+    let rows = "";
+
+
+    /* =================================================
+       PAPAR KOD + NAMA TEMPAT KERJA
+    ================================================= */
+
+    kodUtama.forEach(item => {
+
+        const kod =
+            escapeHtml(
+                item.kod_tempat_kerja || ""
+            );
+
+        const nama =
+            escapeHtml(
+                item.nama_tempat_kerja || ""
+            );
+
+
+        rows += `
+            <tr>
+                <td>${kod}</td>
+                <td>${nama}</td>
+            </tr>
+        `;
+
+    });
+
+
+    /* =================================================
+       JIKA KURANG 9, CUKUPKAN DENGAN ROW KOSONG
+    ================================================= */
+
+    const baki =
+        maksimumRow -
+        kodUtama.length;
+
+
+    for(let i = 0; i < baki; i++){
+
+        rows += `
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        `;
+
+    }
+
+
+    /* =================================================
+       MASUKKAN KE TABLE
+    ================================================= */
+
+    table.innerHTML = `
+
+        <colgroup>
+            <col style="width:10%;">
+            <col style="width:90%;">
+        </colgroup>
+
+        <thead>
+
+            <tr>
+                <th colspan="2">
+                    TEMPAT KERJA
+                </th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+            ${rows}
+        </tbody>
+
+    `;
+
+}
+
     
 /* =====================================================
    JANA LAPORAN UTAMA
@@ -6548,8 +6781,8 @@ await muatDataDuty();
 await muatKodDutyFooter();
 
 paparKodDutyFooter();
-
-
+await muatKodTempatKerjaFooter();
+paparKodTempatKerjaFooter();
         /* =============================================
            ANGGOTA
         ============================================= */
