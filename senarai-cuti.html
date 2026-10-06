@@ -278,8 +278,8 @@ main {
 ===================================================== */
 
 .cuti-table {
-    width: 100%;
-    min-width: 1000px;
+    width: max-content;
+    min-width: 1800px;
 
     border-collapse: separate;
     border-spacing: 0;
@@ -346,10 +346,9 @@ main {
 }
 
 .tarikh-cell {
-    min-width: 300px;
-
+    min-width: 240px;
+    max-width: 320px;
     white-space: normal;
-
     line-height: 1.6;
 }
 
@@ -1296,35 +1295,51 @@ header {
 
                 <thead>
 
-                    <tr>
+    <tr>
 
-                        <th>
-                            Bil
-                        </th>
+        <th>
+            Bil
+        </th>
 
-                        <th>
-                            No. Anggota
-                        </th>
+        <th>
+            No. Anggota
+        </th>
 
-                        <th>
-                            No. SKB
-                        </th>
+        <th>
+            No. SKB
+        </th>
 
-                        <th>
-                            Nama
-                        </th>
+        <th>
+            Nama
+        </th>
 
-                        <th>
-                            Tarikh Cuti Tahun
-                        </th>
+        <th>
+            Tarikh Cuti Tahun
+        </th>
 
-                        <th>
-                            Bilangan Hari
-                        </th>
+        <th>
+            Bilangan CT
+        </th>
 
-                    </tr>
+        <th>
+            Tarikh Cuti AM
+        </th>
 
-                </thead>
+        <th>
+            Bilangan CA
+        </th>
+
+        <th>
+            Tarikh Cuti Sakit
+        </th>
+
+        <th>
+            Bilangan MC
+        </th>
+
+    </tr>
+
+</thead>
 
 
                 <tbody id="cutiTableBody">
@@ -1332,7 +1347,7 @@ header {
                     <tr>
 
                         <td
-                            colspan="6"
+                            colspan="10"
                             class="text-center py-12 text-slate-500"
                         >
 
@@ -1976,10 +1991,14 @@ async function muatSenaraiCuti() {
                     "tahun",
                     String(tahun)
                 )
-                .eq(
-                    "kod_waktu_kerja",
-                    "CT"
-                )
+                .in(
+    "kod_waktu_kerja",
+    [
+        "CT",
+        "CA",
+        "MC"
+    ]
+)
                 .order(
                     "nama_anggota",
                     {
@@ -2199,17 +2218,10 @@ function groupCutiMengikutAnggota(
     data.forEach(
         function (row) {
 
-            /*
-                Gunakan No. SKB sebagai
-                identifier utama anggota.
-            */
-
             const key =
                 String(
-                    row.no_skb ??
-                    ""
-                )
-                .trim();
+                    row.no_skb ?? ""
+                ).trim();
 
 
             if (!key) {
@@ -2218,11 +2230,6 @@ function groupCutiMengikutAnggota(
 
             }
 
-
-            /*
-                Jika anggota belum ada
-                dalam Map, cipta dahulu.
-            */
 
             if (
                 !map.has(key)
@@ -2233,17 +2240,21 @@ function groupCutiMengikutAnggota(
                     {
 
                         no_anggota:
-                            row.no_anggota ||
-                            "",
+                            row.no_anggota || "",
 
                         no_skb:
                             row.no_skb,
 
                         nama:
-                            row.nama_anggota ||
-                            "",
+                            row.nama_anggota || "",
 
-                        tarikh:
+                        tarikhCT:
+                            [],
+
+                        tarikhCA:
+                            [],
+
+                        tarikhMC:
                             []
 
                     }
@@ -2256,12 +2267,9 @@ function groupCutiMengikutAnggota(
                 map.get(key);
 
 
-            /*
-                Jika row pertama tidak
-                mempunyai no anggota,
-                cuba ambil daripada
-                row berikutnya.
-            */
+            /* ==============================
+               LENGKAPKAN MAKLUMAT ANGGOTA
+            ============================== */
 
             if (
                 !anggota.no_anggota &&
@@ -2274,10 +2282,6 @@ function groupCutiMengikutAnggota(
             }
 
 
-            /*
-                Sama untuk nama.
-            */
-
             if (
                 !anggota.nama &&
                 row.nama_anggota
@@ -2289,16 +2293,67 @@ function groupCutiMengikutAnggota(
             }
 
 
-            /*
-                Masukkan tarikh CT.
-            */
+            const kod =
+                String(
+                    row.kod_waktu_kerja || ""
+                )
+                .trim()
+                .toUpperCase();
 
-            if (row.tarikh) {
 
-                anggota.tarikh.push(
-                    String(
-                        row.tarikh
-                    ).trim()
+            const tarikh =
+                String(
+                    row.tarikh || ""
+                ).trim();
+
+
+            if (!tarikh) {
+
+                return;
+
+            }
+
+
+            /* ==============================
+               CUTI TAHUN
+            ============================== */
+
+            if (
+                kod === "CT"
+            ) {
+
+                anggota.tarikhCT.push(
+                    tarikh
+                );
+
+            }
+
+
+            /* ==============================
+               CUTI AM
+            ============================== */
+
+            else if (
+                kod === "CA"
+            ) {
+
+                anggota.tarikhCA.push(
+                    tarikh
+                );
+
+            }
+
+
+            /* ==============================
+               CUTI SAKIT
+            ============================== */
+
+            else if (
+                kod === "MC"
+            ) {
+
+                anggota.tarikhMC.push(
+                    tarikh
                 );
 
             }
@@ -2313,21 +2368,17 @@ function groupCutiMengikutAnggota(
         );
 
 
-    /*
-        Proses setiap anggota.
-    */
-
     hasil.forEach(
         function (anggota) {
 
-            /*
-                Buang tarikh duplicate.
-            */
+            /* ==============================
+               CT
+            ============================== */
 
-            anggota.tarikh =
+            anggota.tarikhCT =
                 [
                     ...new Set(
-                        anggota.tarikh
+                        anggota.tarikhCT
                     )
                 ]
                 .filter(Boolean)
@@ -2336,51 +2387,84 @@ function groupCutiMengikutAnggota(
                 );
 
 
-            /*
-                Bilangan Hari berdasarkan
-                jumlah TARIKH UNIK CT.
-            */
-
-            anggota.bilanganHari =
-                anggota.tarikh.length;
+            anggota.bilanganCT =
+                anggota.tarikhCT.length;
 
 
-            /*
-                Tukarkan senarai tarikh:
-
-                03/10/2026
-                04/10/2026
-                05/10/2026
-
-                menjadi:
-
-                03/10/2026 - 05/10/2026
-            */
-
-            anggota.tarikhPaparan =
+            anggota.tarikhCTPaparan =
                 ringkaskanTarikh(
-                    anggota.tarikh
+                    anggota.tarikhCT
+                );
+
+
+            /* ==============================
+               CA
+            ============================== */
+
+            anggota.tarikhCA =
+                [
+                    ...new Set(
+                        anggota.tarikhCA
+                    )
+                ]
+                .filter(Boolean)
+                .sort(
+                    bandingTarikh
+                );
+
+
+            anggota.bilanganCA =
+                anggota.tarikhCA.length;
+
+
+            anggota.tarikhCAPaparan =
+                ringkaskanTarikh(
+                    anggota.tarikhCA
+                );
+
+
+            /* ==============================
+               MC
+            ============================== */
+
+            anggota.tarikhMC =
+                [
+                    ...new Set(
+                        anggota.tarikhMC
+                    )
+                ]
+                .filter(Boolean)
+                .sort(
+                    bandingTarikh
+                );
+
+
+            anggota.bilanganMC =
+                anggota.tarikhMC.length;
+
+
+            anggota.tarikhMCPaparan =
+                ringkaskanTarikh(
+                    anggota.tarikhMC
                 );
 
         }
     );
 
 
-    /*
-        Susun mengikut nama.
-    */
+    /* ==============================
+       SUSUN NAMA
+    ============================== */
 
     hasil.sort(
         function (a, b) {
 
             return String(
-                a.nama ||
-                ""
+                a.nama || ""
             )
             .localeCompare(
                 String(
-                    b.nama ||
-                    ""
+                    b.nama || ""
                 ),
                 "ms"
             );
@@ -2392,7 +2476,6 @@ function groupCutiMengikutAnggota(
     return hasil;
 
 }
-
 
 /* =====================================================
    PARSE TARIKH
@@ -2937,7 +3020,6 @@ function ringkaskanTarikh(
 /* =====================================================
    RENDER TABLE
 ===================================================== */
-
 function renderCutiTable(
     data
 ) {
@@ -2948,11 +3030,9 @@ function renderCutiTable(
         );
 
 
-    /*
-        =============================================
-        TIADA DATA
-        =============================================
-    */
+    /* =================================================
+       TIADA DATA
+    ================================================= */
 
     if (
         !data ||
@@ -2964,7 +3044,7 @@ function renderCutiTable(
             <tr>
 
                 <td
-                    colspan="6"
+                    colspan="10"
                     class="text-center py-14"
                 >
 
@@ -2976,10 +3056,11 @@ function renderCutiTable(
                             class="fas fa-calendar-xmark text-3xl mb-3"
                         ></i>
 
-                        <p
-                            class="text-sm"
-                        >
-                            Tiada rekod Cuti Tahun (CT) dijumpai bagi tempoh ini.
+                        <p class="text-sm">
+
+                            Tiada rekod CT, CA atau MC
+                            dijumpai bagi tempoh ini.
+
                         </p>
 
                     </div>
@@ -3000,7 +3081,7 @@ function renderCutiTable(
         document.getElementById(
             "jumlahHariSummary"
         ).textContent =
-            "Jumlah: 0 hari";
+            "CT: 0 | CA: 0 | MC: 0";
 
 
         return;
@@ -3008,11 +3089,9 @@ function renderCutiTable(
     }
 
 
-    /*
-        =============================================
-        ADA DATA
-        =============================================
-    */
+    /* =================================================
+       ADA DATA
+    ================================================= */
 
     tbody.innerHTML =
         data
@@ -3036,9 +3115,11 @@ function renderCutiTable(
                         <!-- NO ANGGOTA -->
 
                         <td>
+
                             ${escapeHtml(
                                 anggota.no_anggota
                             )}
+
                         </td>
 
 
@@ -3047,9 +3128,11 @@ function renderCutiTable(
                         <td
                             class="font-semibold text-teal-300"
                         >
+
                             ${escapeHtml(
                                 anggota.no_skb
                             )}
+
                         </td>
 
 
@@ -3058,32 +3141,100 @@ function renderCutiTable(
                         <td
                             class="nama-cell"
                         >
+
                             ${escapeHtml(
                                 anggota.nama
                             )}
+
                         </td>
 
 
-                        <!-- TARIKH -->
+                        <!-- TARIKH CT -->
 
                         <td
                             class="tarikh-cell"
                         >
+
                             ${escapeHtml(
-                                anggota.tarikhPaparan
+                                anggota.tarikhCTPaparan
                             )}
+
                         </td>
 
 
-                        <!-- BILANGAN HARI -->
+                        <!-- BILANGAN CT -->
 
                         <td>
 
-                            <span
-                                class="hari-badge"
-                            >
-                                ${anggota.bilanganHari}
-                            </span>
+                            ${
+                                anggota.bilanganCT > 0
+                                ? `
+                                    <span class="hari-badge">
+                                        ${anggota.bilanganCT}
+                                    </span>
+                                  `
+                                : "-"
+                            }
+
+                        </td>
+
+
+                        <!-- TARIKH CA -->
+
+                        <td
+                            class="tarikh-cell"
+                        >
+
+                            ${escapeHtml(
+                                anggota.tarikhCAPaparan
+                            )}
+
+                        </td>
+
+
+                        <!-- BILANGAN CA -->
+
+                        <td>
+
+                            ${
+                                anggota.bilanganCA > 0
+                                ? `
+                                    <span class="hari-badge">
+                                        ${anggota.bilanganCA}
+                                    </span>
+                                  `
+                                : "-"
+                            }
+
+                        </td>
+
+
+                        <!-- TARIKH MC -->
+
+                        <td
+                            class="tarikh-cell"
+                        >
+
+                            ${escapeHtml(
+                                anggota.tarikhMCPaparan
+                            )}
+
+                        </td>
+
+
+                        <!-- BILANGAN MC -->
+
+                        <td>
+
+                            ${
+                                anggota.bilanganMC > 0
+                                ? `
+                                    <span class="hari-badge">
+                                        ${anggota.bilanganMC}
+                                    </span>
+                                  `
+                                : "-"
+                            }
 
                         </td>
 
@@ -3093,16 +3244,14 @@ function renderCutiTable(
 
             }
         )
-        .join(
-            ""
-        );
+        .join("");
 
 
-    /*
-        Jumlah keseluruhan hari CT.
-    */
+    /* =================================================
+       JUMLAH CT
+    ================================================= */
 
-    const jumlahHari =
+    const jumlahCT =
         data.reduce(
             function (
                 total,
@@ -3112,8 +3261,53 @@ function renderCutiTable(
                 return (
                     total +
                     Number(
-                        anggota.bilanganHari ||
-                        0
+                        anggota.bilanganCT || 0
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    /* =================================================
+       JUMLAH CA
+    ================================================= */
+
+    const jumlahCA =
+        data.reduce(
+            function (
+                total,
+                anggota
+            ) {
+
+                return (
+                    total +
+                    Number(
+                        anggota.bilanganCA || 0
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    /* =================================================
+       JUMLAH MC
+    ================================================= */
+
+    const jumlahMC =
+        data.reduce(
+            function (
+                total,
+                anggota
+            ) {
+
+                return (
+                    total +
+                    Number(
+                        anggota.bilanganMC || 0
                     )
                 );
 
@@ -3126,19 +3320,20 @@ function renderCutiTable(
         "tableSummary"
     ).textContent =
         data.length +
-        " anggota mempunyai rekod Cuti Tahun";
+        " anggota mempunyai rekod cuti";
 
 
     document.getElementById(
         "jumlahHariSummary"
     ).textContent =
-        "Jumlah: " +
-        jumlahHari +
-        " hari";
+        "CT: " +
+        jumlahCT +
+        " | CA: " +
+        jumlahCA +
+        " | MC: " +
+        jumlahMC;
 
 }
-
-
 /* =====================================================
    STATISTIK
 ===================================================== */
