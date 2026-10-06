@@ -1,0 +1,3396 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Senarai Cuti Anggota — Master Duty Pro</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                teal: {
+                    450: '#2dd4bf',
+                    550: '#14b8a6',
+                    650: '#0d9488',
+                    750: '#0f766e'
+                }
+            },
+            fontFamily: {
+                sans: [
+                    'Inter',
+                    'Segoe UI',
+                    'system-ui',
+                    'sans-serif'
+                ]
+            }
+        }
+    }
+}
+</script>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* =====================================================
+   BASE
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    min-width: 0;
+    background: #0b1220;
+    color: #e2e8f0;
+    font-family: Inter, "Segoe UI", system-ui, sans-serif;
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+/* =====================================================
+   GLASS
+===================================================== */
+
+.glass {
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(45, 212, 191, 0.12);
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar-link {
+    color: #94a3b8;
+}
+
+.sidebar-link.active {
+    background: linear-gradient(
+        90deg,
+        rgba(20, 184, 166, 0.20),
+        transparent
+    );
+
+    border-left: 3px solid #14b8a6;
+    color: #2dd4bf;
+}
+
+.sidebar-link:hover {
+    color: #2dd4bf;
+    background: rgba(255,255,255,.04);
+}
+
+.menu-hidden {
+    display: none !important;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+main {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+.content-area {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* =====================================================
+   STAT CARD
+===================================================== */
+
+.stat-card {
+    transition: all .25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-select {
+    width: 100%;
+
+    background: rgba(15,23,42,.75);
+
+    border: 1px solid rgba(148,163,184,.16);
+
+    color: #e2e8f0;
+
+    border-radius: 11px;
+
+    padding: 10px 12px;
+
+    outline: none;
+
+    transition: all .2s ease;
+}
+
+.form-select:focus {
+    border-color: rgba(45,212,191,.55);
+
+    box-shadow:
+        0 0 0 3px rgba(20,184,166,.08);
+}
+
+.form-select option {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.btn-primary {
+    background: #0d9488;
+    color: white;
+
+    border:
+        1px solid rgba(45,212,191,.25);
+
+    transition: all .2s ease;
+}
+
+.btn-primary:hover {
+    background: #14b8a6;
+    transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   REPORT TABS
+===================================================== */
+
+.report-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 9px 14px;
+
+    border-radius: 10px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #94a3b8;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid rgba(148,163,184,.10);
+
+    transition: all .2s ease;
+}
+
+.report-tab.active {
+    color: white;
+
+    background: #0d9488;
+
+    border-color: #14b8a6;
+}
+
+.report-tab:disabled {
+    opacity: .38;
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   TABLE WRAPPER
+===================================================== */
+
+.table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: thin;
+}
+
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: rgba(255,255,255,.04);
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(45,212,191,.35);
+    border-radius: 20px;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.cuti-table {
+    width: 100%;
+    min-width: 1000px;
+
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.cuti-table th {
+    background: #111c2f;
+    color: #94a3b8;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: .04em;
+
+    padding: 13px 12px;
+
+    border-bottom:
+        1px solid rgba(45,212,191,.16);
+
+    white-space: nowrap;
+}
+
+.cuti-table td {
+    padding: 13px 12px;
+
+    font-size: 12px;
+
+    color: #cbd5e1;
+
+    border-bottom:
+        1px solid rgba(148,163,184,.08);
+
+    vertical-align: middle;
+}
+
+.cuti-table tbody tr {
+    transition: background .18s ease;
+}
+
+.cuti-table tbody tr:hover {
+    background:
+        rgba(45,212,191,.045);
+}
+
+.cuti-table th:first-child,
+.cuti-table td:first-child {
+    width: 60px;
+    text-align: center;
+}
+
+.cuti-table th:last-child,
+.cuti-table td:last-child {
+    width: 120px;
+    text-align: center;
+}
+
+.nama-cell {
+    min-width: 250px;
+
+    font-weight: 600;
+
+    color: #f8fafc !important;
+}
+
+.tarikh-cell {
+    min-width: 300px;
+
+    white-space: normal;
+
+    line-height: 1.6;
+}
+
+.hari-badge {
+    display: inline-flex;
+
+    min-width: 38px;
+    height: 30px;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 10px;
+
+    border-radius: 9px;
+
+    background:
+        rgba(20,184,166,.12);
+
+    border:
+        1px solid rgba(45,212,191,.20);
+
+    color: #2dd4bf;
+
+    font-weight: 700;
+}
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 180px;
+
+    background:
+        rgba(15,23,42,.78);
+
+    backdrop-filter: blur(3px);
+
+    z-index: 20;
+}
+
+.hidden-force {
+    display: none !important;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast {
+    position: fixed;
+
+    right: 22px;
+    bottom: 22px;
+
+    z-index: 100000;
+
+    min-width: 280px;
+    max-width: 420px;
+
+    padding: 14px 17px;
+
+    background: #0f172a;
+
+    border:
+        1px solid rgba(45,212,191,.20);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.40);
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    height: 82px;
+}
+
+@media (min-width: 1024px) {
+
+    header {
+        left: 18rem;
+    }
+
+    main > .content-area {
+        margin-top: 82px;
+    }
+
+}
+
+@media (max-width: 1023px) {
+
+    header {
+        left: 0;
+        right: 0;
+        height: 70px;
+    }
+
+    main > .content-area {
+        margin-top: 70px;
+    }
+
+    body {
+        padding-bottom: 80px;
+    }
+
+}
+
+/* =====================================================
+   MOBILE NAV
+===================================================== */
+
+.mobile-bottom {
+    display: none;
+}
+
+@media (max-width: 1023px) {
+
+    .mobile-bottom {
+        display: flex;
+
+        position: fixed;
+
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        height: 70px;
+
+        align-items: center;
+        justify-content: space-around;
+
+        background:
+            rgba(15,23,42,.94);
+
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        border-top:
+            1px solid rgba(45,212,191,.25);
+
+        box-shadow:
+            0 -8px 25px rgba(0,0,0,.4);
+
+        z-index: 99999;
+    }
+
+    .mobile-nav-item {
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+        justify-content: center;
+
+        gap: 4px;
+
+        color: #cbd5e1;
+
+        text-decoration: none;
+
+        font-size: 10px;
+    }
+
+    .mobile-nav-item i {
+        font-size: 18px;
+    }
+
+    .mobile-nav-item.active {
+        color: #2dd4bf;
+    }
+
+}
+
+@media (max-width: 640px) {
+
+    .content-area {
+        padding: 14px !important;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    .toast {
+        left: 14px;
+        right: 14px;
+
+        bottom: 88px;
+
+        min-width: auto;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body class="font-sans text-slate-200">
+
+<div class="flex min-h-screen">
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside
+    class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto"
+>
+
+    <div class="p-6 h-full flex flex-col">
+
+        <!-- BRAND -->
+
+        <div class="flex items-center gap-3 mb-8">
+
+            <div class="w-12 h-12 flex items-center justify-center">
+
+                <img
+                    src="logomdp.png"
+                    alt="Master Duty Pro"
+                    class="w-12 h-12 object-contain"
+                >
+
+            </div>
+
+            <div>
+
+                <h1 class="font-bold text-white text-lg leading-tight">
+                    Master Duty Pro
+                </h1>
+
+                <p class="text-xs text-teal-450">
+                    Wilayah Terengganu
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- USER INFO -->
+
+        <div
+            class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10"
+        >
+
+            <p
+                id="sidebarUserName"
+                class="text-sm font-semibold text-white truncate"
+            >
+                -
+            </p>
+
+            <p
+                id="sidebarUserJawatan"
+                class="text-xs text-teal-400 mt-1"
+            >
+                -
+            </p>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="space-y-1 flex-1">
+
+            <p
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3"
+            >
+                Menu Utama
+            </p>
+
+
+            <a
+                href="dashboard.html"
+                id="menu-dashboard"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-chart-pie w-5"></i>
+                Dashboard
+            </a>
+
+
+            <a
+                href="pengurusan-anggota.html"
+                id="menu-anggota"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-users w-5"></i>
+                Pengurusan Anggota
+            </a>
+
+
+            <a
+                href="kod-duty.html"
+                id="menu-kod-duty"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-code w-5"></i>
+                Kod Waktu Kerja
+            </a>
+
+
+            <a
+                href="kod-tempat-kerja.html"
+                id="menu-kod-tempat"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-map-marker-alt w-5"></i>
+                Kod Tempat Kerja
+            </a>
+
+
+            <a
+                href="jadual-duty.html"
+                id="menu-jadual"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-calendar-check w-5"></i>
+                Pengisian Jadual Tugas
+            </a>
+
+
+            <p
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3"
+            >
+                Laporan
+            </p>
+
+
+            <a
+                href="laporan-wilayah.html"
+                id="menu-laporan-wilayah"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-file-alt w-5"></i>
+                Laporan Wilayah
+            </a>
+
+
+            <a
+                href="klm-mingguan.html"
+                id="menu-klm"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-users w-5"></i>
+                KLM Mingguan
+            </a>
+
+
+            <a
+                href="anggaran-rk02.html"
+                id="menu-rk02"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-chart-bar w-5"></i>
+                Anggaran RK02
+            </a>
+
+
+            <a
+                href="anggaran-rk01.html"
+                id="menu-rk01"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
+            >
+                <i class="fas fa-chart-line w-5"></i>
+                Anggaran RK01
+            </a>
+
+
+            senarai-cuti.html
+                <i class="fas fa-calendar-minus w-5"></i>
+                Senarai Cuti
+            </a>
+
+
+            <p
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3"
+            >
+                Sistem
+            </p>
+
+
+            #
+                <i class="fas fa-cog w-5"></i>
+                Tetapan
+            </a>
+
+
+            # return false;"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4"
+            >
+                <i class="fas fa-sign-out-alt w-5"></i>
+                Log Keluar
+            </a>
+
+        </nav>
+
+    </div>
+
+</aside>
+
+
+
+   <!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="flex-1 lg:ml-72">
+
+<!-- =====================================================
+     TOPBAR
+===================================================== -->
+
+<header
+    class="glass fixed top-0 left-0 right-0 lg:left-72 z-30 border-b border-teal-550/10 px-6 py-4"
+>
+
+    <div class="flex items-center justify-between">
+
+        <div>
+
+            <h2 class="text-xl font-bold text-white">
+                Senarai Cuti Anggota
+            </h2>
+
+            <p class="text-sm text-slate-400">
+                Rekod cuti dan hari tidak bekerja anggota •
+                <span id="currentDate">-</span>
+            </p>
+
+        </div>
+
+
+        <div class="flex items-center gap-4">
+
+            <div
+                class="hidden sm:flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium"
+            >
+
+                <span
+                    class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"
+                ></span>
+
+                System Online
+
+            </div>
+
+
+            <div class="text-right hidden sm:block">
+
+                <p
+                    class="text-sm font-medium text-white"
+                    id="userName"
+                >
+                    -
+                </p>
+
+                <p
+                    class="text-xs text-slate-400"
+                    id="userJawatan"
+                >
+                    -
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<div class="content-area p-6 space-y-6">
+
+
+<!-- =====================================================
+     STATISTIK
+===================================================== -->
+
+<div class="glass rounded-2xl p-5">
+
+    <h3 class="text-lg font-semibold text-white mb-5">
+        Ringkasan Bulanan
+    </h3>
+
+
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+
+
+        <!-- CUTI TAHUN -->
+
+        <div
+            class="stat-card rounded-2xl p-5 bg-teal-500/15 border border-teal-500/30"
+        >
+
+            <div
+                class="w-11 h-11 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-400 mb-4"
+            >
+
+                <i class="fas fa-calendar-check"></i>
+
+            </div>
+
+            <p class="text-sm text-slate-300">
+                Cuti Tahun
+            </p>
+
+            <p
+                id="statCT"
+                class="text-3xl font-bold text-teal-400 mt-1"
+            >
+                -
+            </p>
+
+            <p class="text-xs text-slate-500 mt-1">
+                anggota
+            </p>
+
+        </div>
+
+
+        <!-- JUMLAH HARI CT -->
+
+        <div
+            class="stat-card rounded-2xl p-5 bg-emerald-500/15 border border-emerald-500/30"
+        >
+
+            <div
+                class="w-11 h-11 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4"
+            >
+
+                <i class="fas fa-calendar-days"></i>
+
+            </div>
+
+            <p class="text-sm text-slate-300">
+                Jumlah Hari CT
+            </p>
+
+            <p
+                id="statHariCT"
+                class="text-3xl font-bold text-emerald-400 mt-1"
+            >
+                -
+            </p>
+
+            <p class="text-xs text-slate-500 mt-1">
+                hari
+            </p>
+
+        </div>
+
+
+        <!-- CUTI AM -->
+
+        <div
+            class="stat-card rounded-2xl p-5 bg-amber-500/15 border border-amber-500/30"
+        >
+
+            <div
+                class="w-11 h-11 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 mb-4"
+            >
+
+                <i class="fas fa-calendar-day"></i>
+
+            </div>
+
+            <p class="text-sm text-slate-300">
+                Cuti Am
+            </p>
+
+            <p
+                class="text-3xl font-bold text-amber-400 mt-1"
+            >
+                -
+            </p>
+
+            <p class="text-xs text-slate-500 mt-1">
+                Akan datang
+            </p>
+
+        </div>
+
+
+        <!-- OFFDAY -->
+
+        <div
+            class="stat-card rounded-2xl p-5 bg-orange-500/15 border border-orange-500/30"
+        >
+
+            <div
+                class="w-11 h-11 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 mb-4"
+            >
+
+                <i class="fas fa-bed"></i>
+
+            </div>
+
+            <p class="text-sm text-slate-300">
+                Offday
+            </p>
+
+            <p
+                class="text-3xl font-bold text-orange-400 mt-1"
+            >
+                -
+            </p>
+
+            <p class="text-xs text-slate-500 mt-1">
+                Akan datang
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div class="glass rounded-2xl p-6">
+
+    <div
+        class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5"
+    >
+
+        <div>
+
+            <h3 class="text-lg font-semibold text-white">
+                Pilihan Laporan
+            </h3>
+
+            <p class="text-sm text-slate-400 mt-1">
+                Pilih bulan dan tahun untuk melihat rekod cuti
+            </p>
+
+        </div>
+
+
+        <div
+            class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full xl:w-auto"
+        >
+
+
+            <!-- BULAN -->
+
+            <div class="min-w-[170px]">
+
+                <label
+                    class="text-xs text-slate-500 block mb-1.5"
+                >
+                    Bulan
+                </label>
+
+                <select
+                    id="filterBulan"
+                    class="form-select"
+                >
+
+                    <option value="Januari">
+                        Januari
+                    </option>
+
+                    <option value="Februari">
+                        Februari
+                    </option>
+
+                    <option value="Mac">
+                        Mac
+                    </option>
+
+                    <option value="April">
+                        April
+                    </option>
+
+                    <option value="Mei">
+                        Mei
+                    </option>
+
+                    <option value="Jun">
+                        Jun
+                    </option>
+
+                    <option value="Julai">
+                        Julai
+                    </option>
+
+                    <option value="Ogos">
+                        Ogos
+                    </option>
+
+                    <option value="September">
+                        September
+                    </option>
+
+                    <option value="Oktober">
+                        Oktober
+                    </option>
+
+                    <option value="November">
+                        November
+                    </option>
+
+                    <option value="Disember">
+                        Disember
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- TAHUN -->
+
+            <div class="min-w-[130px]">
+
+                <label
+                    class="text-xs text-slate-500 block mb-1.5"
+                >
+                    Tahun
+                </label>
+
+                <select
+                    id="filterTahun"
+                    class="form-select"
+                ></select>
+
+            </div>
+
+
+            <!-- PAPAR -->
+
+            <div class="flex items-end">
+
+                <button
+                    id="btnPapar"
+                    type="button"
+                    onclick="muatSenaraiCuti()"
+                    class="btn-primary w-full px-5 py-2.5 rounded-xl text-sm font-semibold"
+                >
+
+                    <i
+                        class="fas fa-magnifying-glass mr-1"
+                    ></i>
+
+                    Papar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     REPORT TAB
+===================================================== -->
+
+<div class="glass rounded-2xl p-4">
+
+    <div
+        class="flex items-center gap-2 flex-wrap"
+    >
+
+        <button
+            type="button"
+            class="report-tab active"
+        >
+
+            <i class="fas fa-calendar-check"></i>
+
+            Cuti Tahun
+
+        </button>
+
+
+        <button
+            type="button"
+            class="report-tab"
+            disabled
+        >
+
+            <i class="fas fa-calendar-day"></i>
+
+            Cuti Am
+
+        </button>
+
+
+        <button
+            type="button"
+            class="report-tab"
+            disabled
+        >
+
+            <i class="fas fa-bed"></i>
+
+            Offday
+
+        </button>
+
+
+        <button
+            type="button"
+            class="report-tab"
+            disabled
+        >
+
+            <i class="fas fa-user-clock"></i>
+
+            Tidak Bekerja
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SENARAI CUTI TAHUN
+===================================================== -->
+
+<div class="glass rounded-2xl overflow-hidden">
+
+
+    <!-- HEADER TABLE -->
+
+    <div
+        class="px-5 py-5 border-b border-white/10 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+    >
+
+        <div class="flex items-center gap-2">
+
+            <div
+                class="w-9 h-9 rounded-xl bg-teal-500/15 text-teal-400 flex items-center justify-center"
+            >
+
+                <i class="fas fa-calendar-check"></i>
+
+            </div>
+
+
+            <div>
+
+                <h3
+                    class="text-base font-semibold text-white"
+                >
+                    Senarai Anggota Cuti Tahun
+                </h3>
+
+                <p
+                    id="tajukTempoh"
+                    class="text-xs text-slate-500 mt-1"
+                >
+                    -
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <span
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 text-xs font-semibold"
+            >
+
+                <span
+                    class="w-2 h-2 rounded-full bg-teal-400"
+                ></span>
+
+                Kod CT
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE AREA -->
+
+    <div class="relative min-h-[180px]">
+
+
+        <!-- LOADING -->
+
+        <div
+            id="tableLoading"
+            class="loading-overlay hidden-force"
+        >
+
+            <div class="text-center">
+
+                <i
+                    class="fas fa-spinner fa-spin text-teal-400 text-2xl mb-3"
+                ></i>
+
+                <p class="text-sm text-slate-400">
+                    Memuatkan rekod Cuti Tahun...
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table-wrapper">
+
+            <table class="cuti-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Bil
+                        </th>
+
+                        <th>
+                            No. Anggota
+                        </th>
+
+                        <th>
+                            No. SKB
+                        </th>
+
+                        <th>
+                            Nama
+                        </th>
+
+                        <th>
+                            Tarikh Cuti Tahun
+                        </th>
+
+                        <th>
+                            Bilangan Hari
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="cutiTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="text-center py-12 text-slate-500"
+                        >
+
+                            <i
+                                class="fas fa-spinner fa-spin mr-2"
+                            ></i>
+
+                            Memuatkan data...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE FOOTER -->
+
+    <div
+        class="px-5 py-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+    >
+
+        <p
+            id="tableSummary"
+            class="text-xs text-slate-500"
+        >
+            -
+        </p>
+
+
+        <p
+            id="jumlahHariSummary"
+            class="text-xs text-teal-400 font-semibold"
+        >
+            -
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<div
+    class="text-center text-slate-500 text-sm py-6"
+>
+
+    Master Duty Pro — Wilayah Terengganu
+
+    <br>
+
+    © 2026 • Operational Duty Management System
+
+</div>
+
+
+</div>
+<!-- END CONTENT -->
+
+
+</main>
+
+</div>
+<!-- END MAIN FLEX -->
+
+
+<!-- =====================================================
+     MOBILE NAVIGATION
+===================================================== -->
+
+<nav class="mobile-bottom">
+
+    <a
+        href="dashboard.html"
+        class="mobile-nav-item"
+    >
+
+        <i class="fas fa-chart-pie"></i>
+
+        <span>
+            Dash
+        </span>
+
+    </a>
+
+
+    <a
+        href="pengurusan-anggota.html"
+        class="mobile-nav-item"
+    >
+
+        <i class="fas fa-users"></i>
+
+        <span>
+            Anggota
+        </span>
+
+    </a>
+
+
+    <a
+        href="jadual-duty.html"
+        class="mobile-nav-item"
+    >
+
+        <i class="fas fa-calendar-check"></i>
+
+        <span>
+            Duty
+        </span>
+
+    </a>
+
+
+    senarai-cuti.html
+        class="mobile-nav-item active"
+    >
+
+        <i class="fas fa-calendar-minus"></i>
+
+        <span>
+            Cuti
+        </span>
+
+    </a>
+
+
+    <a
+        href="anggaran-rk02.html"
+        class="mobile-nav-item"
+    >
+
+        <i class="fas fa-chart-bar"></i>
+
+        <span>
+            RK02
+        </span>
+
+    </a>
+
+
+    #
+        onclick="logKeluar(); return false;"
+        class="mobile-nav-item"
+    >
+
+        <i class="fas fa-sign-out-alt"></i>
+
+        <span>
+            Logout
+        </span>
+
+    </a>
+
+</nav>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+
+const SUPABASE_KEY =
+    "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+let currentUser = null;
+
+let dataCutiTahun = [];
+
+
+const NAMA_BULAN = [
+
+    "Januari",
+
+    "Februari",
+
+    "Mac",
+
+    "April",
+
+    "Mei",
+
+    "Jun",
+
+    "Julai",
+
+    "Ogos",
+
+    "September",
+
+    "Oktober",
+
+    "November",
+
+    "Disember"
+
+];
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        currentUser =
+            bacaPengguna();
+
+
+        if (!currentUser) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        paparMaklumatPengguna();
+
+        kawalMenuMengikutPeranan();
+
+        paparTarikh();
+
+        sediakanFilter();
+
+
+        await muatSenaraiCuti();
+
+    }
+);
+
+
+/* =====================================================
+   BACA USER
+===================================================== */
+
+function bacaPengguna() {
+
+    try {
+
+        const data =
+            localStorage.getItem(
+                "mdp_user"
+            );
+
+
+        return data
+            ? JSON.parse(data)
+            : null;
+
+    } catch (error) {
+
+        console.error(
+            "RALAT BACA USER:",
+            error
+        );
+
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
+   PAPAR USER
+===================================================== */
+
+function paparMaklumatPengguna() {
+
+    if (!currentUser) {
+
+        return;
+
+    }
+
+
+    const name =
+        currentUser.name ||
+        currentUser.noSkb ||
+        "-";
+
+
+    const jawatan =
+        currentUser.jawatan ||
+        "-";
+
+
+    document.getElementById(
+        "userName"
+    ).textContent =
+        name;
+
+
+    document.getElementById(
+        "userJawatan"
+    ).textContent =
+        jawatan;
+
+
+    document.getElementById(
+        "sidebarUserName"
+    ).textContent =
+        name;
+
+
+    document.getElementById(
+        "sidebarUserJawatan"
+    ).textContent =
+        jawatan;
+
+}
+
+
+/* =====================================================
+   KAWAL MENU
+===================================================== */
+
+function kawalMenuMengikutPeranan() {
+
+    if (
+        !currentUser ||
+        currentUser.isAdmin
+    ) {
+
+        return;
+
+    }
+
+
+    [
+        "menu-dashboard",
+        "menu-anggota",
+        "menu-laporan-wilayah",
+        "menu-tetapan"
+    ]
+    .forEach(
+        function (id) {
+
+            const el =
+                document.getElementById(
+                    id
+                );
+
+
+            if (el) {
+
+                el.classList.add(
+                    "menu-hidden"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOG KELUAR
+===================================================== */
+
+function logKeluar() {
+
+    localStorage.removeItem(
+        "mdp_user"
+    );
+
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =====================================================
+   TARIKH SEMASA
+===================================================== */
+
+function paparTarikh() {
+
+    const options = {
+
+        weekday:
+            "long",
+
+        year:
+            "numeric",
+
+        month:
+            "long",
+
+        day:
+            "numeric"
+
+    };
+
+
+    document.getElementById(
+        "currentDate"
+    ).textContent =
+        new Date()
+        .toLocaleDateString(
+            "ms-MY",
+            options
+        );
+
+}
+
+
+/* =====================================================
+   FILTER BULAN / TAHUN
+===================================================== */
+
+function sediakanFilter() {
+
+    const sekarang =
+        new Date();
+
+
+    const bulanSemasa =
+        NAMA_BULAN[
+            sekarang.getMonth()
+        ];
+
+
+    const tahunSemasa =
+        sekarang.getFullYear();
+
+
+    const filterBulan =
+        document.getElementById(
+            "filterBulan"
+        );
+
+
+    const filterTahun =
+        document.getElementById(
+            "filterTahun"
+        );
+
+
+    filterBulan.value =
+        bulanSemasa;
+
+
+    filterTahun.innerHTML =
+        "";
+
+
+    for (
+        let tahun =
+            tahunSemasa + 2;
+
+        tahun >=
+            tahunSemasa - 5;
+
+        tahun--
+    ) {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value =
+            String(tahun);
+
+
+        option.textContent =
+            String(tahun);
+
+
+        if (
+            tahun ===
+            tahunSemasa
+        ) {
+
+            option.selected =
+                true;
+
+        }
+
+
+        filterTahun.appendChild(
+            option
+        );
+
+    }
+
+
+    filterBulan.addEventListener(
+        "change",
+        muatSenaraiCuti
+    );
+
+
+    filterTahun.addEventListener(
+        "change",
+        muatSenaraiCuti
+    );
+
+}
+
+/* =====================================================
+   MUAT SENARAI CUTI TAHUN
+===================================================== */
+
+async function muatSenaraiCuti() {
+
+    const bulan =
+        document.getElementById(
+            "filterBulan"
+        ).value;
+
+
+    const tahun =
+        document.getElementById(
+            "filterTahun"
+        ).value;
+
+
+    document.getElementById(
+        "tajukTempoh"
+    ).textContent =
+        `${bulan} ${tahun}`;
+
+
+    setTableLoading(true);
+
+
+    const btnPapar =
+        document.getElementById(
+            "btnPapar"
+        );
+
+
+    const originalButton =
+        btnPapar.innerHTML;
+
+
+    btnPapar.disabled =
+        true;
+
+
+    btnPapar.innerHTML = `
+        <i class="fas fa-spinner fa-spin mr-1"></i>
+        Memuatkan...
+    `;
+
+
+    try {
+
+        /*
+            =================================================
+            AMBIL DATA DARIPADA jadual_duty
+
+            Cuti Tahun:
+            kod_waktu_kerja = CT
+            =================================================
+        */
+
+        const PAGE_SIZE_DB =
+            1000;
+
+
+        let semuaRekod =
+            [];
+
+
+        let from =
+            0;
+
+
+        while (true) {
+
+            const to =
+                from +
+                PAGE_SIZE_DB -
+                1;
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from(
+                    "jadual_duty"
+                )
+                .select(`
+                    no_anggota,
+                    no_skb,
+                    nama_anggota,
+                    tarikh,
+                    kod_waktu_kerja,
+                    bulan,
+                    tahun
+                `)
+                .eq(
+                    "bulan",
+                    bulan
+                )
+                .eq(
+                    "tahun",
+                    String(tahun)
+                )
+                .eq(
+                    "kod_waktu_kerja",
+                    "CT"
+                )
+                .order(
+                    "nama_anggota",
+                    {
+                        ascending: true
+                    }
+                )
+                .order(
+                    "tarikh",
+                    {
+                        ascending: true
+                    }
+                )
+                .range(
+                    from,
+                    to
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "RALAT QUERY CUTI TAHUN:",
+                    error
+                );
+
+
+                console.error(
+                    "MESSAGE:",
+                    error.message
+                );
+
+
+                console.error(
+                    "DETAIL:",
+                    error.details
+                );
+
+
+                console.error(
+                    "HINT:",
+                    error.hint
+                );
+
+
+                throw error;
+
+            }
+
+
+            const batch =
+                data || [];
+
+
+            semuaRekod =
+                semuaRekod.concat(
+                    batch
+                );
+
+
+            /*
+                Jika kurang daripada 1000,
+                bermakna sudah sampai
+                rekod terakhir.
+            */
+
+            if (
+                batch.length <
+                PAGE_SIZE_DB
+            ) {
+
+                break;
+
+            }
+
+
+            from +=
+                PAGE_SIZE_DB;
+
+        }
+
+
+        console.log(
+            "============================"
+        );
+
+
+        console.log(
+            "LAPORAN CUTI TAHUN"
+        );
+
+
+        console.log(
+            "BULAN:",
+            bulan
+        );
+
+
+        console.log(
+            "TAHUN:",
+            tahun
+        );
+
+
+        console.log(
+            "JUMLAH REKOD CT:",
+            semuaRekod.length
+        );
+
+
+        console.log(
+            "REKOD CT:",
+            semuaRekod
+        );
+
+
+        /*
+            Group seorang anggota
+            menjadi satu row.
+        */
+
+        dataCutiTahun =
+            groupCutiMengikutAnggota(
+                semuaRekod
+            );
+
+
+        console.log(
+            "JUMLAH ANGGOTA CT:",
+            dataCutiTahun.length
+        );
+
+
+        console.log(
+            "DATA CT GROUPED:",
+            dataCutiTahun
+        );
+
+
+        console.log(
+            "============================"
+        );
+
+
+        renderCutiTable(
+            dataCutiTahun
+        );
+
+
+        kemasKiniStatistik(
+            dataCutiTahun
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "RALAT MUAT SENARAI CUTI:",
+            error
+        );
+
+
+        dataCutiTahun =
+            [];
+
+
+        renderCutiTable(
+            []
+        );
+
+
+        kemasKiniStatistik(
+            []
+        );
+
+
+        paparToast(
+            "Gagal memuatkan rekod Cuti Tahun: " +
+            (
+                error.message ||
+                error
+            ),
+            "error"
+        );
+
+
+    } finally {
+
+        setTableLoading(
+            false
+        );
+
+
+        btnPapar.disabled =
+            false;
+
+
+        btnPapar.innerHTML =
+            originalButton;
+
+    }
+
+}
+
+
+/* =====================================================
+   GROUP CUTI MENGIKUT ANGGOTA
+===================================================== */
+
+function groupCutiMengikutAnggota(
+    data
+) {
+
+    const map =
+        new Map();
+
+
+    data.forEach(
+        function (row) {
+
+            /*
+                Gunakan No. SKB sebagai
+                identifier utama anggota.
+            */
+
+            const key =
+                String(
+                    row.no_skb ??
+                    ""
+                )
+                .trim();
+
+
+            if (!key) {
+
+                return;
+
+            }
+
+
+            /*
+                Jika anggota belum ada
+                dalam Map, cipta dahulu.
+            */
+
+            if (
+                !map.has(key)
+            ) {
+
+                map.set(
+                    key,
+                    {
+
+                        no_anggota:
+                            row.no_anggota ||
+                            "",
+
+                        no_skb:
+                            row.no_skb,
+
+                        nama:
+                            row.nama_anggota ||
+                            "",
+
+                        tarikh:
+                            []
+
+                    }
+                );
+
+            }
+
+
+            const anggota =
+                map.get(key);
+
+
+            /*
+                Jika row pertama tidak
+                mempunyai no anggota,
+                cuba ambil daripada
+                row berikutnya.
+            */
+
+            if (
+                !anggota.no_anggota &&
+                row.no_anggota
+            ) {
+
+                anggota.no_anggota =
+                    row.no_anggota;
+
+            }
+
+
+            /*
+                Sama untuk nama.
+            */
+
+            if (
+                !anggota.nama &&
+                row.nama_anggota
+            ) {
+
+                anggota.nama =
+                    row.nama_anggota;
+
+            }
+
+
+            /*
+                Masukkan tarikh CT.
+            */
+
+            if (row.tarikh) {
+
+                anggota.tarikh.push(
+                    String(
+                        row.tarikh
+                    ).trim()
+                );
+
+            }
+
+        }
+    );
+
+
+    const hasil =
+        Array.from(
+            map.values()
+        );
+
+
+    /*
+        Proses setiap anggota.
+    */
+
+    hasil.forEach(
+        function (anggota) {
+
+            /*
+                Buang tarikh duplicate.
+            */
+
+            anggota.tarikh =
+                [
+                    ...new Set(
+                        anggota.tarikh
+                    )
+                ]
+                .filter(Boolean)
+                .sort(
+                    bandingTarikh
+                );
+
+
+            /*
+                Bilangan Hari berdasarkan
+                jumlah TARIKH UNIK CT.
+            */
+
+            anggota.bilanganHari =
+                anggota.tarikh.length;
+
+
+            /*
+                Tukarkan senarai tarikh:
+
+                03/10/2026
+                04/10/2026
+                05/10/2026
+
+                menjadi:
+
+                03/10/2026 - 05/10/2026
+            */
+
+            anggota.tarikhPaparan =
+                ringkaskanTarikh(
+                    anggota.tarikh
+                );
+
+        }
+    );
+
+
+    /*
+        Susun mengikut nama.
+    */
+
+    hasil.sort(
+        function (a, b) {
+
+            return String(
+                a.nama ||
+                ""
+            )
+            .localeCompare(
+                String(
+                    b.nama ||
+                    ""
+                ),
+                "ms"
+            );
+
+        }
+    );
+
+
+    return hasil;
+
+}
+
+
+/* =====================================================
+   PARSE TARIKH
+===================================================== */
+
+function parseTarikh(
+    value
+) {
+
+    if (!value) {
+
+        return null;
+
+    }
+
+
+    const teks =
+        String(
+            value
+        )
+        .trim();
+
+
+    /*
+        =============================================
+        FORMAT 1
+
+        YYYY-MM-DD
+
+        Contoh:
+        2026-10-05
+        =============================================
+    */
+
+    let match =
+        teks.match(
+            /^(\d{4})-(\d{1,2})-(\d{1,2})$/
+        );
+
+
+    if (match) {
+
+        const tahun =
+            Number(
+                match[1]
+            );
+
+
+        const bulan =
+            Number(
+                match[2]
+            ) - 1;
+
+
+        const hari =
+            Number(
+                match[3]
+            );
+
+
+        return new Date(
+            tahun,
+            bulan,
+            hari
+        );
+
+    }
+
+
+    /*
+        =============================================
+        FORMAT 2
+
+        DD/MM/YYYY
+
+        Contoh:
+        05/10/2026
+        =============================================
+    */
+
+    match =
+        teks.match(
+            /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+        );
+
+
+    if (match) {
+
+        const hari =
+            Number(
+                match[1]
+            );
+
+
+        const bulan =
+            Number(
+                match[2]
+            ) - 1;
+
+
+        const tahun =
+            Number(
+                match[3]
+            );
+
+
+        return new Date(
+            tahun,
+            bulan,
+            hari
+        );
+
+    }
+
+
+    /*
+        =============================================
+        FALLBACK
+
+        Cuba baca melalui JavaScript Date.
+        =============================================
+    */
+
+    const date =
+        new Date(
+            teks
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+    );
+
+}
+
+
+/* =====================================================
+   BANDING TARIKH
+===================================================== */
+
+function bandingTarikh(
+    a,
+    b
+) {
+
+    const dateA =
+        parseTarikh(
+            a
+        );
+
+
+    const dateB =
+        parseTarikh(
+            b
+        );
+
+
+    if (
+        dateA &&
+        dateB
+    ) {
+
+        return (
+            dateA.getTime() -
+            dateB.getTime()
+        );
+
+    }
+
+
+    return String(
+        a
+    )
+    .localeCompare(
+        String(
+            b
+        )
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT TARIKH
+===================================================== */
+
+function formatTarikh(
+    value
+) {
+
+    const date =
+        value instanceof Date
+            ? value
+            : parseTarikh(
+                value
+            );
+
+
+    if (!date) {
+
+        return String(
+            value ||
+            ""
+        );
+
+    }
+
+
+    const hari =
+        String(
+            date.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    const bulan =
+        String(
+            date.getMonth() + 1
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    const tahun =
+        date.getFullYear();
+
+
+    return (
+        hari +
+        "/" +
+        bulan +
+        "/" +
+        tahun
+    );
+
+}
+
+
+/* =====================================================
+   RINGKASKAN TARIKH BERTURUT-TURUT
+===================================================== */
+
+function ringkaskanTarikh(
+    senarai
+) {
+
+    if (
+        !senarai ||
+        !senarai.length
+    ) {
+
+        return "-";
+
+    }
+
+
+    /*
+        Tukar kepada Date.
+    */
+
+    const dates =
+        senarai
+            .map(
+                function (tarikh) {
+
+                    return parseTarikh(
+                        tarikh
+                    );
+
+                }
+            )
+            .filter(Boolean)
+            .sort(
+                function (a, b) {
+
+                    return (
+                        a.getTime() -
+                        b.getTime()
+                    );
+
+                }
+            );
+
+
+    /*
+        Jika semua tarikh gagal parse,
+        papar data asal.
+    */
+
+    if (
+        !dates.length
+    ) {
+
+        return senarai
+            .map(
+                formatTarikh
+            )
+            .join(
+                ", "
+            );
+
+    }
+
+
+    /*
+        Buang duplicate selepas parse.
+    */
+
+    const unique =
+        [];
+
+
+    const seen =
+        new Set();
+
+
+    dates.forEach(
+        function (date) {
+
+            const key =
+                date.getFullYear() +
+                "-" +
+                String(
+                    date.getMonth() + 1
+                ).padStart(
+                    2,
+                    "0"
+                ) +
+                "-" +
+                String(
+                    date.getDate()
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            if (
+                !seen.has(key)
+            ) {
+
+                seen.add(
+                    key
+                );
+
+
+                unique.push(
+                    date
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+        Group tarikh berturutan.
+    */
+
+    const kumpulan =
+        [];
+
+
+    let mula =
+        unique[0];
+
+
+    let akhir =
+        unique[0];
+
+
+    for (
+        let i = 1;
+        i < unique.length;
+        i++
+    ) {
+
+        const semasa =
+            unique[i];
+
+
+        /*
+            UTC digunakan untuk elakkan
+            masalah timezone.
+        */
+
+        const utcAkhir =
+            Date.UTC(
+                akhir.getFullYear(),
+                akhir.getMonth(),
+                akhir.getDate()
+            );
+
+
+        const utcSemasa =
+            Date.UTC(
+                semasa.getFullYear(),
+                semasa.getMonth(),
+                semasa.getDate()
+            );
+
+
+        const bezaHari =
+            Math.round(
+                (
+                    utcSemasa -
+                    utcAkhir
+                ) /
+                86400000
+            );
+
+
+        /*
+            Kalau beza tepat 1 hari,
+            sambungkan range.
+        */
+
+        if (
+            bezaHari === 1
+        ) {
+
+            akhir =
+                semasa;
+
+        } else {
+
+            kumpulan.push(
+                {
+                    mula:
+                        mula,
+
+                    akhir:
+                        akhir
+                }
+            );
+
+
+            mula =
+                semasa;
+
+
+            akhir =
+                semasa;
+
+        }
+
+    }
+
+
+    /*
+        Masukkan kumpulan terakhir.
+    */
+
+    kumpulan.push(
+        {
+            mula:
+                mula,
+
+            akhir:
+                akhir
+        }
+    );
+
+
+    /*
+        Format paparan.
+    */
+
+    return kumpulan
+        .map(
+            function (
+                kumpulanTarikh
+            ) {
+
+                const tarikhMula =
+                    formatTarikh(
+                        kumpulanTarikh.mula
+                    );
+
+
+                const tarikhAkhir =
+                    formatTarikh(
+                        kumpulanTarikh.akhir
+                    );
+
+
+                /*
+                    Kalau hanya satu hari.
+                */
+
+                if (
+                    kumpulanTarikh.mula
+                    .getTime() ===
+                    kumpulanTarikh.akhir
+                    .getTime()
+                ) {
+
+                    return tarikhMula;
+
+                }
+
+
+                /*
+                    Kalau lebih daripada
+                    satu hari berturutan.
+                */
+
+                return (
+                    tarikhMula +
+                    " - " +
+                    tarikhAkhir
+                );
+
+            }
+        )
+        .join(
+            ", "
+        );
+
+}
+
+
+/* =====================================================
+   RENDER TABLE
+===================================================== */
+
+function renderCutiTable(
+    data
+) {
+
+    const tbody =
+        document.getElementById(
+            "cutiTableBody"
+        );
+
+
+    /*
+        =============================================
+        TIADA DATA
+        =============================================
+    */
+
+    if (
+        !data ||
+        !data.length
+    ) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="text-center py-14"
+                >
+
+                    <div
+                        class="text-slate-500"
+                    >
+
+                        <i
+                            class="fas fa-calendar-xmark text-3xl mb-3"
+                        ></i>
+
+                        <p
+                            class="text-sm"
+                        >
+                            Tiada rekod Cuti Tahun (CT) dijumpai bagi tempoh ini.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        document.getElementById(
+            "tableSummary"
+        ).textContent =
+            "0 anggota";
+
+
+        document.getElementById(
+            "jumlahHariSummary"
+        ).textContent =
+            "Jumlah: 0 hari";
+
+
+        return;
+
+    }
+
+
+    /*
+        =============================================
+        ADA DATA
+        =============================================
+    */
+
+    tbody.innerHTML =
+        data
+        .map(
+            function (
+                anggota,
+                index
+            ) {
+
+                return `
+
+                    <tr>
+
+                        <!-- BIL -->
+
+                        <td>
+                            ${index + 1}
+                        </td>
+
+
+                        <!-- NO ANGGOTA -->
+
+                        <td>
+                            ${escapeHtml(
+                                anggota.no_anggota
+                            )}
+                        </td>
+
+
+                        <!-- NO SKB -->
+
+                        <td
+                            class="font-semibold text-teal-300"
+                        >
+                            ${escapeHtml(
+                                anggota.no_skb
+                            )}
+                        </td>
+
+
+                        <!-- NAMA -->
+
+                        <td
+                            class="nama-cell"
+                        >
+                            ${escapeHtml(
+                                anggota.nama
+                            )}
+                        </td>
+
+
+                        <!-- TARIKH -->
+
+                        <td
+                            class="tarikh-cell"
+                        >
+                            ${escapeHtml(
+                                anggota.tarikhPaparan
+                            )}
+                        </td>
+
+
+                        <!-- BILANGAN HARI -->
+
+                        <td>
+
+                            <span
+                                class="hari-badge"
+                            >
+                                ${anggota.bilanganHari}
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        )
+        .join(
+            ""
+        );
+
+
+    /*
+        Jumlah keseluruhan hari CT.
+    */
+
+    const jumlahHari =
+        data.reduce(
+            function (
+                total,
+                anggota
+            ) {
+
+                return (
+                    total +
+                    Number(
+                        anggota.bilanganHari ||
+                        0
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    document.getElementById(
+        "tableSummary"
+    ).textContent =
+        data.length +
+        " anggota mempunyai rekod Cuti Tahun";
+
+
+    document.getElementById(
+        "jumlahHariSummary"
+    ).textContent =
+        "Jumlah: " +
+        jumlahHari +
+        " hari";
+
+}
+
+
+/* =====================================================
+   STATISTIK
+===================================================== */
+
+function kemasKiniStatistik(
+    data
+) {
+
+    const jumlahAnggota =
+        data.length;
+
+
+    const jumlahHari =
+        data.reduce(
+            function (
+                total,
+                anggota
+            ) {
+
+                return (
+                    total +
+                    Number(
+                        anggota.bilanganHari ||
+                        0
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    document.getElementById(
+        "statCT"
+    ).textContent =
+        jumlahAnggota;
+
+
+    document.getElementById(
+        "statHariCT"
+    ).textContent =
+        jumlahHari;
+
+}
+
+
+/* =====================================================
+   TABLE LOADING
+===================================================== */
+
+function setTableLoading(
+    show
+) {
+
+    const loading =
+        document.getElementById(
+            "tableLoading"
+        );
+
+
+    if (!loading) {
+
+        return;
+
+    }
+
+
+    if (show) {
+
+        loading.classList.remove(
+            "hidden-force"
+        );
+
+    } else {
+
+        loading.classList.add(
+            "hidden-force"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(
+        value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function paparToast(
+    message,
+    type = "success"
+) {
+
+    /*
+        Buang toast lama.
+    */
+
+    const old =
+        document.querySelector(
+            ".toast"
+        );
+
+
+    if (old) {
+
+        old.remove();
+
+    }
+
+
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+
+    let icon =
+        "fa-circle-check";
+
+
+    let iconClass =
+        "text-emerald-400";
+
+
+    if (
+        type === "error"
+    ) {
+
+        icon =
+            "fa-circle-xmark";
+
+
+        iconClass =
+            "text-red-400";
+
+    }
+
+
+    toast.className =
+        "toast";
+
+
+    toast.innerHTML = `
+
+        <div
+            class="flex items-start gap-3"
+        >
+
+            <i
+                class="fas ${icon} ${iconClass} mt-0.5"
+            ></i>
+
+
+            <div>
+
+                <p
+                    class="text-sm text-slate-200"
+                >
+                    ${escapeHtml(
+                        message
+                    )}
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                onclick="this.closest('.toast').remove()"
+                class="ml-auto text-slate-500 hover:text-white"
+            >
+
+                <i
+                    class="fas fa-xmark"
+                ></i>
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        toast
+    );
+
+
+    setTimeout(
+        function () {
+
+            if (
+                toast.parentElement
+            ) {
+
+                toast.remove();
+
+            }
+
+        },
+        4500
+    );
+
+}
+
+</script>
+
+</body>
+</html>
+   
