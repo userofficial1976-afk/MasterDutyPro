@@ -213,7 +213,7 @@ tbody tr:hover{background:rgba(0,220,255,.055)}
       <nav>
         <div class="section-label">Menu Utama</div>
         <a href="#" onclick="bukaDashboardMengikutRole();return false;" id="menuDashboard" class="sidebar-link"><i class="fas fa-house"></i>Dashboard</a>
-        <a href="pengurusan-anggota.html" id="menuAnggota" class="sidebar-link"><i class="fas fa-users"></i>Pengurusan Anggota</a>
+        <a href="pengurusan-anggota.html" id="menuAnggota" class="sidebar-link" style="display:none"><i class="fas fa-users"></i>Pengurusan Anggota</a>
         <a href="kod-duty.html" class="sidebar-link"><i class="fas fa-code"></i>Kod Waktu Kerja</a>
         <a href="kod-tempat-kerja.html" class="sidebar-link active"><i class="fas fa-location-dot"></i>Kod Tempat Kerja</a>
         <a href="jadual-duty.html" class="sidebar-link"><i class="fas fa-calendar-check"></i>Pengisian Jadual Tugas</a>
@@ -285,7 +285,31 @@ function paparMaklumatPengguna(){if(!currentUser)return;const nama=currentUser.n
 function kemasKiniJam(){const now=new Date(),d=document.getElementById("currentDate"),t=document.getElementById("currentTime");if(d)d.textContent=now.toLocaleDateString("ms-MY",{weekday:"short",day:"2-digit",month:"short",year:"numeric"}).toUpperCase();if(t)t.textContent=now.toLocaleTimeString("ms-MY",{hour12:false});}
 function roleSemasa(){return String(currentUser?.role||currentUser?.jawatan||"").trim().toLowerCase().replace(/_/g," ").replace(/\s+/g," ");}
 function isAdminSemasa(){const role=roleSemasa();return !!(currentUser&&(currentUser.isAdmin===true||role==="admin"||role==="administrator"));}
-function kawalMenuMengikutPeranan(){if(!currentUser)return;const role=roleSemasa(),jawatan=String(currentUser.jawatan||"").trim().toUpperCase(),menuMingguan=document.getElementById("menuMingguan"),menuAnggota=document.getElementById("menuAnggota");const bolehLihatPengurusanAnggota=isAdminSemasa()||["POW","PPOW","PTW"].includes(jawatan)||["pow","ppow","ptw"].includes(role);if(menuAnggota)menuAnggota.style.display=bolehLihatPengurusanAnggota?"":"none";if(menuMingguan)menuMingguan.style.display=(isAdminSemasa()||role==="ketua unit")?"":"none";if(isAdminSemasa())return;["menuDashboard","menuLaporan","menuTetapan"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="none";});const mobileKlm=document.getElementById("mobile-menu-klm");if(mobileKlm&&role!=="ketua unit")mobileKlm.style.display="none";}
+function kawalMenuMengikutPeranan(){
+  const menuAnggota=document.getElementById("menuAnggota");
+  const menuMingguan=document.getElementById("menuMingguan");
+  // Default: sembunyikan menu sehingga peranan pengguna disahkan.
+  if(menuAnggota) menuAnggota.style.display="none";
+  if(!currentUser) return;
+
+  const norm=v=>String(v||"").trim().toUpperCase().replace(/[_\s.-]+/g,"");
+  const roleRaw=norm(currentUser.role);
+  const jawatanRaw=norm(currentUser.jawatan);
+  const bolehLihatPengurusanAnggota=
+    currentUser.isAdmin===true ||
+    ["ADMIN","ADMINISTRATOR"].includes(roleRaw) ||
+    ["ADMIN","ADMINISTRATOR"].includes(jawatanRaw) ||
+    ["POW","PPOW","PTW"].includes(roleRaw) ||
+    ["POW","PPOW","PTW"].includes(jawatanRaw);
+
+  if(menuAnggota) menuAnggota.style.display=bolehLihatPengurusanAnggota?"flex":"none";
+  const role=roleSemasa();
+  if(menuMingguan) menuMingguan.style.display=(isAdminSemasa()||role==="ketua unit")?"flex":"none";
+  if(isAdminSemasa()) return;
+  ["menuDashboard","menuLaporan","menuTetapan"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="none";});
+  const mobileKlm=document.getElementById("mobile-menu-klm");
+  if(mobileKlm&&role!=="ketua unit")mobileKlm.style.display="none";
+}
 function bukaDashboardMengikutRole(){window.location.href=isAdminSemasa()?"dashboard.html":"dashboardkpku.html";}
 function logKeluar(){localStorage.removeItem("mdp_user");window.location.href="login.html";}
 function applyRoleAccess(){if(!currentUser)return;const unitSelect=document.getElementById("unit"),filterUnit=document.getElementById("filterUnit");if(isAdminSemasa())return;const userUnit=currentUser.unit||"";if(userUnit){unitSelect.innerHTML="";const opt1=document.createElement("option");opt1.value=userUnit;opt1.textContent=userUnit;unitSelect.appendChild(opt1);unitSelect.value=userUnit;unitSelect.disabled=true;filterUnit.innerHTML="";const opt2=document.createElement("option");opt2.value=userUnit;opt2.textContent=userUnit;filterUnit.appendChild(opt2);filterUnit.value=userUnit;filterUnit.disabled=true;}}
