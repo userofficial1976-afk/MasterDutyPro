@@ -286,7 +286,7 @@ function kemasKiniJam(){const now=new Date(),d=document.getElementById("currentD
 function roleSemasa(){return String(currentUser?.role||currentUser?.jawatan||"").trim().toLowerCase().replace(/_/g," ").replace(/\s+/g," ");}
 function isAdminSemasa(){const role=roleSemasa();return !!(currentUser&&(currentUser.isAdmin===true||role==="admin"||role==="administrator"));}
 function kawalMenuMengikutPeranan(){
-function kawalMenuMengikutPeranan() {
+
     if (!currentUser) return;
 
     const norm = value => String(value || "")
