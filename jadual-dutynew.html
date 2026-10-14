@@ -363,7 +363,40 @@ body>.flex{position:relative;z-index:1;min-height:100vh}
 @media(max-width:1023px){body{padding-bottom:76px!important}.sidebar{display:none!important}.main-content{margin-left:0!important}.mobile-bottom{display:flex!important}.top-user-text{display:none!important}.topbar{padding:12px 14px!important}.topbar .header-date{display:none!important}.topbar .save-duty-btn{padding:10px 11px!important;font-size:10px!important}}
 @media(max-width:560px){.topbar{gap:8px!important}.topbar .brand-font{font-size:12px!important}.topbar .save-duty-btn{padding:9px 8px!important;font-size:9px!important}.topbar .save-duty-btn i{margin-right:4px!important}}
 
-  </style>
+  
+/* =========================================================
+   PEMBETULAN KHUSUS: FONT PENGGUNA AKTIF, HEADER FIXED,
+   DAN JARAK HEADER KE KANDUNGAN
+========================================================= */
+.sidebar .small-label{
+  font-family:Orbitron,Inter,"Segoe UI",sans-serif!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  letter-spacing:.12em!important;
+  line-height:1.5!important;
+  text-transform:uppercase!important;
+  color:#00dff7!important;
+}
+.topbar{
+  position:fixed!important;
+  top:0!important;
+  left:16rem!important;
+  right:0!important;
+  width:auto!important;
+  z-index:1000!important;
+}
+main>.p-3{
+  padding-top:88px!important;
+}
+@media(max-width:1023px){
+  .topbar{left:0!important;right:0!important;width:100%!important}
+  main>.p-3{padding-top:82px!important}
+}
+@media(max-width:560px){
+  main>.p-3{padding-top:78px!important}
+}
+
+</style>
 </head>
 <body class="font-sans text-slate-200">
 
