@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="logomdp.png">
+<link rel="apple-touch-icon" href="logomdp.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#020817">
+<title>Kod Duty — Master Duty Pro</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#020817;color:#d9f5ff;font-family:Inter,"Segoe UI",sans-serif}
+.mobile-bottom{display:none}
+/* =========================================================
+   MASTER DUTY PRO — DASHBOARD COMMAND CENTER V2
+   SAMAKAN IDENTITI VISUAL DENGAN dashboardkpku.html
+   GAYA SAHAJA — LOGIK / JAVASCRIPT ASAL DIKEKALKAN
+========================================================= */
+:root{
+  --mdp-bg:#020817;
+  --mdp-panel:rgba(4,20,43,.88);
+  --mdp-panel2:rgba(5,31,57,.78);
+  --mdp-cyan:#00eaff;
+  --mdp-cyan2:#00a9ff;
+  --mdp-orange:#ff7417;
+  --mdp-line:rgba(0,234,255,.42);
+  --mdp-muted:#83b7d2;
+  --mdp-text:#d9f5ff;
+}
+html{background:var(--mdp-bg)!important;scroll-behavior:smooth}
+body{
+  margin:0!important;
+  color:var(--mdp-text)!important;
+  font-family:Inter,"Segoe UI",system-ui,sans-serif!important;
+  background-color:var(--mdp-bg)!important;
+  background-image:linear-gradient(rgba(0,130,190,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,130,190,.045) 1px,transparent 1px),radial-gradient(ellipse at 60% 0%,#07315a 0%,#020817 55%)!important;
+  background-size:28px 28px,28px 28px,auto!important;
+  min-height:100vh;
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.09) 4px 5px);opacity:.45}
+body>.flex{position:relative;z-index:1;min-height:100vh}
+.brand-font,h1,h2,h3,.section-label,.panel-title{font-family:Orbitron,Inter,sans-serif!important;letter-spacing:.045em}
+.sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 14px!important;color:#9fc8dc!important;border:1px solid transparent!important;border-bottom-color:rgba(0,200,255,.12)!important;border-radius:0!important;font-size:13px!important;transition:all .2s ease!important;text-decoration:none}
+.sidebar-link i{width:22px;text-align:center;font-size:17px;color:#8edcf4}
+.sidebar-link:hover,.sidebar-link.active{color:#fff!important;background:linear-gradient(90deg,rgba(0,220,255,.28),rgba(0,110,180,.06))!important;border:1px solid rgba(0,234,255,.65)!important;box-shadow:inset 0 0 18px rgba(0,234,255,.12),0 0 14px rgba(0,234,255,.08)!important;transform:none!important}
+.sidebar-link.active i{color:var(--mdp-cyan)!important;filter:drop-shadow(0 0 5px var(--mdp-cyan))}
+aside.glass{width:16rem!important;background:linear-gradient(180deg,rgba(3,18,39,.98),rgba(2,12,28,.97))!important;border-right:1px solid var(--mdp-line)!important;box-shadow:8px 0 35px rgba(0,180,255,.06)!important;border-radius:0!important;backdrop-filter:none!important}
+aside .rounded-xl{border-radius:2px!important}
+header.glass{background:rgba(2,11,26,.92)!important;border-bottom:1px solid rgba(0,234,255,.38)!important;box-shadow:0 8px 30px rgba(0,0,0,.18)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;border-radius:0!important}
+header h2{font-family:Orbitron,Inter,sans-serif!important;font-size:clamp(14px,1.4vw,19px)!important;letter-spacing:.07em!important;color:#aaf7ff!important;text-transform:uppercase}
+header p{font-size:10px!important;letter-spacing:.12em!important;color:#83b7d2!important;text-transform:uppercase}
+main{position:relative;color:var(--mdp-text)!important;padding-top:0!important}
+main>.p-3{padding-top:112px!important;position:relative;z-index:1}
+main .glass{
+  position:relative;
+  background:linear-gradient(145deg,rgba(5,29,57,.94),rgba(2,13,32,.94))!important;
+  border:1px solid rgba(0,220,255,.55)!important;
+  border-radius:0!important;
+  box-shadow:inset 0 0 18px rgba(0,190,255,.07),0 0 16px rgba(0,190,255,.06)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  clip-path:polygon(0 13px,13px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 13px),calc(100% - 13px) 100%,13px 100%,0 calc(100% - 13px));
+  transition:box-shadow .22s ease,border-color .22s ease!important;
+}
+main .glass:before{content:"";position:absolute;left:18px;right:18px;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--mdp-cyan),transparent);opacity:.8;pointer-events:none}
+main .glass:hover{border-color:rgba(0,234,255,.75)!important;box-shadow:inset 0 0 20px rgba(0,190,255,.09),0 0 22px rgba(0,190,255,.1)!important;transform:none!important}
+main h3{font-size:12px!important;letter-spacing:.08em!important;text-transform:uppercase;color:#43eaff!important;border-bottom:1px solid rgba(0,220,255,.25);padding-bottom:12px}
+main h3>span{font-family:Orbitron,Inter,sans-serif!important;background:rgba(0,234,255,.12)!important;color:var(--mdp-cyan)!important;border:1px solid rgba(0,234,255,.42)}
+main h4{color:#43eaff!important;font-family:Orbitron,Inter,sans-serif!important;font-size:11px!important;letter-spacing:.06em;text-transform:uppercase}
+main .bg-slate-800\/30{background:rgba(3,18,39,.72)!important;border-color:rgba(0,220,255,.25)!important;border-radius:0!important}
+main .bg-cyan-500\/5,main .bg-purple-500\/5,main .bg-blue-500\/5{background:linear-gradient(145deg,rgba(5,29,57,.94),rgba(2,13,32,.94))!important;border-color:rgba(0,220,255,.55)!important}
+main .border-slate-700{border-color:rgba(0,220,255,.25)!important}
+input,select,textarea{
+  background:rgba(2,12,28,.9)!important;color:#d9f5ff!important;
+  border:1px solid rgba(0,220,255,.3)!important;border-radius:3px!important;
+  min-height:42px;padding:.65rem .85rem!important;
+  font-family:Inter,"Segoe UI",sans-serif!important;
+  transition:border-color .2s ease,box-shadow .2s ease!important;
+}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--mdp-cyan)!important;box-shadow:0 0 0 2px rgba(0,234,255,.13),0 0 12px rgba(0,234,255,.08)!important}
+input:disabled,select:disabled,textarea:disabled{opacity:.55;cursor:not-allowed}
+label{color:#8cb9d0!important;font-size:10px!important;text-transform:uppercase;letter-spacing:.1em;font-weight:700!important}
+button{border-radius:3px!important;font-family:Inter,"Segoe UI",sans-serif!important;transition:filter .18s ease,box-shadow .18s ease,transform .18s ease!important}
+button:hover{filter:brightness(1.1);box-shadow:0 0 16px rgba(0,234,255,.14)}
+.bg-teal-500,.bg-teal-600,.bg-teal-700{background:linear-gradient(90deg,rgba(0,145,200,.48),rgba(0,234,255,.16))!important;color:#e5fbff!important;border:1px solid rgba(0,234,255,.65)!important}
+.text-teal-400,.text-teal-450,.text-teal-500,.text-cyan-400,.text-cyan-300{color:var(--mdp-cyan)!important}
+.text-purple-400,.text-blue-400{color:#65dff6!important}
+.border-teal-550\/10,.border-teal-550\/20,.border-cyan-500\/20,.border-purple-500\/20,.border-blue-500\/20{border-color:rgba(0,220,255,.3)!important}
+.bg-white\/5{background:rgba(0,150,200,.08)!important}
+.text-slate-500{color:#7daec7!important}.text-slate-400{color:#9fc8dc!important}.text-white{color:#f3fcff!important}
+.rounded-full{border-radius:3px!important}
+main .w-8.h-8{box-shadow:0 0 12px rgba(0,234,255,.08)}
+.mobile-bottom{background:rgba(2,12,28,.97)!important;border-top:1px solid rgba(0,234,255,.45)!important;backdrop-filter:blur(15px)!important;-webkit-backdrop-filter:blur(15px)!important;box-shadow:0 -8px 28px rgba(0,0,0,.28)!important}
+.mobile-nav-item{color:#84b6cd!important;transition:color .2s ease,transform .2s ease!important}
+.mobile-nav-item.active{color:var(--mdp-cyan)!important;text-shadow:0 0 10px rgba(0,234,255,.5)!important}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-track{background:#061021}::-webkit-scrollbar-thumb{background:linear-gradient(var(--mdp-cyan),var(--mdp-cyan2));border:2px solid #061021;border-radius:20px}
+@media(max-width:1023px){
+  main{margin-left:0!important;padding-top:0!important}
+  main>.p-3{padding:102px 14px 20px!important}
+  header.glass{left:0!important;padding:12px 14px!important}
+  header .flex.flex-col.lg\:flex-row{gap:10px!important}
+  aside.glass{display:none!important}
+  .mobile-bottom{height:68px!important;padding-bottom:env(safe-area-inset-bottom);justify-content:space-around!important}
+  body{padding-bottom:78px!important}
+  main .glass{clip-path:polygon(0 10px,10px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px))}
+}
+@media(max-width:560px){main>.p-3{padding-left:10px!important;padding-right:10px!important}main h3{font-size:11px!important}input,select{font-size:12px!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+  
+/* =========================================================
+   DASHBOARD COMMAND CENTER V2 — SHARED SIDEBAR + HEADER
+   Header/sidebar design intentionally aligned with dashboardkpku.html
+========================================================= */
+:root{--bg:#020817;--panel:rgba(4,20,43,.88);--panel2:rgba(5,31,57,.78);--cyan:#00eaff;--cyan2:#00a9ff;--orange:#ff7417;--line:rgba(0,234,255,.42);--muted:#83b7d2}
+body{background-color:var(--bg)!important;color:#d9f5ff!important;font-family:Inter,"Segoe UI",sans-serif!important;background-image:linear-gradient(rgba(0,130,190,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,130,190,.045) 1px,transparent 1px),radial-gradient(ellipse at 60% 0%,#07315a 0%,#020817 55%)!important;background-size:28px 28px,28px 28px,auto!important}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.09) 4px 5px);opacity:.45}
+body>.flex{position:relative;z-index:1;min-height:100vh}
+.sidebar{background:linear-gradient(180deg,rgba(3,18,39,.98),rgba(2,12,28,.97))!important;border-right:1px solid var(--line)!important;box-shadow:8px 0 35px rgba(0,180,255,.06)!important}
+.brand-font{font-family:Orbitron,Inter,sans-serif!important;letter-spacing:.08em!important}
+.section-label{font-family:Orbitron,sans-serif!important;font-size:10px!important;letter-spacing:.18em!important;color:#00dff7!important;text-transform:uppercase!important;padding:22px 12px 8px!important}
+.sidebar-link{display:flex!important;align-items:center!important;gap:12px!important;padding:12px 14px!important;color:#9fc8dc!important;border:1px solid transparent!important;border-bottom-color:rgba(0,200,255,.12)!important;border-radius:0!important;transition:.2s!important;text-decoration:none!important;font-size:13px!important;background:transparent!important}
+.sidebar-link i{width:22px!important;text-align:center!important;font-size:17px!important;color:#8edcf4!important}
+.sidebar-link:hover,.sidebar-link.active{color:#fff!important;background:linear-gradient(90deg,rgba(0,220,255,.28),rgba(0,110,180,.06))!important;border:1px solid rgba(0,234,255,.65)!important;box-shadow:inset 0 0 18px rgba(0,234,255,.12),0 0 14px rgba(0,234,255,.08)!important;transform:none!important}
+.sidebar-link.active i{color:var(--cyan)!important;filter:drop-shadow(0 0 5px var(--cyan))!important}
+.sidebar-link.logout-link,.sidebar-link.logout-link i{color:#ff8a2b!important}
+.topbar{background:rgba(2,11,26,.92)!important;border-bottom:1px solid rgba(0,234,255,.38)!important;box-shadow:0 8px 30px rgba(0,0,0,.18)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important}
+.topbar .brand-font{font-family:Orbitron,sans-serif!important}
+.topbar .save-duty-btn{padding:12px 16px!important;border-radius:3px!important;font-size:12px!important}
+.mobile-bottom{display:none;position:fixed!important;bottom:0!important;left:0!important;right:0!important;height:68px!important;z-index:9999!important;background:rgba(2,12,28,.97)!important;border-top:1px solid rgba(0,234,255,.45)!important;backdrop-filter:blur(15px)!important;-webkit-backdrop-filter:blur(15px)!important;justify-content:space-around!important;align-items:center!important;box-shadow:none!important}
+.mobile-nav-item{flex:1!important;text-align:center!important;text-decoration:none!important;color:#84b6cd!important;font-size:9px!important;display:flex!important;flex-direction:column!important;gap:5px!important;align-items:center!important;justify-content:center!important}
+.mobile-nav-item i{font-size:18px!important}
+.mobile-nav-item.active{color:var(--cyan)!important;text-shadow:0 0 10px rgba(0,234,255,.5)!important}
+.main-content{position:relative;z-index:1;min-width:0}
+@media(max-width:1023px){body{padding-bottom:76px!important}.sidebar{display:none!important}.main-content{margin-left:0!important}.mobile-bottom{display:flex!important}.top-user-text{display:none!important}.topbar{padding:12px 14px!important}.topbar .header-date{display:none!important}.topbar .save-duty-btn{padding:10px 11px!important;font-size:10px!important}}
+@media(max-width:560px){.topbar{gap:8px!important}.topbar .brand-font{font-size:12px!important}.topbar .save-duty-btn{padding:9px 8px!important;font-size:9px!important}.topbar .save-duty-btn i{margin-right:4px!important}}
+
+  
+/* =========================================================
+   PEMBETULAN KHUSUS: FONT PENGGUNA AKTIF, HEADER FIXED,
+   DAN JARAK HEADER KE KANDUNGAN
+========================================================= */
+.sidebar .small-label{
+  font-family:Orbitron,Inter,"Segoe UI",sans-serif!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  letter-spacing:.12em!important;
+  line-height:1.5!important;
+  text-transform:uppercase!important;
+  color:#00dff7!important;
+}
+.topbar{
+  position:fixed!important;
+  top:0!important;
+  left:16rem!important;
+  right:0!important;
+  width:auto!important;
+  z-index:1000!important;
+}
+main>.p-3{
+  padding-top:88px!important;
+}
+@media(max-width:1023px){
+  .topbar{left:0!important;right:0!important;width:100%!important}
+  main>.p-3{padding-top:82px!important}
+}
+@media(max-width:560px){
+  main>.p-3{padding-top:78px!important}
+}
+
+
+/* PENYESUAIAN KHAS HALAMAN KOD DUTY */
+main.main-content>.page-content{padding-top:96px!important;position:relative;z-index:1}
+main .glass{padding:24px}
+.page-title{font-family:Orbitron,Inter,sans-serif!important;font-size:clamp(14px,1.4vw,19px)!important;letter-spacing:.07em!important;color:#aaf7ff!important;text-transform:uppercase}
+.action-btn{background:linear-gradient(120deg,#00c8e8,#1267d6)!important;color:#fff!important;border:1px solid #00eaff!important;padding:11px 16px!important;font-family:Orbitron,Inter,sans-serif!important;font-size:10px!important;letter-spacing:.05em!important;border-radius:2px!important;box-shadow:0 0 15px rgba(0,234,255,.12)}
+.action-btn.secondary{background:rgba(35,55,80,.7)!important;border-color:rgba(131,183,210,.35)!important}
+.table-wrap{overflow-x:auto;border:1px solid rgba(0,220,255,.22)}
+table{min-width:850px;border-collapse:collapse}
+thead{background:rgba(0,190,255,.08)}
+thead th{font-family:Orbitron,Inter,sans-serif;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#83dff4!important;white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(0,220,255,.12)}
+tbody tr:hover{background:rgba(0,220,255,.055)}
+.status-pill{display:inline-block;padding:5px 9px;border:1px solid currentColor;font-size:10px;letter-spacing:.05em;text-transform:uppercase}
+.form-label{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#83b7d2;margin-bottom:8px}
+.user-panel{border:1px solid rgba(0,234,255,.3);background:rgba(0,80,120,.13);padding:12px}
+@media(max-width:1023px){main.main-content>.page-content{padding-top:82px!important;padding-bottom:24px!important}.topbar{padding:12px 14px!important}.topbar .header-date{display:none!important}.top-user-text{display:none!important}.mobile-bottom{display:flex!important}.page-title{font-size:12px!important}.main-content{margin-left:0!important}}
+@media(max-width:560px){main.main-content>.page-content{padding-top:76px!important}.topbar{gap:8px!important}.topbar .brand-font{font-size:11px!important}.action-btn{padding:9px 10px!important;font-size:9px!important}.main-content .glass{padding:16px!important}}
+</style>
+</head>
+<body>
+<div class="flex min-h-screen">
+  <aside class="sidebar fixed left-0 top-0 z-40 hidden lg:flex h-screen w-64 flex-col overflow-y-auto">
+    <div class="p-4">
+      <div class="flex items-center gap-3 px-2 py-4 mb-3">
+        <img src="logomdp.png" alt="Logo Master Duty Pro" class="w-12 h-12 object-contain" onerror="this.style.display='none'">
+        <div><div class="brand-font text-cyan-300 text-sm font-bold">MASTER DUTY PRO</div><div class="text-[10px] tracking-[.2em] text-sky-300 mt-1">WILAYAH TERENGGANU</div></div>
+      </div>
+      <div class="user-panel mb-4">
+        <div class="small-label">Pengguna Aktif</div>
+        <div id="sidebarNamaPengguna" class="text-sm font-bold text-white mt-1 truncate">-</div>
+        <div id="sidebarJawatanPengguna" class="text-xs text-cyan-300 mt-1">-</div>
+      </div>
+      <nav>
+        <div class="section-label">Menu Utama</div>
+        <a href="#" onclick="bukaDashboardMengikutRole();return false;" id="menuDashboard" class="sidebar-link"><i class="fas fa-house"></i>Dashboard</a>
+        <a href="pengurusan-anggota.html" id="menuAnggota" class="sidebar-link"><i class="fas fa-users"></i>Pengurusan Anggota</a>
+        <a href="kod-duty.html" class="sidebar-link active"><i class="fas fa-code"></i>Kod Waktu Kerja</a>
+        <a href="kod-tempat-kerja.html" class="sidebar-link"><i class="fas fa-location-dot"></i>Kod Tempat Kerja</a>
+        <a href="jadual-duty.html" class="sidebar-link"><i class="fas fa-calendar-check"></i>Pengisian Jadual Tugas</a>
+        <div class="section-label">Laporan</div>
+        <a href="laporan-wilayah.html" id="menuLaporan" class="sidebar-link"><i class="fas fa-file-lines"></i>Laporan Wilayah</a>
+        <a href="klm-mingguan.html" id="menuMingguan" class="sidebar-link"><i class="fas fa-users"></i>KLM Mingguan</a>
+        <a href="anggaran-rk02.html" class="sidebar-link"><i class="fas fa-chart-column"></i>Anggaran RK02</a>
+        <a href="anggaran-rk01.html" class="sidebar-link"><i class="fas fa-chart-line"></i>Anggaran RK01</a>
+        <div class="section-label">Sistem</div>
+        <a href="#" id="menuTetapan" class="sidebar-link"><i class="fas fa-gear"></i>Tetapan</a>
+        <a href="#" onclick="logKeluar();return false;" class="sidebar-link logout-link"><i class="fas fa-right-from-bracket"></i>Log Keluar</a>
+      </nav>
+    </div>
+    <div class="mt-auto px-5 py-4 border-t border-cyan-900/60 text-[9px] tracking-[.2em] text-cyan-500">DISIPLIN • KOMITMEN • BERJASA</div>
+  </aside>
+
+  <main class="main-content flex-1 lg:ml-64 min-h-screen">
+    <header class="topbar fixed top-0 left-64 right-0 z-50 flex items-center justify-between gap-4 px-6 py-4 border-b border-cyan-800/60 bg-[#020b1a]/90 backdrop-blur-xl">
+      <div class="min-w-0"><div class="brand-font text-cyan-300 text-base md:text-lg font-bold">MASTER DUTY PRO <span class="text-orange-400">/</span> KOD WAKTU KERJA</div><div class="text-[10px] md:text-xs text-sky-200 mt-1 tracking-wider">PENGURUSAN KOD DUTY MENGIKUT UNIT</div></div>
+      <div class="flex items-center gap-3 md:gap-5">
+        <div class="hidden sm:flex items-center gap-2 text-[10px] md:text-xs text-teal-300 border border-teal-500/40 bg-teal-950/40 px-3 py-2"><span class="w-2 h-2 bg-teal-300 rounded-full animate-pulse"></span>SYSTEM ONLINE</div>
+        <div class="header-date hidden md:block text-right"><div id="currentDate" class="text-xs text-sky-200">-</div><div id="currentTime" class="brand-font text-cyan-300 text-sm mt-1">--:--:--</div></div>
+        <div class="flex items-center gap-2 border border-cyan-800/70 bg-sky-950/40 p-2"><div class="w-9 h-9 flex items-center justify-center rounded-full border border-cyan-400 text-cyan-300"><i class="fas fa-user-astronaut"></i></div><div class="top-user-text hidden sm:block"><div id="userName" class="text-xs font-bold text-white max-w-[150px] truncate">-</div><div id="userJawatan" class="text-[10px] text-cyan-300">-</div></div></div>
+      </div>
+    </header>
+
+    <div class="page-content p-3 sm:p-6 space-y-5">
+      <section class="glass">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+          <div><div class="text-[10px] tracking-[.2em] text-cyan-400 mb-2">CONFIGURATION / DUTY CODES</div><h2 class="page-title">Tambah / Kemaskini Kod Duty</h2><p class="text-xs text-sky-200 mt-2">Tetapkan waktu tugasan, jam kerja dan jam KLM mengikut unit.</p></div>
+          <div class="text-[10px] tracking-[.12em] text-sky-300 border border-cyan-900 px-3 py-2"><i class="fas fa-database mr-2 text-cyan-300"></i>DATA KOD DUTY</div>
+        </div>
+        <div id="mesej" class="mb-4"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          <div><label class="form-label" for="unit">Unit</label><select id="unit" class="w-full py-3 px-4"><option value="">-- Pilih Unit --</option><option value="Jerangau">Jerangau</option><option value="Chador">Chador</option><option value="Terengganu">Terengganu</option><option value="Setiu">Setiu</option><option value="Rantau Abang">Rantau Abang</option><option value="Kerteh">Kerteh</option><option value="Pejabat">Pejabat</option><option value="Risik">Risik</option></select></div>
+          <div><label class="form-label" for="kod">Kod Duty</label><input type="text" id="kod" placeholder="Contoh: A" class="w-full py-3 px-4 uppercase"></div>
+          <div><label class="form-label" for="waktuTugasan">Waktu Tugasan</label><input type="text" id="waktuTugasan" placeholder="Contoh: 0700-1500" class="w-full py-3 px-4"></div>
+          <div><label class="form-label" for="jamKerja">Jam Kerja</label><input type="number" id="jamKerja" min="0" step="0.5" placeholder="8" class="w-full py-3 px-4"></div>
+          <div><label class="form-label" for="jamKlm">Jam KLM</label><input type="number" id="jamKlm" min="0" step="0.5" value="0" class="w-full py-3 px-4"></div>
+          <div><label class="form-label" for="status">Status</label><select id="status" class="w-full py-3 px-4"><option value="Aktif">Aktif</option><option value="Tidak Aktif">Tidak Aktif</option></select></div>
+        </div>
+        <div class="flex flex-wrap gap-3 mt-6"><button onclick="simpanKodDuty()" class="action-btn"><i class="fas fa-floppy-disk mr-2"></i>SIMPAN KOD DUTY</button><button id="btnBatal" onclick="batalEdit()" class="action-btn secondary hidden"><i class="fas fa-xmark mr-2"></i>BATAL EDIT</button></div>
+      </section>
+
+      <section class="glass">
+        <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-5"><div><div class="text-[10px] tracking-[.2em] text-cyan-400 mb-2">DATABASE / RECORDS</div><h2 class="page-title">Senarai Kod Duty</h2><p class="text-xs text-sky-200 mt-2">Cari, tapis, edit atau padam rekod kod duty.</p></div><div class="flex flex-col sm:flex-row gap-3"><select id="filterUnit" onchange="paparKodDuty()" class="py-2.5 px-4 text-sm"><option value="">Semua Unit</option><option value="Jerangau">Jerangau</option><option value="Chador">Chador</option><option value="Terengganu">Terengganu</option><option value="Setiu">Setiu</option><option value="Rantau Abang">Rantau Abang</option><option value="Kerteh">Kerteh</option><option value="Pejabat">Pejabat</option><option value="Risik">Risik</option></select><input type="text" id="cariKod" placeholder="Cari kod..." oninput="paparKodDuty()" class="py-2.5 px-4 text-sm"></div></div>
+        <div class="table-wrap"><table class="w-full text-sm"><thead><tr><th class="text-left py-3 px-3">Bil</th><th class="text-left py-3 px-3">Unit</th><th class="text-left py-3 px-3">Kod</th><th class="text-left py-3 px-3">Waktu Tugasan</th><th class="text-left py-3 px-3">Jam Kerja</th><th class="text-left py-3 px-3">Jam KLM</th><th class="text-left py-3 px-3">Status</th><th class="text-left py-3 px-3">Tindakan</th></tr></thead><tbody id="senaraiKodDuty"><tr><td colspan="8" class="py-8 text-center text-slate-500">Memuatkan data...</td></tr></tbody></table></div>
+      </section>
+      <div class="text-center text-sky-700 text-[10px] tracking-[.15em] py-3">MASTER DUTY PRO — WILAYAH TERENGGANU © 2026</div>
+    </div>
+  </main>
+</div>
+
+<nav class="mobile-bottom">
+  <a href="#" onclick="bukaDashboardMengikutRole();return false;" class="mobile-nav-item"><i class="fas fa-house"></i><span>Dash</span></a>
+  <a href="jadual-duty.html" class="mobile-nav-item"><i class="fas fa-calendar-check"></i><span>Duty</span></a>
+  <a href="klm-mingguan.html" id="mobile-menu-klm" class="mobile-nav-item"><i class="fas fa-file-lines"></i><span>KLM</span></a>
+  <a href="anggaran-rk01.html" class="mobile-nav-item"><i class="fas fa-chart-line"></i><span>RK01</span></a>
+  <a href="anggaran-rk02.html" class="mobile-nav-item"><i class="fas fa-chart-column"></i><span>RK02</span></a>
+  <a href="#" onclick="logKeluar();return false;" class="mobile-nav-item"><i class="fas fa-right-from-bracket"></i><span>Keluar</span></a>
+</nav>
+
+<script>
+// Supabase: kekalkan tetapan projek asal halaman Kod Duty
+const SUPABASE_URL = "https://nlwrrrwkjpktrifxeymw.supabase.co";
+const SUPABASE_KEY = "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SENARAI_UNIT = ["Jerangau","Chador","Terengganu","Setiu","Rantau Abang","Kerteh","Pejabat","Risik"];
+let unitLama = "", kodLama = "", sedangEdit = false, currentUser = null;
+
+document.addEventListener("DOMContentLoaded", function(){
+  currentUser = bacaPengguna();
+  if(!currentUser){window.location.href="login.html";return;}
+  paparMaklumatPengguna(); kawalMenuMengikutPeranan(); applyRoleAccess(); kemasKiniJam(); setInterval(kemasKiniJam,1000); paparKodDuty();
+});
+function bacaPengguna(){try{const data=localStorage.getItem("mdp_user");return data?JSON.parse(data):null;}catch{return null;}}
+function paparMaklumatPengguna(){if(!currentUser)return;const nama=currentUser.name||currentUser.noSkb||"-", jawatan=currentUser.jawatan||"-";document.getElementById("userName").textContent=nama;document.getElementById("userJawatan").textContent=jawatan;document.getElementById("sidebarNamaPengguna").textContent=nama;document.getElementById("sidebarJawatanPengguna").textContent=jawatan;}
+function kemasKiniJam(){const now=new Date();const d=document.getElementById("currentDate"),t=document.getElementById("currentTime");if(d)d.textContent=now.toLocaleDateString("ms-MY",{weekday:"short",day:"2-digit",month:"short",year:"numeric"}).toUpperCase();if(t)t.textContent=now.toLocaleTimeString("ms-MY",{hour12:false});}
+function roleSemasa(){return String(currentUser?.role||currentUser?.jawatan||"").trim().toLowerCase().replace(/_/g," ").replace(/\s+/g," ");}
+function kawalMenuMengikutPeranan(){if(!currentUser)return;const role=roleSemasa();const menuMingguan=document.getElementById("menuMingguan");if(menuMingguan){const bolehKLM=currentUser.isAdmin===true||role==="admin"||role==="administrator"||role==="ketua unit";menuMingguan.style.display=bolehKLM?"":"none";}const isAdmin=currentUser.isAdmin===true||role==="admin"||role==="administrator";if(isAdmin)return;["menuDashboard","menuAnggota","menuLaporan","menuTetapan"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="none";});const mobileKlm=document.getElementById("mobile-menu-klm");if(mobileKlm&&!(role==="ketua unit"))mobileKlm.style.display="none";}
+function bukaDashboardMengikutRole(){const role=roleSemasa();window.location.href=(currentUser&&(currentUser.isAdmin===true||role==="admin"||role==="administrator"))?"dashboard.html":"dashboardkpku.html";}
+function logKeluar(){localStorage.removeItem("mdp_user");window.location.href="login.html";}
+function applyRoleAccess(){if(!currentUser)return;const unitSelect=document.getElementById("unit"),filterUnit=document.getElementById("filterUnit");const role=roleSemasa();if(currentUser.isAdmin===true||role==="admin"||role==="administrator")return;const userUnit=currentUser.unit||"";if(userUnit){unitSelect.innerHTML=`<option value="${userUnit}">${userUnit}</option>`;unitSelect.value=userUnit;unitSelect.disabled=true;filterUnit.innerHTML=`<option value="${userUnit}">${userUnit}</option>`;filterUnit.value=userUnit;filterUnit.disabled=true;}}
+function paparMesej(mesej,jenis="success"){const el=document.getElementById("mesej");const warna=jenis==="success"?"bg-emerald-500/15 text-emerald-300 border-emerald-400/40":"bg-red-500/15 text-red-300 border-red-400/40";el.innerHTML=`<div class="border px-4 py-3 text-sm ${warna}">${mesej}</div>`;setTimeout(()=>el.innerHTML="",4000);}
+function isAdminSemasa(){const role=roleSemasa();return !!(currentUser&&(currentUser.isAdmin===true||role==="admin"||role==="administrator"));}
+async function simpanKodDuty(){const unit=document.getElementById("unit").value.trim(),kod=document.getElementById("kod").value.trim().toUpperCase(),waktuTugasan=document.getElementById("waktuTugasan").value.trim(),jamKerja=document.getElementById("jamKerja").value,jamKlm=document.getElementById("jamKlm").value,status=document.getElementById("status").value;if(!unit)return paparMesej("Sila pilih Unit","error");if(!kod)return paparMesej("Sila masukkan Kod Duty","error");if(!waktuTugasan)return paparMesej("Sila masukkan Waktu Tugasan","error");if(jamKerja==="")return paparMesej("Sila masukkan Jam Kerja","error");if(currentUser&&!isAdminSemasa()&&currentUser.unit&&unit!==currentUser.unit)return paparMesej("Anda hanya dibenarkan urus unit sendiri","error");const data={unit,kod,waktu_tugasan:waktuTugasan,jam_kerja:Number(jamKerja),jam_klm:Number(jamKlm||0),status};let result;if(sedangEdit){result=await supabaseClient.from("kod_duty").update(data).eq("unit",unitLama).eq("kod",kodLama);}else{result=await supabaseClient.from("kod_duty").insert([data]);}if(result.error){if(result.error.code==="23505"||result.error.message.toLowerCase().includes("duplicate")){paparMesej(`Kod Duty ${kod} untuk Unit ${unit} telah digunakan`,"error");}else{paparMesej("Gagal simpan: "+result.error.message,"error");}return;}paparMesej(sedangEdit?"Kod Duty berjaya dikemaskini":"Kod Duty berjaya disimpan");kosongkanBorang();paparKodDuty();}
+async function paparKodDuty(){const tbody=document.getElementById("senaraiKodDuty");tbody.innerHTML='<tr><td colspan="8" class="py-8 text-center text-slate-500">Memuatkan data...</td></tr>';let query=supabaseClient.from("kod_duty").select("*").order("unit",{ascending:true}).order("kod",{ascending:true});if(currentUser&&!isAdminSemasa()&&currentUser.unit)query=query.eq("unit",currentUser.unit);const {data,error}=await query;if(error){tbody.innerHTML=`<tr><td colspan="8" class="py-8 text-center text-red-300">Gagal ambil data: ${error.message}</td></tr>`;return;}const filterUnit=document.getElementById("filterUnit").value,cariKod=document.getElementById("cariKod").value.trim().toUpperCase();let senarai=data||[];if(filterUnit)senarai=senarai.filter(i=>i.unit===filterUnit);if(cariKod)senarai=senarai.filter(i=>String(i.kod).toUpperCase().includes(cariKod));if(!senarai.length){tbody.innerHTML='<tr><td colspan="8" class="py-8 text-center text-slate-500">Tiada Kod Duty dijumpai</td></tr>';return;}tbody.innerHTML="";senarai.forEach((item,index)=>{const statusClass=item.status==="Aktif"?"text-emerald-300":"text-red-300";const tr=document.createElement("tr");tr.innerHTML=`<td class="py-3 px-3">${index+1}</td><td class="py-3 px-3 font-semibold text-white">${escapeHTML(item.unit||"")}</td><td class="py-3 px-3 font-bold text-cyan-300">${escapeHTML(item.kod||"")}</td><td class="py-3 px-3">${escapeHTML(item.waktu_tugasan||"")}</td><td class="py-3 px-3">${item.jam_kerja??0}</td><td class="py-3 px-3">${item.jam_klm??0}</td><td class="py-3 px-3"><span class="status-pill ${statusClass}">${escapeHTML(item.status||"")}</span></td><td class="py-3 px-3 whitespace-nowrap"><button data-action="edit" class="text-amber-300 hover:text-amber-200 mr-3 text-xs" type="button"><i class="fas fa-pen-to-square mr-1"></i>Edit</button><button data-action="delete" class="text-red-300 hover:text-red-200 text-xs" type="button"><i class="fas fa-trash mr-1"></i>Padam</button></td>`;tr.querySelector('[data-action="edit"]').addEventListener("click",()=>editKodDuty(item));tr.querySelector('[data-action="delete"]').addEventListener("click",()=>padamKodDuty(item));tbody.appendChild(tr);});}
+function escapeHTML(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
+function editKodDuty(item){if(currentUser&&!isAdminSemasa()&&currentUser.unit&&item.unit!==currentUser.unit){paparMesej("Anda hanya dibenarkan urus unit sendiri","error");return;}sedangEdit=true;unitLama=item.unit;kodLama=item.kod;document.getElementById("unit").value=item.unit||"";document.getElementById("kod").value=item.kod||"";document.getElementById("waktuTugasan").value=item.waktu_tugasan||"";document.getElementById("jamKerja").value=item.jam_kerja??"";document.getElementById("jamKlm").value=item.jam_klm??0;document.getElementById("status").value=item.status||"Aktif";document.getElementById("btnBatal").classList.remove("hidden");document.querySelector(".page-title").textContent="Edit Kod Duty";window.scrollTo({top:0,behavior:"smooth"});}
+function batalEdit(){kosongkanBorang();}
+function kosongkanBorang(){sedangEdit=false;unitLama="";kodLama="";const unitSelect=document.getElementById("unit");if(!unitSelect.disabled)unitSelect.value="";document.getElementById("kod").value="";document.getElementById("waktuTugasan").value="";document.getElementById("jamKerja").value="";document.getElementById("jamKlm").value="0";document.getElementById("status").value="Aktif";document.getElementById("btnBatal").classList.add("hidden");document.querySelector(".page-title").textContent="Tambah / Kemaskini Kod Duty";}
+async function padamKodDuty(item){if(currentUser&&!isAdminSemasa()&&currentUser.unit&&item.unit!==currentUser.unit){paparMesej("Anda hanya dibenarkan urus unit sendiri","error");return;}if(!confirm(`Padam Kod Duty ${item.kod} untuk Unit ${item.unit}?`))return;const {error}=await supabaseClient.from("kod_duty").delete().eq("unit",item.unit).eq("kod",item.kod);if(error){paparMesej("Gagal padam: "+error.message,"error");return;}paparMesej("Kod Duty berjaya dipadam");paparKodDuty();}
+</script>
+</body>
+</html>
