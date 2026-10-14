@@ -31,6 +31,8 @@
 
 
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { background: #0b1220; font-family: 'Segoe UI', system-ui, sans-serif; }
     .glass {
@@ -236,13 +238,110 @@ hr{border-color:rgba(56,232,255,.14)!important}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+
+
+/* =========================================================
+   MASTER DUTY PRO — DASHBOARD COMMAND CENTER V2
+   SAMAKAN IDENTITI VISUAL DENGAN dashboardkpku.html
+   GAYA SAHAJA — LOGIK / JAVASCRIPT ASAL DIKEKALKAN
+========================================================= */
+:root{
+  --mdp-bg:#020817;
+  --mdp-panel:rgba(4,20,43,.88);
+  --mdp-panel2:rgba(5,31,57,.78);
+  --mdp-cyan:#00eaff;
+  --mdp-cyan2:#00a9ff;
+  --mdp-orange:#ff7417;
+  --mdp-line:rgba(0,234,255,.42);
+  --mdp-muted:#83b7d2;
+  --mdp-text:#d9f5ff;
+}
+html{background:var(--mdp-bg)!important;scroll-behavior:smooth}
+body{
+  margin:0!important;
+  color:var(--mdp-text)!important;
+  font-family:Inter,"Segoe UI",system-ui,sans-serif!important;
+  background-color:var(--mdp-bg)!important;
+  background-image:linear-gradient(rgba(0,130,190,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,130,190,.045) 1px,transparent 1px),radial-gradient(ellipse at 60% 0%,#07315a 0%,#020817 55%)!important;
+  background-size:28px 28px,28px 28px,auto!important;
+  min-height:100vh;
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.09) 4px 5px);opacity:.45}
+body>.flex{position:relative;z-index:1;min-height:100vh}
+.brand-font,h1,h2,h3,.section-label,.panel-title{font-family:Orbitron,Inter,sans-serif!important;letter-spacing:.045em}
+.sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 14px!important;color:#9fc8dc!important;border:1px solid transparent!important;border-bottom-color:rgba(0,200,255,.12)!important;border-radius:0!important;font-size:13px!important;transition:all .2s ease!important;text-decoration:none}
+.sidebar-link i{width:22px;text-align:center;font-size:17px;color:#8edcf4}
+.sidebar-link:hover,.sidebar-link.active{color:#fff!important;background:linear-gradient(90deg,rgba(0,220,255,.28),rgba(0,110,180,.06))!important;border:1px solid rgba(0,234,255,.65)!important;box-shadow:inset 0 0 18px rgba(0,234,255,.12),0 0 14px rgba(0,234,255,.08)!important;transform:none!important}
+.sidebar-link.active i{color:var(--mdp-cyan)!important;filter:drop-shadow(0 0 5px var(--mdp-cyan))}
+aside.glass{width:16rem!important;background:linear-gradient(180deg,rgba(3,18,39,.98),rgba(2,12,28,.97))!important;border-right:1px solid var(--mdp-line)!important;box-shadow:8px 0 35px rgba(0,180,255,.06)!important;border-radius:0!important;backdrop-filter:none!important}
+aside .rounded-xl{border-radius:2px!important}
+header.glass{background:rgba(2,11,26,.92)!important;border-bottom:1px solid rgba(0,234,255,.38)!important;box-shadow:0 8px 30px rgba(0,0,0,.18)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;border-radius:0!important}
+header h2{font-family:Orbitron,Inter,sans-serif!important;font-size:clamp(14px,1.4vw,19px)!important;letter-spacing:.07em!important;color:#aaf7ff!important;text-transform:uppercase}
+header p{font-size:10px!important;letter-spacing:.12em!important;color:#83b7d2!important;text-transform:uppercase}
+main{position:relative;color:var(--mdp-text)!important;padding-top:0!important}
+main>.p-3{padding-top:112px!important;position:relative;z-index:1}
+main .glass{
+  position:relative;
+  background:linear-gradient(145deg,rgba(5,29,57,.94),rgba(2,13,32,.94))!important;
+  border:1px solid rgba(0,220,255,.55)!important;
+  border-radius:0!important;
+  box-shadow:inset 0 0 18px rgba(0,190,255,.07),0 0 16px rgba(0,190,255,.06)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  clip-path:polygon(0 13px,13px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 13px),calc(100% - 13px) 100%,13px 100%,0 calc(100% - 13px));
+  transition:box-shadow .22s ease,border-color .22s ease!important;
+}
+main .glass:before{content:"";position:absolute;left:18px;right:18px;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--mdp-cyan),transparent);opacity:.8;pointer-events:none}
+main .glass:hover{border-color:rgba(0,234,255,.75)!important;box-shadow:inset 0 0 20px rgba(0,190,255,.09),0 0 22px rgba(0,190,255,.1)!important;transform:none!important}
+main h3{font-size:12px!important;letter-spacing:.08em!important;text-transform:uppercase;color:#43eaff!important;border-bottom:1px solid rgba(0,220,255,.25);padding-bottom:12px}
+main h3>span{font-family:Orbitron,Inter,sans-serif!important;background:rgba(0,234,255,.12)!important;color:var(--mdp-cyan)!important;border:1px solid rgba(0,234,255,.42)}
+main h4{color:#43eaff!important;font-family:Orbitron,Inter,sans-serif!important;font-size:11px!important;letter-spacing:.06em;text-transform:uppercase}
+main .bg-slate-800\/30{background:rgba(3,18,39,.72)!important;border-color:rgba(0,220,255,.25)!important;border-radius:0!important}
+main .bg-cyan-500\/5,main .bg-purple-500\/5,main .bg-blue-500\/5{background:linear-gradient(145deg,rgba(5,29,57,.94),rgba(2,13,32,.94))!important;border-color:rgba(0,220,255,.55)!important}
+main .border-slate-700{border-color:rgba(0,220,255,.25)!important}
+input,select,textarea{
+  background:rgba(2,12,28,.9)!important;color:#d9f5ff!important;
+  border:1px solid rgba(0,220,255,.3)!important;border-radius:3px!important;
+  min-height:42px;padding:.65rem .85rem!important;
+  font-family:Inter,"Segoe UI",sans-serif!important;
+  transition:border-color .2s ease,box-shadow .2s ease!important;
+}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--mdp-cyan)!important;box-shadow:0 0 0 2px rgba(0,234,255,.13),0 0 12px rgba(0,234,255,.08)!important}
+input:disabled,select:disabled,textarea:disabled{opacity:.55;cursor:not-allowed}
+label{color:#8cb9d0!important;font-size:10px!important;text-transform:uppercase;letter-spacing:.1em;font-weight:700!important}
+button{border-radius:3px!important;font-family:Inter,"Segoe UI",sans-serif!important;transition:filter .18s ease,box-shadow .18s ease,transform .18s ease!important}
+button:hover{filter:brightness(1.1);box-shadow:0 0 16px rgba(0,234,255,.14)}
+.bg-teal-500,.bg-teal-600,.bg-teal-700{background:linear-gradient(90deg,rgba(0,145,200,.48),rgba(0,234,255,.16))!important;color:#e5fbff!important;border:1px solid rgba(0,234,255,.65)!important}
+.text-teal-400,.text-teal-450,.text-teal-500,.text-cyan-400,.text-cyan-300{color:var(--mdp-cyan)!important}
+.text-purple-400,.text-blue-400{color:#65dff6!important}
+.border-teal-550\/10,.border-teal-550\/20,.border-cyan-500\/20,.border-purple-500\/20,.border-blue-500\/20{border-color:rgba(0,220,255,.3)!important}
+.bg-white\/5{background:rgba(0,150,200,.08)!important}
+.text-slate-500{color:#7daec7!important}.text-slate-400{color:#9fc8dc!important}.text-white{color:#f3fcff!important}
+.rounded-full{border-radius:3px!important}
+main .w-8.h-8{box-shadow:0 0 12px rgba(0,234,255,.08)}
+.mobile-bottom{background:rgba(2,12,28,.97)!important;border-top:1px solid rgba(0,234,255,.45)!important;backdrop-filter:blur(15px)!important;-webkit-backdrop-filter:blur(15px)!important;box-shadow:0 -8px 28px rgba(0,0,0,.28)!important}
+.mobile-nav-item{color:#84b6cd!important;transition:color .2s ease,transform .2s ease!important}
+.mobile-nav-item.active{color:var(--mdp-cyan)!important;text-shadow:0 0 10px rgba(0,234,255,.5)!important}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-track{background:#061021}::-webkit-scrollbar-thumb{background:linear-gradient(var(--mdp-cyan),var(--mdp-cyan2));border:2px solid #061021;border-radius:20px}
+@media(max-width:1023px){
+  main{margin-left:0!important;padding-top:0!important}
+  main>.p-3{padding:102px 14px 20px!important}
+  header.glass{left:0!important;padding:12px 14px!important}
+  header .flex.flex-col.lg\:flex-row{gap:10px!important}
+  aside.glass{display:none!important}
+  .mobile-bottom{height:68px!important;padding-bottom:env(safe-area-inset-bottom);justify-content:space-around!important}
+  body{padding-bottom:78px!important}
+  main .glass{clip-path:polygon(0 10px,10px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px))}
+}
+@media(max-width:560px){main>.p-3{padding-left:10px!important;padding-right:10px!important}main h3{font-size:11px!important}input,select{font-size:12px!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
   </style>
 </head>
 <body class="font-sans text-slate-200">
 
 <div class="flex">
   <!-- Sidebar -->
-  <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto">
+  <aside class="w-64 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto">
     <div class="p-6">
       <div class="flex items-center gap-3 mb-8">
        
@@ -323,8 +422,8 @@ hr{border-color:rgba(56,232,255,.14)!important}
   </aside>
 
   <!-- Main -->
-  <main class="flex-1 lg:ml-72">
-<header class="fixed top-0 left-0 lg:left-72 right-0 z-[99999] border-b border-teal-550/10 px-6 py-4 glass">
+  <main class="flex-1 lg:ml-64">
+<header class="fixed top-0 left-0 lg:left-64 right-0 z-[99999] border-b border-teal-550/10 px-6 py-4 glass">
   <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
     <!-- TAJUK -->
