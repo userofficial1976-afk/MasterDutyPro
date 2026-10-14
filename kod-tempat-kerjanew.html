@@ -285,27 +285,30 @@ function paparMaklumatPengguna(){if(!currentUser)return;const nama=currentUser.n
 function kemasKiniJam(){const now=new Date(),d=document.getElementById("currentDate"),t=document.getElementById("currentTime");if(d)d.textContent=now.toLocaleDateString("ms-MY",{weekday:"short",day:"2-digit",month:"short",year:"numeric"}).toUpperCase();if(t)t.textContent=now.toLocaleTimeString("ms-MY",{hour12:false});}
 function roleSemasa(){return String(currentUser?.role||currentUser?.jawatan||"").trim().toLowerCase().replace(/_/g," ").replace(/\s+/g," ");}
 function isAdminSemasa(){const role=roleSemasa();return !!(currentUser&&(currentUser.isAdmin===true||role==="admin"||role==="administrator"));}
-const menuAnggota = document.getElementById("menuAnggota");
+function kawalMenuMengikutPeranan(){
+  const menuAnggota=document.getElementById("menuAnggota");
+  const menuMingguan=document.getElementById("menuMingguan");
+  // Default: sembunyikan menu sehingga peranan pengguna disahkan.
+  if(menuAnggota) menuAnggota.style.display="none";
+  if(!currentUser) return;
 
-const role = String(currentUser.role || "")
-    .trim().toLowerCase()
-    .replace(/_/g, " ")
-    .replace(/\s+/g, " ");
+  const norm=v=>String(v||"").trim().toUpperCase().replace(/[_\s.-]+/g,"");
+  const roleRaw=norm(currentUser.role);
+  const jawatanRaw=norm(currentUser.jawatan);
+  const bolehLihatPengurusanAnggota=
+    currentUser.isAdmin===true ||
+    ["ADMIN","ADMINISTRATOR"].includes(roleRaw) ||
+    ["ADMIN","ADMINISTRATOR"].includes(jawatanRaw) ||
+    ["POW","PPOW","PTW"].includes(roleRaw) ||
+    ["POW","PPOW","PTW"].includes(jawatanRaw);
 
-const jawatan = String(currentUser.jawatan || "")
-    .trim().toLowerCase()
-    .replace(/_/g, " ")
-    .replace(/\s+/g, " ");
-
-const perananDibenarkan = ["admin", "administrator", "pow", "ppow", "ptw"];
-
-const bolehLihat =
-    currentUser.isAdmin === true ||
-    perananDibenarkan.includes(role) ||
-    perananDibenarkan.includes(jawatan);
-
-if (menuAnggota) {
-    menuAnggota.style.display = bolehLihat ? "" : "none";
+  if(menuAnggota) menuAnggota.style.display=bolehLihatPengurusanAnggota?"flex":"none";
+  const role=roleSemasa();
+  if(menuMingguan) menuMingguan.style.display=(isAdminSemasa()||role==="ketua unit")?"flex":"none";
+  if(isAdminSemasa()) return;
+  ["menuDashboard","menuLaporan","menuTetapan"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="none";});
+  const mobileKlm=document.getElementById("mobile-menu-klm");
+  if(mobileKlm&&role!=="ketua unit")mobileKlm.style.display="none";
 }
 function bukaDashboardMengikutRole(){window.location.href=isAdminSemasa()?"dashboard.html":"dashboardkpku.html";}
 function logKeluar(){localStorage.removeItem("mdp_user");window.location.href="login.html";}
