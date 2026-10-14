@@ -199,13 +199,17 @@ tbody tr:hover{background:rgba(0,220,255,.055)}
 </head>
 <body class="text-slate-200">
 <div class="flex min-h-screen">
-  <aside class="sidebar fixed left-0 top-0 z-40 flex h-screen w-64 flex-col overflow-y-auto">
-    <div class="p-5">
-      <div class="flex items-center gap-3 mb-7">
-        <div class="w-11 h-11 flex items-center justify-center border border-cyan-400/60 bg-cyan-950/40"><img src="logomdp.png" alt="MDP" class="w-9 h-9 object-contain" onerror="this.style.display='none'"><i class="fas fa-shield-halved text-cyan-300 text-xl" onerror=""></i></div>
+  <aside class="sidebar fixed left-0 top-0 z-40 hidden lg:flex h-screen w-64 flex-col overflow-y-auto">
+    <div class="p-4">
+      <div class="flex items-center gap-3 px-2 py-4 mb-3">
+        <img src="logomdp.png" alt="Logo Master Duty Pro" class="w-12 h-12 object-contain" onerror="this.style.display='none'">
         <div><div class="brand-font text-cyan-300 text-sm font-bold">MASTER DUTY PRO</div><div class="text-[10px] tracking-[.2em] text-sky-300 mt-1">WILAYAH TERENGGANU</div></div>
       </div>
-      <div class="user-panel mb-4"><div class="small-label">Pengguna Aktif</div><div id="sidebarNamaPengguna" class="text-sm font-bold text-white mt-1 truncate">-</div><div id="sidebarJawatanPengguna" class="text-xs text-cyan-300 mt-1">-</div></div>
+      <div class="user-panel mb-4">
+        <div class="small-label">Pengguna Aktif</div>
+        <div id="sidebarNamaPengguna" class="text-sm font-bold text-white mt-1 truncate">-</div>
+        <div id="sidebarJawatanPengguna" class="text-xs text-cyan-300 mt-1">-</div>
+      </div>
       <nav>
         <div class="section-label">Menu Utama</div>
         <a href="#" onclick="bukaDashboardMengikutRole();return false;" id="menuDashboard" class="sidebar-link"><i class="fas fa-house"></i>Dashboard</a>
