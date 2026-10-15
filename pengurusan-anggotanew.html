@@ -1,1237 +1,198 @@
-
 <!DOCTYPE html>
 <html lang="ms">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link rel="icon" type="image/png" href="logomdp.png">
+<link rel="apple-touch-icon" href="logomdp.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#020817">
 <title>Pengurusan Anggota — Master Duty Pro</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-tailwind.config = {
-    theme: {
-        extend: {
-            colors: {
-                teal: {
-                    450: '#2dd4bf',
-                    550: '#14b8a6',
-                    650: '#0d9488',
-                    750: '#0f766e'
-                }
-            },
-            fontFamily: {
-                sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif']
-            }
-        }
-    }
-}
-</script>
-
-
-
-
-    
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap');
-
-/* =====================================================
-   BASE
-===================================================== */
-
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0;
-    background: #0b1220;
-    color: #e2e8f0;
-    font-family: Inter, "Segoe UI", system-ui, sans-serif;
-}
-
-button,
-input,
-select {
-    font-family: inherit;
-}
-
-/* =====================================================
-   GLASS
-===================================================== */
-
-.glass {
-    background: rgba(15, 23, 42, 0.72);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(45, 212, 191, 0.12);
-}
-
-/* =====================================================
-   SIDEBAR
-===================================================== */
-
-.sidebar-link {
-    color: #94a3b8;
-}
-
-.sidebar-link.active {
-    background: linear-gradient(
-        90deg,
-        rgba(20, 184, 166, 0.20),
-        transparent
-    );
-    border-left: 3px solid #14b8a6;
-    color: #2dd4bf;
-}
-
-.sidebar-link:hover {
-    color: #2dd4bf;
-    background: rgba(255,255,255,.04);
-}
-
-.menu-hidden {
-    display: none !important;
-}
-
-/* =====================================================
-   STAT CARD
-===================================================== */
-
-.stat-card {
-    transition: all .25s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(45,212,191,.30);
-}
-
-/* =====================================================
-   TABLE
-===================================================== */
-
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    border-radius: 14px;
-}
-
-.table-wrapper::-webkit-scrollbar {
-    height: 8px;
-}
-
-.table-wrapper::-webkit-scrollbar-track {
-    background: rgba(255,255,255,.04);
-}
-
-.table-wrapper::-webkit-scrollbar-thumb {
-    background: rgba(45,212,191,.35);
-    border-radius: 20px;
-}
-
-.anggota-table {
-    width: max-content;
-    min-width: 2200px;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-.anggota-table th {
-    position: sticky;
-    top: 0;
-    z-index: 5;
-
-    background: #111c2f;
-    color: #94a3b8;
-
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-
-    padding: 13px 12px;
-    border-bottom: 1px solid rgba(45,212,191,.16);
-    white-space: nowrap;
-}
-
-.anggota-table td {
-    padding: 12px;
-    font-size: 12px;
-    color: #cbd5e1;
-    border-bottom: 1px solid rgba(148,163,184,.08);
-    white-space: nowrap;
-    vertical-align: middle;
-}
-
-.anggota-table tbody tr {
-    transition: background .18s ease;
-}
-
-.anggota-table tbody tr:hover {
-    background: rgba(45,212,191,.045);
-}
-
-.anggota-table th:first-child,
-.anggota-table td:first-child {
-    text-align: center;
-}
-
-.num-cell {
-    text-align: center !important;
-}
-
-.money-cell {
-    text-align: right !important;
-    font-variant-numeric: tabular-nums;
-}
-
-.nama-cell {
-    min-width: 240px;
-    font-weight: 600;
-    color: #f8fafc !important;
-}
-
-.status-cell {
-    text-align: center !important;
-}
-
-/* =====================================================
-   SEARCH / FILTER
-===================================================== */
-
-.form-input,
-.form-select {
-    width: 100%;
-    background: rgba(15,23,42,.75);
-    border: 1px solid rgba(148,163,184,.16);
-    color: #e2e8f0;
-    border-radius: 11px;
-    padding: 10px 12px;
-    outline: none;
-    transition: all .2s ease;
-}
-
-.form-input::placeholder {
-    color: #64748b;
-}
-
-.form-input:focus,
-.form-select:focus {
-    border-color: rgba(45,212,191,.55);
-    box-shadow: 0 0 0 3px rgba(20,184,166,.08);
-}
-
-.form-select option {
-    background: #0f172a;
-    color: #e2e8f0;
-}
-
-/* =====================================================
-   BUTTON
-===================================================== */
-
-.btn-primary {
-    background: #0d9488;
-    color: white;
-    border: 1px solid rgba(45,212,191,.25);
-    transition: all .2s ease;
-}
-
-.btn-primary:hover {
-    background: #14b8a6;
-    transform: translateY(-1px);
-}
-
-.btn-secondary {
-    background: rgba(255,255,255,.06);
-    color: #cbd5e1;
-    border: 1px solid rgba(148,163,184,.14);
-}
-
-.btn-secondary:hover {
-    background: rgba(255,255,255,.10);
-}
-
-.btn-danger {
-    background: rgba(220,38,38,.12);
-    color: #f87171;
-    border: 1px solid rgba(248,113,113,.16);
-}
-
-.btn-danger:hover {
-    background: rgba(220,38,38,.20);
-}
-
-/* =====================================================
-   BADGE
-===================================================== */
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-
-    padding: 5px 9px;
-    border-radius: 999px;
-
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.badge-active {
-    background: rgba(16,185,129,.12);
-    color: #34d399;
-    border: 1px solid rgba(16,185,129,.20);
-}
-
-.badge-inactive {
-    background: rgba(100,116,139,.12);
-    color: #94a3b8;
-    border: 1px solid rgba(100,116,139,.20);
-}
-
-/* =====================================================
-   MODAL
-===================================================== */
-
-.modal-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background: rgba(0,0,0,.68);
-    backdrop-filter: blur(7px);
-}
-
-.modal-box {
-    width: 100%;
-    max-width: 1050px;
-    max-height: 92vh;
-
-    overflow-y: auto;
-
-    background: #0f172a;
-    border: 1px solid rgba(45,212,191,.18);
-    border-radius: 22px;
-
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.55),
-        0 0 40px rgba(20,184,166,.05);
-}
-
-.modal-box::-webkit-scrollbar {
-    width: 7px;
-}
-
-.modal-box::-webkit-scrollbar-thumb {
-    background: rgba(45,212,191,.30);
-    border-radius: 20px;
-}
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-.loading-overlay {
-    position: absolute;
-    inset: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: rgba(15,23,42,.72);
-    backdrop-filter: blur(3px);
-
-    z-index: 10;
-}
-
-/* =====================================================
-   TOAST
-===================================================== */
-
-.toast {
-    position: fixed;
-    right: 22px;
-    bottom: 22px;
-    z-index: 100000;
-
-    min-width: 280px;
-    max-width: 420px;
-
-    padding: 14px 17px;
-
-    background: #0f172a;
-    border: 1px solid rgba(45,212,191,.20);
-    border-radius: 14px;
-
-    box-shadow: 0 20px 50px rgba(0,0,0,.40);
-
-    animation: toastIn .25s ease;
-}
-
-@keyframes toastIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* =====================================================
-   PAGINATION
-===================================================== */
-
-.page-btn {
-    min-width: 34px;
-    height: 34px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 9px;
-
-    background: rgba(255,255,255,.04);
-    border: 1px solid rgba(148,163,184,.12);
-
-    color: #94a3b8;
-
-    font-size: 12px;
-    font-weight: 600;
-
-    transition: all .2s ease;
-}
-
-.page-btn:hover {
-    background: rgba(45,212,191,.10);
-    color: #2dd4bf;
-}
-
-.page-btn.active {
-    background: #0d9488;
-    border-color: #14b8a6;
-    color: white;
-}
-
-.page-btn:disabled {
-    opacity: .35;
-    cursor: not-allowed;
-}
-
-/* =====================================================
-   MOBILE NAV
-===================================================== */
-
-.mobile-bottom {
-    display: none;
-}
-
-@media (max-width: 1023px) {
-
-    body {
-        padding-bottom: 80px;
-    }
-
-    .mobile-bottom {
-        display: flex;
-
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-
-        height: 70px;
-
-        align-items: center;
-        justify-content: space-around;
-
-        background: rgba(15,23,42,.94);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-
-        border-top: 1px solid rgba(45,212,191,.25);
-
-        box-shadow: 0 -8px 25px rgba(0,0,0,.4);
-
-        z-index: 99999;
-    }
-
-    .mobile-nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-        gap: 4px;
-
-        color: #cbd5e1;
-        text-decoration: none;
-
-        font-size: 10px;
-    }
-
-    .mobile-nav-item i {
-        font-size: 18px;
-    }
-
-    .mobile-nav-item.active {
-        color: #2dd4bf;
-    }
-}
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 640px) {
-
-    .content-area {
-        padding: 14px !important;
-    }
-
-   
-
-    .stat-card {
-        padding: 14px;
-    }
-
-    .filter-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    .modal-backdrop {
-        padding: 10px;
-    }
-
-    .modal-box {
-        max-height: 94vh;
-        border-radius: 17px;
-    }
-
-    .toast {
-        left: 14px;
-        right: 14px;
-        bottom: 88px;
-        min-width: auto;
-    }
-}
-
-/* =====================================================
-   HIDE
-===================================================== */
-
-.hidden-force {
-    display: none !important;
-}
-
-/* =====================================================
-   TABLE - RESPONSIVE HORIZONTAL SCROLL
-===================================================== */
-
-html,
-body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-}
-
-body {
-    min-width: 0;
-}
-
-main {
-    min-width: 0;
-    width: 100%;
-    max-width: 100%;
-}
-
-.content-area {
-    min-width: 0;
-    max-width: 100%;
-}
-
-/* =====================================================
-   TABLE WRAPPER
-===================================================== */
-
-.table-wrapper {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-}
-
-/* =====================================================
-   TABLE
-===================================================== */
-
-.anggota-table {
-    width: max-content;
-    min-width: 2200px;
-
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-.anggota-table th,
-.anggota-table td {
-    white-space: nowrap;
-}
-
-/* =====================================================
-   TABLE SCROLLBAR
-===================================================== */
-
-.table-wrapper::-webkit-scrollbar {
-    height: 8px;
-}
-
-.table-wrapper::-webkit-scrollbar-track {
-    background: rgba(255,255,255,.04);
-}
-
-.table-wrapper::-webkit-scrollbar-thumb {
-    background: rgba(45,212,191,.35);
-    border-radius: 20px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: rgba(45,212,191,.55);
-}
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 768px) {
-
-    .content-area {
-        min-width: 0;
-        max-width: 100%;
-    }
-
-    .table-wrapper {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .anggota-table {
-        min-width: 2200px;
-    }
-}
-
-/* =====================================================
-   TOPBAR FIXED
-===================================================== */
-
-header {
-    height: 82px;
-}
-
-/* Header desktop bermula selepas sidebar */
-@media (min-width: 1024px) {
-
-    header {
-        left: 18rem;
-    }
-
-    main > .content-area {
-        margin-top: 82px;
-    }
-
-}
-
-/* Mobile */
-@media (max-width: 1023px) {
-
-    header {
-        left: 0;
-        right: 0;
-        height: 70px;
-    }
-
-    main > .content-area {
-        margin-top: 70px;
-    }
-
-}
-
-
-    
-
-
+body{margin:0;background:#020817;color:#d9f5ff;font-family:Inter,"Segoe UI",sans-serif}
+.mobile-bottom{display:none}
 /* =========================================================
-   MASTER DUTY PRO — DASHBOARD COMMAND CENTER V2
-   PENGURUSAN ANGGOTA
-   PENYERAGAMAN VISUAL DENGAN kod-duty.html
-   GAYA SAHAJA — STRUKTUR DATA DAN JAVASCRIPT DIKEKALKAN
+    DUTY PRO — DASHBOARD COMMAND CENTER V2
+   SAMAKAN IDENTITI VISUAL DENGAN dashboardkpku.html
+   GAYA SAHAJA — LOGIK / JAVASCRIPT ASAL DIKEKALKAN
 ========================================================= */
-:root {
-    --mdp-bg: #020817;
-    --mdp-panel: rgba(4, 20, 43, .88);
-    --mdp-panel2: rgba(5, 31, 57, .78);
-    --mdp-cyan: #00eaff;
-    --mdp-cyan2: #00a9ff;
-    --mdp-orange: #ff7417;
-    --mdp-line: rgba(0, 234, 255, .42);
-    --mdp-muted: #83b7d2;
-    --mdp-text: #d9f5ff;
+:root{
+  --mdp-bg:#020817;
+  --mdp-panel:rgba(4,20,43,.88);
+  --mdp-panel2:rgba(5,31,57,.78);
+  --mdp-cyan:#00eaff;
+  --mdp-cyan2:#00a9ff;
+  --mdp-orange:#ff7417;
+  --mdp-line:rgba(0,234,255,.42);
+  --mdp-muted:#83b7d2;
+  --mdp-text:#d9f5ff;
 }
-
-html {
-    background: var(--mdp-bg) !important;
-    scroll-behavior: smooth;
+html{background:var(--mdp-bg)!important;scroll-behavior:smooth}
+body{
+  margin:0!important;
+  color:var(--mdp-text)!important;
+  font-family:Inter,"Segoe UI",system-ui,sans-serif!important;
+  background-color:var(--mdp-bg)!important;
+  background-image:linear-gradient(rgba(0,130,190,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,130,190,.045) 1px,transparent 1px),radial-gradient(ellipse at 60% 0%,#07315a 0%,#020817 55%)!important;
+  background-size:28px 28px,28px 28px,auto!important;
+  min-height:100vh;
 }
-
-body {
-    margin: 0 !important;
-    min-height: 100vh;
-    color: var(--mdp-text) !important;
-    font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
-    background-color: var(--mdp-bg) !important;
-    background-image:
-        linear-gradient(rgba(0,130,190,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,130,190,.045) 1px, transparent 1px),
-        radial-gradient(ellipse at 60% 0%, #07315a 0%, #020817 55%) !important;
-    background-size: 28px 28px, 28px 28px, auto !important;
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.09) 4px 5px);opacity:.45}
+body>.flex{position:relative;z-index:1;min-height:100vh}
+.brand-font,h1,h2,h3,.section-label,.panel-title{font-family:Orbitron,Inter,sans-serif!important;letter-spacing:.045em}
+.sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 14px!important;color:#9fc8dc!important;border:1px solid transparent!important;border-bottom-color:rgba(0,200,255,.12)!important;border-radius:0!important;font-size:13px!important;transition:all .2s ease!important;text-decoration:none}
+.sidebar-link i{width:22px;text-align:center;font-size:17px;color:#8edcf4}
+.sidebar-link:hover,.sidebar-link.active{color:#fff!important;background:linear-gradient(90deg,rgba(0,220,255,.28),rgba(0,110,180,.06))!important;border:1px solid rgba(0,234,255,.65)!important;box-shadow:inset 0 0 18px rgba(0,234,255,.12),0 0 14px rgba(0,234,255,.08)!important;transform:none!important}
+.sidebar-link.active i{color:var(--mdp-cyan)!important;filter:drop-shadow(0 0 5px var(--mdp-cyan))}
+aside.glass{width:16rem!important;background:linear-gradient(180deg,rgba(3,18,39,.98),rgba(2,12,28,.97))!important;border-right:1px solid var(--mdp-line)!important;box-shadow:8px 0 35px rgba(0,180,255,.06)!important;border-radius:0!important;backdrop-filter:none!important}
+aside .rounded-xl{border-radius:2px!important}
+header.glass{background:rgba(2,11,26,.92)!important;border-bottom:1px solid rgba(0,234,255,.38)!important;box-shadow:0 8px 30px rgba(0,0,0,.18)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;border-radius:0!important}
+header h2{font-family:Orbitron,Inter,sans-serif!important;font-size:clamp(14px,1.4vw,19px)!important;letter-spacing:.07em!important;color:#aaf7ff!important;text-transform:uppercase}
+header p{font-size:10px!important;letter-spacing:.12em!important;color:#83b7d2!important;text-transform:uppercase}
+main{position:relative;color:var(--mdp-text)!important;padding-top:0!important}
+main>.p-3{padding-top:112px!important;position:relative;z-index:1}
+main .glass{
+  position:relative;
+  background:linear-gradient(145deg,rgba(5,29,57,.94),rgba(2,13,32,.94))!important;
+  border:1px solid rgba(0,220,255,.55)!important;
+  border-radius:0!important;
+  box-shadow:inset 0 0 18px rgba(0,190,255,.07),0 0 16px rgba(0,190,255,.06)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  clip-path:polygon(0 13px,13px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 13px),calc(100% - 13px) 100%,13px 100%,0 calc(100% - 13px));
+  transition:box-shadow .22s ease,border-color .22s ease!important;
 }
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent 0 3px,
-        rgba(0,0,0,.09) 4px 5px
-    );
-    opacity: .45;
+main .glass:before{content:"";position:absolute;left:18px;right:18px;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--mdp-cyan),transparent);opacity:.8;pointer-events:none}
+main .glass:hover{border-color:rgba(0,234,255,.75)!important;box-shadow:inset 0 0 20px rgba(0,190,255,.09),0 0 22px rgba(0,190,255,.1)!important;transform:none!important}
+main h3{font-size:12px!important;letter-spacing:.08em!important;text-transform:uppercase;color:#43eaff!important;border-bottom:1px solid rgba(0,220,255,.25);padding-bottom:12px}
+main h3>span{font-family:Orbitron,Inter,sans-serif!important;background:rgba(0,234,255,.12)!important;color:var(--mdp-cyan)!important;border:1px solid rgba(0,234,255,.42)}
+main h4{color:#43eaff!important;font-family:Orbitron,Inter,sans-serif!important;font-size:11px!important;letter-spacing:.06em;text-transform:uppercase}
+main .bg-slate-800\/30{background:rgba(3,18,39,.72)!important;border-color:rgba(0,220,255,.25)!important;border-radius:0!important}
+main .bg-cyan-500\/5,main .bg-purple-500\/5,main .bg-blue-500\/5{background:linear-gradient(145deg,rgba(5,29,57,.94),rgba(2,13,32,.94))!important;border-color:rgba(0,220,255,.55)!important}
+main .border-slate-700{border-color:rgba(0,220,255,.25)!important}
+input,select,textarea{
+  background:rgba(2,12,28,.9)!important;color:#d9f5ff!important;
+  border:1px solid rgba(0,220,255,.3)!important;border-radius:3px!important;
+  min-height:42px;padding:.65rem .85rem!important;
+  font-family:Inter,"Segoe UI",sans-serif!important;
+  transition:border-color .2s ease,box-shadow .2s ease!important;
 }
-
-body > .flex {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--mdp-cyan)!important;box-shadow:0 0 0 2px rgba(0,234,255,.13),0 0 12px rgba(0,234,255,.08)!important}
+input:disabled,select:disabled,textarea:disabled{opacity:.55;cursor:not-allowed}
+label{color:#8cb9d0!important;font-size:10px!important;text-transform:uppercase;letter-spacing:.1em;font-weight:700!important}
+button{border-radius:3px!important;font-family:Inter,"Segoe UI",sans-serif!important;transition:filter .18s ease,box-shadow .18s ease,transform .18s ease!important}
+button:hover{filter:brightness(1.1);box-shadow:0 0 16px rgba(0,234,255,.14)}
+.bg-teal-500,.bg-teal-600,.bg-teal-700{background:linear-gradient(90deg,rgba(0,145,200,.48),rgba(0,234,255,.16))!important;color:#e5fbff!important;border:1px solid rgba(0,234,255,.65)!important}
+.text-teal-400,.text-teal-450,.text-teal-500,.text-cyan-400,.text-cyan-300{color:var(--mdp-cyan)!important}
+.text-purple-400,.text-blue-400{color:#65dff6!important}
+.border-teal-550\/10,.border-teal-550\/20,.border-cyan-500\/20,.border-purple-500\/20,.border-blue-500\/20{border-color:rgba(0,220,255,.3)!important}
+.bg-white\/5{background:rgba(0,150,200,.08)!important}
+.text-slate-500{color:#7daec7!important}.text-slate-400{color:#9fc8dc!important}.text-white{color:#f3fcff!important}
+.rounded-full{border-radius:3px!important}
+main .w-8.h-8{box-shadow:0 0 12px rgba(0,234,255,.08)}
+.mobile-bottom{background:rgba(2,12,28,.97)!important;border-top:1px solid rgba(0,234,255,.45)!important;backdrop-filter:blur(15px)!important;-webkit-backdrop-filter:blur(15px)!important;box-shadow:0 -8px 28px rgba(0,0,0,.28)!important}
+.mobile-nav-item{color:#84b6cd!important;transition:color .2s ease,transform .2s ease!important}
+.mobile-nav-item.active{color:var(--mdp-cyan)!important;text-shadow:0 0 10px rgba(0,234,255,.5)!important}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-track{background:#061021}::-webkit-scrollbar-thumb{background:linear-gradient(var(--mdp-cyan),var(--mdp-cyan2));border:2px solid #061021;border-radius:20px}
+@media(max-width:1023px){
+  main{margin-left:0!important;padding-top:0!important}
+  main>.p-3{padding:102px 14px 20px!important}
+  header.glass{left:0!important;padding:12px 14px!important}
+  header .flex.flex-col.lg\:flex-row{gap:10px!important}
+  aside.glass{display:none!important}
+  .mobile-bottom{height:68px!important;padding-bottom:env(safe-area-inset-bottom);justify-content:space-around!important}
+  body{padding-bottom:78px!important}
+  main .glass{clip-path:polygon(0 10px,10px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px))}
 }
+@media(max-width:560px){main>.p-3{padding-left:10px!important;padding-right:10px!important}main h3{font-size:11px!important}input,select{font-size:12px!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
-h1, h2, h3, h4, .brand-font, .section-label, .page-title {
-    font-family: Orbitron, Inter, sans-serif !important;
-    letter-spacing: .045em;
+  
+/* =========================================================
+   DASHBOARD COMMAND CENTER V2 — SHARED SIDEBAR + HEADER
+   Header/sidebar design intentionally aligned with dashboardkpku.html
+========================================================= */
+:root{--bg:#020817;--panel:rgba(4,20,43,.88);--panel2:rgba(5,31,57,.78);--cyan:#00eaff;--cyan2:#00a9ff;--orange:#ff7417;--line:rgba(0,234,255,.42);--muted:#83b7d2}
+body{background-color:var(--bg)!important;color:#d9f5ff!important;font-family:Inter,"Segoe UI",sans-serif!important;background-image:linear-gradient(rgba(0,130,190,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,130,190,.045) 1px,transparent 1px),radial-gradient(ellipse at 60% 0%,#07315a 0%,#020817 55%)!important;background-size:28px 28px,28px 28px,auto!important}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.09) 4px 5px);opacity:.45}
+body>.flex{position:relative;z-index:1;min-height:100vh}
+.sidebar{background:linear-gradient(180deg,rgba(3,18,39,.98),rgba(2,12,28,.97))!important;border-right:1px solid var(--line)!important;box-shadow:8px 0 35px rgba(0,180,255,.06)!important}
+.brand-font{font-family:Orbitron,Inter,sans-serif!important;letter-spacing:.08em!important}
+.section-label{font-family:Orbitron,sans-serif!important;font-size:10px!important;letter-spacing:.18em!important;color:#00dff7!important;text-transform:uppercase!important;padding:22px 12px 8px!important}
+.sidebar-link{display:flex!important;align-items:center!important;gap:12px!important;padding:12px 14px!important;color:#9fc8dc!important;border:1px solid transparent!important;border-bottom-color:rgba(0,200,255,.12)!important;border-radius:0!important;transition:.2s!important;text-decoration:none!important;font-size:13px!important;background:transparent!important}
+.sidebar-link i{width:22px!important;text-align:center!important;font-size:17px!important;color:#8edcf4!important}
+.sidebar-link:hover,.sidebar-link.active{color:#fff!important;background:linear-gradient(90deg,rgba(0,220,255,.28),rgba(0,110,180,.06))!important;border:1px solid rgba(0,234,255,.65)!important;box-shadow:inset 0 0 18px rgba(0,234,255,.12),0 0 14px rgba(0,234,255,.08)!important;transform:none!important}
+.sidebar-link.active i{color:var(--cyan)!important;filter:drop-shadow(0 0 5px var(--cyan))!important}
+.sidebar-link.logout-link,.sidebar-link.logout-link i{color:#ff8a2b!important}
+.topbar{background:rgba(2,11,26,.92)!important;border-bottom:1px solid rgba(0,234,255,.38)!important;box-shadow:0 8px 30px rgba(0,0,0,.18)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important}
+.topbar .brand-font{font-family:Orbitron,sans-serif!important}
+.topbar .save-duty-btn{padding:12px 16px!important;border-radius:3px!important;font-size:12px!important}
+.mobile-bottom{display:none;position:fixed!important;bottom:0!important;left:0!important;right:0!important;height:68px!important;z-index:9999!important;background:rgba(2,12,28,.97)!important;border-top:1px solid rgba(0,234,255,.45)!important;backdrop-filter:blur(15px)!important;-webkit-backdrop-filter:blur(15px)!important;justify-content:space-around!important;align-items:center!important;box-shadow:none!important}
+.mobile-nav-item{flex:1!important;text-align:center!important;text-decoration:none!important;color:#84b6cd!important;font-size:9px!important;display:flex!important;flex-direction:column!important;gap:5px!important;align-items:center!important;justify-content:center!important}
+.mobile-nav-item i{font-size:18px!important}
+.mobile-nav-item.active{color:var(--cyan)!important;text-shadow:0 0 10px rgba(0,234,255,.5)!important}
+.main-content{position:relative;z-index:1;min-width:0}
+@media(max-width:1023px){body{padding-bottom:76px!important}.sidebar{display:none!important}.main-content{margin-left:0!important}.mobile-bottom{display:flex!important}.top-user-text{display:none!important}.topbar{padding:12px 14px!important}.topbar .header-date{display:none!important}.topbar .save-duty-btn{padding:10px 11px!important;font-size:10px!important}}
+@media(max-width:560px){.topbar{gap:8px!important}.topbar .brand-font{font-size:12px!important}.topbar .save-duty-btn{padding:9px 8px!important;font-size:9px!important}.topbar .save-duty-btn i{margin-right:4px!important}}
+
+  
+/* =========================================================
+   PEMBETULAN KHUSUS: FONT PENGGUNA AKTIF, HEADER FIXED,
+   DAN JARAK HEADER KE KANDUNGAN
+========================================================= */
+.sidebar .small-label{
+  font-family:Orbitron,Inter,"Segoe UI",sans-serif!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  letter-spacing:.12em!important;
+  line-height:1.5!important;
+  text-transform:uppercase!important;
+  color:#00dff7!important;
 }
-
-aside.glass,
-.sidebar {
-    width: 16rem !important;
-    background: linear-gradient(
-        180deg,
-        rgba(3,18,39,.98),
-        rgba(2,12,28,.97)
-    ) !important;
-    border-right: 1px solid var(--mdp-line) !important;
-    box-shadow: 8px 0 35px rgba(0,180,255,.06) !important;
-    border-radius: 0 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+.topbar{
+  position:fixed!important;
+  top:0!important;
+  left:16rem!important;
+  right:0!important;
+  width:auto!important;
+  z-index:1000!important;
 }
-
-.sidebar .brand-font,
-aside .brand-font {
-    font-family: Orbitron, Inter, sans-serif !important;
-    letter-spacing: .08em !important;
-    color: #aaf7ff !important;
+main>.p-3{
+  padding-top:88px!important;
 }
-
-.sidebar .text-teal-450,
-.sidebar .text-teal-400,
-.sidebar .text-cyan-300 {
-    color: var(--mdp-cyan) !important;
+@media(max-width:1023px){
+  .topbar{left:0!important;right:0!important;width:100%!important}
+  main>.p-3{padding-top:82px!important}
 }
-
-.sidebar .rounded-xl,
-aside .rounded-xl {
-    border-radius: 2px !important;
-}
-
-.sidebar-link {
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 12px 14px !important;
-    color: #9fc8dc !important;
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    border-bottom-color: rgba(0,200,255,.12) !important;
-    border-radius: 0 !important;
-    font-size: 13px !important;
-    text-decoration: none !important;
-    transition: all .2s ease !important;
-}
-
-.sidebar-link i {
-    width: 22px !important;
-    text-align: center !important;
-    font-size: 17px !important;
-    color: #8edcf4 !important;
-}
-
-.sidebar-link:hover,
-.sidebar-link.active {
-    color: #fff !important;
-    background: linear-gradient(
-        90deg,
-        rgba(0,220,255,.28),
-        rgba(0,110,180,.06)
-    ) !important;
-    border: 1px solid rgba(0,234,255,.65) !important;
-    box-shadow:
-        inset 0 0 18px rgba(0,234,255,.12),
-        0 0 14px rgba(0,234,255,.08) !important;
-    transform: none !important;
-}
-
-.sidebar-link.active i {
-    color: var(--mdp-cyan) !important;
-    filter: drop-shadow(0 0 5px var(--mdp-cyan)) !important;
-}
-
-.sidebar p.text-xs.font-semibold,
-.sidebar .uppercase.tracking-wider {
-    font-family: Orbitron, Inter, sans-serif !important;
-    font-size: 10px !important;
-    letter-spacing: .16em !important;
-    color: #00dff7 !important;
-}
-
-.sidebar #sidebarUserName,
-.sidebar #sidebarUserJawatan {
-    font-family: Inter, sans-serif !important;
-}
-
-main.flex-1 {
-    margin-left: 16rem !important;
-    min-width: 0;
-    position: relative;
-    z-index: 1;
-    color: var(--mdp-text) !important;
-}
-
-header.glass {
-    position: fixed !important;
-    top: 0 !important;
-    left: 16rem !important;
-    right: 0 !important;
-    z-index: 1000 !important;
-    width: auto !important;
-    padding: 14px 24px !important;
-    background: rgba(2,11,26,.92) !important;
-    border: 0 !important;
-    border-bottom: 1px solid rgba(0,234,255,.38) !important;
-    border-radius: 0 !important;
-    box-shadow: 0 8px 30px rgba(0,0,0,.18) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-}
-
-header h2 {
-    font-family: Orbitron, Inter, sans-serif !important;
-    font-size: clamp(14px, 1.4vw, 19px) !important;
-    letter-spacing: .07em !important;
-    color: #aaf7ff !important;
-    text-transform: uppercase;
-}
-
-header p {
-    font-size: 10px !important;
-    letter-spacing: .08em !important;
-    color: #83b7d2 !important;
-}
-
-header #userName {
-    color: #f3fcff !important;
-}
-
-header #userJawatan {
-    color: var(--mdp-cyan) !important;
-}
-
-.content-area {
-    position: relative;
-    z-index: 1;
-    padding: 104px 24px 28px !important;
-    color: var(--mdp-text) !important;
-}
-
-.content-area > .glass,
-.content-area .glass {
-    position: relative;
-    background: linear-gradient(
-        145deg,
-        rgba(5,29,57,.94),
-        rgba(2,13,32,.94)
-    ) !important;
-    border: 1px solid rgba(0,220,255,.55) !important;
-    border-radius: 0 !important;
-    box-shadow:
-        inset 0 0 18px rgba(0,190,255,.07),
-        0 0 16px rgba(0,190,255,.06) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    transition: box-shadow .22s ease, border-color .22s ease !important;
-}
-
-.content-area > .glass::before {
-    content: "";
-    position: absolute;
-    left: 18px;
-    right: 18px;
-    top: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--mdp-cyan), transparent);
-    opacity: .8;
-    pointer-events: none;
-}
-
-.content-area > .glass:hover {
-    border-color: rgba(0,234,255,.75) !important;
-    box-shadow:
-        inset 0 0 20px rgba(0,190,255,.09),
-        0 0 22px rgba(0,190,255,.1) !important;
-    transform: none !important;
-}
-
-.content-area h3,
-.content-area h4 {
-    font-family: Orbitron, Inter, sans-serif !important;
-    color: #43eaff !important;
-    letter-spacing: .07em !important;
-    text-transform: uppercase;
-}
-
-.content-area h3 {
-    font-size: 12px !important;
-    border-bottom: 1px solid rgba(0,220,255,.25);
-    padding-bottom: 12px;
-}
-
-.content-area h4 {
-    font-size: 11px !important;
-}
-
-.stat-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 0 !important;
-    background: linear-gradient(
-        145deg,
-        rgba(5,29,57,.96),
-        rgba(2,13,32,.96)
-    ) !important;
-    border: 1px solid rgba(0,220,255,.42) !important;
-    box-shadow: inset 0 0 18px rgba(0,190,255,.06) !important;
-    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease !important;
-    animation: mdpCardReveal .55s ease both;
-}
-
-.stat-card::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 12%;
-    right: 12%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--mdp-cyan), transparent);
-    opacity: .75;
-    pointer-events: none;
-}
-
-.stat-card:hover {
-    transform: translateY(-3px) !important;
-    border-color: rgba(0,234,255,.8) !important;
-    box-shadow: 0 0 22px rgba(0,234,255,.13), inset 0 0 18px rgba(0,190,255,.08) !important;
-}
-
-.stat-card .rounded-xl,
-.stat-card .rounded-2xl {
-    border-radius: 2px !important;
-    border: 1px solid rgba(0,234,255,.28);
-}
-
-.content-area .bg-teal-500,
-.content-area .bg-teal-600,
-.content-area .bg-teal-700 {
-    background: linear-gradient(90deg, rgba(0,145,200,.48), rgba(0,234,255,.16)) !important;
-    color: #e5fbff !important;
-    border-color: rgba(0,234,255,.65) !important;
-}
-
-.content-area .text-teal-400,
-.content-area .text-teal-450,
-.content-area .text-teal-500,
-.content-area .text-cyan-400,
-.content-area .text-cyan-300 {
-    color: var(--mdp-cyan) !important;
-}
-
-.content-area .text-purple-400,
-.content-area .text-blue-400 {
-    color: #65dff6 !important;
-}
-
-.content-area .border-teal-550\/10,
-.content-area .border-teal-550\/20,
-.content-area .border-cyan-500\/20,
-.content-area .border-purple-500\/20,
-.content-area .border-blue-500\/20 {
-    border-color: rgba(0,220,255,.3) !important;
-}
-
-.content-area .bg-white\/5 {
-    background: rgba(0,150,200,.08) !important;
-}
-
-.content-area .text-slate-500 {
-    color: #7daec7 !important;
-}
-
-.content-area .text-slate-400 {
-    color: #9fc8dc !important;
-}
-
-.content-area .text-white {
-    color: #f3fcff !important;
-}
-
-.content-area input,
-.content-area select,
-.content-area textarea,
-input,
-select,
-textarea {
-    background: rgba(2,12,28,.9) !important;
-    color: #d9f5ff !important;
-    border: 1px solid rgba(0,220,255,.3) !important;
-    border-radius: 3px !important;
-    font-family: Inter, "Segoe UI", sans-serif !important;
-    transition: border-color .2s ease, box-shadow .2s ease !important;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-    outline: none !important;
-    border-color: var(--mdp-cyan) !important;
-    box-shadow: 0 0 0 2px rgba(0,234,255,.13), 0 0 12px rgba(0,234,255,.08) !important;
-}
-
-label {
-    color: #8cb9d0 !important;
-}
-
-button {
-    border-radius: 3px !important;
-    font-family: Inter, "Segoe UI", sans-serif !important;
-    transition: filter .18s ease, box-shadow .18s ease, transform .18s ease !important;
-}
-
-button:hover {
-    filter: brightness(1.1);
-    box-shadow: 0 0 16px rgba(0,234,255,.14);
-}
-
-.btn-primary,
-button.bg-teal-500,
-button.bg-teal-600 {
-    background: linear-gradient(120deg, #00c8e8, #1267d6) !important;
-    color: #fff !important;
-    border: 1px solid var(--mdp-cyan) !important;
-    border-radius: 2px !important;
-    box-shadow: 0 0 15px rgba(0,234,255,.12);
-}
-
-.btn-secondary {
-    background: rgba(35,55,80,.7) !important;
-    color: #d9f5ff !important;
-    border: 1px solid rgba(131,183,210,.35) !important;
-    border-radius: 2px !important;
-}
-
-.table-wrapper {
-    border: 1px solid rgba(0,220,255,.22) !important;
-    border-radius: 0 !important;
-    background: rgba(2,13,32,.55);
-}
-
-.anggota-table {
-    border-collapse: collapse !important;
-}
-
-.anggota-table th {
-    background: rgba(0,190,255,.08) !important;
-    color: #83dff4 !important;
-    font-family: Orbitron, Inter, sans-serif !important;
-    font-size: 10px !important;
-    letter-spacing: .07em !important;
-    border-bottom: 1px solid rgba(0,220,255,.28) !important;
-}
-
-.anggota-table td {
-    color: #cceaf5 !important;
-    border-bottom: 1px solid rgba(0,220,255,.12) !important;
-}
-
-.anggota-table tbody tr:hover {
-    background: rgba(0,220,255,.055) !important;
-}
-
-.modal,
-#modalAnggota,
-[id*="modal"] {
-    color: var(--mdp-text);
-}
-
-.mobile-bottom {
-    display: none;
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    height: 68px !important;
-    z-index: 9999 !important;
-    align-items: center !important;
-    justify-content: space-around !important;
-    background: rgba(2,12,28,.97) !important;
-    border-top: 1px solid rgba(0,234,255,.45) !important;
-    backdrop-filter: blur(15px) !important;
-    -webkit-backdrop-filter: blur(15px) !important;
-    box-shadow: 0 -8px 28px rgba(0,0,0,.28) !important;
-}
-
-.mobile-nav-item {
-    flex: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 5px !important;
-    text-align: center !important;
-    text-decoration: none !important;
-    color: #84b6cd !important;
-    font-size: 9px !important;
-    transition: color .2s ease, transform .2s ease !important;
-}
-
-.mobile-nav-item i {
-    font-size: 18px !important;
-}
-
-.mobile-nav-item.active,
-.mobile-nav-item:hover {
-    color: var(--mdp-cyan) !important;
-    text-shadow: 0 0 10px rgba(0,234,255,.5) !important;
-}
-
-@keyframes mdpCardReveal {
-    from { opacity: .45; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 1023px) {
-    .sidebar,
-    aside.glass {
-        display: none !important;
-    }
-
-    main.flex-1 {
-        margin-left: 0 !important;
-    }
-
-    header.glass {
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        padding: 12px 14px !important;
-    }
-
-    .content-area {
-        padding: 88px 14px 24px !important;
-    }
-
-    .mobile-bottom {
-        display: flex !important;
-    }
-
-    body {
-        padding-bottom: 78px !important;
-    }
-}
-
-@media (max-width: 560px) {
-    .content-area {
-        padding: 80px 10px 20px !important;
-    }
-
-    header h2 {
-        font-size: 12px !important;
-    }
-
-    .content-area h3 {
-        font-size: 11px !important;
-    }
-
-    .stat-card {
-        padding: 14px !important;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-        animation: none !important;
-    }
+@media(max-width:560px){
+  main>.p-3{padding-top:78px!important}
 }
 
 
+/* PENYESUAIAN KHAS HALAMAN KOD DUTY */
+main.main-content>.page-content{padding-top:96px!important;position:relative;z-index:1}
+main .glass{padding:24px}
+.page-title{font-family:Orbitron,Inter,sans-serif!important;font-size:clamp(14px,1.4vw,19px)!important;letter-spacing:.07em!important;color:#aaf7ff!important;text-transform:uppercase}
+.action-btn{background:linear-gradient(120deg,#00c8e8,#1267d6)!important;color:#fff!important;border:1px solid #00eaff!important;padding:11px 16px!important;font-family:Orbitron,Inter,sans-serif!important;font-size:10px!important;letter-spacing:.05em!important;border-radius:2px!important;box-shadow:0 0 15px rgba(0,234,255,.12)}
+.action-btn.secondary{background:rgba(35,55,80,.7)!important;border-color:rgba(131,183,210,.35)!important}
+.table-wrap{overflow-x:auto;border:1px solid rgba(0,220,255,.22)}
+table{min-width:850px;border-collapse:collapse}
+thead{background:rgba(0,190,255,.08)}
+thead th{font-family:Orbitron,Inter,sans-serif;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#83dff4!important;white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(0,220,255,.12)}
+tbody tr:hover{background:rgba(0,220,255,.055)}
+.status-pill{display:inline-block;padding:5px 9px;border:1px solid currentColor;font-size:10px;letter-spacing:.05em;text-transform:uppercase}
+.form-label{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#83b7d2;margin-bottom:8px}
+.user-panel{border:1px solid rgba(0,234,255,.3);background:rgba(0,80,120,.13);padding:12px}
+@media(max-width:1023px){main.main-content>.page-content{padding-top:82px!important;padding-bottom:24px!important}.topbar{padding:12px 14px!important}.topbar .header-date{display:none!important}.top-user-text{display:none!important}.mobile-bottom{display:flex!important}.page-title{font-size:12px!important}.main-content{margin-left:0!important}}
+@media(max-width:560px){main.main-content>.page-content{padding-top:76px!important}.topbar{gap:8px!important}.topbar .brand-font{font-size:11px!important}.action-btn{padding:9px 10px!important;font-size:9px!important}.main-content .glass{padding:16px!important}}
 </style>
 </head>
-
-<body class="font-sans text-slate-200">
+<body>
 
 <div class="flex min-h-screen">
 
@@ -1239,236 +200,51 @@ button.bg-teal-600 {
      SIDEBAR
 ===================================================== -->
 
-<aside
-    class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto"
->
-
-    <div class="p-6 h-full flex flex-col">
-
-        <!-- BRAND -->
-        <div class="flex items-center gap-3 mb-8">
-
-            <div class="w-12 h-12 flex items-center justify-center">
-                <img
-                    src="logomdp.png"
-                    alt="Master Duty Pro"
-                    class="w-12 h-12 object-contain"
-                >
-            </div>
-
-            <div>
-                <h1 class="font-bold text-white text-lg leading-tight">
-                    Master Duty Pro
-                </h1>
-
-                <p class="text-xs text-teal-450">
-                    Wilayah Terengganu
-                </p>
-            </div>
-
-        </div>
-
-        <!-- USER INFO -->
-
-        <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
-
-            <p
-                id="sidebarUserName"
-                class="text-sm font-semibold text-white truncate"
-            >
-                -
-            </p>
-
-            <p
-                id="sidebarUserJawatan"
-                class="text-xs text-teal-400 mt-1"
-            >
-                -
-            </p>
-
-        </div>
-
-        <!-- NAVIGATION -->
-
-        <nav class="space-y-1 flex-1">
-
-            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">
-                Menu Utama
-            </p>
-
-            <a
-                href="dashboard.html"
-                id="menu-dashboard"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-chart-pie w-5"></i>
-                Dashboard
-            </a>
-
-            <a
-                href="pengurusan-anggota.html"
-                id="menu-anggota"
-                class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-users w-5"></i>
-                Pengurusan Anggota
-            </a>
-
-            <a
-                href="kod-duty.html"
-                id="menu-kod-duty"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-code w-5"></i>
-                Kod Waktu Kerja
-            </a>
-
-            <a
-                href="kod-tempat-kerja.html"
-                id="menu-kod-tempat"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-map-marker-alt w-5"></i>
-                Kod Tempat Kerja
-            </a>
-
-            <a
-                href="jadual-duty.html"
-                id="menu-jadual"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-calendar-check w-5"></i>
-                Pengisian Jadual Tugas
-            </a>
-
-            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">
-                Laporan
-            </p>
-
-            <a
-                href="laporan-wilayah.html"
-                id="menu-laporan-wilayah"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-file-alt w-5"></i>
-                Laporan Wilayah
-            </a>
-
-            <a
-                href="klm-mingguan.html"
-                id="menu-klm"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-users w-5"></i>
-                KLM Mingguan
-            </a>
-
-            <a
-                href="anggaran-rk02.html"
-                id="menu-rk02"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-chart-bar w-5"></i>
-                Anggaran RK02
-            </a>
-
-            <a
-                href="anggaran-rk01.html"
-                id="menu-rk01"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-chart-line w-5"></i>
-                Anggaran RK01
-            </a>
-
-            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">
-                Sistem
-            </p>
-
-            <a
-                href="#"
-                id="menu-tetapan"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition"
-            >
-                <i class="fas fa-cog w-5"></i>
-                Tetapan
-            </a>
-
-            <a
-                href="#"
-                onclick="logKeluar(); return false;"
-                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4"
-            >
-                <i class="fas fa-sign-out-alt w-5"></i>
-                Log Keluar
-            </a>
-
-        </nav>
-
+  <aside class="sidebar fixed left-0 top-0 z-40 hidden lg:flex h-screen w-64 flex-col overflow-y-auto">
+    <div class="p-4">
+      <div class="flex items-center gap-3 px-2 py-4 mb-3">
+        <img src="logomdp.png" alt="Logo Master Duty Pro" class="w-12 h-12 object-contain" onerror="this.style.display='none'">
+        <div><div class="brand-font text-cyan-300 text-sm font-bold">MASTER DUTY PRO</div><div class="text-[10px] tracking-[.2em] text-sky-300 mt-1">WILAYAH TERENGGANU</div></div>
+      </div>
+      <div class="user-panel mb-4">
+        <div class="small-label">Pengguna Aktif</div>
+        <div id="sidebarNamaPengguna" class="text-sm font-bold text-white mt-1 truncate">-</div>
+        <div id="sidebarJawatanPengguna" class="text-xs text-cyan-300 mt-1">-</div>
+      </div>
+      <nav>
+        <div class="section-label">Menu Utama</div>
+        <a href="#" onclick="bukaDashboardMengikutRole();return false;" id="menuDashboard" class="sidebar-link"><i class="fas fa-house"></i>Dashboard</a>
+        <a href="pengurusan-anggota.html" id="menuAnggota" class="sidebar-link"><i class="fas fa-users"></i>Pengurusan Anggota</a>
+        <a href="kod-duty.html" class="sidebar-link active"><i class="fas fa-code"></i>Kod Waktu Kerja</a>
+        <a href="kod-tempat-kerja.html" class="sidebar-link"><i class="fas fa-location-dot"></i>Kod Tempat Kerja</a>
+        <a href="jadual-duty.html" class="sidebar-link"><i class="fas fa-calendar-check"></i>Pengisian Jadual Tugas</a>
+        <div class="section-label">Laporan</div>
+        <a href="laporan-wilayah.html" id="menuLaporan" class="sidebar-link"><i class="fas fa-file-lines"></i>Laporan Wilayah</a>
+        <a href="klm-mingguan.html" id="menuMingguan" class="sidebar-link"><i class="fas fa-users"></i>KLM Mingguan</a>
+        <a href="anggaran-rk02.html" class="sidebar-link"><i class="fas fa-chart-column"></i>Anggaran RK02</a>
+        <a href="anggaran-rk01.html" class="sidebar-link"><i class="fas fa-chart-line"></i>Anggaran RK01</a>
+        <div class="section-label">Sistem</div>
+        <a href="#" id="menuTetapan" class="sidebar-link"><i class="fas fa-gear"></i>Tetapan</a>
+        <a href="#" onclick="logKeluar();return false;" class="sidebar-link logout-link"><i class="fas fa-right-from-bracket"></i>Log Keluar</a>
+      </nav>
     </div>
-
-</aside>
+    <div class="mt-auto px-5 py-4 border-t border-cyan-900/60 text-[9px] tracking-[.2em] text-cyan-500">DISIPLIN • KOMITMEN • BERJASA</div>
+  </aside>
 
 
 <!-- =====================================================
      MAIN
 ===================================================== -->
 
-<main class="flex-1 lg:ml-72">
-
-<!-- =====================================================
-     TOPBAR
-===================================================== -->
-
-<header class="glass fixed top-0 left-0 right-0 lg:left-72 z-30 border-b border-teal-550/10 px-6 py-4">
-
-    <div class="flex items-center justify-between">
-
-        <div>
-
-            <h2 class="text-xl font-bold text-white">
-                Pengurusan Anggota
-            </h2>
-
-            <p class="text-sm text-slate-400">
-                Pengurusan data anggota •
-                <span id="currentDate">-</span>
-            </p>
-
-        </div>
-
-        <div class="flex items-center gap-4">
-
-            <div
-                class="hidden sm:flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium"
-            >
-                <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
-                System Online
-            </div>
-
-            <div class="text-right hidden sm:block">
-
-                <p
-                    class="text-sm font-medium text-white"
-                    id="userName"
-                >
-                    -
-                </p>
-
-                <p
-                    class="text-xs text-slate-400"
-                    id="userJawatan"
-                >
-                    -
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</header>
+ <main class="main-content flex-1 lg:ml-64 min-h-screen">
+    <header class="topbar fixed top-0 left-64 right-0 z-50 flex items-center justify-between gap-4 px-6 py-4 border-b border-cyan-800/60 bg-[#020b1a]/90 backdrop-blur-xl">
+      <div class="min-w-0"><div class="brand-font text-cyan-300 text-base md:text-lg font-bold">MASTER DUTY PRO <span class="text-orange-400">/</span> PENGURUSAN ANGGOTA</div><div class="text-[10px] md:text-xs text-sky-200 mt-1 tracking-wider">PENGURUSAN KOD DUTY MENGIKUT UNIT</div></div>
+      <div class="flex items-center gap-3 md:gap-5">
+        <div class="hidden sm:flex items-center gap-2 text-[10px] md:text-xs text-teal-300 border border-teal-500/40 bg-teal-950/40 px-3 py-2"><span class="w-2 h-2 bg-teal-300 rounded-full animate-pulse"></span>SYSTEM ONLINE</div>
+        <div class="header-date hidden md:block text-right"><div id="currentDate" class="text-xs text-sky-200">-</div><div id="currentTime" class="brand-font text-cyan-300 text-sm mt-1">--:--:--</div></div>
+        <div class="flex items-center gap-2 border border-cyan-800/70 bg-sky-950/40 p-2"><div class="w-9 h-9 flex items-center justify-center rounded-full border border-cyan-400 text-cyan-300"><i class="fas fa-user-astronaut"></i></div><div class="top-user-text hidden sm:block"><div id="userName" class="text-xs font-bold text-white max-w-[150px] truncate">-</div><div id="userJawatan" class="text-[10px] text-cyan-300">-</div></div></div>
+      </div>
+    </header>
 
 
 <!-- =====================================================
