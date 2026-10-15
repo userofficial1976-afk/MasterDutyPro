@@ -1,441 +1,102 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — Master Duty Pro</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            teal: {
-              450: '#2dd4bf',
-              550: '#14b8a6',
-              650: '#0d9488',
-              750: '#0f766e',
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-    body { background: #0b1220; }
-    .glass {
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(45, 212, 191, 0.12);
-    }
-    .sidebar-link.active {
-      background: linear-gradient(90deg, rgba(20, 184, 166, 0.2), transparent);
-      border-left: 3px solid #14b8a6;
-      color: #2dd4bf;
-    }
-    .stat-card { transition: all 0.3s ease; }
-    .stat-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(45, 212, 191, 0.3);
-    }
-    .menu-hidden { display: none !important; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Master Duty Pro</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','Segoe UI','system-ui','sans-serif']}}}};
+</script>
 <style>
-:root{--mdp-bg:#020817;--mdp-panel:rgba(4,20,43,.92);--mdp-cyan:#00eaff;--mdp-line:rgba(0,234,255,.42);--mdp-muted:#83b7d2;--mdp-orange:#ff7417}
-html{scroll-behavior:smooth}body{background-color:var(--mdp-bg)!important;color:#d9f5ff!important;background-image:linear-gradient(rgba(0,130,190,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,130,190,.045) 1px,transparent 1px),radial-gradient(ellipse at 60% 0%,#07315a 0%,#020817 55%)!important;background-size:28px 28px,28px 28px,auto!important;min-height:100vh}body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.09) 4px 5px);opacity:.35}.flex.min-h-screen{position:relative;z-index:1}.sidebar{background:linear-gradient(180deg,rgba(3,18,39,.98),rgba(2,12,28,.97))!important;border-right:1px solid var(--mdp-line)!important;box-shadow:8px 0 35px rgba(0,180,255,.06)!important}.sidebar>div{padding:18px!important}.sidebar .mb-10{padding:10px 8px 18px;border-bottom:1px solid rgba(0,234,255,.2);margin-bottom:14px!important}.sidebar .w-12.h-12{border-radius:4px!important;background:linear-gradient(135deg,#00d9ff,#075985)!important;box-shadow:0 0 20px rgba(0,234,255,.2)!important}.sidebar h1{font-family:Orbitron,Inter,sans-serif;letter-spacing:.06em;font-size:13px!important;color:#a9f5ff!important}.sidebar p{color:#54dff6!important}.sidebar-link{border-radius:2px!important;border:1px solid transparent!important;border-bottom-color:rgba(0,200,255,.12)!important;color:#9fc8dc!important;padding:12px 13px!important;font-size:12px!important}.sidebar-link i{color:#8edcf4!important}.sidebar-link:hover,.sidebar-link.active{color:#fff!important;background:linear-gradient(90deg,rgba(0,220,255,.28),rgba(0,110,180,.06))!important;border:1px solid rgba(0,234,255,.65)!important;border-left:3px solid #00eaff!important;box-shadow:inset 0 0 18px rgba(0,234,255,.12),0 0 14px rgba(0,234,255,.08)!important}.sidebar-link.active i{color:#00eaff!important;filter:drop-shadow(0 0 5px #00eaff)}.glass{background:linear-gradient(145deg,rgba(5,29,57,.94),rgba(2,13,32,.94))!important;backdrop-filter:blur(16px);border:1px solid rgba(0,220,255,.45)!important;border-radius:4px!important;box-shadow:inset 0 0 18px rgba(0,190,255,.05),0 0 16px rgba(0,190,255,.05)!important}.main-content header{background:rgba(2,11,26,.93)!important;border-bottom:1px solid rgba(0,234,255,.4)!important}.main-content header h2{font-family:Orbitron,Inter,sans-serif;letter-spacing:.06em;color:#9df4ff!important;font-size:15px!important;text-transform:uppercase}.main-content header p{color:#83b7d2!important}.main-content header .rounded-full{border-radius:2px!important;border:1px solid rgba(0,234,255,.45);background:rgba(0,220,255,.07)!important;color:#8af8ed!important}.main-content header .rounded-full .rounded-full{border:0}.main-content .bg-gradient-to-r.from-teal-750{background:linear-gradient(145deg,rgba(5,29,57,.97),rgba(2,13,32,.97))!important;border:1px solid rgba(0,234,255,.6);border-radius:4px!important;box-shadow:inset 0 0 22px rgba(0,234,255,.07),0 0 18px rgba(0,180,255,.05);clip-path:polygon(0 14px,14px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px))}.main-content .bg-gradient-to-r.from-teal-750 h1{font-family:Orbitron,Inter,sans-serif;letter-spacing:.025em}.main-content .bg-gradient-to-r.from-teal-750 p{color:#b3eaff!important}.stat-card{position:relative;overflow:hidden;border-radius:3px!important;border:1px solid rgba(0,220,255,.48)!important;background:linear-gradient(145deg,rgba(4,30,57,.96),rgba(2,14,31,.95))!important;min-height:125px;box-shadow:inset 0 0 16px rgba(0,190,255,.05)!important}.stat-card:after{content:"";position:absolute;left:16px;right:16px;top:0;height:1px;background:linear-gradient(90deg,transparent,#00eaff,transparent)}.stat-card:hover{transform:translateY(-3px);box-shadow:0 0 20px rgba(0,234,255,.16)!important;border-color:#00eaff!important}.stat-card .rounded-xl{border-radius:3px!important;background:rgba(0,220,255,.1)!important;color:#00eaff!important}.stat-card p.text-sm{font-size:10px!important;letter-spacing:.08em;text-transform:uppercase;color:#8cb9d0!important}.stat-card p.text-3xl{font-family:Orbitron,Inter,sans-serif;color:#00eaff!important;text-shadow:0 0 12px rgba(0,234,255,.25)}.main-content h3{font-family:Orbitron,Inter,sans-serif!important;font-size:12px!important;letter-spacing:.06em;text-transform:uppercase;color:#43eaff!important}.main-content .rounded-xl{border-radius:3px!important}.main-content .bg-orange-500\/15,.main-content .bg-emerald-500\/15,.main-content .bg-red-500\/15,.main-content .bg-blue-500\/15,.main-content .bg-yellow-500\/15,.main-content .bg-slate-500\/15{background:rgba(3,18,39,.8)!important;border-color:var(--status-color,rgba(0,234,255,.4))!important;border-radius:3px!important}.main-content .bg-orange-500\/15{border-color:rgba(255,138,39,.5)!important}.main-content .bg-emerald-500\/15{border-color:rgba(0,229,168,.5)!important}.main-content .bg-red-500\/15{border-color:rgba(255,64,93,.5)!important}.main-content .bg-blue-500\/15{border-color:rgba(20,157,255,.5)!important}.main-content .bg-yellow-500\/15{border-color:rgba(255,227,77,.5)!important}.main-content .bg-slate-500\/15{border-color:rgba(145,184,217,.5)!important}.main-content a.group{border-radius:3px!important;background:rgba(0,220,255,.035)!important;border-color:rgba(0,220,255,.18)!important}.main-content a.group:hover{background:rgba(0,220,255,.1)!important;border-color:rgba(0,234,255,.55)!important}.main-content a.group .rounded-xl{border-radius:3px!important;background:rgba(0,220,255,.1)!important;color:#00eaff!important}.main-content .text-slate-400{color:#83b7d2!important}.main-content .text-slate-500{color:#588ca8!important}.main-content .text-white{color:#e7faff!important}.main-content .text-teal-450,.main-content .text-teal-400{color:#00eaff!important}.menu-hidden{display:none!important}.mobile-bottom{display:none}
-@media(max-width:1023px){body{padding-bottom:72px}.main-content{margin-left:0!important}.mobile-bottom{display:flex;position:fixed;bottom:0;left:0;right:0;height:68px;z-index:9999;background:rgba(2,12,28,.97);border-top:1px solid rgba(0,234,255,.45);backdrop-filter:blur(15px);justify-content:space-around;align-items:center}.mobile-nav-item{flex:1;text-align:center;text-decoration:none;color:#84b6cd;font-size:9px;display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center}.mobile-nav-item i{font-size:18px}.mobile-nav-item.active{color:#00eaff;text-shadow:0 0 10px rgba(0,234,255,.5)}.main-content header{padding:12px 14px!important}.main-content>.p-6{padding:14px!important}.stat-card{min-height:108px;padding:13px!important}.stat-card .text-3xl{font-size:23px!important}}
-@media(max-width:560px){.main-content header h2{font-size:12px!important}.main-content .bg-gradient-to-r.from-teal-750{padding:19px!important}.main-content .bg-gradient-to-r.from-teal-750 h1{font-size:19px!important}.main-content .grid.grid-cols-1.xl\:grid-cols-5{gap:10px!important}.stat-card{padding:11px!important;min-height:105px}.stat-card .text-3xl{font-size:22px!important}.main-content .p-6{padding:14px!important}}
+:root{--bg:#020817;--panel:rgba(4,20,43,.88);--panel2:rgba(5,31,57,.78);--cyan:#00eaff;--cyan2:#00a9ff;--orange:#ff7417;--line:rgba(0,234,255,.42);--muted:#83b7d2}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:#d9f5ff;font-family:Inter,"Segoe UI",sans-serif;background-image:linear-gradient(rgba(0,130,190,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,130,190,.045) 1px,transparent 1px),radial-gradient(ellipse at 60% 0%,#07315a 0%,#020817 55%);background-size:28px 28px,28px 28px,auto;min-height:100vh}body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.09) 4px 5px);opacity:.45}.app-shell{position:relative;z-index:1;min-height:100vh}.sidebar{background:linear-gradient(180deg,rgba(3,18,39,.98),rgba(2,12,28,.97));border-right:1px solid var(--line);box-shadow:8px 0 35px rgba(0,180,255,.06)}.brand-font{font-family:Orbitron,Inter,sans-serif;letter-spacing:.08em}.neon-panel{position:relative;background:linear-gradient(145deg,rgba(5,29,57,.94),rgba(2,13,32,.94));border:1px solid rgba(0,220,255,.55);box-shadow:inset 0 0 18px rgba(0,190,255,.07),0 0 16px rgba(0,190,255,.06);clip-path:polygon(0 13px,13px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 13px),calc(100% - 13px) 100%,13px 100%,0 calc(100% - 13px));animation:panelReveal .65s ease both}.neon-panel:after{content:"";position:absolute;left:18px;right:18px;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.8;pointer-events:none}.stat-card{min-height:116px;transition:transform .22s ease,box-shadow .22s ease;border:1px solid rgba(0,220,255,.5);background:linear-gradient(145deg,rgba(4,30,57,.96),rgba(2,14,31,.95));position:relative;overflow:hidden;animation:panelReveal .6s ease both}.stat-card:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 25%,rgba(0,234,255,.07),transparent 70%);pointer-events:none}.stat-card:hover{transform:translateY(-3px);box-shadow:0 0 20px rgba(0,234,255,.17)}.sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 14px;color:#9fc8dc;border:1px solid transparent;border-bottom-color:rgba(0,200,255,.12);transition:.2s;text-decoration:none;font-size:13px}.sidebar-link i{width:22px;text-align:center;font-size:17px;color:#8edcf4}.sidebar-link:hover,.sidebar-link.active{color:#fff;background:linear-gradient(90deg,rgba(0,220,255,.28),rgba(0,110,180,.06));border:1px solid rgba(0,234,255,.65);box-shadow:inset 0 0 18px rgba(0,234,255,.12),0 0 14px rgba(0,234,255,.08)}.sidebar-link.active i{color:var(--cyan);filter:drop-shadow(0 0 5px var(--cyan))}.section-label{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:.18em;color:#00dff7;text-transform:uppercase;padding:22px 12px 8px}.status-card{cursor:default;min-height:102px;background:rgba(3,18,39,.8);border:1px solid var(--status,#00eaff);box-shadow:inset 0 0 14px color-mix(in srgb,var(--status,#00eaff) 9%,transparent);transition:.2s;position:relative;overflow:hidden}.status-card:hover{transform:translateY(-3px);box-shadow:0 0 16px color-mix(in srgb,var(--status,#00eaff) 22%,transparent)}.status-card .status-num{color:var(--status,#00eaff);font-family:Orbitron,sans-serif;font-size:26px;font-weight:700}.panel-title{font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:.08em;color:#43eaff;text-transform:uppercase;border-bottom:1px solid rgba(0,220,255,.25);padding-bottom:10px;margin-bottom:14px}.cyan-text{color:var(--cyan);text-shadow:0 0 12px rgba(0,234,255,.35)}.orange-text{color:#ff8a2b;text-shadow:0 0 10px rgba(255,116,23,.3)}.small-label{font-size:10px;color:#8cb9d0;text-transform:uppercase;letter-spacing:.12em}.gauge{width:min(100%,300px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;margin:auto;position:relative;background:repeating-conic-gradient(from -90deg,rgba(0,234,255,.95) 0deg 1deg,transparent 1deg 4deg);box-shadow:0 0 25px rgba(0,200,255,.15);animation:gaugeGlow 4s ease-in-out infinite}.gauge:before{content:"";position:absolute;inset:13px;border-radius:50%;background:conic-gradient(from -90deg,#ff7417 0deg 105deg,rgba(0,234,255,.9) 105deg 265deg,rgba(0,234,255,.13) 265deg 360deg);mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px))}.gauge:after{content:"";position:absolute;inset:32px;border-radius:50%;border:2px solid rgba(0,234,255,.72);box-shadow:inset 0 0 22px rgba(0,234,255,.12),0 0 22px rgba(0,234,255,.13)}.gauge-inner{z-index:1;text-align:center;border-radius:50%;width:65%;height:65%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(0,108,154,.5),rgba(2,15,35,.95) 72%);border:1px solid rgba(0,234,255,.25)}.gauge-number{font-family:Orbitron,sans-serif;font-size:clamp(30px,4vw,48px);line-height:1.1;color:var(--cyan);text-shadow:0 0 15px rgba(0,234,255,.5)}.bar-track{height:9px;background:#102744;border:1px solid rgba(0,220,255,.1);overflow:hidden}.bar-fill{height:100%;background:linear-gradient(90deg,#00a9ff,#00f5e4);box-shadow:0 0 10px rgba(0,234,255,.25)}.action-btn{display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,234,255,.6);background:linear-gradient(90deg,rgba(0,145,200,.28),rgba(0,234,255,.08));color:#bdf7ff;padding:12px 16px;border-radius:3px;font-size:12px;font-weight:700;letter-spacing:.04em;transition:.2s;text-decoration:none}.action-btn:hover{background:rgba(0,220,255,.2);box-shadow:0 0 16px rgba(0,234,255,.15)}.mobile-bottom{display:none}.menu-hidden{display:none!important}.hero-mark{font-family:Orbitron,sans-serif;font-size:clamp(36px,4vw,56px);color:rgba(0,234,255,.17);text-shadow:0 0 24px rgba(0,234,255,.12);animation:markPulse 4s ease-in-out infinite}.hero-panel{animation:heroEnter .75s ease both}.status-grid .status-card:nth-child(2n){animation-delay:.06s}.stats-grid .stat-card:nth-child(2){animation-delay:.06s}.stats-grid .stat-card:nth-child(3){animation-delay:.12s}.stats-grid .stat-card:nth-child(4){animation-delay:.18s}.stats-grid .stat-card:nth-child(5){animation-delay:.24s}.stats-grid .stat-card:nth-child(6){animation-delay:.3s}@keyframes panelReveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@keyframes heroEnter{from{opacity:0;transform:translateY(14px);filter:brightness(.65)}to{opacity:1;transform:translateY(0);filter:brightness(1)}}@keyframes gaugeGlow{0%,100%{filter:drop-shadow(0 0 3px rgba(0,234,255,.1))}50%{filter:drop-shadow(0 0 10px rgba(0,234,255,.25))}}@keyframes markPulse{0%,100%{opacity:.65}50%{opacity:1}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:1023px){body{padding-bottom:76px}.sidebar{display:none}.main-content{margin-left:0!important}.mobile-bottom{display:flex;position:fixed;bottom:0;left:0;right:0;height:68px;z-index:9999;background:rgba(2,12,28,.97);border-top:1px solid rgba(0,234,255,.45);backdrop-filter:blur(15px);justify-content:space-around;align-items:center}.mobile-nav-item{flex:1;text-align:center;text-decoration:none;color:#84b6cd;font-size:9px;display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center}.mobile-nav-item i{font-size:18px}.mobile-nav-item.active{color:var(--cyan);text-shadow:0 0 10px rgba(0,234,255,.5)}.top-user-text{display:none}.main-pad{padding:14px}.stat-card{min-height:104px;padding:12px}.stat-icon{display:none}.gauge{max-width:250px}.topbar{padding:12px 14px}.status-card{min-height:88px}}
+@media(max-width:560px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.main-title{font-size:18px}.stat-value{font-size:23px}.dashboard-grid{grid-template-columns:1fr}.status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-panel{padding:18px}.brand-font{font-size:14px}.header-date{display:none}}
 </style>
-
-<style id="command-center-v2-precision">
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
-:root{--cc-bg:#020817;--cc-panel:rgba(3,18,39,.94);--cc-cyan:#00eaff;--cc-cyan2:#46f4ff;--cc-blue:#0789cf;--cc-orange:#ff7417;--cc-muted:#83b7d2;--cc-line:rgba(0,234,255,.42)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body,body.font-sans{font-family:Inter,Arial,sans-serif!important;background:#020817!important;color:#d9f5ff!important;background-image:linear-gradient(rgba(0,130,190,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,130,190,.045) 1px,transparent 1px),radial-gradient(ellipse at 58% -8%,rgba(0,109,174,.36),transparent 47%),linear-gradient(180deg,#031126 0%,#020817 72%)!important;background-size:28px 28px,28px 28px,auto,auto!important;min-height:100vh;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.11) 4px 5px);opacity:.28}
-body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at 80% 20%,rgba(0,234,255,.045),transparent 32%);animation:ccAmbient 8s ease-in-out infinite alternate}
-.flex.min-h-screen{position:relative;z-index:1}
-/* SIDEBAR — target the real aside element (not a missing .sidebar class). */
-.flex.min-h-screen>aside{width:288px!important;background:linear-gradient(180deg,rgba(3,18,39,.985),rgba(2,10,25,.985))!important;border:0!important;border-right:1px solid var(--cc-line)!important;border-radius:0!important;box-shadow:8px 0 34px rgba(0,180,255,.075),inset -1px 0 rgba(0,234,255,.08)!important;backdrop-filter:blur(18px)!important;overflow-x:hidden}
-.flex.min-h-screen>aside>div{padding:22px 17px!important}
-.flex.min-h-screen>aside>div>.flex.items-center.gap-3{padding:12px 9px 23px!important;margin-bottom:20px!important;border-bottom:1px solid rgba(0,234,255,.25);position:relative}
-.flex.min-h-screen>aside>div>.flex.items-center.gap-3:after{content:"SYSTEM ONLINE  //  MDP-CORE";position:absolute;left:9px;bottom:7px;font:8px Orbitron,sans-serif;letter-spacing:1.35px;color:#4caecb}
-.flex.min-h-screen>aside .w-12.h-12{width:44px!important;height:44px!important;flex-shrink:0;border-radius:4px!important;background:linear-gradient(135deg,#00eaff,#0878b8 70%,#07365c)!important;border:1px solid rgba(116,249,255,.8);box-shadow:0 0 10px rgba(0,234,255,.35),inset 0 0 12px rgba(255,255,255,.13)!important;animation:ccLogoPulse 4s ease-in-out infinite}
-.flex.min-h-screen>aside h1{font-family:Orbitron,Inter,sans-serif!important;font-size:12px!important;font-weight:800!important;letter-spacing:.055em!important;text-transform:uppercase;color:#d9fbff!important;line-height:1.5!important}
-.flex.min-h-screen>aside p.text-xs{font:9px Orbitron,Inter,sans-serif!important;letter-spacing:.16em!important;color:var(--cc-cyan)!important;margin-top:4px}
-.flex.min-h-screen>aside nav>p{font:9px Orbitron,Inter,sans-serif!important;letter-spacing:.17em!important;color:#4f8fae!important;padding:0 11px!important;margin:0 0 9px!important}
-.flex.min-h-screen>aside .sidebar-link{min-height:42px;margin:3px 0!important;padding:11px 12px!important;gap:11px!important;border:1px solid transparent!important;border-left:2px solid transparent!important;border-radius:2px!important;background:transparent!important;color:#91b8ce!important;font-size:11px!important;font-weight:600!important;letter-spacing:.025em;transition:color .22s ease,background .22s ease,border-color .22s ease,box-shadow .22s ease,transform .22s ease!important;position:relative;overflow:hidden}
-.flex.min-h-screen>aside .sidebar-link:before{content:"";position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,rgba(0,234,255,.14),transparent);transition:width .28s ease;pointer-events:none}
-.flex.min-h-screen>aside .sidebar-link i{width:18px!important;color:#59b9d7!important;font-size:13px!important;text-align:center;transition:color .2s ease,filter .2s ease}
-.flex.min-h-screen>aside .sidebar-link:hover,.flex.min-h-screen>aside .sidebar-link.active{color:#effeff!important;border-color:rgba(0,234,255,.38)!important;border-left-color:var(--cc-cyan)!important;background:linear-gradient(90deg,rgba(0,208,255,.17),rgba(0,100,170,.035))!important;box-shadow:inset 0 0 18px rgba(0,234,255,.065),0 0 12px rgba(0,234,255,.045)!important;transform:translateX(2px)}
-.flex.min-h-screen>aside .sidebar-link:hover:before,.flex.min-h-screen>aside .sidebar-link.active:before{width:100%}.flex.min-h-screen>aside .sidebar-link.active i,.flex.min-h-screen>aside .sidebar-link:hover i{color:var(--cc-cyan)!important;filter:drop-shadow(0 0 5px rgba(0,234,255,.7))}
-/* TOP COMMAND BAR */
-main.flex-1{min-width:0!important;background:transparent!important}
-main.flex-1>header{min-height:74px;padding:14px 28px!important;background:rgba(2,10,25,.94)!important;border:0!important;border-bottom:1px solid rgba(0,234,255,.42)!important;border-radius:0!important;box-shadow:0 8px 24px rgba(0,0,0,.16)!important;backdrop-filter:blur(16px)!important}
-main.flex-1>header h2{font-family:Orbitron,Inter,sans-serif!important;font-size:13px!important;font-weight:700!important;letter-spacing:.13em!important;text-transform:uppercase;color:#c7f8ff!important}
-main.flex-1>header p{font-family:Inter,sans-serif!important;font-size:10px!important;letter-spacing:.035em;color:#679eb8!important}
-main.flex-1>header .rounded-full{border-radius:2px!important;border:1px solid rgba(0,234,255,.4)!important;background:rgba(0,200,255,.055)!important;color:#b8f8ff!important;box-shadow:inset 0 0 12px rgba(0,234,255,.04)}
-main.flex-1>header .rounded-full .rounded-full{border:0!important;box-shadow:0 0 12px rgba(0,234,255,.4)}
-main.flex-1>.p-6{padding:25px 28px!important;max-width:1800px;margin:0 auto}
-/* HERO / WELCOME HUD */
-main.flex-1 .bg-gradient-to-r.from-teal-750{min-height:190px;padding:30px 34px!important;margin-bottom:25px!important;position:relative;isolation:isolate;overflow:hidden;border-radius:0!important;border:1px solid rgba(0,234,255,.68)!important;background:linear-gradient(105deg,rgba(4,31,57,.98) 0%,rgba(3,20,42,.96) 58%,rgba(4,40,65,.9) 100%)!important;box-shadow:inset 0 0 32px rgba(0,234,255,.08),0 0 25px rgba(0,140,255,.075)!important;clip-path:polygon(0 18px,18px 0,calc(100% - 54px) 0,100% 20px,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%)}
-main.flex-1 .bg-gradient-to-r.from-teal-750:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 0 48%,rgba(0,234,255,.055) 48.2%,transparent 48.6%),repeating-linear-gradient(90deg,transparent 0 42px,rgba(0,234,255,.035) 43px 44px);mask-image:linear-gradient(90deg,transparent,black)}
-main.flex-1 .bg-gradient-to-r.from-teal-750:after{content:"";position:absolute;top:0;left:-40%;height:1px;width:35%;background:linear-gradient(90deg,transparent,#fff,var(--cc-cyan),transparent);box-shadow:0 0 12px var(--cc-cyan);animation:ccScan 6s ease-in-out infinite;pointer-events:none}
-main.flex-1 .bg-gradient-to-r.from-teal-750 h1{font-family:Orbitron,Inter,sans-serif!important;font-size:clamp(20px,2.1vw,30px)!important;font-weight:800!important;line-height:1.35;letter-spacing:.015em!important;color:#e7fcff!important;text-shadow:0 0 22px rgba(0,234,255,.13);margin-bottom:12px!important}
-main.flex-1 .bg-gradient-to-r.from-teal-750 h1 span{color:var(--cc-cyan)!important;text-shadow:0 0 15px rgba(0,234,255,.45)}
-main.flex-1 .bg-gradient-to-r.from-teal-750 p{max-width:690px;font-size:12px!important;line-height:1.8;color:#9acbe0!important}
-main.flex-1 .bg-gradient-to-r.from-teal-750 .absolute.right-0{right:26px!important;bottom:-16px!important;opacity:.13!important;transform:rotate(-8deg)}
-main.flex-1 .bg-gradient-to-r.from-teal-750 .absolute.right-0 i{font-size:145px!important;color:var(--cc-cyan)!important;filter:drop-shadow(0 0 18px rgba(0,234,255,.55))}
-/* HUD STAT PANELS */
-main.flex-1 .grid.grid-cols-1.sm\:grid-cols-2.xl\:grid-cols-5{gap:14px!important;margin-bottom:25px!important}
-main.flex-1 .stat-card{position:relative;isolation:isolate;min-height:144px!important;padding:19px 18px!important;overflow:hidden;border-radius:2px!important;border:1px solid rgba(0,213,255,.4)!important;background:linear-gradient(145deg,rgba(4,30,57,.97),rgba(2,13,30,.97))!important;box-shadow:inset 0 0 20px rgba(0,190,255,.045),0 5px 18px rgba(0,0,0,.14)!important;transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease!important;animation:ccRise .65s both}
-main.flex-1 .stat-card:nth-child(2){animation-delay:.07s}main.flex-1 .stat-card:nth-child(3){animation-delay:.14s}main.flex-1 .stat-card:nth-child(4){animation-delay:.21s}main.flex-1 .stat-card:nth-child(5){animation-delay:.28s}
-main.flex-1 .stat-card:before{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(120deg,rgba(0,234,255,.07),transparent 48%);pointer-events:none}
-main.flex-1 .stat-card:after{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--cc-cyan),transparent);box-shadow:0 0 8px rgba(0,234,255,.5)}
-main.flex-1 .stat-card:hover{transform:translateY(-5px)!important;border-color:var(--cc-cyan)!important;box-shadow:inset 0 0 24px rgba(0,234,255,.08),0 0 22px rgba(0,234,255,.12)!important}
-main.flex-1 .stat-card .rounded-xl{width:39px!important;height:39px!important;border-radius:3px!important;border:1px solid rgba(0,234,255,.25);background:rgba(0,220,255,.09)!important;color:var(--cc-cyan)!important;box-shadow:inset 0 0 12px rgba(0,234,255,.05)}
-main.flex-1 .stat-card p.text-sm{margin-top:11px;font-size:9px!important;font-weight:700!important;letter-spacing:.105em!important;text-transform:uppercase;color:#82b4ca!important;line-height:1.5}
-main.flex-1 .stat-card p.text-3xl{font-family:Orbitron,Inter,sans-serif!important;font-size:clamp(22px,1.8vw,29px)!important;font-weight:700!important;letter-spacing:-.025em;color:var(--cc-cyan)!important;text-shadow:0 0 14px rgba(0,234,255,.22);font-variant-numeric:tabular-nums}
-/* OPERATIONS, STATUS PANELS, QUICK ACTIONS */
-main.flex-1 .grid.grid-cols-1.xl\:grid-cols-3{gap:18px!important}
-main.flex-1 .glass.rounded-2xl{border-radius:3px!important;border:1px solid rgba(0,213,255,.36)!important;background:linear-gradient(145deg,rgba(4,25,49,.96),rgba(2,13,29,.97))!important;box-shadow:inset 0 0 24px rgba(0,190,255,.035),0 6px 20px rgba(0,0,0,.12)!important;position:relative}
-main.flex-1 .glass.rounded-2xl:before{content:"";position:absolute;top:-1px;left:18px;width:70px;height:2px;background:var(--cc-cyan);box-shadow:0 0 9px rgba(0,234,255,.6)}
-main.flex-1 h3{font-family:Orbitron,Inter,sans-serif!important;font-size:11px!important;font-weight:700!important;letter-spacing:.07em!important;text-transform:uppercase;color:#b9f5ff!important;line-height:1.7}
-main.flex-1 .glass.rounded-2xl h3+p{font-size:10px!important;color:#699ab3!important;margin-top:4px}
-main.flex-1 .grid.grid-cols-2.sm\:grid-cols-3>div{min-height:90px;padding:15px 9px!important;border-radius:2px!important;background:rgba(2,15,31,.86)!important;border-width:1px!important;position:relative;overflow:hidden;transition:transform .25s ease,box-shadow .25s ease}
-main.flex-1 .grid.grid-cols-2.sm\:grid-cols-3>div:hover{transform:translateY(-3px);box-shadow:0 0 16px rgba(0,234,255,.08)}
-main.flex-1 .grid.grid-cols-2.sm\:grid-cols-3>div p:first-child{font-size:9px!important;letter-spacing:.08em;text-transform:uppercase}
-main.flex-1 .grid.grid-cols-2.sm\:grid-cols-3>div p.text-2xl{font-family:Orbitron,Inter,sans-serif!important;font-size:23px!important;line-height:1.45}
-main.flex-1 a.group{border-radius:2px!important;background:rgba(0,180,230,.035)!important;border:1px solid rgba(0,213,255,.2)!important;transition:all .24s ease!important;position:relative;overflow:hidden}
-main.flex-1 a.group:hover{transform:translateX(3px);background:rgba(0,220,255,.085)!important;border-color:rgba(0,234,255,.7)!important;box-shadow:0 0 16px rgba(0,234,255,.07)!important}
-main.flex-1 a.group .rounded-xl{border-radius:2px!important;background:rgba(0,220,255,.09)!important;border:1px solid rgba(0,234,255,.2);color:var(--cc-cyan)!important}
-main.flex-1 a.group p.font-medium{font-size:11px!important;font-weight:700;color:#d6f7ff!important}main.flex-1 a.group p.text-xs{font-size:9px!important;color:#6fa5be!important;margin-top:4px}
-main.flex-1 .text-slate-400{color:#83b7d2!important}main.flex-1 .text-slate-500{color:#588ca8!important}main.flex-1 .text-white{color:#e7faff!important}main.flex-1 .text-teal-450,main.flex-1 .text-teal-400{color:var(--cc-cyan)!important}
-main.flex-1>div>div.text-center{border-top:1px solid rgba(0,234,255,.15);margin-top:24px;padding-top:20px!important;font-size:9px!important;letter-spacing:.06em;color:#477c96!important}
-.menu-hidden{display:none!important}
-@keyframes ccRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes ccScan{0%{left:-40%;opacity:0}12%{opacity:1}65%{left:110%;opacity:1}100%{left:110%;opacity:0}}@keyframes ccLogoPulse{0%,100%{box-shadow:0 0 10px rgba(0,234,255,.24),inset 0 0 12px rgba(255,255,255,.1)}50%{box-shadow:0 0 20px rgba(0,234,255,.42),inset 0 0 14px rgba(255,255,255,.16)}}@keyframes ccAmbient{from{opacity:.35}to{opacity:.8}}
-.mobile-bottom{display:none}
-@media(max-width:1023px){body{padding-bottom:76px}.flex.min-h-screen>aside{display:none!important}main.flex-1{margin-left:0!important}main.flex-1>header{padding:13px 16px!important;min-height:66px}main.flex-1>.p-6{padding:17px 15px!important}.mobile-bottom{display:flex;position:fixed;left:0;right:0;bottom:0;height:68px;z-index:100;background:rgba(2,10,25,.97);border-top:1px solid rgba(0,234,255,.48);backdrop-filter:blur(18px);justify-content:space-around;align-items:center;box-shadow:0 -8px 25px rgba(0,0,0,.2)}.mobile-nav-item{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-decoration:none;color:#75a8bf;font:8px Orbitron,Inter,sans-serif;letter-spacing:.02em;transition:color .2s ease,background .2s ease}.mobile-nav-item i{font-size:16px}.mobile-nav-item.active{color:var(--cc-cyan);background:linear-gradient(0deg,rgba(0,234,255,.12),transparent 75%);text-shadow:0 0 9px rgba(0,234,255,.45)}main.flex-1 .grid.grid-cols-1.sm\:grid-cols-2.xl\:grid-cols-5{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
-@media(max-width:650px){main.flex-1>.p-6{padding:13px 11px!important}main.flex-1 .bg-gradient-to-r.from-teal-750{min-height:168px;padding:23px 20px!important;margin-bottom:15px!important}main.flex-1 .bg-gradient-to-r.from-teal-750 h1{font-size:19px!important;max-width:88%}main.flex-1 .bg-gradient-to-r.from-teal-750 p{font-size:10px!important;max-width:88%}main.flex-1 .bg-gradient-to-r.from-teal-750 .absolute.right-0{right:5px!important;bottom:-7px!important}main.flex-1 .bg-gradient-to-r.from-teal-750 .absolute.right-0 i{font-size:88px!important}main.flex-1 .grid.grid-cols-1.sm\:grid-cols-2.xl\:grid-cols-5{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;margin-bottom:15px!important}main.flex-1 .stat-card{min-height:118px!important;padding:13px!important}main.flex-1 .stat-card p.text-sm{font-size:8px!important;margin-top:8px}main.flex-1 .stat-card p.text-3xl{font-size:21px!important}main.flex-1 .grid.grid-cols-1.xl\:grid-cols-3{gap:13px!important}main.flex-1 .glass.rounded-2xl{padding:16px!important}main.flex-1 h3{font-size:10px!important}main.flex-1 .grid.grid-cols-2.sm\:grid-cols-3>div{min-height:78px;padding:11px 5px!important}main.flex-1 .grid.grid-cols-2.sm\:grid-cols-3>div p.text-2xl{font-size:20px!important}main.flex-1>header h2{font-size:10px!important;letter-spacing:.08em!important}main.flex-1>header p{font-size:8px!important}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-</style>
-
 </head>
-<body class="font-sans text-slate-200">
-
-  <div class="flex min-h-screen">
-    
-    <!-- Sidebar -->
-    <aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block">
-      <div class="p-6 h-full flex flex-col">
-        <!-- Brand -->
-        <div class="flex items-center gap-3 mb-10">
-          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center shadow-lg">
-            <i class="fas fa-shield-halved text-white text-xl"></i>
-          </div>
-          <div>
-            <h1 class="font-bold text-white text-lg leading-tight">Master Duty Pro</h1>
-            <p class="text-xs text-teal-450">Wilayah Terengganu</p>
-          </div>
-        </div>
-
-        <!-- Navigation -->
-        <nav class="space-y-1 flex-1">
-          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Utama</p>
-          
-          <!-- Dashboard - Admin only -->
-          <a href="dashboard.html" id="menu-dashboard" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition">
-            <i class="fas fa-chart-pie w-5"></i>
-            Dashboard
-          </a>
-          
-          <!-- Pengurusan Anggota - Admin only -->
-          <a href="#" id="menu-anggota" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-            <i class="fas fa-users w-5"></i>
-            Pengurusan Anggota
-          </a>
-          
-          <!-- Pengisian Kod Duty - Semua -->
-          <a href="kod-duty.html" id="menu-kod-duty" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-            <i class="fas fa-code w-5"></i>
-            Kod Waktu Kerja
-          </a>
-          
-          <!-- Pengisian Kod Tempat Kerja - Semua -->
-          <a href="kod-tempat-kerja.html" id="menu-kod-tempat" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-            <i class="fas fa-map-marker-alt w-5"></i>
-            Kod Tempat Kerja
-          </a>
-          
-          <!-- Pengisian Jadual Tugas - Semua -->
-          <a href="jadual-duty.html" id="menu-jadual" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-            <i class="fas fa-calendar-check w-5"></i>
-            Pengisian Jadual Tugas
-          </a>
-
-          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Laporan</p>
-          
-          <!-- Laporan Wilayah - Admin only -->
-          <a href="#" id="menu-laporan-wilayah" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-            <i class="fas fa-file-alt w-5"></i>
-            Laporan Wilayah
-          </a>
-          
-          <!-- Anggaran RK02 - Semua -->
-          <a href="#" id="menu-rk02" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-            <i class="fas fa-chart-bar w-5"></i>
-            Anggaran RK02
-          </a>
-          
-          <!-- Anggaran RK01 - Semua -->
-          <a href="#" id="menu-rk01" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-            <i class="fas fa-chart-line w-5"></i>
-            Anggaran RK01
-          </a>
-
-          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-8 mb-3">Sistem</p>
-          
-          <!-- Tetapan - Admin only -->
-          <a href="#" id="menu-tetapan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-teal-450 hover:bg-white/5 transition">
-            <i class="fas fa-cog w-5"></i>
-            Tetapan
-          </a>
-          
-          <a href="login.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition mt-4">
-            <i class="fas fa-sign-out-alt w-5"></i>
-            Log Keluar
-          </a>
-        </nav>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 lg:ml-72">
-      
-      <!-- Topbar -->
-      <header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-xl font-bold text-white">Command Dashboard</h2>
-            <p class="text-sm text-slate-400">PUSAT KAWALAN OPERASI • <span id="currentDate"></span> <span id="currentTime" class="brand-font text-cyan-300 ml-2"></span></p>
-          </div>
-          
-          <div class="flex items-center gap-4">
-            <div class="hidden sm:flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium">
-              <span class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"></span>
-              System Online
-            </div>
-            
-            <div class="flex items-center gap-3">
-              <div class="text-right hidden sm:block">
-                <p class="text-sm font-medium text-white" id="userName">-</p>
-                <p class="text-xs text-slate-400" id="userJawatan">-</p>
-              </div>
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center font-bold text-white" id="userAvatar">
-                A
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <!-- Content -->
-      <div class="p-6 space-y-6">
-        
-        <!-- Hero -->
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-teal-750 via-teal-650 to-teal-550 p-8">
-          <div class="relative z-10">
-            <h1 class="text-3xl font-bold text-white mb-2">Selamat Datang, <span id="welcomeName">Pengguna</span></h1>
-            <p class="text-teal-100/90 max-w-2xl">Sistem pengurusan jadual tugasan anggota keselamatan secara berpusat, sistematik dan profesional untuk Wilayah Terengganu.</p>
-          </div>
-          <div class="absolute right-0 bottom-0 opacity-20">
-            <i class="fas fa-shield-halved text-9xl text-white"></i>
-          </div>
-        </div>
-
-        <!-- Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
-          <div class="stat-card glass rounded-2xl p-5">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450">
-                <i class="fas fa-users text-lg"></i>
-              </div>
-            </div>
-            <p class="text-sm text-slate-400">Jumlah Anggota Aktif</p>
-            <p class="text-3xl font-bold text-white mt-1">128</p>
-          </div>
-
-          <div class="stat-card glass rounded-2xl p-5">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-11 h-11 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-                <i class="fas fa-user-check text-lg"></i>
-              </div>
-            </div>
-            <p class="text-sm text-slate-400">Bertugas Hari Ini</p>
-            <p class="text-3xl font-bold text-white mt-1">87</p>
-          </div>
-
-          <div class="stat-card glass rounded-2xl p-5">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-11 h-11 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
-                <i class="fas fa-clock text-lg"></i>
-              </div>
-            </div>
-            <p class="text-sm text-slate-400">Jam Kerja Hari Ini</p>
-            <p class="text-3xl font-bold text-white mt-1">696</p>
-          </div>
-
-          <div class="stat-card glass rounded-2xl p-5">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-11 h-11 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400">
-                <i class="fas fa-business-time text-lg"></i>
-              </div>
-            </div>
-            <p class="text-sm text-slate-400">Jam KLM Hari Ini</p>
-            <p class="text-3xl font-bold text-white mt-1">42</p>
-          </div>
-
-          <div class="stat-card glass rounded-2xl p-5">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-11 h-11 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-400">
-                <i class="fas fa-money-bill-wave text-lg"></i>
-              </div>
-            </div>
-            <p class="text-sm text-slate-400">RM KLM Hari Ini</p>
-            <p class="text-3xl font-bold text-white mt-1">RM 1,260</p>
-          </div>
-        </div>
-
-        <!-- Status + Quick Actions -->
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          
-          <div class="xl:col-span-2 glass rounded-2xl p-6">
-            <div class="flex items-center justify-between mb-6">
-              <div>
-                <h3 class="text-lg font-semibold text-white">Status Tidak Bertugas Hari Ini</h3>
-                <p class="text-sm text-slate-400">Ringkasan status cuti & tidak bertugas</p>
-              </div>
-            </div>
-            
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div class="bg-orange-500/15 border border-orange-500/30 rounded-xl p-4 text-center">
-                <p class="text-xs text-orange-300 font-medium">OFF / GOFF</p>
-                <p class="text-2xl font-bold text-orange-400 mt-1">12</p>
-              </div>
-              <div class="bg-emerald-500/15 border border-emerald-500/30 rounded-xl p-4 text-center">
-                <p class="text-xs text-emerald-300 font-medium">Cuti Tahunan</p>
-                <p class="text-2xl font-bold text-emerald-400 mt-1">8</p>
-              </div>
-              <div class="bg-red-500/15 border border-red-500/30 rounded-xl p-4 text-center">
-                <p class="text-xs text-red-300 font-medium">Cuti Sakit</p>
-                <p class="text-2xl font-bold text-red-400 mt-1">5</p>
-              </div>
-              <div class="bg-blue-500/15 border border-blue-500/30 rounded-xl p-4 text-center">
-                <p class="text-xs text-blue-300 font-medium">Kursus</p>
-                <p class="text-2xl font-bold text-blue-400 mt-1">3</p>
-              </div>
-              <div class="bg-yellow-500/15 border border-yellow-500/30 rounded-xl p-4 text-center">
-                <p class="text-xs text-yellow-300 font-medium">Cuti Am</p>
-                <p class="text-2xl font-bold text-yellow-400 mt-1">2</p>
-              </div>
-              <div class="bg-slate-500/15 border border-slate-500/30 rounded-xl p-4 text-center">
-                <p class="text-xs text-slate-300 font-medium">Jumlah</p>
-                <p class="text-2xl font-bold text-white mt-1">41</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="glass rounded-2xl p-6">
-            <h3 class="text-lg font-semibold text-white mb-5">Quick Actions</h3>
-            
-            <div class="space-y-3">
-              <a href="#" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
-                <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450 group-hover:scale-110 transition">
-                  <i class="fas fa-calendar-plus"></i>
-                </div>
-                <div>
-                  <p class="font-medium text-white">Pengisian Jadual Tugas</p>
-                  <p class="text-xs text-slate-400">Isi duty anggota</p>
-                </div>
-              </a>
-              
-              <a href="#" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
-                <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450 group-hover:scale-110 transition">
-                  <i class="fas fa-code"></i>
-                </div>
-                <div>
-                  <p class="font-medium text-white">Kod Duty</p>
-                  <p class="text-xs text-slate-400">Urus kod shift</p>
-                </div>
-              </a>
-              
-              <a href="#" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-teal-550/10 border border-transparent hover:border-teal-550/30 transition group">
-                <div class="w-11 h-11 rounded-xl bg-teal-550/20 flex items-center justify-center text-teal-450 group-hover:scale-110 transition">
-                  <i class="fas fa-file-export"></i>
-                </div>
-                <div>
-                  <p class="font-medium text-white">Export Laporan</p>
-                  <p class="text-xs text-slate-400">PDF / Excel</p>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="text-center text-slate-500 text-sm py-6">
-          Master Duty Pro — Wilayah Terengganu<br>
-          © 2026 • Operational Duty Management System
-        </div>
-      </div>
-    </main>
+<body>
+<div class="app-shell">
+<aside class="sidebar fixed left-0 top-0 z-40 hidden lg:flex h-screen w-64 flex-col overflow-y-auto">
+  <div class="p-4">
+    <div class="flex items-center gap-3 px-2 py-4 mb-3">
+      <img src="logomdp.png" alt="Logo Master Duty Pro" class="w-12 h-12 object-contain" onerror="this.style.display='none'">
+      <div><div class="brand-font text-cyan-300 text-sm font-bold">MASTER DUTY PRO</div><div class="text-[10px] tracking-[.2em] text-sky-300 mt-1">WILAYAH TERENGGANU</div></div>
+    </div>
+    <div class="border border-cyan-900/80 bg-sky-950/40 p-3 mb-4"><div class="small-label">Pengguna Aktif</div><div id="sidebarNamaPengguna" class="text-sm font-bold text-white mt-1 truncate">-</div><div id="sidebarJawatanPengguna" class="text-xs text-cyan-300 mt-1">-</div></div>
+    <nav>
+      <div class="section-label">Menu Utama</div>
+      <a href="dashboard.html" id="menu-dashboard" class="sidebar-link active"><i class="fas fa-house"></i>Dashboard</a>
+      <a href="#" id="menu-anggota" class="sidebar-link"><i class="fas fa-users"></i>Pengurusan Anggota</a>
+      <a href="kod-duty.html" id="menu-kod-duty" class="sidebar-link"><i class="fas fa-code"></i>Kod Waktu Kerja</a>
+      <a href="kod-tempat-kerja.html" id="menu-kod-tempat" class="sidebar-link"><i class="fas fa-location-dot"></i>Kod Tempat Kerja</a>
+      <a href="jadual-duty.html" id="menu-jadual" class="sidebar-link"><i class="fas fa-calendar-check"></i>Pengisian Jadual Tugas</a>
+      <div class="section-label">Laporan</div>
+      <a href="laporan-wilayah.html" id="menu-laporan-wilayah" class="sidebar-link"><i class="fas fa-file-lines"></i>Laporan Wilayah</a>
+      <a href="anggaran-rk02.html" id="menu-rk02" class="sidebar-link"><i class="fas fa-chart-column"></i>Anggaran RK02</a>
+      <a href="anggaran-rk01.html" id="menu-rk01" class="sidebar-link"><i class="fas fa-chart-line"></i>Anggaran RK01</a>
+      <div class="section-label">Sistem</div>
+      <a href="#" id="menu-tetapan" class="sidebar-link"><i class="fas fa-gear"></i>Tetapan</a>
+      <a href="login.html" id="menu-logout" class="sidebar-link !text-orange-400"><i class="fas fa-right-from-bracket !text-orange-400"></i>Log Keluar</a>
+    </nav>
   </div>
-
-
-<nav class="mobile-bottom">
-<a href="dashboard.html" id="mobile-menu-dashboard" class="mobile-nav-item active"><i class="fas fa-house"></i><span>Dashboard</span></a>
-<a href="jadual-duty.html" class="mobile-nav-item"><i class="fas fa-calendar-check"></i><span>Duty</span></a>
-<a href="kod-duty.html" class="mobile-nav-item"><i class="fas fa-code"></i><span>Kod</span></a>
-<a href="anggaran-rk01.html" id="mobile-menu-rk01" class="mobile-nav-item"><i class="fas fa-chart-line"></i><span>RK01</span></a>
-<a href="anggaran-rk02.html" id="mobile-menu-rk02" class="mobile-nav-item"><i class="fas fa-chart-column"></i><span>RK02</span></a>
-<a href="login.html" onclick="localStorage.removeItem('mdp_user')" class="mobile-nav-item"><i class="fas fa-right-from-bracket"></i><span>Keluar</span></a>
-</nav>
-
-  <script>
-    // Semak login
-    const user = JSON.parse(localStorage.getItem('mdp_user') || 'null');
-    let isAdmin = false;
-    
-    if (!user) {
-      window.location.href = 'login.html';
-    } else {
-      // Papar maklumat pengguna
-      document.getElementById('userName').textContent = user.name;
-      document.getElementById('userJawatan').textContent = user.jawatan;
-      document.getElementById('welcomeName').textContent = user.name.split(' ')[0];
-      document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
-
-      // Tapisan menu berdasarkan jawatan
-      isAdmin = user.isAdmin === true; // PTW, PPOW, POW
-
-      if (!isAdmin) {
-        // Sembunyikan menu Admin sahaja
-        document.getElementById('menu-dashboard').classList.add('menu-hidden');
-        document.getElementById('menu-anggota').classList.add('menu-hidden');
-        document.getElementById('menu-laporan-wilayah').classList.add('menu-hidden');
-        document.getElementById('menu-tetapan').classList.add('menu-hidden');
-      }
-    }
-
-    // Tarikh hari ini
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ms-MY', options);
-    const jamDashboard = () => { const el=document.getElementById('currentTime'); if(el) el.textContent=new Date().toLocaleTimeString('ms-MY',{hour12:false}); };
-    jamDashboard(); setInterval(jamDashboard,1000);
-    if (!isAdmin) { const md=document.getElementById('mobile-menu-dashboard'); if(md) md.classList.add('menu-hidden'); }
-  </script>
+  <div class="mt-auto px-5 py-4 border-t border-cyan-900/60 text-[9px] tracking-[.2em] text-cyan-500">DISIPLIN • KOMITMEN • BERJASA</div>
+</aside>
+<main class="main-content lg:ml-64 min-h-screen">
+<header class="topbar sticky top-0 z-30 flex items-center justify-between gap-4 px-6 py-4 border-b border-cyan-800/60 bg-[#020b1a]/90 backdrop-blur-xl">
+  <div class="min-w-0"><div class="brand-font text-cyan-300 text-base md:text-lg font-bold">MASTER DUTY PRO <span class="text-orange-400">/</span> DASHBOARD</div><div class="text-[10px] md:text-xs text-sky-200 mt-1 tracking-wider">PENGURUSAN JADUAL TUGAS ANGGOTA</div></div>
+  <div class="flex items-center gap-3 md:gap-5"><div class="hidden sm:flex items-center gap-2 text-[10px] md:text-xs text-teal-300 border border-teal-500/40 bg-teal-950/40 px-3 py-2"><span class="w-2 h-2 bg-teal-300 rounded-full animate-pulse"></span>SYSTEM ONLINE</div><div class="header-date hidden md:block text-right"><div id="currentDate" class="text-xs text-sky-200">-</div><div id="currentTime" class="brand-font text-cyan-300 text-sm mt-1">--:--:--</div></div><div class="flex items-center gap-2 border border-cyan-800/70 bg-sky-950/40 p-2"><div class="w-9 h-9 flex items-center justify-center rounded-full border border-cyan-400 text-cyan-300"><i class="fas fa-user-astronaut"></i></div><div class="top-user-text hidden sm:block"><div id="userName" class="text-xs font-bold text-white max-w-[150px] truncate">-</div><div id="userJawatan" class="text-[10px] text-cyan-300">-</div></div><div id="userAvatar" class="hidden">A</div></div></div>
+</header>
+<div class="main-pad p-5 md:p-6 space-y-5">
+  <section class="neon-panel hero-panel p-6 md:p-7 flex flex-col md:flex-row md:items-center justify-between gap-4"><div><div class="small-label mb-2">Pusat Kawalan Operasi • Terengganu</div><h1 class="main-title brand-font text-2xl md:text-3xl font-bold text-white">SELAMAT DATANG, <span id="welcomeName" class="cyan-text">PENGGUNA</span></h1><p class="text-xs md:text-sm text-sky-100 mt-3 max-w-2xl leading-relaxed">Sistem pengurusan jadual tugasan anggota keselamatan secara berpusat, sistematik dan profesional untuk Wilayah Terengganu.</p><div class="grid grid-cols-1 sm:grid-cols-3 gap-x-7 gap-y-2 mt-4 text-xs text-sky-100"><div><span class="text-cyan-400">STATUS //</span> <span>OPERASI AKTIF</span></div><div><span class="text-cyan-400">WILAYAH //</span> <span>TERENGGANU</span></div><div><span class="text-cyan-400">SISTEM //</span> <span>MASTER DUTY PRO</span></div></div></div><div class="hidden md:block text-right"><div class="hero-mark">MDP<span class="text-orange-500">.</span></div><div class="small-label">COMMAND CENTER V2</div></div></section>
+  <section class="stats-grid grid grid-cols-2 xl:grid-cols-6 gap-3">
+    <div class="stat-card p-4"><div class="flex items-center justify-between gap-2"><div class="small-label">Jumlah Anggota Aktif</div><i class="stat-icon fas fa-users text-cyan-300 text-xl"></i></div><div class="stat-value brand-font text-3xl text-cyan-300 mt-3">128</div><div class="text-[9px] text-sky-500 mt-1">ANGGOTA AKTIF</div></div>
+    <div class="stat-card p-4"><div class="flex items-center justify-between gap-2"><div class="small-label">Bertugas Hari Ini</div><i class="stat-icon fas fa-person-running text-teal-300 text-xl"></i></div><div class="stat-value brand-font text-3xl text-teal-300 mt-3">87</div><div class="text-[9px] text-teal-600 mt-1">STATUS OPERASI</div></div>
+    <div class="stat-card p-4"><div class="flex items-center justify-between gap-2"><div class="small-label">Tidak Bertugas</div><i class="stat-icon fas fa-user-clock text-orange-400 text-xl"></i></div><div class="stat-value brand-font text-3xl text-orange-400 mt-3">41</div><div class="text-[9px] text-orange-600 mt-1">CUTI / OFF / LAIN-LAIN</div></div>
+    <div class="stat-card p-4"><div class="flex items-center justify-between gap-2"><div class="small-label">Jam Kerja Hari Ini</div><i class="stat-icon fas fa-clock text-cyan-300 text-xl"></i></div><div class="stat-value brand-font text-2xl text-cyan-300 mt-3">696</div><div class="text-[9px] text-cyan-600 mt-1">JUMLAH JAM KERJA</div></div>
+    <div class="stat-card p-4"><div class="flex items-center justify-between gap-2"><div class="small-label">Jam KLM Hari Ini</div><i class="stat-icon fas fa-stopwatch text-orange-400 text-xl"></i></div><div class="stat-value brand-font text-2xl text-orange-400 mt-3">42</div><div class="text-[9px] text-orange-600 mt-1">JUMLAH JAM KLM</div></div>
+    <div class="stat-card p-4"><div class="flex items-center justify-between gap-2"><div class="small-label">RM KLM Hari Ini</div><i class="stat-icon fas fa-coins text-cyan-300 text-xl"></i></div><div class="stat-value brand-font text-xl text-cyan-300 mt-4">RM 1,260</div><div class="text-[9px] text-cyan-600 mt-1">ANGGARAN HARIAN</div></div>
+  </section>
+  <section class="dashboard-grid grid grid-cols-1 xl:grid-cols-12 gap-4">
+    <div class="neon-panel p-4 xl:col-span-3 flex flex-col justify-center"><div class="panel-title">Jumlah Anggota Aktif</div><div class="gauge"><div class="gauge-inner"><div class="small-label">ANGGOTA AKTIF</div><div class="gauge-number">128</div><i class="fas fa-users text-cyan-400 text-xl mt-2"></i></div></div><div class="text-center small-label mt-4">MASTER DUTY PRO • TERENGGANU</div></div>
+    <div class="neon-panel p-4 xl:col-span-5"><div class="panel-title">Status Tidak Bertugas Hari Ini</div><div class="status-grid grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="status-card p-3 text-center" style="--status:#ff8a27"><i class="fas fa-ban text-xl mb-2" style="color:#ff8a27"></i><div class="text-xs font-bold">OFF / GOFF</div><div class="status-num">12</div></div>
+      <div class="status-card p-3 text-center" style="--status:#00e5a8"><i class="fas fa-calendar-check text-xl mb-2" style="color:#00e5a8"></i><div class="text-xs font-bold">Cuti Tahunan</div><div class="status-num">8</div></div>
+      <div class="status-card p-3 text-center" style="--status:#ff405d"><i class="fas fa-briefcase-medical text-xl mb-2" style="color:#ff405d"></i><div class="text-xs font-bold">Cuti Sakit</div><div class="status-num">5</div></div>
+      <div class="status-card p-3 text-center" style="--status:#149dff"><i class="fas fa-plane text-xl mb-2" style="color:#149dff"></i><div class="text-xs font-bold">Kursus</div><div class="status-num">3</div></div>
+      <div class="status-card p-3 text-center" style="--status:#ffe34d"><i class="fas fa-star text-xl mb-2" style="color:#ffe34d"></i><div class="text-xs font-bold">Cuti Am</div><div class="status-num">2</div></div>
+      <div class="status-card p-3 text-center" style="--status:#b36bff"><i class="fas fa-file-lines text-xl mb-2" style="color:#b36bff"></i><div class="text-xs font-bold">Lain-lain</div><div class="status-num">11</div></div>
+      <div class="status-card p-3 text-center" style="--status:#00eaff"><i class="fas fa-shield-halved text-xl mb-2" style="color:#00eaff"></i><div class="text-xs font-bold">Jumlah</div><div class="status-num">41</div></div>
+      <div class="status-card p-3 text-center" style="--status:#91b8d9"><i class="fas fa-clipboard-check text-xl mb-2" style="color:#91b8d9"></i><div class="text-xs font-bold">Rekod</div><div class="status-num">OK</div></div>
+    </div></div>
+    <div class="neon-panel p-4 xl:col-span-4"><div class="panel-title">Ringkasan Operasi</div><div class="space-y-4"><div><div class="flex justify-between text-xs mb-2"><span class="text-sky-200">Bertugas</span><span class="text-teal-300">87</span></div><div class="bar-track"><div class="bar-fill" style="width:68%;background:linear-gradient(90deg,#00b7ff,#00f0cb)"></div></div></div><div><div class="flex justify-between text-xs mb-2"><span class="text-sky-200">Tidak Bertugas</span><span class="text-orange-300">41</span></div><div class="bar-track"><div class="bar-fill" style="width:32%;background:linear-gradient(90deg,#ff7417,#ffb347)"></div></div></div><div class="pt-3 border-t border-cyan-900/70"><div class="small-label mb-2">Pintasan</div><a href="jadual-duty.html" class="action-btn w-full mb-2"><i class="fas fa-calendar-plus mr-2"></i>PENGISIAN JADUAL TUGAS</a><a href="kod-duty.html" class="action-btn w-full mb-2"><i class="fas fa-code mr-2"></i>KOD WAKTU KERJA</a><a href="anggaran-rk01.html" class="action-btn w-full mb-2"><i class="fas fa-chart-line mr-2"></i>ANGGARAN RK01</a><a href="anggaran-rk02.html" class="action-btn w-full"><i class="fas fa-chart-column mr-2"></i>ANGGARAN RK02</a></div></div></div>
+  </section>
+  <section class="dashboard-grid grid grid-cols-1 xl:grid-cols-12 gap-4"><div class="neon-panel p-4 xl:col-span-7"><div class="panel-title">Akses Pantas Sistem</div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><a href="jadual-duty.html" class="action-btn justify-start gap-3"><i class="fas fa-calendar-check text-lg"></i><span class="text-left"><span class="block">Pengisian Jadual Tugas</span><span class="block text-[10px] font-normal text-sky-400 mt-1">Isi duty anggota</span></span></a><a href="kod-duty.html" class="action-btn justify-start gap-3"><i class="fas fa-code text-lg"></i><span class="text-left"><span class="block">Kod Waktu Kerja</span><span class="block text-[10px] font-normal text-sky-400 mt-1">Urus kod shift</span></span></a><a href="kod-tempat-kerja.html" class="action-btn justify-start gap-3"><i class="fas fa-location-dot text-lg"></i><span class="text-left"><span class="block">Kod Tempat Kerja</span><span class="block text-[10px] font-normal text-sky-400 mt-1">Urus lokasi tugas</span></span></a><a href="laporan-wilayah.html" id="quick-laporan" class="action-btn justify-start gap-3"><i class="fas fa-file-export text-lg"></i><span class="text-left"><span class="block">Laporan Wilayah</span><span class="block text-[10px] font-normal text-sky-400 mt-1">Laporan sistem</span></span></a></div></div><div class="neon-panel p-4 xl:col-span-5"><div class="panel-title">Status Sistem</div><div class="space-y-4"><div class="flex items-center justify-between border-b border-cyan-900/60 pb-3"><span class="text-xs text-sky-200">Sistem Pengurusan Duty</span><span class="text-[10px] text-teal-300"><i class="fas fa-circle text-[7px] mr-1 animate-pulse"></i>ONLINE</span></div><div class="flex items-center justify-between border-b border-cyan-900/60 pb-3"><span class="text-xs text-sky-200">Sesi Pengguna</span><span id="statusRole" class="text-[10px] text-cyan-300">AKTIF</span></div><div class="flex items-center justify-between"><span class="text-xs text-sky-200">Tarikh Sistem</span><span id="footerDate" class="text-[10px] text-cyan-300">-</span></div><p class="text-[10px] tracking-[.14em] text-sky-600 pt-2">DISIPLIN • KOMITMEN • BERJASA</p></div></div></section>
+  <footer class="flex flex-col sm:flex-row justify-between gap-2 py-3 border-t border-cyan-900/60 text-[9px] tracking-[.14em] text-sky-600"><span>MASTER DUTY PRO • WILAYAH TERENGGANU</span><span>© 2026 • OPERATIONAL DUTY MANAGEMENT SYSTEM</span></footer>
+</div>
+</main>
+</div>
+<nav class="mobile-bottom"><a href="dashboard.html" class="mobile-nav-item active"><i class="fas fa-house"></i><span>Dash</span></a><a href="jadual-duty.html" class="mobile-nav-item"><i class="fas fa-calendar-check"></i><span>Duty</span></a><a href="kod-duty.html" class="mobile-nav-item"><i class="fas fa-code"></i><span>Kod</span></a><a href="anggaran-rk01.html" class="mobile-nav-item"><i class="fas fa-chart-line"></i><span>RK01</span></a><a href="anggaran-rk02.html" class="mobile-nav-item"><i class="fas fa-chart-column"></i><span>RK02</span></a><a href="login.html" class="mobile-nav-item"><i class="fas fa-right-from-bracket"></i><span>Keluar</span></a></nav>
+<script>
+'use strict';
+const user=JSON.parse(localStorage.getItem('mdp_user')||'null');
+const $=id=>document.getElementById(id);
+function setText(id,value){const el=$(id);if(el)el.textContent=value??'-';}
+function logout(){localStorage.removeItem('mdp_user');window.location.href='login.html';}
+if(!user){window.location.href='login.html';}
+else{
+ const fullName=String(user.name||user.nama||'Pengguna');
+ setText('userName',fullName);setText('sidebarNamaPengguna',fullName);setText('welcomeName',fullName.split(/\s+/)[0]);
+ setText('userJawatan',user.jawatan||'-');setText('sidebarJawatanPengguna',user.jawatan||'-');setText('userAvatar',fullName.charAt(0).toUpperCase());
+ const isAdmin=user.isAdmin===true;
+ if(!isAdmin){['menu-dashboard','menu-anggota','menu-laporan-wilayah','menu-tetapan','quick-laporan'].forEach(id=>{const el=$(id);if(el)el.classList.add('menu-hidden');});}
+ setText('statusRole',user.jawatan||'AKTIF');
+}
+function updateClock(){const d=new Date();setText('currentDate',d.toLocaleDateString('ms-MY',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}));setText('footerDate',d.toLocaleDateString('ms-MY',{day:'2-digit',month:'short',year:'numeric'}));setText('currentTime',d.toLocaleTimeString('ms-MY',{hour12:false}));}
+updateClock();setInterval(updateClock,1000);
+</script>
 </body>
 </html>
