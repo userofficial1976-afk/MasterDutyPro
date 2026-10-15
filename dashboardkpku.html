@@ -263,27 +263,98 @@ async function paparLaporanHarianKetuaUnit(){
         }
     );
 
-    const laporan =
-`Assalamualaikum Tuan.
+    const kumpulanPos = {};
 
-*ATURTUGAS UNIT ${currentUser.unit || "-"}*
+    dataDutyHariIni.forEach(row => {
+
+        const pos = row.kod_tempat_kerja || row.pos || "TANPA POS";
+
+        if(!kumpulanPos[pos]){
+            kumpulanPos[pos] = [];
+        }
+
+        kumpulanPos[pos].push(row);
+
+    });
+
+    let laporan = `Assalamualaikum Tuan.
+
+*ATURTUGAS UNIT ${currentUser.unit || ""}*
 
 Tarikh: ${tarikh} (${namaHari})
 
 Aturtugas anggota di pos kawalan adalah seperti berikut:
 
-*1. CONTOH POS*
+`;
 
-1. Duty A (0700-1500)
-2. Duty B (1500-2300)
+    let bilPos = 1;
 
-Off Day :
-Cuti Tahun :
-MC :
+    Object.entries(kumpulanPos).forEach(([namaPos, anggota]) => {
 
+        laporan += `\n*${bilPos}. ${namaPos}*\n`;
+
+        const dutyA = anggota.filter(x => kodRekod(x) === "A");
+        const dutyB = anggota.filter(x => kodRekod(x) === "B");
+        const dutyC = anggota.filter(x => kodRekod(x) === "C");
+        const dutyD = anggota.filter(x => kodRekod(x) === "D");
+        const dutyE = anggota.filter(x => kodRekod(x) === "E");
+        const dutyF = anggota.filter(x => kodRekod(x) === "F");
+        const dutyG = anggota.filter(x => kodRekod(x) === "G");
+
+        if(dutyA.length){
+            laporan += `1. Duty A (0700-1500) ${dutyA.map(x=>x.nama_anggota).join(" / ")}\n`;
+        }
+
+        if(dutyB.length){
+            laporan += `2. Duty B (1500-2300) ${dutyB.map(x=>x.nama_anggota).join(" / ")}\n`;
+        }
+
+        if(dutyC.length){
+            laporan += `3. Duty C (2300-0700) ${dutyC.map(x=>x.nama_anggota).join(" / ")}\n`;
+        }
+
+        if(dutyD.length){
+            laporan += `4. Duty D (0700-1900) ${dutyD.map(x=>x.nama_anggota).join(" / ")}\n`;
+        }
+
+        if(dutyE.length){
+            laporan += `5. Duty E (1900-0700) ${dutyE.map(x=>x.nama_anggota).join(" / ")}\n`;
+        }
+
+        if(dutyF.length){
+            laporan += `6. Duty F ${dutyF.map(x=>x.nama_anggota).join(" / ")}\n`;
+        }
+
+        if(dutyG.length){
+            laporan += `7. Duty G ${dutyG.map(x=>x.nama_anggota).join(" / ")}\n`;
+        }
+
+        const off  = anggota.filter(x => kodRekod(x) === "OFF");
+        const gr   = anggota.filter(x => kodRekod(x) === "GR");
+        const ct   = anggota.filter(x => kodRekod(x) === "CT");
+        const cg   = anggota.filter(x => kodRekod(x) === "CG");
+        const ca   = anggota.filter(x => kodRekod(x) === "CA");
+        const mc   = anggota.filter(x => kodRekod(x) === "MC");
+        const ce   = anggota.filter(x => kodRekod(x) === "CE");
+
+        laporan += `\nOff Day : ${off.map(x=>x.nama_anggota).join(", ") || "-"}\n`;
+        laporan += `Ganti Off : ${gr.map(x=>x.nama_anggota).join(", ") || "-"}\n`;
+        laporan += `Cuti Tahun : ${ct.map(x=>x.nama_anggota).join(", ") || "-"}\n`;
+        laporan += `Cuti Ganti : ${cg.map(x=>x.nama_anggota).join(", ") || "-"}\n`;
+        laporan += `Cuti Am : ${ca.map(x=>x.nama_anggota).join(", ") || "-"}\n`;
+        laporan += `MC : ${mc.map(x=>x.nama_anggota).join(", ") || "-"}\n`;
+        laporan += `Cuti Ehsan : ${ce.map(x=>x.nama_anggota).join(", ") || "-"}\n`;
+        laporan += `Cuti Kecemasan : -\n\n`;
+
+        bilPos++;
+
+    });
+
+    laporan += `
 Sebarang perubahan duty akan dimaklumkan segera.
 
-Sekian untuk makluman Tuan.`;
+Sekian untuk makluman Tuan.
+`;
 
     bukaPopup(
         "Laporan Harian Ketua Unit",
@@ -309,6 +380,7 @@ Sekian untuk makluman Tuan.`;
     );
 
 }
+
   
 function paparkanStatusBar(counts){
   const colors={OFFGR:"#ff8a27",CT:"#00e5a8",MC:"#ff405d",KUR:"#149dff",CA:"#ffe34d",CG:"#b36bff",CE:"#00eaff",CTR:"#91b8d9"};
