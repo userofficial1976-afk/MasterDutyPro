@@ -270,19 +270,28 @@ Sebarang perubahan duty akan dimaklumkan segera.
 
 Sekian untuk makluman Tuan.`;
 
-    bukaPopup(
-        "Laporan Harian Ketua Unit",
-        `
-        <div class="space-y-3">
+bukaPopup(
+    "Laporan Harian Ketua Unit",
+    `
+    <div class="space-y-3">
 
-            <textarea
-                id="laporanHarianText"
-                class="w-full h-[500px] bg-slate-950 border border-cyan-700 p-3 text-sm text-sky-100"
-            >${teksLaporanHarian}</textarea>
+        <textarea
+            id="laporanHarianText"
+            class="w-full h-[500px] bg-slate-950 border border-cyan-700 p-3 text-sm text-sky-100"
+        >${teksLaporanHarian}</textarea>
 
-        </div>
-        `
-    );
+        <button
+            onclick="salinLaporanWhatsApp()"
+            class="action-btn w-full">
+
+            <i class="fab fa-whatsapp mr-2"></i>
+            SALIN KE WHATSAPP
+
+        </button>
+
+    </div>
+    `
+);
 
 }
   
