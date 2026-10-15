@@ -287,7 +287,83 @@ function bacaPengguna(){try{const data=localStorage.getItem("mdp_user");return d
 function paparMaklumatPengguna(){if(!currentUser)return;const nama=currentUser.name||currentUser.noSkb||"-", jawatan=currentUser.jawatan||"-";document.getElementById("userName").textContent=nama;document.getElementById("userJawatan").textContent=jawatan;document.getElementById("sidebarNamaPengguna").textContent=nama;document.getElementById("sidebarJawatanPengguna").textContent=jawatan;}
 function kemasKiniJam(){const now=new Date();const d=document.getElementById("currentDate"),t=document.getElementById("currentTime");if(d)d.textContent=now.toLocaleDateString("ms-MY",{weekday:"short",day:"2-digit",month:"short",year:"numeric"}).toUpperCase();if(t)t.textContent=now.toLocaleTimeString("ms-MY",{hour12:false});}
 function roleSemasa(){return String(currentUser?.role||currentUser?.jawatan||"").trim().toLowerCase().replace(/_/g," ").replace(/\s+/g," ");}
-function kawalMenuMengikutPeranan(){if(!currentUser)return;const role=roleSemasa();const menuMingguan=document.getElementById("menuMingguan");if(menuMingguan){const bolehKLM=currentUser.isAdmin===true||role==="admin"||role==="administrator"||role==="ketua unit";menuMingguan.style.display=bolehKLM?"":"none";}const isAdmin=currentUser.isAdmin===true||role==="admin"||role==="administrator";if(isAdmin)return;["menuDashboard","menuAnggota","menuLaporan","menuTetapan"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="none";});const mobileKlm=document.getElementById("mobile-menu-klm");if(mobileKlm&&!(role==="ketua unit"))mobileKlm.style.display="none";}
+
+function kawalMenuMengikutPeranan() {
+    if (!currentUser) return;
+
+    const role = roleSemasa();
+
+    // Admin, PTW, POW dan PPOW
+    const roleAdmin = [
+        "admin",
+        "administrator",
+        "ptw",
+        "pow",
+        "ppow"
+    ];
+
+    // Admin, PTW, POW, PPOW dan Ketua Unit
+    const roleKLM = [
+        ...roleAdmin,
+        "ketua unit"
+    ];
+
+    const isAdmin =
+        currentUser.isAdmin === true ||
+        role === "admin" ||
+        role === "administrator";
+
+    const bolehLihatAdminMenu =
+        isAdmin || roleAdmin.includes(role);
+
+    const bolehLihatKLM =
+        isAdmin || roleKLM.includes(role);
+
+    // Pengurusan Anggota
+    const menuAnggota =
+        document.getElementById("menuAnggota");
+
+    if (menuAnggota) {
+        menuAnggota.style.display =
+            bolehLihatAdminMenu ? "" : "none";
+    }
+
+    // Laporan Wilayah
+    const menuLaporan =
+        document.getElementById("menuLaporan");
+
+    if (menuLaporan) {
+        menuLaporan.style.display =
+            bolehLihatAdminMenu ? "" : "none";
+    }
+
+    // KLM Mingguan - Sidebar desktop
+    const menuMingguan =
+        document.getElementById("menuMingguan");
+
+    if (menuMingguan) {
+        menuMingguan.style.display =
+            bolehLihatKLM ? "" : "none";
+    }
+
+    // Dashboard dan Tetapan - kekalkan kawalan asal
+    if (!isAdmin) {
+        ["menuDashboard", "menuTetapan"].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = "none";
+        });
+    }
+
+    // KLM Mingguan - Navigasi mudah alih
+    const mobileKlm =
+        document.getElementById("mobile-menu-klm");
+
+    if (mobileKlm) {
+        mobileKlm.style.display =
+            bolehLihatKLM ? "" : "none";
+    }
+}
+
 function bukaDashboardMengikutRole(){const role=roleSemasa();window.location.href=(currentUser&&(currentUser.isAdmin===true||role==="admin"||role==="administrator"))?"dashboard.html":"dashboardkpku.html";}
 function logKeluar(){localStorage.removeItem("mdp_user");window.location.href="login.html";}
 function applyRoleAccess(){if(!currentUser)return;const unitSelect=document.getElementById("unit"),filterUnit=document.getElementById("filterUnit");const role=roleSemasa();if(currentUser.isAdmin===true||role==="admin"||role==="administrator")return;const userUnit=currentUser.unit||"";if(userUnit){unitSelect.innerHTML=`<option value="${userUnit}">${userUnit}</option>`;unitSelect.value=userUnit;unitSelect.disabled=true;filterUnit.innerHTML=`<option value="${userUnit}">${userUnit}</option>`;filterUnit.value=userUnit;filterUnit.disabled=true;}}
