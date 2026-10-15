@@ -289,10 +289,10 @@ function kemasKiniJam(){const now=new Date();const d=document.getElementById("cu
 function roleSemasa(){return String(currentUser?.role||currentUser?.jawatan||"").trim().toLowerCase().replace(/_/g," ").replace(/\s+/g," ");}
 
 
+
 function kawalMenuMengikutPeranan() {
     if (!currentUser) return;
 
-    // Baca peranan daripada data pengguna
     const normalRole = value =>
         String(value || "")
             .trim()
@@ -303,12 +303,6 @@ function kawalMenuMengikutPeranan() {
     const role = normalRole(currentUser.role);
     const jawatan = normalRole(currentUser.jawatan);
 
-    const isAdmin =
-        currentUser.isAdmin === true ||
-        ["admin", "administrator"].includes(role) ||
-        ["admin", "administrator"].includes(jawatan);
-
-    // Senarai peranan yang dibenarkan
     const roleAdmin = [
         "admin",
         "administrator",
@@ -322,6 +316,11 @@ function kawalMenuMengikutPeranan() {
         "ketua unit"
     ];
 
+    const isAdmin =
+        currentUser.isAdmin === true ||
+        ["admin", "administrator"].includes(role) ||
+        ["admin", "administrator"].includes(jawatan);
+
     const bolehLihatAdminMenu =
         isAdmin ||
         roleAdmin.includes(role) ||
@@ -332,48 +331,76 @@ function kawalMenuMengikutPeranan() {
         roleKLM.includes(role) ||
         roleKLM.includes(jawatan);
 
-    // Paksa paparan menu mengikut kebenaran
     function tetapkanMenu(id, dibenarkan) {
         const el = document.getElementById(id);
-
-        if (!el) {
-            console.warn("Menu tidak dijumpai:", id);
-            return;
-        }
+        if (!el) return;
 
         if (dibenarkan) {
             el.style.removeProperty("display");
         } else {
-            el.style.setProperty(
-                "display",
-                "none",
-                "important"
-            );
+            el.style.setProperty("display", "none", "important");
         }
     }
 
-    // Admin, PTW, POW, PPOW sahaja
+    // Dashboard mesti dipaparkan untuk semua pengguna
+    tetapkanMenu("menuDashboard", true);
+
+    // Pengurusan Anggota dan Laporan Wilayah
     tetapkanMenu("menuAnggota", bolehLihatAdminMenu);
     tetapkanMenu("menuLaporan", bolehLihatAdminMenu);
 
-    // Admin, PTW, POW, PPOW, Ketua Unit
+    // KLM Mingguan
     tetapkanMenu("menuMingguan", bolehLihatKLM);
     tetapkanMenu("mobile-menu-klm", bolehLihatKLM);
 
-    // Kekalkan kawalan Dashboard dan Tetapan
-    if (!isAdmin) {
-        tetapkanMenu("menuDashboard", false);
-        tetapkanMenu("menuTetapan", false);
-    }
+    // Tetapan: Admin sahaja
+    tetapkanMenu("menuTetapan", isAdmin);
 
     console.log("KAWALAN MENU SIDEBAR", {
         role,
         jawatan,
-        isAdmin,
+        dashboard: bolehLihatAdminMenu
+            ? "dashboard.html"
+            : "dashboardkpku.html",
         bolehLihatAdminMenu,
         bolehLihatKLM
     });
 }
+
+function bukaDashboardMengikutRole() {
+    if (!currentUser) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const normalRole = value =>
+        String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/_/g, " ")
+            .replace(/\s+/g, " ");
+
+    const role = normalRole(currentUser.role);
+    const jawatan = normalRole(currentUser.jawatan);
+
+    const roleAdmin = [
+        "admin",
+        "administrator",
+        "ptw",
+        "pow",
+        "ppow"
+    ];
+
+    const bolehDashboardAdmin =
+        currentUser.isAdmin === true ||
+        roleAdmin.includes(role) ||
+        roleAdmin.includes(jawatan);
+
+    window.location.href = bolehDashboardAdmin
+        ? "dashboard.html"
+        : "dashboardkpku.html";
+}
+
 
 
 function bukaDashboardMengikutRole(){const role=roleSemasa();window.location.href=(currentUser&&(currentUser.isAdmin===true||role==="admin"||role==="administrator"))?"dashboard.html":"dashboardkpku.html";}
