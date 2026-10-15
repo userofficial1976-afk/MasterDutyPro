@@ -802,29 +802,37 @@ main>.p-3{
     } catch { return null; }
   }
 
-function bukaDashboardMengikutRole(){
 
-  if (!currentUser){
-    location.href="login.html";
-    return;
-  }
+function bukaDashboardMengikutRole() {
+    if (!currentUser) return;
 
-  const jawatan = (currentUser.jawatan || "").toUpperCase();
+    const normalisasi = nilai => String(nilai || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[_\-.]+/g, " ")
+        .replace(/\s+/g, " ");
 
-  if(currentUser.isAdmin){
-    location.href="dashboard.html";
-  }
-  else if(
-    jawatan.includes("KETUA UNIT") ||
-    jawatan.includes("KETUA POS")
-  ){
-    location.href="dashboardkpku.html";
-  }
-  else{
-    location.href="dashboardkpku.html";
-  }
+    const role = normalisasi(currentUser.role);
+    const jawatan = normalisasi(currentUser.jawatan);
 
+    const perananDashboardUtama = [
+        "admin",
+        "administrator",
+        "ptw",
+        "pow",
+        "ppow"
+    ];
+
+    const gunaDashboardUtama =
+        currentUser.isAdmin === true ||
+        perananDashboardUtama.includes(role) ||
+        perananDashboardUtama.includes(jawatan);
+
+    window.location.href = gunaDashboardUtama
+        ? "dashboard.html"
+        : "dashboardkpku.html";
 }
+
 
 
 
@@ -835,80 +843,75 @@ function bukaDashboardMengikutRole(){
     document.getElementById("userJawatan").textContent = currentUser.jawatan || "-";
   }
 
-function kawalMenuMengikutPeranan() {
 
+function kawalMenuMengikutPeranan() {
     if (!currentUser) return;
 
-    const role = String(
-        currentUser.role ||
-        currentUser.jawatan ||
-        ""
-    )
-    .trim()
-    .toLowerCase()
-    .replace(/_/g, " ")
-    .replace(/\s+/g, " ");
-
-    // ================================
-    // ADMIN
-    // ================================
-    if (
-        currentUser.isAdmin === true ||
-        role === "admin" ||
-        role === "administrator"
-    ) {
-        return;
+    function normalisasiPeranan(nilai) {
+        return String(nilai || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[_\-.]+/g, " ")
+            .replace(/\s+/g, " ");
     }
 
-    // ================================
-    // SEMBUNYI MENU ADMIN
-    // ================================
-    [
-    "menuAnggota",
-    "menuLaporan",
-    "menuTetapan"
-].forEach(id => {
+    const role = normalisasiPeranan(currentUser.role);
+    const jawatan = normalisasiPeranan(currentUser.jawatan);
 
-        const el = document.getElementById(id);
+    const perananUtama = [
+        "admin",
+        "administrator",
+        "ptw",
+        "pow",
+        "ppow"
+    ];
 
-        if (el) {
-            el.style.display = "none";
-        }
+    const isAdmin =
+        currentUser.isAdmin === true ||
+        ["admin", "administrator"].includes(role) ||
+        ["admin", "administrator"].includes(jawatan);
 
+    const bolehLihatPengurusan =
+        perananUtama.includes(role) ||
+        perananUtama.includes(jawatan) ||
+        isAdmin;
+
+    const bolehLihatKLM =
+        bolehLihatPengurusan ||
+        role === "ketua unit" ||
+        jawatan === "ketua unit";
+
+    function tetapkanMenu(id, papar) {
+        const elemen = document.getElementById(id);
+
+        if (!elemen) return;
+
+        elemen.style.setProperty(
+            "display",
+            papar ? "flex" : "none",
+            "important"
+        );
+    }
+
+    // Dashboard desktop: Admin sahaja
+    tetapkanMenu("menu-board", isAdmin);
+
+    // KLM Mingguan desktop dan mobile
+    tetapkanMenu("menuMingguan", bolehLihatKLM);
+    tetapkanMenu("mobile-menu-klm", bolehLihatKLM);
+
+    // Tetapan: Admin sahaja
+    tetapkanMenu("menuTetapan", isAdmin);
+
+    console.log("KAWALAN MENU JADUAL DUTY", {
+        role,
+        jawatan,
+        isAdmin,
+        bolehLihatPengurusan,
+        bolehLihatKLM
     });
-
-    // ================================
-    // KLM MINGGUAN
-    // KETUA UNIT SAHAJA
-    // ================================
-    const menuMingguan =
-        document.getElementById("menuMingguan");
-
-  const mobileMenuKlm =
-    document.getElementById("mobile-menu-klm");
-
-if (role === "ketua unit") {
-
-    if (menuMingguan)
-        menuMingguan.style.display = "";
-
-    if (mobileMenuKlm)
-        mobileMenuKlm.style.display = "";
-
-}
-else {
-
-    if (menuMingguan)
-        menuMingguan.style.display = "none";
-
-    if (mobileMenuKlm)
-        mobileMenuKlm.style.display = "none";
-
 }
 
-
-
-}
 
   
   function logKeluar() {
