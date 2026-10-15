@@ -155,10 +155,12 @@ tbody tr:hover{background:rgba(0,210,255,.06)}
         <div><div class="flex justify-between text-xs mb-2"><span class="text-sky-200">Tidak Bertugas</span><span id="ringkasanTidak" class="text-orange-300">0</span></div><div class="bar-track"><div id="barTidak" class="bar-fill" style="width:0%;background:linear-gradient(90deg,#ff7417,#ffb347)"></div></div></div>
         <div class="pt-3 border-t border-cyan-900/70"><div class="small-label mb-2">Pintasan Laporan</div><button type="button" onclick="window.location.href='testrk.html'" class="action-btn w-full mb-2"><i class="fas fa-file-alt mr-2"></i>LAPORAN RK01 SEBULAN (MINGGU)</button><button type="button" onclick="paparLaporanBulanan()" class="action-btn w-full"><i class="fas fa-chart-bar mr-2"></i>LAPORAN PENUH SEBULAN</button><button
     type="button"
-    onclick="salinLaporanWhatsApp()"
+    onclick="paparLaporanHarianKetuaUnit()"
     class="action-btn w-full mt-2">
-    <i class="fab fa-whatsapp mr-2"></i>
-    SALIN KE WHATSAPP
+
+    <i class="fas fa-clipboard-list mr-2"></i>
+    LAPORAN HARIAN KETUA UNIT
+
 </button></div>
       </div>
     </div>
@@ -243,55 +245,68 @@ function paparLaporanBulanan(){
 
 async function paparLaporanHarianKetuaUnit(){
 
-    const hari = new Date().toLocaleDateString(
+    const hari = new Date();
+
+    const tarikh = hari.toLocaleDateString(
         "ms-MY",
         {
-            weekday:"long",
             day:"2-digit",
             month:"2-digit",
             year:"numeric"
         }
     );
 
-    teksLaporanHarian =
+    const namaHari = hari.toLocaleDateString(
+        "ms-MY",
+        {
+            weekday:"long"
+        }
+    );
+
+    const laporan =
 `Assalamualaikum Tuan.
 
-*ATURTUGAS UNIT ${currentUser.unit || ""}*
+*ATURTUGAS UNIT ${currentUser.unit || "-"}*
 
-Tarikh: ${hari}
+Tarikh: ${tarikh} (${namaHari})
 
 Aturtugas anggota di pos kawalan adalah seperti berikut:
 
+*1. CONTOH POS*
 
-[SENARAI DUTY AKAN DIJANA AUTOMATIK DI SINI]
+1. Duty A (0700-1500)
+2. Duty B (1500-2300)
 
+Off Day :
+Cuti Tahun :
+MC :
 
 Sebarang perubahan duty akan dimaklumkan segera.
 
 Sekian untuk makluman Tuan.`;
 
-bukaPopup(
-    "Laporan Harian Ketua Unit",
-    `
-    <div class="space-y-3">
+    bukaPopup(
+        "Laporan Harian Ketua Unit",
+        `
+        <div class="space-y-3">
 
-        <textarea
-            id="laporanHarianText"
-            class="w-full h-[500px] bg-slate-950 border border-cyan-700 p-3 text-sm text-sky-100"
-        >${teksLaporanHarian}</textarea>
+            <textarea
+                id="laporanHarianText"
+                class="w-full h-[500px] bg-slate-950 border border-cyan-700 p-3 text-sm text-sky-100"
+            >${laporan}</textarea>
 
-        <button
-            onclick="salinLaporanWhatsApp()"
-            class="action-btn w-full">
+            <button
+                onclick="salinLaporanWhatsApp()"
+                class="action-btn w-full">
 
-            <i class="fab fa-whatsapp mr-2"></i>
-            SALIN KE WHATSAPP
+                <i class="fab fa-whatsapp mr-2"></i>
+                SALIN KE WHATSAPP
 
-        </button>
+            </button>
 
-    </div>
-    `
-);
+        </div>
+        `
+    );
 
 }
   
