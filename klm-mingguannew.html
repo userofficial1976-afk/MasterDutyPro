@@ -1,0 +1,3743 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KLM Mingguan — Master Duty Pro</title>
+
+<!-- TAILWIND -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- TAILWIND CUSTOM COLOR -->
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                teal: {
+                    450: '#2dd4bf',
+                    550: '#14b8a6',
+                    650: '#0d9488',
+                    750: '#0f766e'
+                }
+            }
+        }
+    }
+}
+</script>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- FONT AWESOME -->
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<style>
+
+/* =========================================================
+   MASTER DUTY PRO
+   KLM MINGGUAN
+   UI SAHAJA
+   JAVASCRIPT / LOGIC TIDAK DIUBAH
+========================================================= */
+
+body{
+    background:#0b1220;
+    font-family:'Segoe UI',system-ui,sans-serif;
+    color:#e2e8f0;
+}
+
+
+/* =========================================================
+   GLASS
+========================================================= */
+
+.glass{
+    background:rgba(15,23,42,.72);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border:1px solid rgba(45,212,191,.12);
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar-link{
+    color:#94a3b8;
+    text-decoration:none;
+    transition:.18s ease;
+}
+
+.sidebar-link:hover{
+    color:#fff;
+    background:rgba(255,255,255,.04);
+}
+
+.sidebar-link.active{
+    background:linear-gradient(
+        90deg,
+        rgba(20,184,166,.20),
+        transparent
+    );
+
+    border-left:3px solid #14b8a6;
+
+    color:#2dd4bf;
+}
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+select{
+    background:#0f172a;
+    color:#e2e8f0;
+    border:1px solid rgba(148,163,184,.18);
+}
+
+select:focus{
+    border-color:#14b8a6;
+    outline:none;
+
+    box-shadow:
+        0 0 0 3px rgba(20,184,166,.08);
+}
+
+select:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+button{
+    transition:.18s ease;
+}
+
+button:hover{
+    transform:translateY(-1px);
+}
+
+
+/* =========================================================
+   TAB
+========================================================= */
+
+.tab.active{
+    background:linear-gradient(
+        135deg,
+        rgba(20,184,166,.20),
+        rgba(15,118,110,.12)
+    );
+
+    color:#2dd4bf;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(20,184,166,.16);
+}
+
+.tab:hover{
+    background:rgba(255,255,255,.04);
+    color:#fff;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.summary-card,
+.table-card,
+.filter-card{
+    background:rgba(15,23,42,.72);
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    border:1px solid rgba(45,212,191,.10);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(15,118,110,.38),
+            rgba(15,23,42,.88)
+        );
+
+    border:1px solid rgba(45,212,191,.15);
+}
+
+
+/* =========================================================
+   NUMBER
+========================================================= */
+
+.number-klm{
+    color:#fbbf24;
+    font-weight:700;
+}
+
+.number-rm{
+    color:#5eead4;
+    font-weight:700;
+}
+
+.number-total{
+    color:#fff;
+    font-weight:900;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+tbody tr:hover{
+    background:rgba(20,184,166,.035);
+}
+
+.total-row td{
+    background:#0f1b2d;
+    color:#fff;
+    font-weight:900;
+}
+
+
+/* =========================================================
+   UNIT / POS
+========================================================= */
+
+.unit-card,
+.pos-group{
+    border-color:rgba(255,255,255,.08);
+}
+
+.unit-card:hover{
+    border-color:rgba(45,212,191,.15);
+}
+
+
+/* =========================================================
+   BUTTON STYLE
+========================================================= */
+
+.btn-primary{
+    background:
+        linear-gradient(
+            135deg,
+            #14b8a6,
+            #0f766e
+        );
+
+    color:#fff;
+}
+
+.btn-secondary{
+    background:rgba(255,255,255,.05);
+    color:#cbd5e1;
+}
+
+.btn-detail{
+    background:rgba(20,184,166,.08);
+
+    color:#5eead4;
+
+    border:
+        1px solid
+        rgba(20,184,166,.18);
+}
+
+.btn-detail:hover{
+    background:rgba(20,184,166,.16);
+}
+
+
+/* =========================================================
+   DETAIL
+========================================================= */
+
+.detail-panel{
+    background:rgba(15,23,42,.78);
+    border-color:rgba(45,212,191,.12);
+}
+
+.detail-close{
+    background:rgba(255,255,255,.05);
+    color:#94a3b8;
+}
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+.state-box{
+    color:#64748b;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    background:#0f172a;
+    border:
+        1px solid
+        rgba(45,212,191,.18);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+.mobile-bottom{
+    background:rgba(11,18,32,.96);
+
+    border-top:
+        1px solid
+        rgba(45,212,191,.10);
+}
+
+.mobile-nav-item{
+    color:#64748b;
+}
+
+.mobile-nav-item.active{
+    color:#2dd4bf;
+}
+
+
+/* =========================================================
+   MOBILE RESPONSIVE
+========================================================= */
+
+@media(max-width:760px){
+
+    .main{
+        padding-bottom:70px;
+    }
+
+    .topbar{
+        padding-left:16px;
+        padding-right:16px;
+    }
+
+    .hero{
+        border-radius:16px;
+    }
+
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+</style>
+
+
+<!-- MASTER DUTY PRO — VISUAL MATCH LAYER (UI sahaja; fungsi asal dikekalkan) -->
+<style id="mdp-kod-duty-visual-match">
+:root{--mdp-bg:#020817;--mdp-panel:rgba(8,20,39,.88);--mdp-cyan:#22d3ee;--mdp-sky:#38bdf8;--mdp-line:rgba(34,211,238,.20);--mdp-muted:#94a3b8}
+html,body{font-family:"Century Gothic",CenturyGothic,AppleGothic,sans-serif!important;background:#020817!important;color:#e2e8f0}
+body{background-image:radial-gradient(ellipse at 15% 0%,rgba(8,145,178,.12),transparent 42%),radial-gradient(ellipse at 95% 20%,rgba(14,165,233,.08),transparent 36%)!important}
+/* Shared futuristic panel tone */
+.sidebar,aside,nav.sidebar,header,.topbar,.top-bar{background:rgba(2,8,23,.96)!important;border-color:var(--mdp-line)!important;backdrop-filter:blur(18px)}
+.sidebar,.sidebar a,.sidebar-link{transition:background .2s ease,color .2s ease,border-color .2s ease}
+.sidebar a,.sidebar-link{border:1px solid transparent!important;border-radius:10px!important;color:#94a3b8!important}
+.sidebar a:hover,.sidebar-link:hover{background:rgba(8,145,178,.12)!important;border-color:rgba(34,211,238,.16)!important;color:#67e8f9!important}
+.sidebar a.active,.sidebar-link.active{background:linear-gradient(100deg,rgba(8,145,178,.24),rgba(14,165,233,.08))!important;border-color:rgba(34,211,238,.34)!important;color:#67e8f9!important;box-shadow:inset 3px 0 0 #22d3ee,0 0 18px rgba(6,182,212,.06)!important}
+/* Headings and accent text */
+h1,h2,h3,.page-title,.brand-font{font-family:"Century Gothic",CenturyGothic,AppleGothic,sans-serif!important;letter-spacing:.01em}
+.text-teal-400,.text-teal-300,.text-cyan-400,.text-cyan-300{color:#67e8f9!important}
+/* Command-center cards */
+.glass,.card,.stat-card,.panel,.content-card{background:rgba(8,20,39,.78)!important;border:1px solid rgba(34,211,238,.16)!important;border-radius:16px!important;box-shadow:0 12px 32px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.025)!important;backdrop-filter:blur(14px)}
+input,select,textarea{background:rgba(2,8,23,.78)!important;color:#e2e8f0!important;border-color:rgba(34,211,238,.22)!important;border-radius:10px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:#22d3ee!important;box-shadow:0 0 0 3px rgba(34,211,238,.10)!important}
+button{transition:filter .18s ease,transform .18s ease}
+button:hover{filter:brightness(1.08)}
+table{border-color:rgba(34,211,238,.15)!important}
+thead th{background:rgba(8,47,73,.68)!important;color:#a5f3fc!important;border-color:rgba(34,211,238,.18)!important}
+tbody tr{border-color:rgba(34,211,238,.10)!important}
+tbody tr:hover{background:rgba(8,145,178,.07)!important}
+hr{border-color:rgba(34,211,238,.16)!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:#020817}::-webkit-scrollbar-thumb{background:#164e63;border-radius:10px}::-webkit-scrollbar-thumb:hover{background:#0891b2}
+@media(max-width:1023px){.glass,.card,.stat-card,.panel,.content-card{border-radius:13px!important}}
+</style>
+
+</head>
+
+
+<body>
+
+<!-- =========================================================
+     SIDEBAR
+     ========================================================= -->
+
+<aside class="w-72 glass border-r border-teal-550/10 fixed h-full z-40 hidden lg:block overflow-y-auto">
+
+    <div class="p-6">
+
+        <!-- LOGO -->
+        <div class="flex items-center gap-3 mb-8">
+
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-450 to-teal-750 flex items-center justify-center">
+                <i class="fas fa-shield-halved text-white text-xl"></i>
+            </div>
+
+            <div>
+                <h1 class="font-bold text-white text-lg">
+                    Master Duty Pro
+                </h1>
+
+                <p class="text-xs text-teal-450">
+                    Wilayah Terengganu
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- USER -->
+        <div class="mb-8 p-3 rounded-xl bg-white/5 border border-white/10">
+
+            <p
+                id="sidebarUserName"
+                class="text-sm font-semibold text-white truncate"
+            >
+                —
+            </p>
+
+            <p
+                id="sidebarUserRole"
+                class="text-xs text-teal-400 mt-1"
+            >
+                —
+            </p>
+
+            <p
+                id="sidebarUserUnit"
+                class="text-xs text-slate-500 mt-1 truncate"
+            >
+                —
+            </p>
+
+        </div>
+
+
+        <!-- MENU -->
+        <nav class="space-y-1">
+
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">
+                Menu Utama
+            </p>
+
+
+            <a
+                href="dashboard.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-chart-line w-5"></i>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a
+                href="senarai-anggota.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-users w-5"></i>
+                <span>Senarai Anggota</span>
+            </a>
+
+
+            <a
+                href="jadual-duty.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-calendar-days w-5"></i>
+                <span>Jadual Duty</span>
+            </a>
+
+
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-6 mb-3">
+                Pengurusan
+            </p>
+
+
+            <a
+                href="kod-duty.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-code w-5"></i>
+                <span>Kod Duty</span>
+            </a>
+
+
+            <a
+                href="kod-tempat-kerja.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-location-dot w-5"></i>
+                <span>Kod Tempat Kerja</span>
+            </a>
+
+
+            <a
+                href="rk02-entry.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-file-invoice w-5"></i>
+                <span>RK02 &amp; PNL Entry</span>
+            </a>
+
+
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-6 mb-3">
+                Laporan
+            </p>
+
+
+            <a
+                href="klm-mingguan.html"
+                class="sidebar-link active flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-chart-column w-5"></i>
+                <span>KLM Mingguan</span>
+            </a>
+
+
+            <a
+                href="laporan-penuh-pengurusan.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-file-lines w-5"></i>
+                <span>Laporan Pengurusan</span>
+            </a>
+
+
+            <a
+                href="anggaran-rk01.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-coins w-5"></i>
+                <span>Anggaran RK01</span>
+            </a>
+
+
+            <a
+                href="anggaran-rk02.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-chart-pie w-5"></i>
+                <span>Anggaran RK02</span>
+            </a>
+
+
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mt-6 mb-3">
+                Sistem
+            </p>
+
+
+            <a
+                href="tetapan.html"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-gear w-5"></i>
+                <span>Tetapan</span>
+            </a>
+
+
+            <a
+                href="#"
+                id="btnLogout"
+                class="sidebar-link flex items-center gap-3 px-3 py-3 rounded-lg text-sm"
+            >
+                <i class="fas fa-right-from-bracket w-5"></i>
+                <span>Log Keluar</span>
+            </a>
+
+        </nav>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main class="main">
+
+    <!-- TOPBAR -->
+
+<header class="glass sticky top-0 z-30 border-b border-teal-550/10 px-6 py-4">
+
+    <div class="flex items-center justify-between">
+
+        <div>
+
+            <h2 class="text-xl font-bold text-white">
+                KLM Mingguan
+            </h2>
+
+            <p class="text-sm text-slate-400">
+                Ringkasan KLM &amp; RM mengikut minggu
+            </p>
+
+        </div>
+
+
+        <div
+            class="flex items-center gap-2 bg-teal-550/10 text-teal-450 px-4 py-2 rounded-full text-sm font-medium"
+        >
+
+            <span
+                class="w-2 h-2 bg-teal-450 rounded-full animate-pulse"
+            ></span>
+
+            System Online
+
+            <span
+                id="topRole"
+                class="ml-2 text-teal-300"
+            >
+                —
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+    <!-- CONTENT -->
+
+    <section class="content">
+
+        <!-- HERO -->
+
+        <div class="hero">
+
+            <div class="hero-content">
+
+                <div class="hero-title">
+                    KLM MINGGUAN
+                </div>
+
+                <div class="hero-description">
+                    Analisis KLM dan RM berdasarkan jadual duty.
+                    Data dibahagikan kepada empat minggu dalam bulan
+                    dan jumlah keseluruhan.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="filter-card">
+
+            <div class="filter-group">
+
+                <label class="filter-label">
+                    Bulan
+                </label>
+
+                <select id="filterBulan"></select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label class="filter-label">
+                    Tahun
+                </label>
+
+                <select id="filterTahun"></select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label class="filter-label">
+                    Unit
+                </label>
+
+                <select id="filterUnit">
+                    <option value="">
+                        MEMUATKAN UNIT...
+                    </option>
+                </select>
+
+            </div>
+
+
+            <div class="filter-actions">
+
+                <button
+                    class="btn btn-primary"
+                    id="btnPapar"
+                >
+                    🔎 PAPAR
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    id="btnRefresh"
+                >
+                    🔄 REFRESH
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABS -->
+
+        <div class="tabs">
+
+            <button
+                class="tab active"
+                data-week="1"
+            >
+                MINGGU 1
+            </button>
+
+            <button
+                class="tab"
+                data-week="2"
+            >
+                MINGGU 2
+            </button>
+
+            <button
+                class="tab"
+                data-week="3"
+            >
+                MINGGU 3
+            </button>
+
+            <button
+                class="tab"
+                data-week="4"
+            >
+                MINGGU 4
+            </button>
+
+            <button
+                class="tab"
+                data-week="all"
+            >
+                JUMLAH KESELURUHAN
+            </button>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div
+            class="summary-grid"
+            id="summaryGrid"
+        >
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    KLM Hari Biasa
+                </div>
+
+                <div
+                    class="summary-value klm"
+                    id="sumKlmBiasa"
+                >
+                    0.00
+                </div>
+
+                <div class="summary-small">
+                    Jam
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    KLM Hari OFF
+                </div>
+
+                <div
+                    class="summary-value klm"
+                    id="sumKlmOff"
+                >
+                    0.00
+                </div>
+
+                <div class="summary-small">
+                    Hari
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    KLM Cuti AM
+                </div>
+
+                <div
+                    class="summary-value klm"
+                    id="sumKlmCuti"
+                >
+                    0.00
+                </div>
+
+                <div class="summary-small">
+                    Hari
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    JUMLAH RM KLM
+                </div>
+
+                <div
+                    class="summary-value rm"
+                    id="sumRm"
+                >
+                    RM 0.00
+                </div>
+
+                <div class="summary-small">
+                    rm_klm_seluruh
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAIN RESULT -->
+
+        <div id="resultArea">
+
+            <div class="state-box">
+
+                <div class="state-icon">
+                    📊
+                </div>
+
+                <div class="state-title">
+                    Sila pilih bulan dan tahun
+                </div>
+
+                <div class="state-text">
+                    Tekan PAPAR untuk memuatkan data KLM mingguan.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DETAIL -->
+
+        <div
+            class="detail-panel"
+            id="detailPanel"
+        >
+
+            <div class="detail-header">
+
+                <div>
+
+                    <div
+                        class="detail-title"
+                        id="detailTitle"
+                    >
+                        Detail Anggota
+                    </div>
+
+                    <div
+                        class="table-subtitle"
+                        id="detailSubtitle"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+                <button
+                    class="detail-close"
+                    id="btnCloseDetail"
+                >
+                    ✕ TUTUP DETAIL
+                </button>
+
+            </div>
+
+            <div id="detailContent"></div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     MOBILE BOTTOM NAV
+     ========================================================= -->
+
+<nav class="mobile-bottom">
+
+    <a
+        href="dashboard.html"
+        class="mobile-nav-item"
+    >
+        <span class="mobile-nav-icon">⌂</span>
+        <span>Dashboard</span>
+    </a>
+
+    <a
+        href="jadual-duty.html"
+        class="mobile-nav-item"
+    >
+        <span class="mobile-nav-icon">📅</span>
+        <span>Duty</span>
+    </a>
+
+    <a
+        href="klm-mingguan.html"
+        class="mobile-nav-item active"
+    >
+        <span class="mobile-nav-icon">📊</span>
+        <span>KLM</span>
+    </a>
+
+    <a
+        href="tetapan.html"
+        class="mobile-nav-item"
+    >
+        <span class="mobile-nav-icon">⚙</span>
+        <span>Tetapan</span>
+    </a>
+
+</nav>
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div
+    class="toast"
+    id="toast"
+>
+
+    <div
+        class="toast-title"
+        id="toastTitle"
+    >
+        Makluman
+    </div>
+
+    <div
+        class="toast-text"
+        id="toastText"
+    >
+        —
+    </div>
+
+</div>
+
+
+<script>
+/* =========================================================
+   MASTER DUTY PRO
+   KLM MINGGUAN
+   ========================================================= */
+
+
+/* =========================================================
+   SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL =
+    "https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+let currentUser = null;
+
+let currentRole = "";
+
+let currentUnit = "";
+
+let currentWeek = "1";
+
+let semuaDuty = [];
+
+let semuaAnggota = [];
+
+let unitList = [];
+
+
+/* =========================================================
+   BULAN
+   ========================================================= */
+
+const SENARAI_BULAN = [
+    "Januari",
+    "Februari",
+    "Mac",
+    "April",
+    "Mei",
+    "Jun",
+    "Julai",
+    "Ogos",
+    "September",
+    "Oktober",
+    "November",
+    "Disember"
+];
+
+
+/* =========================================================
+   HELPER
+   ========================================================= */
+
+function normaliseRole(role){
+
+    return String(role || "")
+        .trim()
+        .toLowerCase()
+        .replace(/_/g," ")
+        .replace(/\s+/g," ");
+}
+
+
+function normaliseUnit(unit){
+
+    return String(unit || "")
+        .trim()
+        .toUpperCase();
+}
+
+
+function num(value){
+
+    const n = Number(value);
+
+    return Number.isFinite(n)
+        ? n
+        : 0;
+}
+
+
+function money(value){
+
+    return "RM " +
+        num(value).toLocaleString(
+            "ms-MY",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+}
+
+
+function decimal(value){
+
+    return num(value).toLocaleString(
+        "ms-MY",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+}
+
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+function toast(title,text){
+
+    const el =
+        document.getElementById("toast");
+
+    document.getElementById(
+        "toastTitle"
+    ).textContent = title;
+
+    document.getElementById(
+        "toastText"
+    ).textContent = text;
+
+    el.classList.add("show");
+
+    setTimeout(() => {
+
+        el.classList.remove("show");
+
+    },3500);
+}
+
+
+/* =========================================================
+   BACA USER
+   ========================================================= */
+
+function bacaPengguna(){
+
+    try{
+
+        const raw =
+            localStorage.getItem("mdp_user");
+
+        if(!raw){
+
+            window.location.href =
+                "login.html";
+
+            return null;
+        }
+
+        const user =
+            JSON.parse(raw);
+
+        return user;
+
+    }catch(error){
+
+        console.error(
+            "RALAT BACA USER:",
+            error
+        );
+
+        localStorage.removeItem(
+            "mdp_user"
+        );
+
+        window.location.href =
+            "login.html";
+
+        return null;
+    }
+}
+
+
+/* =========================================================
+   ROLE
+   ========================================================= */
+
+function semakAkses(){
+
+    currentUser =
+        bacaPengguna();
+
+    if(!currentUser){
+        return false;
+    }
+
+    console.log(
+        "KLM MINGGUAN USER:",
+        currentUser
+    );
+
+
+    /*
+       ROLE BOLEH DATANG SEBAGAI:
+
+       role
+       jawatan
+       ketua_unit
+       ketua unit
+       isAdmin
+    */
+
+    let roleRaw =
+        currentUser.role ||
+        currentUser.jawatan ||
+        "";
+
+    currentRole =
+        normaliseRole(roleRaw);
+
+
+    if(
+        currentUser.isAdmin === true ||
+        currentRole === "admin" ||
+        currentRole === "administrator"
+    ){
+
+        currentRole = "admin";
+
+    }
+
+
+    console.log(
+        "ROLE NORMALISE:",
+        currentRole
+    );
+
+
+    /*
+       HANYA ADMIN + KETUA UNIT
+    */
+
+    const dibenarkan =
+        currentRole === "admin" ||
+        currentRole === "ketua unit";
+
+
+    if(!dibenarkan){
+
+        alert(
+            "Akses ditolak. Halaman KLM Mingguan hanya untuk Admin dan Ketua Unit."
+        );
+
+        window.location.href =
+            "jadual-duty.html";
+
+        return false;
+    }
+
+
+    currentUnit =
+        currentUser.unit ||
+        currentUser.namaUnit ||
+        currentUser.unitName ||
+        "";
+
+
+    currentUnit =
+        normaliseUnit(currentUnit);
+
+
+    document.getElementById(
+        "sidebarUserName"
+    ).textContent =
+        currentUser.name ||
+        currentUser.nama ||
+        "Pengguna";
+
+
+    document.getElementById(
+        "sidebarUserRole"
+    ).textContent =
+        currentRole.toUpperCase();
+
+
+    document.getElementById(
+        "sidebarUserUnit"
+    ).textContent =
+        currentUnit ||
+        "SEMUA UNIT";
+
+
+    document.getElementById(
+        "topRole"
+    ).textContent =
+        currentRole === "admin"
+            ? "ADMIN"
+            : "KETUA UNIT";
+
+
+    return true;
+}
+
+
+/* =========================================================
+   INIT FILTER BULAN
+   ========================================================= */
+
+function binaFilterBulan(){
+
+    const select =
+        document.getElementById(
+            "filterBulan"
+        );
+
+    select.innerHTML = "";
+
+    SENARAI_BULAN.forEach(
+        (bulan,index) => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                index + 1;
+
+            option.textContent =
+                bulan;
+
+            select.appendChild(
+                option
+            );
+        }
+    );
+
+    const sekarang =
+        new Date();
+
+    select.value =
+        sekarang.getMonth() + 1;
+}
+
+
+/* =========================================================
+   INIT FILTER TAHUN
+   ========================================================= */
+
+function binaFilterTahun(){
+
+    const select =
+        document.getElementById(
+            "filterTahun"
+        );
+
+    select.innerHTML = "";
+
+    const tahunSemasa =
+        new Date().getFullYear();
+
+
+    for(
+        let tahun =
+            tahunSemasa - 2;
+
+        tahun <=
+            tahunSemasa + 2;
+
+        tahun++
+    ){
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            tahun;
+
+        option.textContent =
+            tahun;
+
+        select.appendChild(
+            option
+        );
+    }
+
+
+    select.value =
+        tahunSemasa;
+}
+
+
+/* =========================================================
+   LOAD UNIT
+   ========================================================= */
+
+async function muatUnit(){
+
+    const select =
+        document.getElementById(
+            "filterUnit"
+        );
+
+
+    /*
+       KETUA UNIT
+       HANYA UNIT SENDIRI
+    */
+
+    if(
+        currentRole ===
+        "ketua unit"
+    ){
+
+        select.innerHTML = "";
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            currentUnit;
+
+        option.textContent =
+            currentUnit ||
+            "UNIT SENDIRI";
+
+        select.appendChild(
+            option
+        );
+
+        select.value =
+            currentUnit;
+
+        select.disabled = true;
+
+        return;
+    }
+
+
+    /*
+       ADMIN
+    */
+
+    select.disabled = false;
+
+    select.innerHTML =
+        `<option value="">SEMUA UNIT</option>`;
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("Data_Anggota")
+                .select("unit")
+                .not(
+                    "unit",
+                    "is",
+                    null
+                );
+
+
+        if(error){
+            throw error;
+        }
+
+
+        const setUnit =
+            new Set();
+
+
+        (data || []).forEach(
+            row => {
+
+                const unit =
+                    normaliseUnit(
+                        row.unit
+                    );
+
+                if(unit){
+                    setUnit.add(unit);
+                }
+            }
+        );
+
+
+        unitList =
+            [...setUnit].sort();
+
+
+        unitList.forEach(
+            unit => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    unit;
+
+                option.textContent =
+                    unit;
+
+                select.appendChild(
+                    option
+                );
+            }
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "RALAT LOAD UNIT:",
+            error
+        );
+
+        toast(
+            "Ralat",
+            "Tidak dapat memuatkan senarai unit."
+        );
+    }
+}
+
+
+/* =========================================================
+   LOAD ANGGOTA
+   ========================================================= */
+
+async function muatAnggota(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("Data_Anggota")
+                .select(`
+                    noskb,
+                    noanggota,
+                    nama,
+                    poskhidmat,
+                    unit,
+                    status
+                `);
+
+
+        if(error){
+            throw error;
+        }
+
+
+        semuaAnggota =
+            data || [];
+
+
+        console.log(
+            "DATA ANGGOTA:",
+            semuaAnggota
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "RALAT LOAD ANGGOTA:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   TARIKH
+   ========================================================= */
+
+function parseTarikh(value){
+
+    if(!value){
+        return null;
+    }
+
+
+    const str =
+        String(value).trim();
+
+
+    /*
+       FORMAT ISO:
+
+       YYYY-MM-DD
+    */
+
+    let match =
+        str.match(
+            /^(\d{4})-(\d{1,2})-(\d{1,2})/
+        );
+
+
+    if(match){
+
+        return {
+            year:Number(match[1]),
+            month:Number(match[2]),
+            day:Number(match[3])
+        };
+    }
+
+
+    /*
+       FORMAT DD/MM/YYYY
+    */
+
+    match =
+        str.match(
+            /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+        );
+
+
+    if(match){
+
+        return {
+            year:Number(match[3]),
+            month:Number(match[2]),
+            day:Number(match[1])
+        };
+    }
+
+
+    /*
+       FORMAT DD-MM-YYYY
+    */
+
+    match =
+        str.match(
+            /^(\d{1,2})-(\d{1,2})-(\d{4})/
+        );
+
+
+    if(match){
+
+        return {
+            year:Number(match[3]),
+            month:Number(match[2]),
+            day:Number(match[1])
+        };
+    }
+
+
+    return null;
+}
+
+
+/* =========================================================
+   TENTUKAN MINGGU
+   ========================================================= */
+
+function tentukanMinggu(day){
+
+    if(day >= 1 && day <= 7){
+        return 1;
+    }
+
+    if(day >= 8 && day <= 14){
+        return 2;
+    }
+
+    if(day >= 15 && day <= 21){
+        return 3;
+    }
+
+    if(day >= 22){
+        return 4;
+    }
+
+    return 0;
+}
+
+
+/* =========================================================
+   LOAD DUTY
+   ========================================================= */
+
+async function muatDuty(){
+
+    const bulan =
+        Number(
+            document.getElementById(
+                "filterBulan"
+            ).value
+        );
+
+    const tahun =
+        Number(
+            document.getElementById(
+                "filterTahun"
+            ).value
+        );
+
+
+    showLoading();
+
+
+    try{
+
+        /*
+           Ambil berdasarkan tahun.
+
+           Bulan dan minggu akan ditapis
+           di client berdasarkan tarikh.
+        */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("jadual_duty")
+                .select(`
+                    id,
+                    tarikh,
+                    bulan,
+                    tahun,
+                    no_skb,
+                    nama_anggota,
+                    no_anggota,
+                    unit,
+                    pos,
+                    nama_pos_asal,
+                    jam_klm,
+                    jumlah_offday,
+                    jam_offday_bertugas,
+                    jumlah_cutiam,
+                    jam_cutiam_bertugas,
+                    rm_jam_offday,
+                    rm_hari_offday,
+                    rm_jam_cutiam,
+                    rm_hari_cutiam,
+                    rm_klm_hari_biasa,
+                    rm_klm_seluruh
+                `)
+                .eq(
+                    "tahun",
+                    String(tahun)
+                );
+
+
+        if(error){
+            throw error;
+        }
+
+
+        let rows =
+            data || [];
+
+
+        /*
+           TAPIS BULAN
+        */
+
+        rows =
+            rows.filter(row => {
+
+                const date =
+                    parseTarikh(
+                        row.tarikh
+                    );
+
+
+                if(date){
+
+                    return (
+                        date.year === tahun &&
+                        date.month === bulan
+                    );
+                }
+
+
+                /*
+                   fallback jika tarikh tidak
+                   boleh parse.
+
+                   Cuba guna bulan.
+                */
+
+                const bulanDb =
+                    String(
+                        row.bulan || ""
+                    ).trim();
+
+
+                return (
+                    bulanDb ===
+                    String(bulan)
+                    ||
+                    bulanDb.toLowerCase() ===
+                    SENARAI_BULAN[
+                        bulan - 1
+                    ].toLowerCase()
+                );
+            });
+
+
+        /*
+           FILTER UNIT
+        */
+
+        const unit =
+            normaliseUnit(
+                document.getElementById(
+                    "filterUnit"
+                ).value
+            );
+
+
+        if(unit){
+
+            rows =
+                rows.filter(
+                    row =>
+                        normaliseUnit(
+                            row.unit
+                        ) === unit
+                );
+        }
+
+
+        /*
+           SIMPAN
+        */
+
+        semuaDuty =
+            rows;
+
+
+        console.log(
+            "DATA KLM MINGGUAN:",
+            semuaDuty
+        );
+
+
+        paparData();
+
+
+        toast(
+            "Data dikemaskini",
+            `${semuaDuty.length} rekod jadual duty dimuatkan.`
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "RALAT LOAD DUTY:",
+            error
+        );
+
+
+        semuaDuty = [];
+
+
+        showError(
+            "Tidak dapat memuatkan data jadual duty."
+        );
+
+
+        toast(
+            "Ralat Supabase",
+            error.message ||
+            "Gagal mendapatkan data."
+        );
+    }
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+function showLoading(){
+
+    document.getElementById(
+        "resultArea"
+    ).innerHTML = `
+
+        <div class="state-box">
+
+            <div class="state-icon">
+                ⏳
+            </div>
+
+            <div class="state-title">
+                Memuatkan data...
+            </div>
+
+            <div class="state-text">
+                Sila tunggu sebentar.
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+function showError(message){
+
+    document.getElementById(
+        "resultArea"
+    ).innerHTML = `
+
+        <div class="state-box">
+
+            <div class="state-icon">
+                ⚠️
+            </div>
+
+            <div class="state-title">
+                Ralat
+            </div>
+
+            <div class="state-text">
+                ${escapeHtml(message)}
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================================
+   WEEK FILTER
+   ========================================================= */
+
+function rowsUntukMinggu(
+    rows,
+    week
+){
+
+    if(week === "all"){
+
+        return rows;
+    }
+
+
+    const minggu =
+        Number(week);
+
+
+    return rows.filter(row => {
+
+        const date =
+            parseTarikh(
+                row.tarikh
+            );
+
+
+        if(!date){
+            return false;
+        }
+
+
+        return (
+            tentukanMinggu(
+                date.day
+            ) === minggu
+        );
+    });
+}
+
+
+/* =========================================================
+   AGGREGATE MEMBER
+   ========================================================= */
+
+function buatKeyAnggota(row){
+
+    if(row.no_skb !== null &&
+       row.no_skb !== undefined){
+
+        return "skb_" +
+            String(row.no_skb);
+    }
+
+
+    if(row.no_anggota){
+
+        return "anggota_" +
+            String(row.no_anggota);
+    }
+
+
+    return "nama_" +
+        String(
+            row.nama_anggota ||
+            "UNKNOWN"
+        );
+}
+
+
+function agregatAnggota(rows){
+
+    const map =
+        new Map();
+
+
+    rows.forEach(row => {
+
+        const key =
+            buatKeyAnggota(row);
+
+
+        if(!map.has(key)){
+
+            map.set(
+                key,
+                {
+                    key:key,
+
+                    no_skb:
+                        row.no_skb,
+
+                    no_anggota:
+                        row.no_anggota,
+
+                    nama:
+                        row.nama_anggota ||
+                        "—",
+
+                    unit:
+                        normaliseUnit(
+                            row.unit
+                        ),
+
+                    pos:
+                        row.pos ||
+                        row.nama_pos_asal ||
+                        "TANPA POS",
+
+                    klmHariBiasa:0,
+                    rmHariBiasa:0,
+
+                    klmHariOff:0,
+                    rmHariOff:0,
+
+                    klmJamOff:0,
+                    rmJamOff:0,
+
+                    klmHariCutiAm:0,
+                    rmHariCutiAm:0,
+
+                    klmJamCutiAm:0,
+                    rmJamCutiAm:0,
+
+                    jumlah:0
+                }
+            );
+        }
+
+
+        const item =
+            map.get(key);
+
+
+        /*
+           KLM HARI BIASA
+           = jam_klm
+        */
+
+        item.klmHariBiasa +=
+            num(
+                row.jam_klm
+            );
+
+
+        /*
+           RM HARI BIASA
+           = rm_klm_hari_biasa
+        */
+
+        item.rmHariBiasa +=
+            num(
+                row.rm_klm_hari_biasa
+            );
+
+
+        /*
+           HARI OFF
+        */
+
+        item.klmHariOff +=
+            num(
+                row.jumlah_offday
+            );
+
+        item.rmHariOff +=
+            num(
+                row.rm_hari_offday
+            );
+
+
+        /*
+           JAM OFF
+        */
+
+        item.klmJamOff +=
+            num(
+                row.jam_offday_bertugas
+            );
+
+        item.rmJamOff +=
+            num(
+                row.rm_jam_offday
+            );
+
+
+        /*
+           HARI CUTI AM
+        */
+
+        item.klmHariCutiAm +=
+            num(
+                row.jumlah_cutiam
+            );
+
+        item.rmHariCutiAm +=
+            num(
+                row.rm_hari_cutiam
+            );
+
+
+        /*
+           JAM CUTI AM
+        */
+
+        item.klmJamCutiAm +=
+            num(
+                row.jam_cutiam_bertugas
+            );
+
+        item.rmJamCutiAm +=
+            num(
+                row.rm_jam_cutiam
+            );
+
+
+        /*
+           JUMLAH RM
+
+           PENTING:
+           GUNA rm_klm_seluruh SAHAJA
+        */
+
+        item.jumlah +=
+            num(
+                row.rm_klm_seluruh
+            );
+
+    });
+
+
+    return [...map.values()];
+}
+
+
+/* =========================================================
+   AGGREGATE UNIT
+   ========================================================= */
+
+function agregatUnit(rows){
+
+    const map =
+        new Map();
+
+
+    rows.forEach(row => {
+
+        const unit =
+            normaliseUnit(
+                row.unit
+            ) ||
+            "TANPA UNIT";
+
+
+        if(!map.has(unit)){
+
+            map.set(
+                unit,
+                {
+                    unit:unit,
+
+                    anggota:new Set(),
+
+                    klmHariBiasa:0,
+                    rmHariBiasa:0,
+
+                    klmHariOff:0,
+                    rmHariOff:0,
+
+                    klmJamOff:0,
+                    rmJamOff:0,
+
+                    klmHariCutiAm:0,
+                    rmHariCutiAm:0,
+
+                    klmJamCutiAm:0,
+                    rmJamCutiAm:0,
+
+                    jumlah:0
+                }
+            );
+        }
+
+
+        const item =
+            map.get(unit);
+
+
+        item.anggota.add(
+            buatKeyAnggota(row)
+        );
+
+
+        item.klmHariBiasa +=
+            num(row.jam_klm);
+
+        item.rmHariBiasa +=
+            num(row.rm_klm_hari_biasa);
+
+
+        item.klmHariOff +=
+            num(row.jumlah_offday);
+
+        item.rmHariOff +=
+            num(row.rm_hari_offday);
+
+
+        item.klmJamOff +=
+            num(row.jam_offday_bertugas);
+
+        item.rmJamOff +=
+            num(row.rm_jam_offday);
+
+
+        item.klmHariCutiAm +=
+            num(row.jumlah_cutiam);
+
+        item.rmHariCutiAm +=
+            num(row.rm_hari_cutiam);
+
+
+        item.klmJamCutiAm +=
+            num(row.jam_cutiam_bertugas);
+
+        item.rmJamCutiAm +=
+            num(row.rm_jam_cutiam);
+
+
+        item.jumlah +=
+            num(row.rm_klm_seluruh);
+
+    });
+
+
+    return [...map.values()]
+        .map(item => {
+
+            item.bilAnggota =
+                item.anggota.size;
+
+            delete item.anggota;
+
+            return item;
+        })
+        .sort(
+            (a,b) =>
+                a.unit.localeCompare(
+                    b.unit
+                )
+        );
+}
+
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+function totalRows(rows){
+
+    return rows.reduce(
+        (total,row) => {
+
+            total.klmHariBiasa +=
+                num(row.jam_klm);
+
+            total.rmHariBiasa +=
+                num(
+                    row.rm_klm_hari_biasa
+                );
+
+            total.klmHariOff +=
+                num(
+                    row.jumlah_offday
+                );
+
+            total.rmHariOff +=
+                num(
+                    row.rm_hari_offday
+                );
+
+            total.klmJamOff +=
+                num(
+                    row.jam_offday_bertugas
+                );
+
+            total.rmJamOff +=
+                num(
+                    row.rm_jam_offday
+                );
+
+            total.klmHariCutiAm +=
+                num(
+                    row.jumlah_cutiam
+                );
+
+            total.rmHariCutiAm +=
+                num(
+                    row.rm_hari_cutiam
+                );
+
+            total.klmJamCutiAm +=
+                num(
+                    row.jam_cutiam_bertugas
+                );
+
+            total.rmJamCutiAm +=
+                num(
+                    row.rm_jam_cutiam
+                );
+
+            total.jumlah +=
+                num(
+                    row.rm_klm_seluruh
+                );
+
+            return total;
+
+        },
+        {
+            klmHariBiasa:0,
+            rmHariBiasa:0,
+
+            klmHariOff:0,
+            rmHariOff:0,
+
+            klmJamOff:0,
+            rmJamOff:0,
+
+            klmHariCutiAm:0,
+            rmHariCutiAm:0,
+
+            klmJamCutiAm:0,
+            rmJamCutiAm:0,
+
+            jumlah:0
+        }
+    );
+}
+
+
+/* =========================================================
+   PAPAR DATA
+   ========================================================= */
+
+function paparData(){
+
+    const rows =
+        rowsUntukMinggu(
+            semuaDuty,
+            currentWeek
+        );
+
+
+    kemaskiniSummary(
+        rows
+    );
+
+
+    /*
+       ADMIN:
+
+       papar unit sahaja.
+    */
+
+    if(
+        currentRole === "admin"
+    ){
+
+        paparAdmin(
+            rows
+        );
+
+        return;
+    }
+
+
+    /*
+       KETUA UNIT:
+
+       papar POS + ANGGOTA.
+    */
+
+    paparKetuaUnit(
+        rows
+    );
+}
+
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+function kemaskiniSummary(rows){
+
+    const total =
+        totalRows(rows);
+
+
+    document.getElementById(
+        "sumKlmBiasa"
+    ).textContent =
+        decimal(
+            total.klmHariBiasa
+        );
+
+
+    document.getElementById(
+        "sumKlmOff"
+    ).textContent =
+        decimal(
+            total.klmHariOff
+        );
+
+
+    document.getElementById(
+        "sumKlmCuti"
+    ).textContent =
+        decimal(
+            total.klmHariCutiAm
+        );
+
+
+    document.getElementById(
+        "sumRm"
+    ).textContent =
+        money(
+            total.jumlah
+        );
+}
+
+
+/* =========================================================
+   HEADER WEEK
+   ========================================================= */
+
+function teksMinggu(){
+
+    const bulan =
+        Number(
+            document.getElementById(
+                "filterBulan"
+            ).value
+        );
+
+    const tahun =
+        Number(
+            document.getElementById(
+                "filterTahun"
+            ).value
+        );
+
+
+    if(currentWeek === "all"){
+
+        return `
+            ${SENARAI_BULAN[bulan - 1]}
+            ${tahun}
+            — Keseluruhan Bulan
+        `;
+    }
+
+
+    let mula = 1;
+    let akhir = 7;
+
+
+    if(currentWeek === "2"){
+        mula = 8;
+        akhir = 14;
+    }
+
+    if(currentWeek === "3"){
+        mula = 15;
+        akhir = 21;
+    }
+
+    if(currentWeek === "4"){
+
+        mula = 22;
+
+        akhir =
+            new Date(
+                tahun,
+                bulan,
+                0
+            ).getDate();
+    }
+
+
+    return `
+        ${SENARAI_BULAN[bulan - 1]}
+        ${tahun}
+        — ${mula} hingga ${akhir}
+    `;
+}
+
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+function paparAdmin(rows){
+
+    const units =
+        agregatUnit(rows);
+
+
+    if(!units.length){
+
+        document.getElementById(
+            "resultArea"
+        ).innerHTML = `
+
+            <div class="state-box">
+
+                <div class="state-icon">
+                    📭
+                </div>
+
+                <div class="state-title">
+                    Tiada rekod
+                </div>
+
+                <div class="state-text">
+                    Tiada rekod KLM untuk
+                    ${escapeHtml(teksMinggu())}.
+                </div>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const total =
+        totalRows(rows);
+
+
+    let html = `
+
+        <div class="table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <div class="table-title">
+                        Ringkasan KLM Mengikut Unit
+                    </div>
+
+                    <div class="table-subtitle">
+                        ${escapeHtml(teksMinggu())}
+                    </div>
+
+                </div>
+
+                <div class="table-subtitle">
+                    ${units.length} unit
+                </div>
+
+            </div>
+
+            <div>
+    `;
+
+
+    units.forEach(unit => {
+
+        html += `
+
+            <div class="unit-card">
+
+                <div class="unit-row">
+
+                    <div>
+
+                        <div class="unit-name">
+                            ${escapeHtml(unit.unit)}
+                        </div>
+
+                        <div class="unit-meta">
+                            ${unit.bilAnggota} anggota
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="unit-stat-label">
+                            KLM Biasa
+                        </div>
+
+                        <div class="unit-stat-value klm">
+                            ${decimal(unit.klmHariBiasa)}
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="unit-stat-label">
+                            KLM OFF
+                        </div>
+
+                        <div class="unit-stat-value klm">
+                            ${decimal(unit.klmHariOff)}
+                        </div>
+
+                    </div>
+
+
+                    <div class="hide-tablet">
+
+                        <div class="unit-stat-label">
+                            KLM Cuti
+                        </div>
+
+                        <div class="unit-stat-value klm">
+                            ${decimal(unit.klmHariCutiAm)}
+                        </div>
+
+                    </div>
+
+
+                    <div class="hide-tablet">
+
+                        <div class="unit-stat-label">
+                            RM Biasa
+                        </div>
+
+                        <div class="unit-stat-value rm">
+                            ${money(unit.rmHariBiasa)}
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="unit-stat-label">
+                            JUMLAH RM
+                        </div>
+
+                        <div class="unit-stat-value rm">
+                            ${money(unit.jumlah)}
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-cell">
+
+                        <button
+                            class="btn-detail"
+                            data-detail-unit="${escapeHtml(unit.unit)}"
+                        >
+                            DETAIL
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+    });
+
+
+    html += `
+
+            </div>
+
+        </div>
+
+
+        <div class="overall-unit">
+
+            <div class="unit-row">
+
+                <div>
+
+                    <div class="unit-name">
+                        JUMLAH KESELURUHAN SEMUA UNIT
+                    </div>
+
+                    <div class="unit-meta">
+                        ${units.length} unit
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="unit-stat-label">
+                        KLM BIASA
+                    </div>
+
+                    <div class="unit-stat-value klm">
+                        ${decimal(total.klmHariBiasa)}
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="unit-stat-label">
+                        KLM OFF
+                    </div>
+
+                    <div class="unit-stat-value klm">
+                        ${decimal(total.klmHariOff)}
+                    </div>
+
+                </div>
+
+
+                <div class="hide-tablet">
+
+                    <div class="unit-stat-label">
+                        KLM CUTI
+                    </div>
+
+                    <div class="unit-stat-value klm">
+                        ${decimal(total.klmHariCutiAm)}
+                    </div>
+
+                </div>
+
+
+                <div class="hide-tablet">
+
+                    <div class="unit-stat-label">
+                        RM BIASA
+                    </div>
+
+                    <div class="unit-stat-value rm">
+                        ${money(total.rmHariBiasa)}
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="unit-stat-label">
+                        JUMLAH RM
+                    </div>
+
+                    <div class="unit-stat-value rm">
+                        ${money(total.jumlah)}
+                    </div>
+
+                </div>
+
+
+                <div></div>
+
+            </div>
+
+        </div>
+    `;
+
+
+    document.getElementById(
+        "resultArea"
+    ).innerHTML = html;
+
+
+    /*
+       EVENT DETAIL
+    */
+
+    document
+        .querySelectorAll(
+            "[data-detail-unit]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const unit =
+                        button.getAttribute(
+                            "data-detail-unit"
+                        );
+
+                    paparDetailAdmin(
+                        unit,
+                        rows
+                    );
+                }
+            );
+
+        });
+}
+
+
+/* =========================================================
+   ADMIN DETAIL
+   ========================================================= */
+
+function paparDetailAdmin(
+    unit,
+    rows
+){
+
+    const unitRows =
+        rows.filter(
+            row =>
+                normaliseUnit(
+                    row.unit
+                ) ===
+                normaliseUnit(unit)
+        );
+
+
+    const anggota =
+        agregatAnggota(
+            unitRows
+        );
+
+
+    paparDetailAnggota(
+        anggota,
+        unit,
+        `Admin • ${unit} • ${teksMinggu()}`
+    );
+}
+
+
+/* =========================================================
+   KETUA UNIT
+   ========================================================= */
+
+function paparKetuaUnit(rows){
+
+    if(!rows.length){
+
+        document.getElementById(
+            "resultArea"
+        ).innerHTML = `
+
+            <div class="state-box">
+
+                <div class="state-icon">
+                    📭
+                </div>
+
+                <div class="state-title">
+                    Tiada rekod
+                </div>
+
+                <div class="state-text">
+                    Tiada rekod KLM untuk
+                    ${escapeHtml(teksMinggu())}.
+                </div>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const anggota =
+        agregatAnggota(rows);
+
+
+    /*
+       GROUP BY POS
+    */
+
+    const posMap =
+        new Map();
+
+
+    anggota.forEach(item => {
+
+        const pos =
+            item.pos ||
+            "TANPA POS";
+
+
+        if(!posMap.has(pos)){
+
+            posMap.set(
+                pos,
+                []
+            );
+        }
+
+
+        posMap
+            .get(pos)
+            .push(item);
+
+    });
+
+
+    const posList =
+        [...posMap.entries()]
+            .sort(
+                (a,b) =>
+                    a[0].localeCompare(
+                        b[0]
+                    )
+            );
+
+
+    let html = `
+
+        <div class="table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <div class="table-title">
+                        ${escapeHtml(currentUnit)}
+                    </div>
+
+                    <div class="table-subtitle">
+                        Mengikut POS • ${escapeHtml(teksMinggu())}
+                    </div>
+
+                </div>
+
+                <div class="table-subtitle">
+                    ${anggota.length} anggota
+                </div>
+
+            </div>
+
+    `;
+
+
+    posList.forEach(
+        ([pos,items]) => {
+
+            items.sort(
+                (a,b) =>
+                    String(a.nama)
+                        .localeCompare(
+                            String(b.nama)
+                        )
+            );
+
+
+            html += `
+
+                <div class="pos-group">
+
+                    <div class="pos-header">
+
+                        <div class="pos-title">
+                            📍 ${escapeHtml(pos)}
+                        </div>
+
+                        <div class="pos-count">
+                            ${items.length} anggota
+                        </div>
+
+                    </div>
+
+                    ${binaTableAnggota(items)}
+
+                </div>
+            `;
+        }
+    );
+
+
+    html += `
+
+        </div>
+    `;
+
+
+    document.getElementById(
+        "resultArea"
+    ).innerHTML = html;
+}
+
+
+/* =========================================================
+   DETAIL ANGGOTA
+   ========================================================= */
+
+function paparDetailAnggota(
+    anggota,
+    unit,
+    subtitle
+){
+
+    const panel =
+        document.getElementById(
+            "detailPanel"
+        );
+
+
+    document.getElementById(
+        "detailTitle"
+    ).textContent =
+        "DETAIL ANGGOTA — " +
+        unit;
+
+
+    document.getElementById(
+        "detailSubtitle"
+    ).textContent =
+        subtitle;
+
+
+    /*
+       GROUP POS
+    */
+
+    const posMap =
+        new Map();
+
+
+    anggota.forEach(item => {
+
+        const pos =
+            item.pos ||
+            "TANPA POS";
+
+
+        if(!posMap.has(pos)){
+
+            posMap.set(
+                pos,
+                []
+            );
+        }
+
+
+        posMap
+            .get(pos)
+            .push(item);
+
+    });
+
+
+    let html = "";
+
+
+    [...posMap.entries()]
+        .sort(
+            (a,b) =>
+                a[0].localeCompare(
+                    b[0]
+                )
+        )
+        .forEach(
+            ([pos,items]) => {
+
+                items.sort(
+                    (a,b) =>
+                        String(a.nama)
+                            .localeCompare(
+                                String(b.nama)
+                            )
+                );
+
+
+                html += `
+
+                    <div class="pos-group">
+
+                        <div class="pos-header">
+
+                            <div class="pos-title">
+                                📍 ${escapeHtml(pos)}
+                            </div>
+
+                            <div class="pos-count">
+                                ${items.length} anggota
+                            </div>
+
+                        </div>
+
+                        ${binaTableAnggota(items)}
+
+                    </div>
+
+                `;
+            }
+        );
+
+
+    document.getElementById(
+        "detailContent"
+    ).innerHTML =
+        html ||
+        `
+            <div class="state-box">
+                <div class="state-icon">
+                    📭
+                </div>
+                <div class="state-title">
+                    Tiada data anggota
+                </div>
+            </div>
+        `;
+
+
+    panel.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            panel.scrollIntoView({
+                behavior:"smooth",
+                block:"start"
+            });
+
+        },
+        80
+    );
+}
+
+
+/* =========================================================
+   TABLE ANGGOTA
+   ========================================================= */
+
+function binaTableAnggota(
+    items
+){
+
+    let html = `
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th style="text-align:center">
+                            Bil
+                        </th>
+
+                        <th>
+                            Nama
+                        </th>
+
+                        <th>
+                            KLM Hari Biasa
+                        </th>
+
+                        <th>
+                            RM Hari Biasa
+                        </th>
+
+                        <th>
+                            KLM Hari OFF
+                        </th>
+
+                        <th>
+                            RM Hari OFF
+                        </th>
+
+                        <th>
+                            KLM Jam OFF
+                        </th>
+
+                        <th>
+                            RM Jam OFF
+                        </th>
+
+                        <th>
+                            KLM Hari Cuti AM
+                        </th>
+
+                        <th>
+                            RM Hari Cuti AM
+                        </th>
+
+                        <th>
+                            KLM Jam Cuti AM
+                        </th>
+
+                        <th>
+                            RM Jam Cuti AM
+                        </th>
+
+                        <th>
+                            JUMLAH
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+    `;
+
+
+    items.forEach(
+        (item,index) => {
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+
+                        <div class="name-main">
+                            ${escapeHtml(item.nama)}
+                        </div>
+
+                        <div class="name-sub">
+                            SKB:
+                            ${escapeHtml(item.no_skb ?? "—")}
+                            ${item.no_anggota
+                                ? " • " +
+                                  escapeHtml(item.no_anggota)
+                                : ""}
+                        </div>
+
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmHariBiasa)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmHariBiasa)}
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmHariOff)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmHariOff)}
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmJamOff)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmJamOff)}
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmHariCutiAm)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmHariCutiAm)}
+                    </td>
+
+
+                    <td class="number-klm">
+                        ${decimal(item.klmJamCutiAm)}
+                    </td>
+
+                    <td class="number-rm">
+                        ${money(item.rmJamCutiAm)}
+                    </td>
+
+
+                    <td class="number-total">
+                        ${money(item.jumlah)}
+                    </td>
+
+                </tr>
+            `;
+        }
+    );
+
+
+    const total =
+        items.reduce(
+            (t,item) => {
+
+                t.klmHariBiasa +=
+                    item.klmHariBiasa;
+
+                t.rmHariBiasa +=
+                    item.rmHariBiasa;
+
+                t.klmHariOff +=
+                    item.klmHariOff;
+
+                t.rmHariOff +=
+                    item.rmHariOff;
+
+                t.klmJamOff +=
+                    item.klmJamOff;
+
+                t.rmJamOff +=
+                    item.rmJamOff;
+
+                t.klmHariCutiAm +=
+                    item.klmHariCutiAm;
+
+                t.rmHariCutiAm +=
+                    item.rmHariCutiAm;
+
+                t.klmJamCutiAm +=
+                    item.klmJamCutiAm;
+
+                t.rmJamCutiAm +=
+                    item.rmJamCutiAm;
+
+                t.jumlah +=
+                    item.jumlah;
+
+                return t;
+
+            },
+            {
+                klmHariBiasa:0,
+                rmHariBiasa:0,
+
+                klmHariOff:0,
+                rmHariOff:0,
+
+                klmJamOff:0,
+                rmJamOff:0,
+
+                klmHariCutiAm:0,
+                rmHariCutiAm:0,
+
+                klmJamCutiAm:0,
+                rmJamCutiAm:0,
+
+                jumlah:0
+            }
+        );
+
+
+    html += `
+
+                </tbody>
+
+                <tfoot>
+
+                    <tr class="total-row">
+
+                        <td colspan="2">
+                            JUMLAH
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmHariBiasa)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmHariBiasa)}
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmHariOff)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmHariOff)}
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmJamOff)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmJamOff)}
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmHariCutiAm)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmHariCutiAm)}
+                        </td>
+
+                        <td>
+                            ${decimal(total.klmJamCutiAm)}
+                        </td>
+
+                        <td>
+                            ${money(total.rmJamCutiAm)}
+                        </td>
+
+                        <td>
+                            ${money(total.jumlah)}
+                        </td>
+
+                    </tr>
+
+                </tfoot>
+
+            </table>
+
+        </div>
+    `;
+
+
+    return html;
+}
+
+
+/* =========================================================
+   EVENT TABS
+   ========================================================= */
+
+function pasangTab(){
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(tab => {
+
+            tab.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(".tab")
+                        .forEach(
+                            t =>
+                                t.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    tab.classList.add(
+                        "active"
+                    );
+
+
+                    currentWeek =
+                        tab.dataset.week;
+
+
+                    /*
+                       Tutup detail lama
+                    */
+
+                    tutupDetail();
+
+
+                    paparData();
+
+                }
+            );
+
+        });
+}
+
+
+/* =========================================================
+   DETAIL CLOSE
+   ========================================================= */
+
+function tutupDetail(){
+
+    document
+        .getElementById(
+            "detailPanel"
+        )
+        .classList.remove(
+            "show"
+        );
+}
+
+
+function pasangEvent(){
+
+    document
+        .getElementById(
+            "btnPapar"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                await muatDuty();
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "btnRefresh"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                await muatDuty();
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "btnCloseDetail"
+        )
+        .addEventListener(
+            "click",
+            tutupDetail
+        );
+
+
+    document
+        .getElementById(
+            "filterBulan"
+        )
+        .addEventListener(
+            "change",
+            () => {
+
+                if(semuaDuty.length){
+
+                    muatDuty();
+
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "filterTahun"
+        )
+        .addEventListener(
+            "change",
+            () => {
+
+                if(semuaDuty.length){
+
+                    muatDuty();
+
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "filterUnit"
+        )
+        .addEventListener(
+            "change",
+            () => {
+
+                if(
+                    currentRole ===
+                    "admin"
+                ){
+
+                    if(semuaDuty.length){
+
+                        muatDuty();
+
+                    }
+
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "btnLogout"
+        )
+        .addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                localStorage.removeItem(
+                    "mdp_user"
+                );
+
+                window.location.href =
+                    "login.html";
+            }
+        );
+
+}
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+async function init(){
+
+    console.log(
+        "================================"
+    );
+
+    console.log(
+        "KLM MINGGUAN START"
+    );
+
+    console.log(
+        "================================"
+    );
+
+
+    /*
+       ACCESS
+    */
+
+    if(!semakAkses()){
+        return;
+    }
+
+
+    /*
+       FILTER
+    */
+
+    binaFilterBulan();
+
+    binaFilterTahun();
+
+
+    /*
+       EVENTS
+    */
+
+    pasangTab();
+
+    pasangEvent();
+
+
+    /*
+       DATA
+    */
+
+    await Promise.all([
+        muatUnit(),
+        muatAnggota()
+    ]);
+
+
+    /*
+       PAPAR AUTOMATIK
+    */
+
+    await muatDuty();
+
+
+    console.log(
+        "KLM MINGGUAN READY"
+    );
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    init
+);
+</script>
+
+</body>
+</html>
