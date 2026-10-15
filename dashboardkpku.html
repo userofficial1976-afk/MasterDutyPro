@@ -267,7 +267,11 @@ async function paparLaporanHarianKetuaUnit(){
 
     dataDutyHariIni.forEach(row => {
 
-        const pos = row.kod_tempat_kerja || row.pos || "TANPA POS";
+        const pos =
+    row.nama_pos_asal ||
+    row.pos ||
+    "TANPA POS";
+
 
         if(!kumpulanPos[pos]){
             kumpulanPos[pos] = [];
@@ -293,13 +297,14 @@ Aturtugas anggota di pos kawalan adalah seperti berikut:
 
         laporan += `\n*${bilPos}. ${namaPos}*\n`;
 
-        const dutyA = anggota.filter(x => kodRekod(x) === "A");
-        const dutyB = anggota.filter(x => kodRekod(x) === "B");
-        const dutyC = anggota.filter(x => kodRekod(x) === "C");
-        const dutyD = anggota.filter(x => kodRekod(x) === "D");
-        const dutyE = anggota.filter(x => kodRekod(x) === "E");
-        const dutyF = anggota.filter(x => kodRekod(x) === "F");
-        const dutyG = anggota.filter(x => kodRekod(x) === "G");
+const dutyA = anggota.filter(x => kodRekod(x) === "X");
+const dutyB = anggota.filter(x => kodRekod(x) === "Y");
+const dutyC = anggota.filter(x => kodRekod(x) === "Z");
+const dutyD = anggota.filter(x => kodRekod(x) === "W");
+const dutyE = anggota.filter(x => kodRekod(x) === "X/W");
+const dutyF = anggota.filter(x => kodRekod(x) === "Y/W");
+const dutyG = anggota.filter(x => kodRekod(x) === "Z/W");
+
 
         if(dutyA.length){
             laporan += `1. Duty A (0700-1500) ${dutyA.map(x=>x.nama_anggota).join(" / ")}\n`;
@@ -403,7 +408,7 @@ async function statistikHariIni(){
   const rm=rows.reduce((t,r)=>t+Number(r.rm_klm_seluruh||0),0);setText("rmKlm","RM "+rm.toLocaleString("ms-MY",{minimumFractionDigits:2,maximumFractionDigits:2}));
 }
 async function statusHariIni(){
-  const hariIni=tarikhTempatan();let query=supabaseClient.from("jadual_duty").select("no_anggota,nama_anggota,kod_waktu_kerja,kod_duty,kod_tempat_kerja,unit,pos,tarikh").eq("tarikh",hariIni);query=tapis(query);
+  const hariIni=tarikhTempatan();let query=supabaseClient.from("jadual_duty").select("*").eq("tarikh",hariIni);query=tapis(query);
   const {data,error}=await query;if(error){console.error("Status hari ini:",error);return;}
   dataDutyHariIni=data||[];
   const keys=["OFFGR","CT","MC","KUR","CA","CG","CE","CTR"],counts={OFFGR:0,CT:0,MC:0,KUR:0,CA:0,CG:0,CE:0,CTR:0};
