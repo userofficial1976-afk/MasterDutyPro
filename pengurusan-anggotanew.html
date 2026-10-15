@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ms">
 <head>
@@ -15,7 +14,6 @@
 >
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
 
 <script>
 tailwind.config = {
@@ -38,9 +36,6 @@ tailwind.config = {
 </script>
 
 
-
-
-    
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -517,7 +512,6 @@ select {
         padding: 14px !important;
     }
 
-   
 
     .stat-card {
         padding: 14px;
@@ -690,7 +684,6 @@ header {
 }
 
 
-    
 </style>
 </head>
 
@@ -939,7 +932,6 @@ header {
 ===================================================== -->
 
 <div class="content-area p-6 space-y-6">
-
 
 
 <!-- =====================================================
@@ -1934,9 +1926,17 @@ header {
    SUPABASE
 ===================================================== */
 
-// Gunakan client bersama yang diwujudkan oleh supabase-config.js.
-// Jangan cipta client kedua atau ubah konfigurasi Supabase sedia ada.
-const supabaseClient = window.supabaseClient;
+const SUPABASE_URL =
+    "https://nlwrrrwkjpktrifxeymw.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
 /* =====================================================
@@ -1963,17 +1963,6 @@ let editingNoSkb = null;
 document.addEventListener(
     "DOMContentLoaded",
     async function () {
-
-        if (!window.supabaseClient) {
-            console.error(
-                "Supabase client tidak tersedia. Semak fail supabase-config.js dan pastikan ia dimuatkan sebelum kod halaman."
-            );
-            paparToast(
-                "Sambungan pangkalan data tidak tersedia. Sila semak supabase-config.js.",
-                "error"
-            );
-            return;
-        }
 
         currentUser = bacaPengguna();
 
@@ -2050,15 +2039,21 @@ function paparMaklumatPengguna() {
         currentUser.jawatan ||
         "-";
 
-    const userNameEl = document.getElementById("userName");
-    const userJawatanEl = document.getElementById("userJawatan");
-    const sidebarUserNameEl = document.getElementById("sidebarUserName");
-    const sidebarUserJawatanEl = document.getElementById("sidebarUserJawatan");
+    document.getElementById(
+        "userName"
+    ).textContent = name;
 
-    if (userNameEl) userNameEl.textContent = name;
-    if (userJawatanEl) userJawatanEl.textContent = jawatan;
-    if (sidebarUserNameEl) sidebarUserNameEl.textContent = name;
-    if (sidebarUserJawatanEl) sidebarUserJawatanEl.textContent = jawatan;
+    document.getElementById(
+        "userJawatan"
+    ).textContent = jawatan;
+
+    document.getElementById(
+        "sidebarUserName"
+    ).textContent = name;
+
+    document.getElementById(
+        "sidebarUserJawatan"
+    ).textContent = jawatan;
 
 }
 
@@ -3578,10 +3573,6 @@ const payload = {
 
         if (mode === "edit") {
 
-            if (editingNoSkb === null || editingNoSkb === undefined || editingNoSkb === "") {
-                throw new Error("No. SKB asal tidak ditemui. Sila buka semula rekod untuk diedit.");
-            }
-
             const {
                 error
             } = await supabaseClient
@@ -3589,7 +3580,7 @@ const payload = {
                 .update(payload)
                 .eq(
                     "no_skb",
-                    editingNoSkb
+                    editingnoskb
                 );
 
 
