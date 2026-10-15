@@ -286,73 +286,125 @@ function kemasKiniJam(){const now=new Date(),d=document.getElementById("currentD
 function roleSemasa(){return String(currentUser?.role||currentUser?.jawatan||"").trim().toLowerCase().replace(/_/g," ").replace(/\s+/g," ");}
 function isAdminSemasa(){const role=roleSemasa();return !!(currentUser&&(currentUser.isAdmin===true||role==="admin"||role==="administrator"));}
 
+
 function kawalMenuMengikutPeranan() {
     if (!currentUser) return;
 
-    const norm = value => String(value || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[_\s.-]+/g, " ");
+    const normalRole = value =>
+        String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[_\s.-]+/g, " ")
+            .replace(/\s+/g, " ");
 
-    const role = norm(currentUser.role);
-    const jawatan = norm(currentUser.jawatan);
+    const role = normalRole(currentUser.role);
+    const jawatan = normalRole(currentUser.jawatan);
 
-    // Semakan Admin
+    // Peranan Admin, PTW, POW dan PPOW
+    const roleAdmin = [
+        "admin",
+        "administrator",
+        "ptw",
+        "pow",
+        "ppow"
+    ];
+
+    // Admin sebenar sahaja untuk fungsi pentadbiran
     const isAdmin =
         currentUser.isAdmin === true ||
         ["admin", "administrator"].includes(role) ||
         ["admin", "administrator"].includes(jawatan);
 
-    // Pengurusan Anggota:
-    // Admin, POW, PPOW dan PTW sahaja
-    const menuAnggota = document.getElementById("menuAnggota");
-
-    const bolehLihatPengurusanAnggota =
+    // Menu Pengurusan Anggota, Laporan Wilayah dan Dashboard
+    const bolehLihatAdminMenu =
         isAdmin ||
-        ["pow", "ppow", "ptw"].includes(role) ||
-        ["pow", "ppow", "ptw"].includes(jawatan);
+        roleAdmin.includes(role) ||
+        roleAdmin.includes(jawatan);
 
-    if (menuAnggota) {
-        menuAnggota.style.display =
-            bolehLihatPengurusanAnggota ? "flex" : "none";
-    }
+    // KLM Mingguan turut dibenarkan untuk Ketua Unit
+    const bolehLihatKLM =
+        bolehLihatAdminMenu ||
+        role === "ketua unit" ||
+        jawatan === "ketua unit";
 
-    // Admin boleh melihat semua menu
-    if (isAdmin) return;
-
-    // Sembunyikan menu tertentu untuk pengguna bukan Admin
-    [
-        "menuDashboard",
-        "menuLaporan",
-        "menuTetapan"
-    ].forEach(id => {
+    function tetapkanMenu(id, dibenarkan) {
         const el = document.getElementById(id);
-        if (el) el.style.display = "none";
+
+        if (!el) {
+            console.warn("Menu tidak dijumpai:", id);
+            return;
+        }
+
+        if (dibenarkan) {
+            el.style.removeProperty("display");
+        } else {
+            el.style.setProperty(
+                "display",
+                "none",
+                "important"
+            );
+        }
+    }
+
+    // Dashboard dipaparkan kepada semua pengguna
+    tetapkanMenu("menuDashboard", true);
+
+    // Menu pentadbiran
+    tetapkanMenu("menuAnggota", bolehLihatAdminMenu);
+    tetapkanMenu("menuLaporan", bolehLihatAdminMenu);
+
+    // KLM Mingguan
+    tetapkanMenu("menuMingguan", bolehLihatKLM);
+    tetapkanMenu("mobile-menu-klm", bolehLihatKLM);
+
+    // Tetapan hanya untuk Admin
+    tetapkanMenu("menuTetapan", isAdmin);
+
+    console.log("KAWALAN MENU KOD TEMPAT KERJA", {
+        role,
+        jawatan,
+        dashboard: bolehLihatAdminMenu
+            ? "dashboard.html"
+            : "dashboardkpku.html",
+        bolehLihatAdminMenu,
+        bolehLihatKLM
     });
-
-    // KLM Mingguan: Admin dan Ketua Unit sahaja
-    const menuMingguan = document.getElementById("menuMingguan");
-
-    if (menuMingguan) {
-        menuMingguan.style.display =
-            role === "ketua unit" || jawatan === "ketua unit"
-                ? "flex"
-                : "none";
-    }
-
-    // KLM pada navigasi mudah alih:
-    // Ketua Unit sahaja bagi pengguna bukan Admin
-    const mobileKlm = document.getElementById("mobile-menu-klm");
-
-    if (mobileKlm) {
-        mobileKlm.style.display =
-            role === "ketua unit" || jawatan === "ketua unit"
-                ? "flex"
-                : "none";
-    }
 }
 
-function bukaDashboardMengikutRole(){window.location.href=isAdminSemasa()?"dashboard.html":"dashboardkpku.html";}
+function bukaDashboardMengikutRole() {
+    if (!currentUser) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const normalRole = value =>
+        String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[_\s.-]+/g, " ")
+            .replace(/\s+/g, " ");
+
+    const role = normalRole(currentUser.role);
+    const jawatan = normalRole(currentUser.jawatan);
+
+    const roleAdmin = [
+        "admin",
+        "administrator",
+        "ptw",
+        "pow",
+        "ppow"
+    ];
+
+    const bolehDashboardAdmin =
+        currentUser.isAdmin === true ||
+        roleAdmin.includes(role) ||
+        roleAdmin.includes(jawatan);
+
+    window.location.href = bolehDashboardAdmin
+        ? "dashboard.html"
+        : "dashboardkpku.html";
+}
+
 function logKeluar(){localStorage.removeItem("mdp_user");window.location.href="login.html";}
 function applyRoleAccess(){if(!currentUser)return;const unitSelect=document.getElementById("unit"),filterUnit=document.getElementById("filterUnit");if(isAdminSemasa())return;const userUnit=currentUser.unit||"";if(userUnit){unitSelect.innerHTML="";const opt1=document.createElement("option");opt1.value=userUnit;opt1.textContent=userUnit;unitSelect.appendChild(opt1);unitSelect.value=userUnit;unitSelect.disabled=true;filterUnit.innerHTML="";const opt2=document.createElement("option");opt2.value=userUnit;opt2.textContent=userUnit;filterUnit.appendChild(opt2);filterUnit.value=userUnit;filterUnit.disabled=true;}}
 function paparkanMesej(mesej,jenis="success"){const el=document.getElementById("mesej");if(!el)return;const warna=jenis==="success"?"bg-emerald-500/15 text-emerald-300 border-emerald-400/40":"bg-red-500/15 text-red-300 border-red-400/40";el.innerHTML=`<div class="border px-4 py-3 text-sm ${warna}">${escapeHTML(mesej)}</div>`;setTimeout(()=>{if(el)el.innerHTML="";},4000);}
