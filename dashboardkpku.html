@@ -326,6 +326,29 @@ async function muatDataBulanIni(){
   let query=supabaseClient.from("jadual_duty").select("jam_kerja,jam_klm,rm_klm_seluruh,kod_waktu_kerja,kod_duty,unit,pos,tarikh").gte("tarikh",mula).lte("tarikh",akhir);query=tapis(query);
   const {data,error}=await query;if(error){console.error("Laporan bulanan:",error);dataBulanIni=[];return;}dataBulanIni=data||[];
 }
+
+async function salinLaporanWhatsApp(){
+
+    if(!teksLaporanHarian){
+        alert("Sila jana Laporan Harian Ketua Unit terlebih dahulu.");
+        return;
+    }
+
+    try{
+
+        await navigator.clipboard.writeText(teksLaporanHarian);
+
+        alert("Laporan berjaya disalin ke clipboard. Boleh paste ke WhatsApp.");
+
+    }catch(error){
+
+        console.error(error);
+        alert("Gagal menyalin laporan.");
+
+    }
+
+}
+  
 document.addEventListener("DOMContentLoaded",async()=>{
   paparkanIdentiti();kemasKiniJam();setInterval(kemasKiniJam,1000);
   if(!currentUser||Object.keys(currentUser).length===0)return;
