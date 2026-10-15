@@ -338,16 +338,17 @@ async function muatDataBulanIni(){
 
 async function salinLaporanWhatsApp(){
 
-    if(!teksLaporanHarian){
-        alert("Sila jana Laporan Harian Ketua Unit terlebih dahulu.");
-        return;
-    }
-
     try{
 
-        await navigator.clipboard.writeText(teksLaporanHarian);
+        const textArea = document.getElementById("laporanHarianText");
 
-        alert("Laporan berjaya disalin ke clipboard. Boleh paste ke WhatsApp.");
+        const teks = textArea
+            ? textArea.value
+            : teksLaporanHarian;
+
+        await navigator.clipboard.writeText(teks);
+
+        alert("Laporan berjaya disalin ke clipboard.");
 
     }catch(error){
 
