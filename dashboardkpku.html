@@ -153,7 +153,13 @@ tbody tr:hover{background:rgba(0,210,255,.06)}
       <div class="space-y-4">
         <div><div class="flex justify-between text-xs mb-2"><span class="text-sky-200">Bertugas</span><span id="ringkasanBertugas" class="text-teal-300">0</span></div><div class="bar-track"><div id="barBertugas" class="bar-fill" style="width:0%;background:linear-gradient(90deg,#00b7ff,#00f0cb)"></div></div></div>
         <div><div class="flex justify-between text-xs mb-2"><span class="text-sky-200">Tidak Bertugas</span><span id="ringkasanTidak" class="text-orange-300">0</span></div><div class="bar-track"><div id="barTidak" class="bar-fill" style="width:0%;background:linear-gradient(90deg,#ff7417,#ffb347)"></div></div></div>
-        <div class="pt-3 border-t border-cyan-900/70"><div class="small-label mb-2">Pintasan Laporan</div><button type="button" onclick="window.location.href='testrk.html'" class="action-btn w-full mb-2"><i class="fas fa-file-alt mr-2"></i>LAPORAN RK01 SEBULAN (MINGGU)</button><button type="button" onclick="paparLaporanBulanan()" class="action-btn w-full"><i class="fas fa-chart-bar mr-2"></i>LAPORAN PENUH SEBULAN</button></div>
+        <div class="pt-3 border-t border-cyan-900/70"><div class="small-label mb-2">Pintasan Laporan</div><button type="button" onclick="window.location.href='testrk.html'" class="action-btn w-full mb-2"><i class="fas fa-file-alt mr-2"></i>LAPORAN RK01 SEBULAN (MINGGU)</button><button type="button" onclick="paparLaporanBulanan()" class="action-btn w-full"><i class="fas fa-chart-bar mr-2"></i>LAPORAN PENUH SEBULAN</button><button
+    type="button"
+    onclick="salinLaporanWhatsApp()"
+    class="action-btn w-full mt-2">
+    <i class="fab fa-whatsapp mr-2"></i>
+    SALIN KE WHATSAPP
+</button></div>
       </div>
     </div>
   </section>
@@ -178,6 +184,7 @@ const SUPABASE_KEY="sb_publishable_0ymP9thOFXkuNYzvwa0gwQ_1mbxyFE6";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const currentUser=JSON.parse(localStorage.getItem("mdp_user")||"{}");
 let dataDutyHariIni=[],dataKLMHariIni=[],dataBulanIni=[];
+let teksLaporanHarian = "";
 const $=id=>document.getElementById(id);
 const namaPengguna=()=>currentUser.name||currentUser.nama||"-";
 const jawatan=String(currentUser.jawatan||"").trim().toUpperCase();
@@ -233,6 +240,52 @@ function paparLaporanBulanan(){
   const isi=`<p class="text-xs text-sky-400 mb-4">Tempoh: ${mula} hingga ${akhir}</p><div class="grid grid-cols-2 md:grid-cols-3 gap-3">${[["Jam Kerja",jamKerja],["Jam KLM",jamKlm],["RM KLM","RM "+rmKlm.toLocaleString("ms-MY",{minimumFractionDigits:2,maximumFractionDigits:2})],["Hari Offday",offday],["Hari Cuti Am",cutiam],["Jam Tampungan","—"]].map(([k,v])=>`<div class="border border-cyan-900 bg-sky-950/60 p-4"><div class="small-label">${k}</div><div class="brand-font text-xl text-cyan-300 mt-3">${v}</div></div>`).join("")}</div>`;
   bukaPopup("Laporan Penuh Bulan Ini",isi);
 }
+
+async function paparLaporanHarianKetuaUnit(){
+
+    const hari = new Date().toLocaleDateString(
+        "ms-MY",
+        {
+            weekday:"long",
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric"
+        }
+    );
+
+    teksLaporanHarian =
+`Assalamualaikum Tuan.
+
+*ATURTUGAS UNIT ${currentUser.unit || ""}*
+
+Tarikh: ${hari}
+
+Aturtugas anggota di pos kawalan adalah seperti berikut:
+
+
+[SENARAI DUTY AKAN DIJANA AUTOMATIK DI SINI]
+
+
+Sebarang perubahan duty akan dimaklumkan segera.
+
+Sekian untuk makluman Tuan.`;
+
+    bukaPopup(
+        "Laporan Harian Ketua Unit",
+        `
+        <div class="space-y-3">
+
+            <textarea
+                id="laporanHarianText"
+                class="w-full h-[500px] bg-slate-950 border border-cyan-700 p-3 text-sm text-sky-100"
+            >${teksLaporanHarian}</textarea>
+
+        </div>
+        `
+    );
+
+}
+  
 function paparkanStatusBar(counts){
   const colors={OFFGR:"#ff8a27",CT:"#00e5a8",MC:"#ff405d",KUR:"#149dff",CA:"#ffe34d",CG:"#b36bff",CE:"#00eaff",CTR:"#91b8d9"};
   const max=Math.max(1,...Object.values(counts));
