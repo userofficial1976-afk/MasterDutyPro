@@ -844,6 +844,7 @@ function bukaDashboardMengikutRole() {
   }
 
 
+
 function kawalMenuMengikutPeranan() {
     if (!currentUser) return;
 
@@ -866,24 +867,24 @@ function kawalMenuMengikutPeranan() {
         "ppow"
     ];
 
+    const perananSemasa = [role, jawatan];
+
     const isAdmin =
         currentUser.isAdmin === true ||
-        ["admin", "administrator"].includes(role) ||
-        ["admin", "administrator"].includes(jawatan);
+        perananSemasa.some(p =>
+            ["admin", "administrator"].includes(p)
+        );
 
     const bolehLihatPengurusan =
-        perananUtama.includes(role) ||
-        perananUtama.includes(jawatan) ||
-        isAdmin;
+        isAdmin ||
+        perananSemasa.some(p => perananUtama.includes(p));
 
     const bolehLihatKLM =
         bolehLihatPengurusan ||
-        role === "ketua unit" ||
-        jawatan === "ketua unit";
+        perananSemasa.includes("ketua unit");
 
-    function tetapkanMenu(id, papar) {
+    function tetapkanPaparan(id, papar) {
         const elemen = document.getElementById(id);
-
         if (!elemen) return;
 
         elemen.style.setProperty(
@@ -893,15 +894,20 @@ function kawalMenuMengikutPeranan() {
         );
     }
 
-    // Dashboard desktop: Admin sahaja
-    tetapkanMenu("menu-board", isAdmin);
+    // Dashboard mobile: semua peranan
+    // Pautan dashboard ditentukan oleh bukaDashboardMengikutRole()
+    document.querySelectorAll(
+        '.mobile-nav-item[onclick*="bukaDashboardMengikutRole"]'
+    ).forEach(elemen => {
+        elemen.style.setProperty("display", "flex", "important");
+    });
 
-    // KLM Mingguan desktop dan mobile
-    tetapkanMenu("menuMingguan", bolehLihatKLM);
-    tetapkanMenu("mobile-menu-klm", bolehLihatKLM);
+    // KLM Mingguan
+    tetapkanPaparan("menuMingguan", bolehLihatKLM);
+    tetapkanPaparan("mobile-menu-klm", bolehLihatKLM);
 
-    // Tetapan: Admin sahaja
-    tetapkanMenu("menuTetapan", isAdmin);
+    // Menu tetapan: Admin sahaja
+    tetapkanPaparan("menuTetapan", isAdmin);
 
     console.log("KAWALAN MENU JADUAL DUTY", {
         role,
@@ -911,6 +917,7 @@ function kawalMenuMengikutPeranan() {
         bolehLihatKLM
     });
 }
+
 
 
   
