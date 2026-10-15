@@ -43,7 +43,7 @@ tailwind.config = {
     
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* =====================================================
    BASE
@@ -691,544 +691,6 @@ header {
 
 
     
-
-
-/* =========================================================
-   MASTER DUTY PRO — DASHBOARD COMMAND CENTER V2
-   PENGURUSAN ANGGOTA
-   PENYERAGAMAN VISUAL DENGAN kod-duty.html
-   GAYA SAHAJA — STRUKTUR DATA DAN JAVASCRIPT DIKEKALKAN
-========================================================= */
-:root {
-    --mdp-bg: #020817;
-    --mdp-panel: rgba(4, 20, 43, .88);
-    --mdp-panel2: rgba(5, 31, 57, .78);
-    --mdp-cyan: #00eaff;
-    --mdp-cyan2: #00a9ff;
-    --mdp-orange: #ff7417;
-    --mdp-line: rgba(0, 234, 255, .42);
-    --mdp-muted: #83b7d2;
-    --mdp-text: #d9f5ff;
-}
-
-html {
-    background: var(--mdp-bg) !important;
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0 !important;
-    min-height: 100vh;
-    color: var(--mdp-text) !important;
-    font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
-    background-color: var(--mdp-bg) !important;
-    background-image:
-        linear-gradient(rgba(0,130,190,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,130,190,.045) 1px, transparent 1px),
-        radial-gradient(ellipse at 60% 0%, #07315a 0%, #020817 55%) !important;
-    background-size: 28px 28px, 28px 28px, auto !important;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent 0 3px,
-        rgba(0,0,0,.09) 4px 5px
-    );
-    opacity: .45;
-}
-
-body > .flex {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-}
-
-h1, h2, h3, h4, .brand-font, .section-label, .page-title {
-    font-family: Orbitron, Inter, sans-serif !important;
-    letter-spacing: .045em;
-}
-
-aside.glass,
-.sidebar {
-    width: 16rem !important;
-    background: linear-gradient(
-        180deg,
-        rgba(3,18,39,.98),
-        rgba(2,12,28,.97)
-    ) !important;
-    border-right: 1px solid var(--mdp-line) !important;
-    box-shadow: 8px 0 35px rgba(0,180,255,.06) !important;
-    border-radius: 0 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-}
-
-.sidebar .brand-font,
-aside .brand-font {
-    font-family: Orbitron, Inter, sans-serif !important;
-    letter-spacing: .08em !important;
-    color: #aaf7ff !important;
-}
-
-.sidebar .text-teal-450,
-.sidebar .text-teal-400,
-.sidebar .text-cyan-300 {
-    color: var(--mdp-cyan) !important;
-}
-
-.sidebar .rounded-xl,
-aside .rounded-xl {
-    border-radius: 2px !important;
-}
-
-.sidebar-link {
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 12px 14px !important;
-    color: #9fc8dc !important;
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    border-bottom-color: rgba(0,200,255,.12) !important;
-    border-radius: 0 !important;
-    font-size: 13px !important;
-    text-decoration: none !important;
-    transition: all .2s ease !important;
-}
-
-.sidebar-link i {
-    width: 22px !important;
-    text-align: center !important;
-    font-size: 17px !important;
-    color: #8edcf4 !important;
-}
-
-.sidebar-link:hover,
-.sidebar-link.active {
-    color: #fff !important;
-    background: linear-gradient(
-        90deg,
-        rgba(0,220,255,.28),
-        rgba(0,110,180,.06)
-    ) !important;
-    border: 1px solid rgba(0,234,255,.65) !important;
-    box-shadow:
-        inset 0 0 18px rgba(0,234,255,.12),
-        0 0 14px rgba(0,234,255,.08) !important;
-    transform: none !important;
-}
-
-.sidebar-link.active i {
-    color: var(--mdp-cyan) !important;
-    filter: drop-shadow(0 0 5px var(--mdp-cyan)) !important;
-}
-
-.sidebar p.text-xs.font-semibold,
-.sidebar .uppercase.tracking-wider {
-    font-family: Orbitron, Inter, sans-serif !important;
-    font-size: 10px !important;
-    letter-spacing: .16em !important;
-    color: #00dff7 !important;
-}
-
-.sidebar #sidebarUserName,
-.sidebar #sidebarUserJawatan {
-    font-family: Inter, sans-serif !important;
-}
-
-main.flex-1 {
-    margin-left: 16rem !important;
-    min-width: 0;
-    position: relative;
-    z-index: 1;
-    color: var(--mdp-text) !important;
-}
-
-header.glass {
-    position: fixed !important;
-    top: 0 !important;
-    left: 16rem !important;
-    right: 0 !important;
-    z-index: 1000 !important;
-    width: auto !important;
-    padding: 14px 24px !important;
-    background: rgba(2,11,26,.92) !important;
-    border: 0 !important;
-    border-bottom: 1px solid rgba(0,234,255,.38) !important;
-    border-radius: 0 !important;
-    box-shadow: 0 8px 30px rgba(0,0,0,.18) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-}
-
-header h2 {
-    font-family: Orbitron, Inter, sans-serif !important;
-    font-size: clamp(14px, 1.4vw, 19px) !important;
-    letter-spacing: .07em !important;
-    color: #aaf7ff !important;
-    text-transform: uppercase;
-}
-
-header p {
-    font-size: 10px !important;
-    letter-spacing: .08em !important;
-    color: #83b7d2 !important;
-}
-
-header #userName {
-    color: #f3fcff !important;
-}
-
-header #userJawatan {
-    color: var(--mdp-cyan) !important;
-}
-
-.content-area {
-    position: relative;
-    z-index: 1;
-    padding: 104px 24px 28px !important;
-    color: var(--mdp-text) !important;
-}
-
-.content-area > .glass,
-.content-area .glass {
-    position: relative;
-    background: linear-gradient(
-        145deg,
-        rgba(5,29,57,.94),
-        rgba(2,13,32,.94)
-    ) !important;
-    border: 1px solid rgba(0,220,255,.55) !important;
-    border-radius: 0 !important;
-    box-shadow:
-        inset 0 0 18px rgba(0,190,255,.07),
-        0 0 16px rgba(0,190,255,.06) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    transition: box-shadow .22s ease, border-color .22s ease !important;
-}
-
-.content-area > .glass::before {
-    content: "";
-    position: absolute;
-    left: 18px;
-    right: 18px;
-    top: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--mdp-cyan), transparent);
-    opacity: .8;
-    pointer-events: none;
-}
-
-.content-area > .glass:hover {
-    border-color: rgba(0,234,255,.75) !important;
-    box-shadow:
-        inset 0 0 20px rgba(0,190,255,.09),
-        0 0 22px rgba(0,190,255,.1) !important;
-    transform: none !important;
-}
-
-.content-area h3,
-.content-area h4 {
-    font-family: Orbitron, Inter, sans-serif !important;
-    color: #43eaff !important;
-    letter-spacing: .07em !important;
-    text-transform: uppercase;
-}
-
-.content-area h3 {
-    font-size: 12px !important;
-    border-bottom: 1px solid rgba(0,220,255,.25);
-    padding-bottom: 12px;
-}
-
-.content-area h4 {
-    font-size: 11px !important;
-}
-
-.stat-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 0 !important;
-    background: linear-gradient(
-        145deg,
-        rgba(5,29,57,.96),
-        rgba(2,13,32,.96)
-    ) !important;
-    border: 1px solid rgba(0,220,255,.42) !important;
-    box-shadow: inset 0 0 18px rgba(0,190,255,.06) !important;
-    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease !important;
-    animation: mdpCardReveal .55s ease both;
-}
-
-.stat-card::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 12%;
-    right: 12%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--mdp-cyan), transparent);
-    opacity: .75;
-    pointer-events: none;
-}
-
-.stat-card:hover {
-    transform: translateY(-3px) !important;
-    border-color: rgba(0,234,255,.8) !important;
-    box-shadow: 0 0 22px rgba(0,234,255,.13), inset 0 0 18px rgba(0,190,255,.08) !important;
-}
-
-.stat-card .rounded-xl,
-.stat-card .rounded-2xl {
-    border-radius: 2px !important;
-    border: 1px solid rgba(0,234,255,.28);
-}
-
-.content-area .bg-teal-500,
-.content-area .bg-teal-600,
-.content-area .bg-teal-700 {
-    background: linear-gradient(90deg, rgba(0,145,200,.48), rgba(0,234,255,.16)) !important;
-    color: #e5fbff !important;
-    border-color: rgba(0,234,255,.65) !important;
-}
-
-.content-area .text-teal-400,
-.content-area .text-teal-450,
-.content-area .text-teal-500,
-.content-area .text-cyan-400,
-.content-area .text-cyan-300 {
-    color: var(--mdp-cyan) !important;
-}
-
-.content-area .text-purple-400,
-.content-area .text-blue-400 {
-    color: #65dff6 !important;
-}
-
-.content-area .border-teal-550\/10,
-.content-area .border-teal-550\/20,
-.content-area .border-cyan-500\/20,
-.content-area .border-purple-500\/20,
-.content-area .border-blue-500\/20 {
-    border-color: rgba(0,220,255,.3) !important;
-}
-
-.content-area .bg-white\/5 {
-    background: rgba(0,150,200,.08) !important;
-}
-
-.content-area .text-slate-500 {
-    color: #7daec7 !important;
-}
-
-.content-area .text-slate-400 {
-    color: #9fc8dc !important;
-}
-
-.content-area .text-white {
-    color: #f3fcff !important;
-}
-
-.content-area input,
-.content-area select,
-.content-area textarea,
-input,
-select,
-textarea {
-    background: rgba(2,12,28,.9) !important;
-    color: #d9f5ff !important;
-    border: 1px solid rgba(0,220,255,.3) !important;
-    border-radius: 3px !important;
-    font-family: Inter, "Segoe UI", sans-serif !important;
-    transition: border-color .2s ease, box-shadow .2s ease !important;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-    outline: none !important;
-    border-color: var(--mdp-cyan) !important;
-    box-shadow: 0 0 0 2px rgba(0,234,255,.13), 0 0 12px rgba(0,234,255,.08) !important;
-}
-
-label {
-    color: #8cb9d0 !important;
-}
-
-button {
-    border-radius: 3px !important;
-    font-family: Inter, "Segoe UI", sans-serif !important;
-    transition: filter .18s ease, box-shadow .18s ease, transform .18s ease !important;
-}
-
-button:hover {
-    filter: brightness(1.1);
-    box-shadow: 0 0 16px rgba(0,234,255,.14);
-}
-
-.btn-primary,
-button.bg-teal-500,
-button.bg-teal-600 {
-    background: linear-gradient(120deg, #00c8e8, #1267d6) !important;
-    color: #fff !important;
-    border: 1px solid var(--mdp-cyan) !important;
-    border-radius: 2px !important;
-    box-shadow: 0 0 15px rgba(0,234,255,.12);
-}
-
-.btn-secondary {
-    background: rgba(35,55,80,.7) !important;
-    color: #d9f5ff !important;
-    border: 1px solid rgba(131,183,210,.35) !important;
-    border-radius: 2px !important;
-}
-
-.table-wrapper {
-    border: 1px solid rgba(0,220,255,.22) !important;
-    border-radius: 0 !important;
-    background: rgba(2,13,32,.55);
-}
-
-.anggota-table {
-    border-collapse: collapse !important;
-}
-
-.anggota-table th {
-    background: rgba(0,190,255,.08) !important;
-    color: #83dff4 !important;
-    font-family: Orbitron, Inter, sans-serif !important;
-    font-size: 10px !important;
-    letter-spacing: .07em !important;
-    border-bottom: 1px solid rgba(0,220,255,.28) !important;
-}
-
-.anggota-table td {
-    color: #cceaf5 !important;
-    border-bottom: 1px solid rgba(0,220,255,.12) !important;
-}
-
-.anggota-table tbody tr:hover {
-    background: rgba(0,220,255,.055) !important;
-}
-
-.modal,
-#modalAnggota,
-[id*="modal"] {
-    color: var(--mdp-text);
-}
-
-.mobile-bottom {
-    display: none;
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    height: 68px !important;
-    z-index: 9999 !important;
-    align-items: center !important;
-    justify-content: space-around !important;
-    background: rgba(2,12,28,.97) !important;
-    border-top: 1px solid rgba(0,234,255,.45) !important;
-    backdrop-filter: blur(15px) !important;
-    -webkit-backdrop-filter: blur(15px) !important;
-    box-shadow: 0 -8px 28px rgba(0,0,0,.28) !important;
-}
-
-.mobile-nav-item {
-    flex: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 5px !important;
-    text-align: center !important;
-    text-decoration: none !important;
-    color: #84b6cd !important;
-    font-size: 9px !important;
-    transition: color .2s ease, transform .2s ease !important;
-}
-
-.mobile-nav-item i {
-    font-size: 18px !important;
-}
-
-.mobile-nav-item.active,
-.mobile-nav-item:hover {
-    color: var(--mdp-cyan) !important;
-    text-shadow: 0 0 10px rgba(0,234,255,.5) !important;
-}
-
-@keyframes mdpCardReveal {
-    from { opacity: .45; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 1023px) {
-    .sidebar,
-    aside.glass {
-        display: none !important;
-    }
-
-    main.flex-1 {
-        margin-left: 0 !important;
-    }
-
-    header.glass {
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        padding: 12px 14px !important;
-    }
-
-    .content-area {
-        padding: 88px 14px 24px !important;
-    }
-
-    .mobile-bottom {
-        display: flex !important;
-    }
-
-    body {
-        padding-bottom: 78px !important;
-    }
-}
-
-@media (max-width: 560px) {
-    .content-area {
-        padding: 80px 10px 20px !important;
-    }
-
-    header h2 {
-        font-size: 12px !important;
-    }
-
-    .content-area h3 {
-        font-size: 11px !important;
-    }
-
-    .stat-card {
-        padding: 14px !important;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-        animation: none !important;
-    }
-}
-
-
 </style>
 </head>
 
@@ -2472,8 +1934,8 @@ button.bg-teal-600 {
    SUPABASE
 ===================================================== */
 
-// Gunakan client yang telah disediakan oleh supabase-config.js.
-// Elakkan mencipta client kedua dengan konfigurasi berasingan.
+// Gunakan client bersama yang diwujudkan oleh supabase-config.js.
+// Jangan cipta client kedua atau ubah konfigurasi Supabase sedia ada.
 const supabaseClient = window.supabaseClient;
 
 
@@ -2502,9 +1964,14 @@ document.addEventListener(
     "DOMContentLoaded",
     async function () {
 
-        if (!supabaseClient) {
-            console.error("Supabase tidak tersedia. Semak supabase-config.js.");
-            alert("Sambungan pangkalan data tidak tersedia. Sila semak supabase-config.js dan muat semula halaman.");
+        if (!window.supabaseClient) {
+            console.error(
+                "Supabase client tidak tersedia. Semak fail supabase-config.js dan pastikan ia dimuatkan sebelum kod halaman."
+            );
+            paparToast(
+                "Sambungan pangkalan data tidak tersedia. Sila semak supabase-config.js.",
+                "error"
+            );
             return;
         }
 
@@ -2583,25 +2050,15 @@ function paparMaklumatPengguna() {
         currentUser.jawatan ||
         "-";
 
-    const elemenNama = [
-        "userName",
-        "sidebarUserName"
-    ];
+    const userNameEl = document.getElementById("userName");
+    const userJawatanEl = document.getElementById("userJawatan");
+    const sidebarUserNameEl = document.getElementById("sidebarUserName");
+    const sidebarUserJawatanEl = document.getElementById("sidebarUserJawatan");
 
-    const elemenJawatan = [
-        "userJawatan",
-        "sidebarUserJawatan"
-    ];
-
-    elemenNama.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = name;
-    });
-
-    elemenJawatan.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = jawatan;
-    });
+    if (userNameEl) userNameEl.textContent = name;
+    if (userJawatanEl) userJawatanEl.textContent = jawatan;
+    if (sidebarUserNameEl) sidebarUserNameEl.textContent = name;
+    if (sidebarUserJawatanEl) sidebarUserJawatanEl.textContent = jawatan;
 
 }
 
@@ -4120,6 +3577,10 @@ const payload = {
     try {
 
         if (mode === "edit") {
+
+            if (editingNoSkb === null || editingNoSkb === undefined || editingNoSkb === "") {
+                throw new Error("No. SKB asal tidak ditemui. Sila buka semula rekod untuk diedit.");
+            }
 
             const {
                 error
