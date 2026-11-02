@@ -1742,7 +1742,7 @@ header {
                         <input
                             id="f_rm_pehariklmbiasa"
                             type="number"
-                            step="0.000000000001"
+                            step="0.01"
                             min="0"
                             class="form-input text-right"
                             placeholder="0.00"
@@ -1762,7 +1762,7 @@ header {
                         <input
                             id="f_rm_perharioffday"
                             type="number"
-                            step="0.000000000001"
+                            step="0.01"
                             min="0"
                             class="form-input text-right"
                             placeholder="0.00"
@@ -1782,7 +1782,7 @@ header {
                         <input
                             id="f_rm_perjamoffday"
                             type="number"
-                            step="0.000000000001"
+                            step="0.01"
                             min="0"
                             class="form-input text-right"
                             placeholder="0.00"
@@ -1802,7 +1802,7 @@ header {
                         <input
                             id="f_rm_perharicutiam"
                             type="number"
-                            step="0.000000000001"
+                            step="0.01"
                             min="0"
                             class="form-input text-right"
                             placeholder="0.00"
@@ -1822,7 +1822,7 @@ header {
                         <input
                             id="f_rm_perjamcutiam"
                             type="number"
-                            step="0.000000000001"
+                            step="0.01"
                             min="0"
                             class="form-input text-right"
                             placeholder="0.00"
@@ -3533,27 +3533,27 @@ const payload = {
         ),
 
     rm_pehariklmbiasa:
-        decimalOrNull(
+        numberOrNull(
             "f_rm_pehariklmbiasa"
         ),
 
     rm_perharioffday:
-        decimalOrNull(
+        numberOrNull(
             "f_rm_perharioffday"
         ),
 
     rm_perjamoffday:
-        decimalOrNull(
+        numberOrNull(
             "f_rm_perjamoffday"
         ),
 
     rm_perharicutiam:
-        decimalOrNull(
+        numberOrNull(
             "f_rm_perharicutiam"
         ),
 
     rm_perjamcutiam:
-        decimalOrNull(
+        numberOrNull(
             "f_rm_perjamcutiam"
         )
 
@@ -3872,7 +3872,7 @@ function setValue(
 }
 
 
-// Kekalkan nilai RM sebagai teks perpuluhan supaya digit sehingga 12 tempat\n// tidak melalui penukaran JavaScript Number sebelum dihantar ke PostgreSQL NUMERIC.\nfunction decimalOrNull(id) {\n\n    const value = document.getElementById(id).value.trim();\n\n    if (value === "") return null;\n\n    // Input type=number menggunakan titik perpuluhan dalam value.\n    const parsed = Number(value);\n\n    return Number.isFinite(parsed) ? value : null;\n\n}\n\n\nfunction numberOrNull(id) {
+function numberOrNull(id) {
 
     const value =
         valueOf(id);
@@ -4173,3 +4173,4 @@ document.addEventListener(
 
 </body>
 </html>
+
